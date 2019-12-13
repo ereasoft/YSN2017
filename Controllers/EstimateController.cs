@@ -569,5 +569,46 @@ namespace YSN2017.Controllers
 
         }
 
+        // 카테고리 목록:  /Estimate/cateLv
+        public ActionResult cate_lv1()
+        {
+
+            /*  if (Request["menuId"] != null)
+              { */
+
+            Hashtable hash = new Hashtable();
+            String sql = "cate_lv1";
+
+            hash.Add("language", User.Identity.Name.Split('|')[3]);         // 기본언어
+            hash.Add("company_cd", User.Identity.Name.Split('|')[2]);       // 회사코드
+
+            if(Request["cate_lv1"] !=  null)
+            {
+                sql = "cate_lv2";
+                hash.Add("cate_lv1", Request["cate_lv1"]);
+            }  
+
+            ISqlMapper mapper = Mapper.Instance();
+            IEnumerable<Hashtable> list = mapper.QueryForList<Hashtable>(sql, hash);
+
+
+            Hashtable jsonData = new Hashtable();
+            jsonData.Add("COUNT", list.Count());
+            jsonData.Add("LIST", list);
+
+
+            var jsonResult = Json(jsonData, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+
+            return jsonResult;
+
+            /* }
+             else
+             {
+                 return new EmptyResult();
+             } */
+
+        }
+
     }
 }

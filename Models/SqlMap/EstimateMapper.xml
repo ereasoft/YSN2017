@@ -14,7 +14,7 @@
     <select id="baseProdList" parameterClass="Hashtable" resultClass="Hashtable">
 
       SELECT
-      ,cate_lv1 ,cate_lv2 ,prod_code ,prod_option1 ,prod_others ,eco_category ,sample_modify
+      idx,cate_lv1 ,cate_lv2 ,prod_code ,prod_option1 ,prod_others ,eco_category ,sample_modify
       ,bottle_5K ,Innerbottle_5K ,pumpcap_5K ,cap_5K ,tubesleeveheadering_5K ,others_5K ,set_5K ,bottle_10K
       ,Innerbottle_10K ,pumpcap_10K ,cap_10K ,tubesleeveheadering_10K ,others_10K ,set_10K ,bottle_30K
       ,Innerbottle_30K ,pumpcap_30K ,cap_30K ,tubesleeveheadering_30K ,others_30K ,set_30K ,bottle_50K
@@ -36,6 +36,23 @@
         AND prod_code LIKE '%' + #prod_code# + '%'
       </isNotNull>
       
+    </select>
+
+    <select id="cate_lv1" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT  distinct cate_lv1 as catenm
+      FROM T_BASE_PRODUCT
+      WHERE ISNULL(del_yn,'N') = 'N' 
+
+    </select>
+
+    <select id="cate_lv2" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT  distinct cate_lv2 as catenm
+      FROM T_BASE_PRODUCT
+      WHERE ISNULL(del_yn,'N') = 'N'
+      AND cate_lv1 = #cate_lv1#
+
     </select>
 
 

@@ -4,7 +4,8 @@
 
     requires: [
           'Ysn.store.estimateitem',
-          'Ysn.view.estimate.estimateDetailController'
+          'Ysn.view.estimate.estimateDetailController',
+          'Ysn.store.cateLV'
     ],
 
     controller: 'estimateDetail',
@@ -258,7 +259,17 @@
                          dataIndex: 'cate_lv1',
                          text: '품목분류1',
                          widget: {
-                             xtype: 'combobox' 
+                             xtype: 'combobox',
+                             store: {
+                                 type: 'cateLV'
+                             },
+                             minChars: 1,
+                             //queryParam: 'customer_name',
+                             queryMode: 'local',
+                             publishes: 'value',
+                             displayField: 'catenm',
+                             valueField: 'catenm',
+                             hideTrigger: true,
                          }
                      },
                      {
@@ -266,7 +277,17 @@
                          dataIndex: 'cate_lv2',
                          text: '품목분류2',
                          widget: {
-                             xtype: 'combobox'
+                             xtype: 'combobox',
+                             store: {
+                                 type: 'cateLV'
+                             },
+                             minChars: 1,
+                             //queryParam: 'customer_name',
+                             queryMode: 'local',
+                             publishes: 'value',
+                             displayField: 'catenm',
+                             valueField: 'catenm',
+                             hideTrigger: true,
                          }
                      },
                      {

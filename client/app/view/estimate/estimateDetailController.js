@@ -4,7 +4,7 @@ Ext.define( 'Ysn.view.estimate.estimateDetailController', {
 
     init: function ()
     {
-        this.lookupReference( 'dstr_chn' ).getStore().load( { params: { up_code_id: 'DSTR_TYPE', lang: localeCd } } );
+        this.lookupReference( 'dstr_chn' ).getStore().load( { params: { up_code_id: 'DSTR_TYPE', lang: localeCd } } ); 
         var store = this.lookupReference( 'estimateItem' ).getStore();
         for ( var i = 0; i < 30; i++ )
         {
