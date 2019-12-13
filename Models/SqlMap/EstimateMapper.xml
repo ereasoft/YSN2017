@@ -1,0 +1,292 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+
+
+
+
+
+    <!-- 견적관리 : 기본품목 리스트 -->
+    <select id="baseProdList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      ,cate_lv1 ,cate_lv2 ,prod_code ,prod_option1 ,prod_others ,eco_category ,sample_modify
+      ,bottle_5K ,Innerbottle_5K ,pumpcap_5K ,cap_5K ,tubesleeveheadering_5K ,others_5K ,set_5K ,bottle_10K
+      ,Innerbottle_10K ,pumpcap_10K ,cap_10K ,tubesleeveheadering_10K ,others_10K ,set_10K ,bottle_30K
+      ,Innerbottle_30K ,pumpcap_30K ,cap_30K ,tubesleeveheadering_30K ,others_30K ,set_30K ,bottle_50K
+      ,Innerbottle_50K ,pumpcap_50K ,cap_50K ,tubesleeveheadering_50K ,others_50K ,set_50K ,bottle_100K
+      ,Innerbottle_100K ,pumpcap_100K ,cap_100K ,tubesleeveheadering_100K ,others_100K ,set_100K
+      ,remark ,create_id ,create_date ,modify_id ,modify_date ,del_yn
+      FROM T_BASE_PRODUCT
+      WHERE ISNULL(del_yn,'N') = 'N'
+      <isNotNull property="idx">
+        AND idx = #idx#
+      </isNotNull>
+      <isNotNull property="cate_lv1">
+        AND cate_lv1 = #cate_lv1#
+      </isNotNull>
+      <isNotNull property="cate_lv2">
+        AND cate_lv2 LIKE '%' + #cate_lv2# + '%'
+      </isNotNull>
+      <isNotNull property="prod_code">
+        AND prod_code LIKE '%' + #prod_code# + '%'
+      </isNotNull>
+      
+    </select>
+
+
+
+    <!-- 견적관리 : 옵션품목 리스트 -->
+    <select id="baseOptionList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      idx ,prod_code ,prod ,sub_prod ,prod_option
+      ,global_basic ,global_sample ,japan_basic ,japan_sample
+      ,remark ,create_id ,create_date ,modify_id ,modify_date ,del_yn
+      FROM T_BASE_OPTION
+      WHERE ISNULL(del_yn,'N') = 'N'
+      <isNotNull property="idx">
+        AND idx = #idx#
+      </isNotNull>
+      <isNotNull property="prod_code">
+        AND prod_code = #prod_code#
+      </isNotNull>
+      <isNotNull property="sub_prod">
+        AND sub_prod LIKE '%' + #sub_prod# + '%'
+      </isNotNull>
+      <isNotNull property="prod_option">
+        AND prod_option LIKE '%' + #prod_option# + '%'
+      </isNotNull>
+      
+    </select>
+
+    <!-- 견적관리 : 견적서 마스터 리스트 -->
+    <select id="estimateHeadList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      idx ,estimate_id ,form_lang ,form_type ,form_id ,dstr_type ,user_cd ,user_nm
+      ,estimate_date ,cust_cd ,ref_cd ,ref_nm ,submit_cd ,submit_nm ,currency
+      ,subject ,summary_yn ,remark ,create_id ,create_date ,modify_id ,modify_date ,del_yn
+      FROM T_ESTIMATE_HEAD
+      WHERE ISNULL(del_yn,'N') = 'N'
+      <isNotNull property="idx">
+        AND idx = #idx#
+      </isNotNull>
+      <isNotNull property="estimate_id">
+        AND estimate_id = #estimate_id#
+      </isNotNull>
+      <isNotNull property="form_lang">
+        AND form_lang = #form_lang#
+      </isNotNull>
+      <isNotNull property="form_type">
+        AND form_type = #form_type#
+      </isNotNull>
+      <isNotNull property="form_id">
+        AND form_id = #form_id#
+      </isNotNull>
+      <isNotNull property="user_cd">
+        AND user_cd = #user_cd#
+      </isNotNull>
+      <isNotNull property="ref_cd">
+        AND ref_cd = #ref_cd#
+      </isNotNull>
+      <isNotNull property="submit_cd">
+        AND submit_cd = #submit_cd#
+      </isNotNull>
+      <isNotNull property="subject">
+        AND subject LIKE '%' + #subject# + '%'
+      </isNotNull>
+
+    </select>
+
+    <!-- 견적관리 : 견적서 마스터 등록 -->
+    <insert id="estimateHeadInsert" parameterClass="Hashtable">
+
+      INSERT T_ESTIMATE_HEAD(
+      estimate_id ,form_lang ,form_type ,form_id ,dstr_type ,user_cd ,user_nm
+      ,estimate_date ,cust_cd ,ref_cd ,ref_nm ,submit_cd ,submit_nm ,currency
+      ,subject ,summary_yn ,remark ,create_id ,create_date ,modify_id ,modify_date ,del_yn)
+      VALUES (
+      #estimate_id# ,
+      #form_lang# ,
+      #form_type# ,
+      #form_id# ,
+      #dstr_type# ,
+      #user_cd# ,
+      #user_nm# ,
+      #estimate_date# ,
+      #cust_cd# ,
+      #ref_cd# ,
+      #ref_nm# ,
+      #submit_cd# ,
+      #submit_nm# ,
+      #currency#,
+      #subject# ,
+      #summary_yn# ,
+      #remark# ,
+      #create_id# ,
+      getdate() ,
+      #modify_id# ,
+      getdate() ,
+      'N'
+      )
+    </insert>
+
+    <!-- 견적관리 : 견적서 마스터 수정 -->
+    <update id="estimateHeadUpdate" parameterClass="Hashtable">
+
+      UPDATE T_ESTIMATE_HEAD SET 
+        estimate_id = #estimate_id# ,
+        form_lang = #form_lang# ,
+        form_type = #form_type# ,
+        form_id = #form_id# ,
+        dstr_type = #dstr_type# ,
+        user_cd = #user_cd# ,
+        user_nm = #user_nm# ,
+        estimate_date = #estimate_date# ,
+        cust_cd = #cust_cd# ,
+        ref_cd = #ref_cd# ,
+        ref_nm = #ref_nm# ,
+        submit_cd = #submit_cd# ,
+        submit_nm = #submit_nm# ,
+        currency = #currency# ,
+        subject = #subject# ,
+        summary_yn = #summary_yn# ,
+        remark = #remark# ,
+        modify_id = #modify_id# ,
+        modify_date = getdate()  
+      FROM idx = #idx#
+
+    </update>
+
+    <!-- 견적관리 : 견적서 마스터 삭제 -->
+    <update id="estimateHeadDelete" parameterClass="Hashtable">
+
+      UPDATE T_ESTIMATE_HEAD SET
+      modify_id = #modify_id# ,
+      modify_date = getdate() ,
+      del_yn = 'Y'
+      FROM idx = #idx#
+
+    </update>
+
+    <!-- 견적관리 : 견적서 아이템 리스트 -->
+    <select id="estimateItemList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      idx ,estimate_id ,sno ,chk_print ,summary_yn ,set_yn ,cate_lv1 ,cate_lv2
+      ,prod ,sub_prod ,prod_code ,prod_option ,prod_desc ,eco_category ,unit_price ,quantity ,amount
+      ,qty_5k ,qty_10k ,qty_30k ,qty_50k ,qty_100k ,option_price
+      ,remark ,create_id ,create_date ,modify_id ,modify_date ,del_yn
+      FROM T_ESTIMATE_ITEM
+      WHERE ISNULL(del_yn,'N') = 'N'
+      <isNotNull property="idx">
+        AND idx = #idx#
+      </isNotNull>
+      <isNotNull property="estimate_id">
+        AND estimate_id = #estimate_id#
+      </isNotNull>
+      <isNotNull property="sno">
+        AND sno = #sno#
+      </isNotNull>
+      <isNotNull property="summary_yn">
+        AND summary_yn = #summary_yn#
+      </isNotNull>
+      <isNotNull property="set_yn">
+        AND set_yn = #set_yn#
+      </isNotNull>
+
+    </select>
+
+    <!-- 견적관리 : 견적서 아이템 등록 -->
+    <insert id="estimateItemInsert" parameterClass="Hashtable">
+
+      INSERT T_ESTIMATE_ITEM(
+      idx ,estimate_id ,sno ,chk_print ,summary_yn ,set_yn ,cate_lv1 ,cate_lv2
+      ,prod ,sub_prod ,prod_code ,prod_option ,prod_desc ,eco_category ,unit_price ,quantity ,amount
+      ,qty_5k ,qty_10k ,qty_30k ,qty_50k ,qty_100k ,option_price
+      ,remark ,create_id ,create_date ,modify_id ,modify_date ,del_yn)
+      VALUES (
+      #estimate_id# ,
+      #sno# ,
+      #chk_print# ,
+      #summary_yn# ,
+      #set_yn# ,
+      #cate_lv1# ,
+      #cate_lv2# ,
+      #prod# ,
+      #sub_prod# ,
+      #prod_code# ,
+      #prod_option# ,
+      #prod_desc# ,
+      #eco_category# ,
+      #unit_price#,
+      #quantity# ,
+      #amount# ,
+      #qty_5k# ,
+      #qty_10k# ,
+      #qty_30k# ,
+      #qty_50k# ,
+      #qty_100k# ,
+      #option_price# , 
+      #remark# ,
+      #create_id# ,
+      getdate() ,
+      #modify_id# ,
+      getdate() ,
+      'N'
+      )
+    </insert>
+
+    <!-- 견적관리 : 견적서 아이템 수정 -->
+    <update id="estimateItemUpdate" parameterClass="Hashtable">
+
+      UPDATE T_ESTIMATE_ITEM SET
+      estimate_id = #estimate_id# ,
+      sno = #estimsnoate_id# ,
+      chk_print = #chk_print# ,
+      summary_yn = #summary_yn#,
+      set_yn = #set_yn#,
+      cate_lv1 = #cate_lv1# ,
+      cate_lv2 = #cate_lv2# ,
+      prod = #prod# ,
+      sub_prod = #sub_prod#,
+      prod_code = #prod_code#,
+      prod_option = #prod_option# ,
+      prod_desc = #prod_desc# ,
+      eco_category = #eco_category# ,
+      unit_price = #unit_price# ,
+      quantity = #quantity#,
+      amount = #amount# ,
+      qty_5k = #qty_5k#,
+      qty_10k = #qty_10k#,
+      qty_30k = #qty_30k#,
+      qty_50k = #qty_50k#,
+      qty_100k = #qty_100k#,
+      option_price = #option_price#,
+      remark = #remark# ,
+      modify_id = #modify_id# ,
+      modify_date = getdate()
+      FROM idx = #idx#
+
+    </update>
+
+    <!-- 견적관리 : 견적서 아이템 삭제 -->
+    <update id="estimateItemDelete" parameterClass="Hashtable">
+
+      UPDATE T_ESTIMATE_ITEM SET
+      del_yn = #del_yn#
+      FROM idx = #idx#
+
+    </update> 
+    
+  
+</statements>
+
+
+
+</sqlMap>

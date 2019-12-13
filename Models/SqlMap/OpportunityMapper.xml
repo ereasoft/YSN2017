@@ -1,0 +1,458 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+
+
+
+    <!-- 기회 및 수주관리 : 사업기회 관리 - 리스트 -->
+      <select id="opportunityList" parameterClass="Hashtable" resultClass="Hashtable">
+
+        SELECT
+        A.OPPT_CD
+        , A.OPPT_TYPE
+        , dbo.FN_GET_CODE_NM(#language#, 'OPPT_TYPE', A.OPPT_TYPE) AS OPPT_TYPE_NM
+        , A.ITEM_CD
+        , DBO.FN_GET_ITEM_NM(A.ITEM_CD) AS ITEM_NM
+        , (SELECT ITEM_CD2 FROM T_ITEM WHERE ITEM_CD = A.ITEM_CD) AS ITEM_CD2
+        , A.BIZ_TYPE
+        , dbo.FN_GET_CODE_NM(#language#, 'BIZ_TYPE', A.BIZ_TYPE) AS BIZ_TYPE_NM
+        , (SELECT dbo.FN_GET_CODE_NM(#language#, 'ITEM_TYPE', ITEM_TYPE) FROM T_ITEM WHERE ITEM_CD = A.ITEM_CD) AS ITEM_TYPE_NM
+        , A.CUST_CD
+        , DBO.FN_GET_CUST_NM(A.CUST_CD) AS CUST_NM
+        , (SELECT BAD_AR_YN FROM T_CUSTOMER WHERE CUST_CD = A.CUST_CD) AS BAD_AR_YN
+        , A.USER_CD
+        , DBO.FN_GET_USER_NM(A.USER_CD) AS USER_NM
+        , A.DEPT_CD
+        , DBO.FN_GET_DEPT_NM(A.DEPT_CD) AS DEPT_NM
+        , A.EUSER_CD
+        , DBO.FN_GET_CUST_NM(A.EUSER_CD) AS EUSER_NM
+        , A.DSTR_TYPE
+        , dbo.FN_GET_CODE_NM(#language#, 'DSTR_TYPE', A.DSTR_TYPE) AS DSTR_TYPE_NM
+        , A.OPPT_STATUS
+        , dbo.FN_GET_CODE_NM(#language#, 'OPPT_STATUS', A.OPPT_STATUS) AS OPPT_STATUS_NM
+        , A.WSO_PSBLT
+        , dbo.FN_GET_CODE_NM(#language#, 'WSO_PSBLT', A.WSO_PSBLT) AS WSO_PSBLT_NM
+        , (SELECT VALUE_2 FROM T_CODE WHERE UP_CODE_ID = 'WSO_PSBLT' AND CODE_ID = A.WSO_PSBLT) AS WSO_PSBLT_VALUE
+        , A.BASE_CRNY
+        , A.EXCH_RATE
+        , (SELECT SUM(OPPT_QTY) FROM T_OPPT_ITEM WHERE OPPT_CD = A.OPPT_CD) AS OPPT_QTY
+        , CASE
+        WHEN (SELECT SUM(OPPT_QTY) FROM T_OPPT_ITEM WHERE OPPT_CD = A.OPPT_CD) != 0 THEN
+        (SELECT SUM(AMOUNT) FROM T_OPPT_ITEM WHERE OPPT_CD = A.OPPT_CD)/(SELECT SUM(OPPT_QTY) FROM T_OPPT_ITEM WHERE OPPT_CD = A.OPPT_CD)
+        ELSE 0
+        END AS OPPT_UNIT_PRC
+        , (SELECT SUM(AMOUNT) FROM T_OPPT_ITEM WHERE OPPT_CD = A.OPPT_CD) AS AMOUNT
+        , (SELECT SUM(KRW_AMOUNT) FROM T_OPPT_ITEM WHERE OPPT_CD = A.OPPT_CD) AS KRW_AMOUNT
+        , A.PJT_CD
+        , DBO.FN_GET_PJT_NM(A.PJT_CD) AS PJT_NM
+        , A.WSO_PDATE
+        , A.OPPT_SUMRY
+        , A.RFC_CD
+        FROM T_OPPORTUNITY A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD	AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.DROP_YN = 'N'
+        AND A.USE_YN = 'Y'
+        
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>        
+        
+        
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        <isNotEmpty property="sdate">
+          AND A.WSO_PDATE BETWEEN REPLACE(#sdate#, '-', '') AND REPLACE(#edate#, '-', '')
+        </isNotEmpty>
+        <isNotEmpty property="cust_cd">
+          AND (A.CUST_CD LIKE '%'+ #cust_cd# +'%' )
+        </isNotEmpty>
+        <isNotEmpty property="biz_type">
+          AND A.BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+        <isNotEmpty property="oppt_type">
+          AND A.OPPT_TYPE = #oppt_type#
+        </isNotEmpty>
+        <isNotEmpty property="oppt_status">
+          AND A.OPPT_STATUS = #oppt_status#
+        </isNotEmpty>
+        <isNotEmpty property="euser_cd">
+          AND A.EUSER_CD = #euser_cd#
+        </isNotEmpty>
+        <isNotEmpty property="item_type">
+          AND A.ITEM_CD IN (SELECT ITEM_CD FROM T_ITEM WHERE ITEM_TYPE = #item_type#)
+        </isNotEmpty>
+        <isNotEmpty property="item_nm">
+          AND A.ITEM_CD IN (SELECT ITEM_CD FROM T_ITEM WHERE ITEM_NM = #item_nm#)
+        </isNotEmpty>
+        <isNotEmpty property="rfc_cd">
+          AND A.RFC_CD = #rfc_cd#
+        </isNotEmpty>
+        <isNotEmpty property="wso_psblt">
+          AND A.WSO_PSBLT = #wso_psblt#
+        </isNotEmpty>
+        <isNotEmpty property="bcust_cd">
+          AND A.CUST_CD IN (SELECT CUST_CD FROM T_CUSTOMER WHERE BCUST_CD LIKE '%'+ #bcust_cd# +'%' )
+        </isNotEmpty>
+          <isNotEmpty property="pjt_cd">
+          AND A.PJT_CD = #pjt_cd#
+        </isNotEmpty>
+      </select>
+
+
+
+
+
+
+
+
+    <!-- 기회 및 수주관리 : 사업기회 관리 - 상세 -->
+    <select id="opportunityDetail" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      A.OPPT_CD
+      , A.OPPT_TYPE
+      , dbo.FN_GET_CODE_NM(#language#, 'OPPT_TYPE', A.OPPT_TYPE) AS OPPT_TYPE_NM
+      , A.ITEM_CD
+      , DBO.FN_GET_ITEM_NM(A.ITEM_CD) AS ITEM_NM
+      , (SELECT ITEM_CD2 FROM T_ITEM WHERE ITEM_CD = A.ITEM_CD) AS ITEM_CD2
+      , A.BIZ_TYPE
+      , dbo.FN_GET_CODE_NM(#language#, 'BIZ_TYPE', A.BIZ_TYPE) AS BIZ_TYPE_NM
+      , (SELECT dbo.FN_GET_CODE_NM(#language#, 'ITEM_TYPE', ITEM_TYPE) FROM T_ITEM WHERE ITEM_CD = A.ITEM_CD) AS ITEM_TYPE_NM
+      , A.CUST_CD
+      , DBO.FN_GET_CUST_NM(A.CUST_CD) AS CUST_NM
+      , (SELECT BAD_AR_YN FROM T_CUSTOMER WHERE CUST_CD = A.CUST_CD) AS BAD_AR_YN
+      , A.USER_CD
+      , DBO.FN_GET_USER_NM(A.USER_CD) AS USER_NM
+      , A.DEPT_CD
+      , DBO.FN_GET_DEPT_NM(A.DEPT_CD) AS DEPT_NM
+      , A.EUSER_CD
+      , DBO.FN_GET_CUST_NM(A.EUSER_CD) AS EUSER_NM
+      , A.DSTR_TYPE
+      , dbo.FN_GET_CODE_NM(#language#, 'DSTR_TYPE', A.DSTR_TYPE) AS DSTR_TYPE_NM
+      , A.OPPT_STATUS
+      , dbo.FN_GET_CODE_NM(#language#, 'OPPT_STATUS', A.OPPT_STATUS) AS OPPT_STATUS_NM
+      , A.WSO_PSBLT
+      , dbo.FN_GET_CODE_NM(#language#, 'WSO_PSBLT', A.WSO_PSBLT) AS WSO_PSBLT_NM
+      , (SELECT VALUE_2 FROM T_CODE WHERE UP_CODE_ID = 'WSO_PSBLT' AND CODE_ID = A.WSO_PSBLT) AS WSO_PSBLT_VALUE
+      , A.BASE_CRNY
+      , A.EXCH_RATE
+      , (SELECT SUM(OPPT_QTY) FROM T_OPPT_ITEM WHERE OPPT_CD = A.OPPT_CD) AS OPPT_QTY
+      , CASE
+      WHEN (SELECT SUM(OPPT_QTY) FROM T_OPPT_ITEM WHERE OPPT_CD = A.OPPT_CD) != 0 THEN
+      (SELECT SUM(AMOUNT) FROM T_OPPT_ITEM WHERE OPPT_CD = A.OPPT_CD)/(SELECT SUM(OPPT_QTY) FROM T_OPPT_ITEM WHERE OPPT_CD = A.OPPT_CD)
+      ELSE 0
+      END AS OPPT_UNIT_PRC
+      , (SELECT SUM(AMOUNT) FROM T_OPPT_ITEM WHERE OPPT_CD = A.OPPT_CD) AS AMOUNT
+      , (SELECT SUM(KRW_AMOUNT) FROM T_OPPT_ITEM WHERE OPPT_CD = A.OPPT_CD) AS KRW_AMOUNT
+      , A.PJT_CD
+      , DBO.FN_GET_PJT_NM(A.PJT_CD) AS PJT_NM
+      , A.WSO_PDATE
+      , A.OPPT_SUMRY
+      , A.RFC_CD
+      , A.RFC_CHASU
+      FROM T_OPPORTUNITY A
+      WHERE A.COMPANY_CD = #company_cd#
+      AND A.DROP_YN = 'N'
+      AND A.USE_YN = 'Y'
+      <isNotEmpty property="oppt_cd">
+        AND A.OPPT_CD = #oppt_cd#
+      </isNotEmpty>
+
+    </select>
+
+
+
+    <!-- 기회 및 수주관리 : 사업기회 관리 - 상세 아이템 리스트 -->
+    <select id="getOpportunityItemList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      A.OPPT_CD
+      , A.ITEM_CD
+      , C.ITEM_CD2
+      , C.ITEM_NM
+      , A.BASE_CRNY
+      , A.EXCH_RATE
+      , B.OPPT_QTY
+      , B.OPPT_UNIT_PRC
+      , B.AMOUNT
+      , B.KRW_AMOUNT
+      , B.SALES_DATE
+      FROM T_OPPORTUNITY A, T_OPPT_ITEM B, T_ITEM C
+      WHERE A.COMPANY_CD = B.COMPANY_CD
+      AND A.COMPANY_CD = #company_cd#
+      AND A.OPPT_CD = B.OPPT_CD
+      AND A.ITEM_CD = B.ITEM_CD
+      AND B.ITEM_CD = C.ITEM_CD
+      AND A.OPPT_CD = #oppt_cd#
+    </select>
+
+
+
+
+    <!-- 기회 및 수주관리 : 사업기회 관리 - 기회품목코드로 기본정보 조회 -->
+    <select id="getSampleInfo"  parameterClass="Hashtable" resultClass="Hashtable">
+      
+      SELECT
+      COMPANY_CD
+      , SMP_CD
+      , ITEM_CD
+      , (SELECT ITEM_CD2 FROM T_ITEM WHERE ITEM_CD = A.ITEM_CD) AS ITEM_CD2
+      , DBO.FN_GET_ITEM_NM(A.ITEM_CD) AS ITEM_NM
+      , PJT_CD
+      , DBO.FN_GET_PJT_NM(A.PJT_CD) AS PJT_NM
+      , CUST_CD
+      , DBO.FN_GET_CUST_NM(A.CUST_CD) AS CUST_NM
+      , EUSER_CD
+      , DBO.FN_GET_CUST_NM(A.EUSER_CD) AS EUSER_NM
+      , BIZ_TYPE
+      , dbo.FN_GET_CODE_NM(#language#, 'BIZ_TYPE', A.BIZ_TYPE) AS BIZ_TYPE_NM
+      , DSTR_TYPE
+      , dbo.FN_GET_CODE_NM(#language#, 'DSTR_TYPE', A.DSTR_TYPE) AS DSTR_TYPE_NM
+      , USER_CD
+      , DBO.FN_GET_USER_NM(A.USER_CD) AS USER_NM
+      , DEPT_CD
+      , DBO.FN_GET_DEPT_NM(A.DEPT_CD) AS DEPT_NM
+      , CUST_SMP_CD
+      , MOLD_NO
+      , RUSER_CD
+      , MUSER_CD
+      , MDEPT_CD
+      , SMP_STATUS
+      , PRDT_PSBLT
+      , dbo.FN_GET_CODE_NM(#language#, 'PRDT_PSBLT', A.PRDT_PSBLT) AS PRDT_PSBLT_NM
+      , DBO.FN_GET_DATE_FORMAT(SMP_RDATE, 'YYYY-MM-DD') AS SMP_RDATE
+      , PRDT_RCDATE
+      , CMPT_RDATE
+      , PRDT_RDATE
+      , PRDT_ADATE
+      , PRDT_CDATE
+      , SHIP_PDATE
+      , PRDT_RUSER
+      , PRDT_AUSER
+      , PRDT_CUSER
+      , SHIP_PUSER
+      , SMP_SUMRY
+      , BASE_CRNY
+      , EXCH_RATE
+      , USE_YN
+      FROM T_SAMPLE A
+      WHERE A.COMPANY_CD = #company_cd#
+      AND A.SMP_CD = #smp_cd#
+      AND A.ITEM_CD = #item_cd#
+      AND A.SMP_CHASU = #smp_chasu#
+    </select>
+    
+    
+    <!-- 기회 및 수주관리 : 사업기회 관리 - PK생성 -->
+    <select id="getOpptCd" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      'OPPT'+SUBSTRING(CONVERT(NVARCHAR, GETDATE(), 112), 3,2)
+      + REPLICATE('0', 6 - LEN(CONVERT(VARCHAR,CONVERT(NUMERIC,RIGHT(MAX(REPLACE(OPPT_CD,'OPPT','')),LEN(MAX(REPLACE(OPPT_CD,'OPPT','')))-2)) + 1)))
+      + CONVERT(VARCHAR,CONVERT(NUMERIC,RIGHT(MAX(REPLACE(OPPT_CD,'OPPT','')),LEN(MAX(REPLACE(OPPT_CD,'OPPT','')))-2)) + 1)
+      FROM T_OPPORTUNITY
+    </select>
+
+    <select id="getOpptCdbySmpCd" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT OPPT_CD FROM T_OPPORTUNITY
+      WHERE RFC_CD = #smp_cd#  AND RFC_CHASU = #smp_chasu#
+
+    </select>
+
+    <select id="getRfcCd" parameterClass="Hashtable" resultClass="int">
+
+      SELECT COUNT(*) FROM T_OPPORTUNITY
+      WHERE RFC_CD = #rfc_cd#
+
+    </select>
+
+
+    <!-- 기회 및 수주관리 : 사업기회 관리 - 저장/수정 -->
+    <insert id="opportunitySave" parameterClass="Hashtable">
+
+      IF NOT EXISTS
+      (
+      SELECT * FROM T_OPPORTUNITY
+      WHERE COMPANY_CD = #company_cd#
+      AND OPPT_CD = #oppt_cd#
+      )
+      INSERT INTO T_OPPORTUNITY
+      (
+      COMPANY_CD
+      , OPPT_CD
+      , ITEM_CD
+      , PJT_CD
+      , OPPT_TYPE
+      , BIZ_TYPE
+      , DSTR_TYPE
+      , CUST_CD
+      , EUSER_CD
+      , EUSER_NM
+      , USER_CD
+      , DEPT_CD
+      , OPPT_STATUS
+      , WSO_PSBLT
+      , WSO_PDATE
+      , OPPT_SUMRY
+      , BASE_CRNY
+      , EXCH_RATE
+      <isNotEmpty property="rfc_cd">
+      , RFC_CD
+      , RFC_CHASU
+    </isNotEmpty>
+      , DROP_YN
+      , REG_DT
+      , REG_USR
+      ) VALUES (
+      #company_cd#
+      , #oppt_cd#
+      , #item_cd#
+      , #pjt_cd#
+      , #oppt_type#
+      , #biz_type#
+      , #dstr_type#
+      , #cust_cd#
+      , #euser_cd#
+      , #euser_nm#
+      , #user_cd#
+      , #dept_cd#
+      , #oppt_status#
+      , #wso_psblt#
+      , dbo.FN_GET_DATE_FORMAT(#wso_pdate#, 'YYYYMMDD')
+      , #oppt_sumry#
+      , #base_crny#
+      , #exch_rate#
+      <isNotEmpty property="rfc_cd">
+        , #rfc_cd#
+        , #rfc_chasu#
+      </isNotEmpty>
+      , 'N'
+      , getdate()
+      , #reg_usr#
+      )
+      ELSE
+      UPDATE T_OPPORTUNITY SET
+      PJT_CD = #pjt_cd#
+      , OPPT_TYPE = #oppt_type#
+      , BIZ_TYPE = #biz_type#
+      , DSTR_TYPE = #dstr_type#
+      , CUST_CD = #cust_cd#
+      , EUSER_CD = #euser_cd#
+      , EUSER_NM = #euser_nm#
+      , USER_CD = #user_cd#
+      , DEPT_CD = #dept_cd#
+      , OPPT_STATUS = #oppt_status#
+      , WSO_PSBLT = #wso_psblt#
+      , WSO_PDATE = dbo.FN_GET_DATE_FORMAT(#wso_pdate#, 'YYYYMMDD')
+      , OPPT_SUMRY = #oppt_sumry#
+      , BASE_CRNY = #base_crny#
+      , EXCH_RATE = #exch_rate#
+      <isNotEmpty property="rfc_cd">
+      , RFC_CD = #rfc_cd#
+      , RFC_CHASU = #rfc_chasu#
+    </isNotEmpty>
+      , MOD_DT = GETDATE()
+      , MOD_USR = #mod_usr#
+      WHERE COMPANY_CD = #company_cd#
+      AND OPPT_CD = #oppt_cd#
+    </insert>
+    
+
+
+    <!-- 기회 및 수주관리 : 사업기회 관리 - 아이템 삭제 -->
+    <delete id="opptItemDel" parameterClass="Hashtable" >
+      
+      DELETE T_OPPT_ITEM WHERE COMPANY_CD = #company_cd# AND OPPT_CD = #oppt_cd#
+    </delete>
+
+
+
+
+
+
+
+    <!-- 기회 및 수주관리 : 사업기회 관리 - 아이템 저장 -->
+    <insert id="opportunityItemSave" parameterClass="Hashtable">
+
+      INSERT INTO T_OPPT_ITEM
+      (
+      COMPANY_CD
+      , OPPT_CD
+      , ITEM_CD
+      , SALES_DATE
+      , OPPT_QTY
+      , OPPT_UNIT_PRC
+      , AMOUNT
+      , KRW_AMOUNT
+      , REG_DT
+      , REG_USR
+      )
+      VALUES
+      (
+      #company_cd#
+      , #oppt_cd#
+      , #item_cd#
+      , dbo.FN_GET_DATE_FORMAT(#sales_date#, 'YYYYMMDD')
+      , #oppt_qty#
+      , #oppt_unit_prc#
+      , #amount#
+      , #krw_amount#
+      , getdate()
+      , #reg_usr#
+      )
+    </insert>
+
+
+
+    <!-- 기회 및 수주관리 : 사업기회 관리 - 드롭 데이터 저장 -->
+    <insert id="opportunityDropSave" parameterClass="Hashtable">
+
+      INSERT INTO T_OPPT_DROP
+      VALUES (
+      #company_cd#
+      , #oppt_cd#
+      , #user_cd#
+      , dbo.FN_GET_DATE_FORMAT(#oppt_drdate#, 'YYYYMMDD')
+      , #oppt_drtype#
+      , #oppt_drdescript#
+      , GETDATE()
+      , #reg_usr#
+      )
+    </insert>
+
+
+    <!-- 기회 및 수주관리 : 사업기회 관리 - 드롭 실행 -->
+    <update id="opportunityDrop" parameterClass="Hashtable">
+
+      UPDATE T_OPPORTUNITY SET
+      DROP_YN = 'Y'
+      , OPPT_STATUS = 'OPSTAT_900'
+      WHERE COMPANY_CD = #company_cd#
+      AND OPPT_CD = #oppt_cd#
+    </update>
+
+    
+    
+  </statements>
+
+
+
+</sqlMap>

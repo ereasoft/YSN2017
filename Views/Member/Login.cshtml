@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+<script src="~/Content/Scripts/jquery-1.10.2.min.js"></script>
+
+
+
+
+
+
+<div class="row">
+    <div class="col-md-4">
+        AuthTest :[ @User.Identity.Name.Split('|')[0] ] [ @User.IsInRole("User") ]<br />
+        <form name="dataForm" action="/Member/LoginCheck" method="post">
+            
+            <button type="submit" name="Login">[LogIn]</button>
+            <a href="/Member/LogOut">[LoOut]</a>
+        </form>
+
+    </div>
+</div>
+
+
+<script>
+
+    document.dataForm.submit();
+
+</script>

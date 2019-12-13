@@ -1,0 +1,782 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+
+    <!-- 기회 및 수주관리 : 수주대장 관리 - 리스트 -->
+    <select id="salesOrderList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      Z2.SO_CD
+      , Z2.SO_SEQ
+      , Z2.SO_SERL
+      , Z2.ORD_CDATE
+      , Z2.LOT_NO
+      , Z2.ITEM_CD
+      , Z2.ITEM_CD2
+      , Z2.ITEM_NM
+      , Z2.CUST_NM
+      , Z2.EUSER_CD
+      , Z2.EUSER_NM
+      , Z2.DEPT_CD
+      , Z2.DEPT_NM
+      , Z2.USER_CD
+      , Z2.USER_NM
+      , Z2.ITEM_LEVEL1
+      , Z2.ITEM_LEVEL2
+      , Z2.ITEM_LEVEL3
+      , Z2.DSTR_TYPE
+      , Z2.DSTR_TYPE_NM
+      , Z2.BIZ_TYPE
+      , Z2.BIZ_TYPE_NM
+      , Z2.ITEM_TYPE
+      , Z2.ITEM_TYPE_NM
+      , Z2.SALES_PDATE
+      , Z2.SALES_DDATE
+      , MAX(Z2.SALES_ODATE) AS SALES_ODATE
+      , Z2.SO_STATUS
+      , dbo.FN_GET_CODE_NM(#language#, 'OPPT_STATUS', Z2.SO_STATUS) AS  SO_STATUS_NM
+      , Z2.BASE_CRNY
+      , Z2.EXCH_RATE
+      , MAX(Z2.QTY) AS QTY
+      , MAX(Z2.CUST_SP_QTY) AS CUST_SP_QTY
+      , MAX(Z2.QTY) + MAX(Z2.CUST_SP_QTY) AS TOT_QTY
+      , MAX(Z2.UNIT_PRICE) AS UNIT_PRICE
+      , MAX(Z2.AMOUNT) AS AMOUNT
+      , MAX(Z2.KRW_AMOUNT) AS KRW_AMOUNT
+      , MAX(Z2.SALES_WDATE) AS SALES_WDATE
+      , SUM(Z2.WSO_QTY) AS WSO_QTY
+      , SUM(Z2.WSO_AMOUNT) AS WSO_AMOUNT
+      , SUM(Z2.WSO_KRW_AMOUNT) AS WSO_KRW_AMOUNT
+      , MAX(Z2.OWH_QTY) AS OWH_QTY
+      , MAX(Z2.OWH_AMOUNT) AS OWH_AMOUNT
+      , MAX(Z2.OWH_KRW_AMOUNT) AS OWH_KRW_AMOUNT
+      , Z2.PO_CD
+      , Z2.ORD_GB_L
+      , Z2.ORD_GB_L_NM
+      , Z2.ORD_GB_M
+      , Z2.ORD_GB_M_NM
+      , Z2.ORD_GB_S
+      , Z2.ORD_GB_S_NM
+      , Z2.CTLG_CD
+      , Z2.PJT_CD
+      , Z2.PJT_NM
+      , Z2.CLOSE_YN
+      , Z2.REMARK
+      , Z2.DUMMY8
+      , Z2.JNB_DEPT_NM
+      FROM
+      (
+      SELECT
+      Z.COMPANY_CD
+      , Z.SO_CD
+      , Z.SO_SEQ
+      , Z.SO_SERL
+      , Z.ORD_CDATE
+      , Z.LOT_NO
+      , Z.ITEM_CD
+      , Z.ITEM_CD2
+      , Z.ITEM_NM
+      , Z.CUST_CD
+      , Z.CUST_NM
+      , Z.EUSER_CD
+      , Z.EUSER_NM
+      , Z.DEPT_CD
+      , Z.DEPT_NM
+      , Z.USER_CD
+      , Z.USER_NM
+      , Z.ITEM_LEVEL1
+      , Z.ITEM_LEVEL2
+      , Z.ITEM_LEVEL3
+      , Z.DSTR_TYPE
+      , Z.DSTR_TYPE_NM
+      , Z.BIZ_TYPE
+      , Z.BIZ_TYPE_NM
+      , Z.ITEM_TYPE
+      , Z.ITEM_TYPE_NM
+      , Z.SALES_PDATE
+      , Z.SALES_DDATE
+      , OWH.SALES_ODATE
+      , Z.SO_STATUS
+      , Z.BASE_CRNY
+      , Z.EXCH_RATE
+      , Z.QTY
+      , Z.CUST_SP_QTY
+      , Z.UNIT_PRICE
+      , Z.AMOUNT
+      , Z.KRW_AMOUNT
+      , WSO.SALES_WDATE
+      , WSO.WSO_QTY
+      , WSO.WSO_AMOUNT
+      , WSO.WSO_KRW_AMOUNT
+      , OWH.OWH_QTY
+      , OWH.OWH_AMOUNT
+      , OWH.OWH_KRW_AMOUNT
+      , Z.PO_CD
+      , Z.ORD_GB_L
+      , Z.ORD_GB_L_NM
+      , Z.ORD_GB_M
+      , Z.ORD_GB_M_NM
+      , Z.ORD_GB_S
+      , Z.ORD_GB_S_NM
+      , Z.CTLG_CD
+      , Z.PJT_CD
+      , Z.PJT_NM
+      , Z.CLOSE_YN
+      , Z.REMARK
+      , Z.DUMMY8
+      , Z.JNB_DEPT_NM
+      FROM
+      (
+      SELECT
+      LOT_NO
+      , SO_CD
+      , SO_SEQ
+      , SO_SERL
+      , ITEM_CD
+      , SALES_WDATE
+      , SUM(WSO_QTY) AS WSO_QTY
+      , SUM(WSO_AMOUNT) AS WSO_AMOUNT
+      , SUM(WSO_KRW_AMOUNT) AS WSO_KRW_AMOUNT
+      , WSO_YN
+      FROM dbo.T_SO_WSO_AMOUNT
+      WHERE 1=1
+      <isNotEmpty property="year">
+        <isNotEmpty property="month">
+          AND SALES_WDATE LIKE #year#+#month# +'%'
+        </isNotEmpty>
+      </isNotEmpty>
+      GROUP BY LOT_NO, SO_CD, SO_SEQ, SO_SERL, ITEM_CD, SALES_WDATE,  WSO_YN
+      ) WSO LEFT JOIN (
+      SELECT
+      LOT_NO
+      , SO_CD
+      , SO_SEQ
+      , SO_SERL
+      , ITEM_CD
+      , MAX(SALES_ODATE) AS SALES_ODATE
+      , SUM(OWH_QTY) AS OWH_QTY
+      , SUM(OWH_AMOUNT) AS OWH_AMOUNT
+      , SUM(OWH_KRW_AMOUNT) AS OWH_KRW_AMOUNT
+      FROM T_SO_OWH_AMOUNT
+      WHERE 1=1
+      <isNotEmpty property="salesBdate">
+        <isNotEqual property="salesBdate" compareValue="all">
+          AND SALES_ODATE LIKE #year#+#month# +'%'
+        </isNotEqual>
+      </isNotEmpty>
+      GROUP BY LOT_NO, SO_CD, SO_SEQ, SO_SERL, ITEM_CD
+      ) OWH ON WSO.LOT_NO = OWH.LOT_NO
+      AND WSO.SO_CD = OWH.SO_CD
+      AND WSO.SO_SEQ = OWH.SO_SEQ
+      AND WSO.SO_SERL = OWH.SO_SERL
+      AND WSO.ITEM_CD = OWH.ITEM_CD,
+      (
+      SELECT
+      A.COMPANY_CD
+      , B.SO_CD
+      , B.SO_SEQ
+      , B.SO_SERL
+      , A.ORD_CDATE
+      , B.LOT_NO
+      , B.ITEM_CD
+      , C.ITEM_CD2
+      , C.ITEM_NM
+      , A.CUST_CD
+      , D.CUST_NM
+      , E.CUST_CD AS EUSER_CD
+      , E.CUST_NM AS EUSER_NM
+      , A.DEPT_CD
+      , F.DEPT_NM
+      , A.USER_CD
+      , dbo.FN_GET_USER_NM(A.USER_CD) AS USER_NM
+      , C.ITEM_LEVEL1
+      , C.ITEM_LEVEL2
+      , C.ITEM_LEVEL3
+      , A.DSTR_TYPE
+      , dbo.FN_GET_CODE_NM(#language#, 'DSTR_TYPE', A.DSTR_TYPE) AS DSTR_TYPE_NM
+      , A.BIZ_TYPE
+      , dbo.FN_GET_CODE_NM(#language#, 'BIZ_TYPE', A.BIZ_TYPE) AS BIZ_TYPE_NM
+      , C.ITEM_TYPE
+      , dbo.FN_GET_CODE_NM(#language#, 'ITEM_TYPE', C.ITEM_TYPE) AS ITEM_TYPE_NM
+      , B.SALES_PDATE
+      , B.SALES_DDATE
+      , A.SO_STATUS
+      , A.BASE_CRNY
+      , A.EXCH_RATE
+      , B.QTY
+      , B.CUST_SP_QTY
+      , B.UNIT_PRICE
+      , B.AMOUNT
+      , B.KRW_AMOUNT
+      , A.PO_CD
+      , B.ORD_GB_L
+      , dbo.FN_GET_CODE_NM(#language#, 'ORDER_GB', B.ORD_GB_L) AS ORD_GB_L_NM
+      , B.ORD_GB_M
+      , dbo.FN_GET_CODE_NM(#language#, 'ORDER_GB', B.ORD_GB_M) AS ORD_GB_M_NM
+      , B.ORD_GB_S
+      , dbo.FN_GET_CODE_NM(#language#, 'ORDER_GB', B.ORD_GB_S) AS ORD_GB_S_NM
+      , B.CTLG_CD
+      , A.PJT_CD
+      , (SELECT PJT_NM FROM T_PROJECT WHERE PJT_CD = A.PJT_CD) AS PJT_NM
+      , B.CLOSE_YN
+      , B.REMARK
+      , B.DUMMY8
+      , B.JNB_DEPT_NM
+      FROM dbo.T_SALES_ORDER A, dbo.T_SO_CNTR_AMOUNT B, dbo.T_ITEM C, dbo.T_CUSTOMER D, dbo.T_CUSTOMER E, dbo.T_DEPARTMENT F
+      WHERE A.COMPANY_CD = B.COMPANY_CD
+      AND A.COMPANY_CD = C.COMPANY_CD
+      AND A.COMPANY_CD = D.COMPANY_CD
+      AND A.COMPANY_CD = E.COMPANY_CD
+      AND A.COMPANY_CD = F.COMPANY_CD
+      AND A.SO_CD = B.SO_CD
+      AND A.SO_SEQ = B.SO_SEQ
+      AND B.ITEM_CD = C.ITEM_CD
+      AND A.CUST_CD = D.CUST_CD
+      AND A.EUSER_CD = E.CUST_CD
+      AND A.DEPT_CD = F.DEPT_CD
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND F.UP_DEPT_CD = #bizGroup#
+          AND A.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+      ) Z
+      WHERE 1=1
+      AND WSO.SO_CD = Z.SO_CD
+      AND WSO.SO_SEQ = Z.SO_SEQ
+      AND WSO.SO_SERL = Z.SO_SERL
+      ) Z2
+      WHERE Z2.COMPANY_CD = #company_cd#
+      AND Z2.SO_CD IS NOT NULL
+ 
+
+      <isEmpty property="wso_gubun">  
+        AND (DBO.FN_GET_DATE_FORMAT(Z2.SALES_PDATE, 'YYYYMM') <![CDATA[<]]> #year#+#month# OR DBO.FN_GET_DATE_FORMAT(Z2.SALES_PDATE, 'YYYYMM') <![CDATA[>=]]> #year#+#month# )
+      </isEmpty>
+      <isNotEmpty property="wso_gubun">
+        <isEqual property="wso_gubun" compareValue="WSOGB_100">
+           AND DBO.FN_GET_DATE_FORMAT(Z2.SALES_PDATE, 'YYYYMM') <![CDATA[<]]> #year#+#month#
+        </isEqual>
+        <isEqual property="wso_gubun" compareValue="WSOGB_200">
+          AND DBO.FN_GET_DATE_FORMAT(Z2.SALES_PDATE, 'YYYYMM') <![CDATA[>=]]> #year#+#month#
+        </isEqual>
+      </isNotEmpty>
+      <isNotEmpty property="so_cd">
+        AND Z2.SO_CD = #so_cd#
+      </isNotEmpty>
+      <isNotEmpty property="so_seq">
+        AND Z2.SO_SEQ = #so_seq#
+      </isNotEmpty>
+      <isNotEmpty property="lot_no">
+        AND Z2.LOT_NO = #lot_no#
+      </isNotEmpty>
+      
+      
+      
+
+      <isNotEmpty property="deptGroup">
+        AND Z2.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+ 
+      <isNotEmpty property="user_cd">
+        AND Z2.USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND Z2.DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="cust_nm">
+        AND (Z2.CUST_CD LIKE '%'+ #cust_nm# +'%' OR Z2.CUST_NM LIKE '%'+ #cust_nm# +'%')
+      </isNotEmpty>
+      <isNotEmpty property="cust_cd">
+        AND Z2.CUST_CD = #cust_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND Z2.BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      <isNotEmpty property="ctlg_cd">
+        AND Z2.CTLG_CD LIKE '%'+ #ctlg_cd# +'%'
+      </isNotEmpty>
+      <isNotEmpty property="euser_nm">
+        AND (Z2.EUSER_CD LIKE '%'+ #euser_nm# +'%' OR Z2.EUSER_NM LIKE '%'+ #euser_nm# +'%')
+      </isNotEmpty>
+      <isNotEmpty property="euser_cd">
+        AND Z2.EUSER_CD = #euser_cd#
+      </isNotEmpty>
+      <isNotEmpty property="item_type">
+        AND Z2.ITEM_TYPE = #item_type#
+      </isNotEmpty>
+      <isNotEmpty property="item_nm">
+        AND Z2.ITEM_NM LIKE '%'+ #item_nm# +'%'
+      </isNotEmpty>
+      <isNotEmpty property="oppt_status">
+        AND Z2.SO_STATUS = #oppt_status#
+      </isNotEmpty>
+      <isNotEmpty property="bcust_nm">
+        AND Z2.CUST_CD IN (SELECT CUST_CD FROM T_CUSTOMER WHERE BCUST_CD LIKE '%'+ #bcust_nm# +'%' OR DBO.FN_GET_BCUST_NM(BCUST_CD) LIKE '%'+ #bcust_nm# +'%')
+      </isNotEmpty>
+      <isNotEmpty property="bcust_cd">
+        AND Z2.CUST_CD IN (SELECT CUST_CD FROM T_CUSTOMER WHERE BCUST_CD LIKE '%'+ #bcust_cd# +'%')
+      </isNotEmpty>
+      <isNotEmpty property="pjt_cd">
+        AND Z2.PJT_CD = #pjt_cd#
+      </isNotEmpty>
+      <isNotEmpty property="po_cd">
+        AND Z2.PO_CD LIKE '%'+ #po_cd# +'%'
+      </isNotEmpty>
+      <isNotEmpty property="item_level1">
+        AND Z2.ITEM_LEVEL1 = #item_level1#
+      </isNotEmpty>
+      <isNotEmpty property="item_level2">
+        AND Z2.ITEM_LEVEL2 = #item_level2#
+      </isNotEmpty>
+      <isNotEmpty property="item_level3">
+        AND Z2.ITEM_LEVEL3 = #item_level3#
+      </isNotEmpty>
+      <isNotEmpty property="ord_gb_l">
+        AND Z2.ORD_GB_L = #ord_gb_l#
+      </isNotEmpty>
+      <isNotEmpty property="ord_gb_m">
+        AND Z2.ORD_GB_M = #ord_gb_m#
+      </isNotEmpty>
+      <isNotEmpty property="ord_gb_s">
+        AND Z2.ORD_GB_S = #ord_gb_s#
+      </isNotEmpty>
+      <isNotEmpty property="ord_cdate">
+        AND Z2.ORD_CDATE LIKE '#ord_cdate#' +'%'
+      </isNotEmpty>
+      GROUP BY Z2.SO_CD
+      , Z2.SO_SEQ
+      , Z2.SO_SERL
+      , Z2.ORD_CDATE
+      , Z2.LOT_NO
+      , Z2.ITEM_CD
+      , Z2.ITEM_CD2
+      , Z2.ITEM_NM
+      , Z2.CUST_NM
+      , Z2.EUSER_CD
+      , Z2.EUSER_NM
+      , Z2.DEPT_CD
+      , Z2.DEPT_NM
+      , Z2.USER_CD
+      , Z2.USER_NM
+      , Z2.ITEM_LEVEL1
+      , Z2.ITEM_LEVEL2
+      , Z2.ITEM_LEVEL3
+      , Z2.DSTR_TYPE
+      , Z2.DSTR_TYPE_NM
+      , Z2.BIZ_TYPE
+      , Z2.BIZ_TYPE_NM
+      , Z2.ITEM_TYPE
+      , Z2.ITEM_TYPE_NM
+      , Z2.SALES_PDATE
+      , Z2.SALES_DDATE
+      , Z2.SO_STATUS
+      , Z2.BASE_CRNY
+      , Z2.EXCH_RATE
+      , Z2.PO_CD
+      , Z2.ORD_GB_L
+      , Z2.ORD_GB_L_NM
+      , Z2.ORD_GB_M
+      , Z2.ORD_GB_M_NM
+      , Z2.ORD_GB_S
+      , Z2.ORD_GB_S_NM
+      , Z2.CTLG_CD
+      , Z2.PJT_CD
+      , Z2.PJT_NM
+      , Z2.CLOSE_YN
+      , Z2.REMARK
+      , Z2.DUMMY8
+      , Z2.JNB_DEPT_NM
+      ORDER BY ORD_CDATE ASC
+    </select>
+
+
+
+
+
+
+    <!-- 기회 및 수주관리 : 수주대장 관리 - 상세 -->
+    <select id="salesOrderDetail" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      Z2.SO_CD
+      , Z2.SO_SEQ
+      , Z2.SO_SERL
+      , DBO.FN_GET_DATE_FORMAT(Z2.ORD_CDATE, 'YYYY-MM-DD') AS ORD_CDATE
+      , Z2.LOT_NO
+      , Z2.ITEM_CD
+      , Z2.ITEM_CD2
+      , Z2.ITEM_NM
+      , Z2.CUST_NM
+      , Z2.EUSER_CD
+      , Z2.EUSER_NM
+      , Z2.DEPT_CD
+      , Z2.DEPT_NM
+      , Z2.USER_CD
+      , Z2.USER_NM
+      , Z2.ITEM_LEVEL1
+      , Z2.ITEM_LEVEL2
+      , Z2.ITEM_LEVEL3
+      , Z2.DSTR_TYPE
+      , Z2.DSTR_TYPE_NM
+      , Z2.BIZ_TYPE
+      , Z2.BIZ_TYPE_NM
+      , Z2.ITEM_TYPE
+      , Z2.ITEM_TYPE_NM
+      , DBO.FN_GET_DATE_FORMAT(Z2.SALES_PDATE, 'YYYY-MM-DD') AS SALES_PDATE
+      , DBO.FN_GET_DATE_FORMAT(Z2.SALES_DDATE, 'YYYY-MM-DD') AS SALES_DDATE
+      , DBO.FN_GET_DATE_FORMAT(MAX(Z2.SALES_ODATE), 'YYYY-MM-DD') AS SALES_ODATE
+      , Z2.SO_STATUS
+      , dbo.FN_GET_CODE_NM(#language#, 'OPPT_STATUS', Z2.SO_STATUS) AS  SO_STATUS_NM
+      , Z2.BASE_CRNY
+      , Z2.EXCH_RATE
+      , MAX(Z2.QTY) AS QTY
+      , MAX(Z2.CUST_SP_QTY) AS CUST_SP_QTY
+      , MAX(Z2.UNIT_PRICE) AS UNIT_PRICE
+      , MAX(Z2.AMOUNT) AS AMOUNT
+      , MAX(Z2.KRW_AMOUNT) AS KRW_AMOUNT
+      , MAX(Z2.SALES_WDATE) AS SALES_WDATE
+      , SUM(Z2.WSO_QTY) AS WSO_QTY
+      , SUM(Z2.WSO_AMOUNT) AS WSO_AMOUNT
+      , SUM(Z2.WSO_KRW_AMOUNT) AS WSO_KRW_AMOUNT
+      , MAX(Z2.OWH_QTY) AS OWH_QTY
+      , MAX(Z2.OWH_AMOUNT) AS OWH_AMOUNT
+      , MAX(Z2.OWH_KRW_AMOUNT) AS OWH_KRW_AMOUNT
+      , Z2.PO_CD
+      , Z2.ORD_GB_L
+      , Z2.ORD_GB_L_NM
+      , Z2.ORD_GB_M
+      , Z2.ORD_GB_M_NM
+      , Z2.ORD_GB_S
+      , Z2.ORD_GB_S_NM
+      , Z2.CTLG_CD
+      , Z2.PJT_CD
+      , Z2.PJT_NM
+      , Z2.CLOSE_YN
+      FROM
+      (
+      SELECT
+      Z.COMPANY_CD
+      , Z.SO_CD
+      , Z.SO_SEQ
+      , Z.SO_SERL
+      , Z.ORD_CDATE
+      , Z.LOT_NO
+      , Z.ITEM_CD
+      , Z.ITEM_CD2
+      , Z.ITEM_NM
+      , Z.CUST_CD
+      , Z.CUST_NM
+      , Z.EUSER_CD
+      , Z.EUSER_NM
+      , Z.DEPT_CD
+      , Z.DEPT_NM
+      , Z.USER_CD
+      , Z.USER_NM
+      , Z.ITEM_LEVEL1
+      , Z.ITEM_LEVEL2
+      , Z.ITEM_LEVEL3
+      , Z.DSTR_TYPE
+      , Z.DSTR_TYPE_NM
+      , Z.BIZ_TYPE
+      , Z.BIZ_TYPE_NM
+      , Z.ITEM_TYPE
+      , Z.ITEM_TYPE_NM
+      , Z.SALES_PDATE
+      , Z.SALES_DDATE
+      , OWH.SALES_ODATE
+      , Z.SO_STATUS
+      , Z.BASE_CRNY
+      , Z.EXCH_RATE
+      , Z.QTY
+      , Z.CUST_SP_QTY
+      , Z.UNIT_PRICE
+      , Z.AMOUNT
+      , Z.KRW_AMOUNT
+      , WSO.SALES_WDATE
+      , WSO.WSO_QTY
+      , WSO.WSO_AMOUNT
+      , WSO.WSO_KRW_AMOUNT
+      , OWH.OWH_QTY
+      , OWH.OWH_AMOUNT
+      , OWH.OWH_KRW_AMOUNT
+      , Z.PO_CD
+      , Z.ORD_GB_L
+      , Z.ORD_GB_L_NM
+      , Z.ORD_GB_M
+      , Z.ORD_GB_M_NM
+      , Z.ORD_GB_S
+      , Z.ORD_GB_S_NM
+      , Z.CTLG_CD
+      , Z.PJT_CD
+      , Z.PJT_NM
+      , Z.CLOSE_YN
+      FROM
+      (
+      SELECT
+      LOT_NO
+      , SO_CD
+      , SO_SEQ
+      , SO_SERL
+      , ITEM_CD
+      , SALES_WDATE
+      , SUM(WSO_QTY) AS WSO_QTY
+      , SUM(WSO_AMOUNT) AS WSO_AMOUNT
+      , SUM(WSO_KRW_AMOUNT) AS WSO_KRW_AMOUNT
+      , WSO_YN
+      FROM dbo.T_SO_WSO_AMOUNT
+      WHERE 1=1
+      <isNotEmpty property="year">
+        <isNotEmpty property="month">
+          AND SALES_WDATE LIKE #year#+#month# +'%'
+        </isNotEmpty>
+      </isNotEmpty>
+      GROUP BY LOT_NO, SO_CD, SO_SEQ, SO_SERL, ITEM_CD, SALES_WDATE,  WSO_YN
+      ) WSO LEFT JOIN (
+      SELECT
+      LOT_NO
+      , SO_CD
+      , SO_SEQ
+      , SO_SERL
+      , ITEM_CD
+      , MAX(SALES_ODATE) AS SALES_ODATE
+      , SUM(OWH_QTY) AS OWH_QTY
+      , SUM(OWH_AMOUNT) AS OWH_AMOUNT
+      , SUM(OWH_KRW_AMOUNT) AS OWH_KRW_AMOUNT
+      FROM T_SO_OWH_AMOUNT
+      WHERE 1=1
+      <isNotEmpty property="salesBdate">
+        <isNotEqual property="salesBdate" compareValue="all">
+          AND SALES_ODATE LIKE #year#+#month# +'%'
+        </isNotEqual>
+      </isNotEmpty>
+      GROUP BY LOT_NO, SO_CD, SO_SEQ, SO_SERL, ITEM_CD
+      ) OWH ON WSO.LOT_NO = OWH.LOT_NO
+      AND WSO.SO_CD = OWH.SO_CD
+      AND WSO.SO_SEQ = OWH.SO_SEQ
+      AND WSO.SO_SERL = OWH.SO_SERL
+      AND WSO.ITEM_CD = OWH.ITEM_CD,
+      (
+      SELECT
+      A.COMPANY_CD
+      , B.SO_CD
+      , B.SO_SEQ
+      , B.SO_SERL
+      , A.ORD_CDATE
+      , B.LOT_NO
+      , B.ITEM_CD
+      , C.ITEM_CD2
+      , C.ITEM_NM
+      , A.CUST_CD
+      , D.CUST_NM
+      , E.CUST_CD AS EUSER_CD
+      , E.CUST_NM AS EUSER_NM
+      , A.DEPT_CD
+      , F.DEPT_NM
+      , A.USER_CD
+      , dbo.FN_GET_USER_NM(A.USER_CD) AS USER_NM
+      , C.ITEM_LEVEL1
+      , C.ITEM_LEVEL2
+      , C.ITEM_LEVEL3
+      , A.DSTR_TYPE
+      , dbo.FN_GET_CODE_NM(#language#, 'DSTR_TYPE', A.DSTR_TYPE) AS DSTR_TYPE_NM
+      , A.BIZ_TYPE
+      , dbo.FN_GET_CODE_NM(#language#, 'BIZ_TYPE', A.BIZ_TYPE) AS BIZ_TYPE_NM
+      , C.ITEM_TYPE
+      , dbo.FN_GET_CODE_NM(#language#, 'ITEM_TYPE', C.ITEM_TYPE) AS ITEM_TYPE_NM
+      , B.SALES_PDATE
+      , B.SALES_DDATE
+      , A.SO_STATUS
+      , A.BASE_CRNY
+      , A.EXCH_RATE
+      , B.QTY
+      , B.CUST_SP_QTY
+      , B.UNIT_PRICE
+      , B.AMOUNT
+      , B.KRW_AMOUNT
+      , A.PO_CD
+      , B.ORD_GB_L
+      , dbo.FN_GET_CODE_NM(#language#, 'ORDER_GB', B.ORD_GB_L) AS ORD_GB_L_NM
+      , B.ORD_GB_M
+      , dbo.FN_GET_CODE_NM(#language#, 'ORDER_GB', B.ORD_GB_M) AS ORD_GB_M_NM
+      , B.ORD_GB_S
+      , dbo.FN_GET_CODE_NM(#language#, 'ORDER_GB', B.ORD_GB_S) AS ORD_GB_S_NM
+      , B.CTLG_CD
+      , A.PJT_CD
+      , (SELECT PJT_NM FROM T_PROJECT WHERE PJT_CD = A.PJT_CD) AS PJT_NM
+      , B.CLOSE_YN
+      , B.REMARK
+      , B.DUMMY8
+      , B.JNB_DEPT_NM
+      FROM dbo.T_SALES_ORDER A, dbo.T_SO_CNTR_AMOUNT B, dbo.T_ITEM C, dbo.T_CUSTOMER D, dbo.T_CUSTOMER E, dbo.T_DEPARTMENT F
+      WHERE A.COMPANY_CD = B.COMPANY_CD
+      AND A.COMPANY_CD = C.COMPANY_CD
+      AND A.COMPANY_CD = D.COMPANY_CD
+      AND A.COMPANY_CD = E.COMPANY_CD
+      AND A.COMPANY_CD = F.COMPANY_CD
+      AND A.SO_CD = B.SO_CD
+      AND A.SO_SEQ = B.SO_SEQ
+      AND B.ITEM_CD = C.ITEM_CD
+      AND A.CUST_CD = D.CUST_CD
+      AND A.EUSER_CD = E.CUST_CD
+      AND A.DEPT_CD = F.DEPT_CD
+      ) Z
+      WHERE 1=1
+      AND WSO.SO_CD = Z.SO_CD
+      AND WSO.SO_SEQ = Z.SO_SEQ
+      AND WSO.SO_SERL = Z.SO_SERL
+      ) Z2
+      WHERE Z2.COMPANY_CD = #company_cd#
+      AND Z2.SO_CD IS NOT NULL
+
+
+      <isNotEmpty property="so_cd">
+        AND Z2.SO_CD = #so_cd#
+      </isNotEmpty>
+      <isNotEmpty property="so_seq">
+        AND Z2.SO_SEQ = #so_seq#
+      </isNotEmpty>
+      <isNotEmpty property="lot_no">
+        AND Z2.LOT_NO = #lot_no#
+      </isNotEmpty>
+
+
+
+
+      GROUP BY Z2.SO_CD
+      , Z2.SO_SEQ
+      , Z2.SO_SERL
+      , Z2.ORD_CDATE
+      , Z2.LOT_NO
+      , Z2.ITEM_CD
+      , Z2.ITEM_CD2
+      , Z2.ITEM_NM
+      , Z2.CUST_NM
+      , Z2.EUSER_CD
+      , Z2.EUSER_NM
+      , Z2.DEPT_CD
+      , Z2.DEPT_NM
+      , Z2.USER_CD
+      , Z2.USER_NM
+      , Z2.ITEM_LEVEL1
+      , Z2.ITEM_LEVEL2
+      , Z2.ITEM_LEVEL3
+      , Z2.DSTR_TYPE
+      , Z2.DSTR_TYPE_NM
+      , Z2.BIZ_TYPE
+      , Z2.BIZ_TYPE_NM
+      , Z2.ITEM_TYPE
+      , Z2.ITEM_TYPE_NM
+      , Z2.SALES_PDATE
+      , Z2.SALES_DDATE
+      , Z2.SO_STATUS
+      , Z2.BASE_CRNY
+      , Z2.EXCH_RATE
+      , Z2.PO_CD
+      , Z2.ORD_GB_L
+      , Z2.ORD_GB_L_NM
+      , Z2.ORD_GB_M
+      , Z2.ORD_GB_M_NM
+      , Z2.ORD_GB_S
+      , Z2.ORD_GB_S_NM
+      , Z2.CTLG_CD
+      , Z2.PJT_CD
+      , Z2.PJT_NM
+      , Z2.CLOSE_YN
+      ORDER BY ORD_CDATE ASC
+    </select>
+    
+    
+
+    <!-- 기회 및 수주관리 : 수주대장 관리 - 저장 step1 -->
+    <update id="salesOrderUpdate" parameterClass="Hashtable">
+
+      UPDATE T_SALES_ORDER SET
+      PJT_CD = #pjt_cd#
+      , MOD_DT = GETDATE()
+      , MOD_USR = #mod_usr#
+      WHERE COMPANY_CD = #company_cd#
+      AND SO_CD = #so_cd#
+
+    </update>
+    
+    
+
+    <!-- 기회 및 수주관리 : 수주대장 관리 - 저장 step2 -->
+    <update id="cntrAmountUpdate" parameterClass="Hashtable">
+
+      UPDATE T_SO_CNTR_AMOUNT SET
+      CLOSE_YN = #close_yn#
+      , MOD_DT = GETDATE()
+      , MOD_USR = #mod_usr#
+      WHERE COMPANY_CD = #company_cd#
+      AND SO_CD = #so_cd#
+      AND SO_SEQ = #so_seq#
+      AND SO_SERL = #so_serl#
+    </update>
+
+
+    <!-- 기회 및 수주관리 : 수주대장 관리 - 상세  납품 정보 -->
+    <select id="salesOrderItemList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      ROW_NUMBER() OVER (ORDER BY OWH_NO ASC) AS ROWNUM
+      , A.SO_CD
+      , A.SO_SEQ
+      , A.SO_SERL
+      , A.INV_SEQ
+      , A.INV_SERL
+      , A.LOT_NO
+      , A.OWH_NO
+      , A.ITEM_CD
+      , (SELECT ITEM_CD2 FROM T_ITEM WHERE ITEM_CD = A.ITEM_CD) AS ITEM_CD2
+      , DBO.FN_GET_ITEM_NM(A.ITEM_CD) AS ITEM_NM
+      , (SELECT BASE_CRNY FROM T_SALES_ORDER WHERE SO_CD = A.SO_CD) AS BASE_CRNY
+      , A.EXCH_RATE
+      , A.OWH_QTY
+      , A.OWH_UNIT_PRICE
+      , A.OWH_AMOUNT
+      , A.OWH_KRW_AMOUNT
+      , DBO.FN_GET_DATE_FORMAT(A.SALES_ODATE, 'YYYY-MM-DD') AS SALES_ODATE
+      FROM T_SO_OWH_AMOUNT A
+      WHERE A.COMPANY_CD = #company_cd#
+      AND A.SO_CD = #so_cd#
+      AND A.SO_SEQ = #so_seq#
+      AND A.LOT_NO = #lot_no#
+      ORDER BY ROWNUM ASC
+    </select>
+    
+
+    <!-- 기회 및 수주관리 : 수주대장 관리 - 상세  청구 정보 -->
+    <select id="salesOrderItemBillList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      ROW_NUMBER() OVER (ORDER BY ITEM_CD ASC) AS ROWNUM
+      , A.ITEM_CD
+      , (SELECT ITEM_CD2 FROM T_ITEM WHERE ITEM_CD = A.ITEM_CD) AS ITEM_CD2
+      , DBO.FN_GET_ITEM_NM(A.ITEM_CD) AS ITEM_NM
+      , (SELECT BASE_CRNY FROM T_SALES_ORDER WHERE SO_CD = A.SO_CD) AS BASE_CRNY
+      , A.EXCH_RATE
+      , A.BILL_QTY
+      , A.BILL_UNIT_PRICE
+      , A.BILL_AMOUNT
+      , A.BILL_KRW_AMOUNT
+      , DBO.FN_GET_DATE_FORMAT(A.SALES_BDATE, 'YYYY-MM-DD') AS SALES_BDATE
+      FROM T_SO_BILL_AMOUNT A
+      WHERE A.COMPANY_CD = #company_cd#
+      AND A.SO_CD = #so_cd#
+      AND A.SO_SEQ = #so_seq#
+      AND A.LOT_NO = #lot_no#
+      ORDER BY SALES_BDATE ASC
+    </select>
+    
+
+  </statements>
+
+
+
+</sqlMap>

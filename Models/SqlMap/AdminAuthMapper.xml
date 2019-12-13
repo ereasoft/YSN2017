@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+
+
+
+
+
+    <!-- 권한 관리 : 리스트 -->
+    <select id="authorityList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      'S' AS MODE
+      ,AUTH_ID
+      , AUTH_NM
+      , #company_cd# AS COMPANY_CD
+      , ISNULL(AUTH_DIV,'N') AS AUTH_DIV
+      , ISNULL(AUTH_TEAM,'N') AS AUTH_TEAM
+      , ISNULL(AUTH_PERS_1,'N') AS AUTH_PERS_1
+      , ISNULL(AUTH_PERS_2,'N') AS AUTH_PERS_2
+      , AUTH_DESCRIPT
+      , ISNULL(USE_YN,'N') AS USE_YN
+      , REG_DT
+      , REG_USR
+      , MOD_DT
+      , MOD_USR
+      FROM T_AUTHORITY
+      WHERE 1=1
+      <isNotEmpty property="searchAuthId">
+        AND AUTH_ID LIKE '%' + #searchAuthId# + '%'
+      </isNotEmpty>
+      <isNotEmpty property="searchAuthNm">
+        AND AUTH_NM LIKE '%' + #searchAuthNm#  + '%'
+      </isNotEmpty>
+    </select>
+
+
+
+    <!-- 권한 관리 : 하위 리스트 - 권한 별 사용자 -->
+    <select id="authUserList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      USR.COMPANY_CD
+      ,AUTH.AUTH_ID AS AUTH_ID
+      , AUTH.USER_CD AS USER_CD
+      , USR.USER_NM AS USER_NM
+      , DEP.DEPT_NM AS DEPT_NM
+      , USR.EMAIL AS EMAIL
+      , AUTH.AUTH_DESCRIPT AS DESCRIPT
+      , AUTH.USE_YN AS USER_YN
+      , AUTH.REG_DT
+      , AUTH.REG_USR
+      , AUTH.MOD_DT
+      , AUTH.MOD_USR
+      FROM T_AUTH_USER AUTH
+      ,T_USER USR
+      ,T_DEPARTMENT DEP
+      WHERE 1=1
+      AND AUTH.USER_CD = USR.USER_CD
+      AND USR.DEPT_CD = DEP.DEPT_CD
+      <isNotEmpty property="selectAuthId">
+        AND AUTH_ID = #selectAuthId#
+      </isNotEmpty>
+      AND USR.COMPANY_CD = #company_cd#
+    </select>
+
+    
+        
+    
+    <!-- 권한관리 : 하위 메뉴 조회 - 권한별 메뉴  -->
+    <select id="authMenuList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      CASE WHEN ISNULL(AUTH.AUTH_ID,'') = '' THEN 'I' ELSE 'U' END AS MODE
+      ,#company_cd# AS COMPANY_CD
+      ,MENU.MENU_ID AS MENU_ID
+      , MENU.MENU_NM AS MENU_NM
+      , MENU.MENU_LEVEL AS MENU_LEVEL
+      , MENU.UP_MENU_ID AS UP_MENU_ID
+      , CASE WHEN MENU_LEVEL = 3 THEN ISNULL(AUTH.USE_SCOPE,'R') ELSE '' END AS USE_SCOPE
+      , ISNULL(AUTH.DEPT_YN,'N') AS DEPT_YN
+      , CASE WHEN MENU_LEVEL = 3 THEN ISNULL(AUTH.ODEPT_SCOPE,'SELF') ELSE '' END AS ODEPT_SCOPE
+      , CASE WHEN MENU_LEVEL = 3 THEN ISNULL(AUTH.IDEPT_SCOPE,'N')  ELSE '' END AS IDEPT_SCOPE
+      , AUTH.AUTH_DESCRIPT AS DESCRIPT
+      , ISNULL(AUTH.USE_YN,'N') AS USE_YN
+      , ISNULL(AUTH.AUTH_ID,#selectAuthId#) AS AUTH_ID
+      , AUTH.REG_DT
+      , AUTH.REG_USR
+      , AUTH.MOD_DT
+      , AUTH.MOD_USR
+      ,(SELECT COUNT(*) FROM T_MENU WHERE USE_YN = 'Y' AND UP_MENU_ID = MENU.MENU_ID) AS CHILD_CNT
+      FROM (SELECT * FROM T_MENU WHERE USE_YN = 'Y') MENU LEFT JOIN
+      (SELECT *
+      FROM T_AUTH_MENU
+      WHERE 1=1
+      AND AUTH_ID = #selectAuthId#
+      ) AUTH
+      ON MENU.MENU_ID = AUTH.MENU_ID
+      WHERE 1=1
+      <isNotEmpty property="upmenuId">
+      AND MENU.UP_MENU_ID = #upmenuId#
+    </isNotEmpty>
+    <isNotEmpty property="menuId">
+      AND MENU.MENU_ID = #menuId#
+    </isNotEmpty>
+
+    </select>
+
+    
+
+
+    <!-- 권한관리 : 당당자 추가 팝업 검색 -->
+    <select id="popupAuthUserList" parameterClass="Hashtable" resultClass="Hashtable">
+ 
+      SELECT
+      USR.USER_CD AS USER_CD
+      , USR.USER_NM AS USER_NM
+      , DEP.DEPT_NM AS DEPT_NM
+      , USR.EMAIL AS EMAIL
+      , USR.REG_DT
+      , USR.REG_USR
+      , USR.MOD_DT
+      , USR.MOD_USR
+      FROM T_USER USR
+      LEFT OUTER JOIN
+      T_DEPARTMENT DEP
+      ON
+      USR.DEPT_CD = DEP.DEPT_CD
+      WHERE
+      USR.USE_YN = 'Y'
+      <isNotEmpty property="UserNm">
+        AND USR.USER_NM LIKE '%' + #UserNm# + '%'
+      </isNotEmpty>
+
+      <isNotEmpty property="BizGroup">
+        <isNotEmpty property="DeptGroup">
+          AND USR.DEPT_CD = #DeptGroup#
+        </isNotEmpty>
+        <isEmpty>
+          AND (DEP.UP_DEPT_CD = #BizGroup# OR USR.DEPT_CD = #BizGroup#)
+          AND USR.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+
+      ORDER BY USER_NM
+
+    </select>
+
+
+
+    <!-- 권한관리 : 담당자 추가 팝업  - 등록  -->
+    <insert id="popupAuthUserReg" parameterClass="Hashtable"> 
+      INSERT INTO T_AUTH_USER
+      (
+      AUTH_ID
+      , USER_CD
+      , AUTH_DESCRIPT
+      , USE_YN
+      , REG_DT
+      , REG_USR
+      , MOD_DT
+      , MOD_USR
+      )
+      VALUES
+      (
+      #auth_id#
+      ,#auth_user_cd#
+      , ''
+      , 'Y'
+      , GETDATE()
+      , #user_cd#
+      , GETDATE()
+      , #user_cd#
+      ) 
+    </insert>
+
+    
+
+    <!-- 권한관리 : 담당자 삭제  -->
+    <delete id="popupAuthUserDelete" parameterClass="Hashtable">
+      DELETE FROM
+      T_AUTH_USER
+      WHERE AUTH_ID = #auth_id#
+      AND USER_CD = #auth_user_cd#
+    </delete>
+
+
+
+    <!-- 권한관리 : 권한 등록  -->
+    <insert id="authReg" parameterClass="Hashtable"> 
+      INSERT INTO T_AUTHORITY
+      (
+      AUTH_ID
+      , AUTH_NM
+      , AUTH_DIV
+      , AUTH_TEAM
+      , AUTH_PERS_1
+      , AUTH_PERS_2
+      , AUTH_DESCRIPT
+      , USE_YN
+      , REG_DT
+      , REG_USR
+      , MOD_DT
+      , MOD_USR
+      )
+      VALUES
+      (
+      #auth_id#
+      ,#auth_nm#
+      , #auth_div#
+      , #auth_team#
+      , #auth_pers_1#
+      , #auth_pers_2#
+      , #auth_descript#
+      , #use_yn#
+      , GETDATE()
+      , #user_cd#
+      , GETDATE()
+      , #user_cd#
+      )
+    </insert>
+
+    <!-- 권한관리 : 권한 수정  -->
+    <update id="authModify" parameterClass="Hashtable"> 
+      UPDATE T_AUTHORITY SET
+      AUTH_NM = #auth_nm#
+      ,AUTH_DIV = #auth_div#
+      ,AUTH_TEAM = #auth_team#
+      ,AUTH_PERS_1 = #auth_pers_1#
+      ,AUTH_PERS_2 = #auth_pers_2#
+      ,AUTH_DESCRIPT = #auth_descript#
+      ,USE_YN = #use_yn#
+      ,MOD_DT = GETDATE()
+      ,MOD_USR = #user_cd#
+      WHERE 1=1
+      AND AUTH_ID = #auth_id#
+      </update>
+    
+    <!-- 권한관리 : 메뉴권한 추가  -->
+    <insert id="authMenuIns" parameterClass="Hashtable"> 
+      INSERT INTO T_AUTH_MENU
+      (
+      AUTH_ID
+      , MENU_ID
+      , USE_SCOPE
+      , DEPT_YN
+      , ODEPT_SCOPE
+      , IDEPT_SCOPE
+      , AUTH_DESCRIPT
+      , USE_YN
+      , REG_DT
+      , REG_USR
+      , MOD_DT
+      , MOD_USR
+      )
+      VALUES
+      (
+      #auth_id#
+      ,#menu_id#
+      , #use_scope#
+      , #dept_yn#
+      , #odept_scope#
+      , #idept_scope#
+      , #auth_descript#
+      , #use_yn#
+      , GETDATE()
+      , #user_cd#
+      , GETDATE()
+      , #user_cd#
+      ) 
+    </insert>
+
+    <!-- 권한관리 : 메뉴권한 수정  -->
+    <update id="authMenuUpdate" parameterClass="Hashtable"> 
+      UPDATE T_AUTH_MENU SET
+      USE_SCOPE = #use_scope#
+      ,DEPT_YN = #dept_yn#
+      ,ODEPT_SCOPE = #odept_scope#
+      ,IDEPT_SCOPE = #idept_scope# 
+      ,USE_YN = #use_yn#
+      ,MOD_DT = GETDATE()
+      ,MOD_USR = #user_cd#
+      WHERE 1=1
+      AND AUTH_ID = #auth_id#
+      AND MENU_ID = #menu_id#
+    </update> 
+    
+    <!-- 권한관리 : 메뉴권한 삭제  -->
+    <delete id="authMenuDelete" parameterClass="Hashtable">
+      DELETE FROM
+      T_AUTH_MENU
+      WHERE AUTH_ID = #auth_id#
+      AND MENU_ID = #menu_id#
+    </delete>
+
+
+
+
+
+
+
+
+
+  </statements>
+
+
+
+</sqlMap>

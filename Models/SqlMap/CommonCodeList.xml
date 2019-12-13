@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <alias>
+    <typeAlias alias="T_DEPARTMENT"  type="YSN2017.Models.T_DEPARTMENT" />
+    <typeAlias alias="T_USER"  type="YSN2017.Models.T_USER" />
+    <typeAlias alias="T_NATION"  type="YSN2017.Models.T_NATION" />
+    <typeAlias alias="T_CODE"  type="YSN2017.Models.T_CODE" />
+  </alias>
+
+
+
+  <statements>
+
+    <!-- 회사  -->
+    <select id="selCompany"  parameterClass="Hashtable"  resultClass="Hashtable">
+
+      SELECT  COMPANY_CD AS DEPT_CD , COMP_NM AS DEPT_NM
+      FROM T_COMPANY
+      where USE_YN = 'Y'
+      order by dept_cd
+
+    </select>
+
+    <!-- 부서  -->
+    <select id="selPart1"  parameterClass="Hashtable"  resultClass="Hashtable">
+
+      SELECT COMPANY_CD, DEPT_CD, DEPT_NM
+      FROM T_DEPARTMENT
+      where company_cd = #COMPANY_CD#
+      and dept_level = '2'
+      and USE_YN = 'Y'
+      order by dept_cd
+
+    </select>
+
+    <!-- 부서2  -->
+    <select id="selPart2"  parameterClass="Hashtable"  resultClass="Hashtable">
+
+      SELECT COMPANY_CD, DEPT_CD, DEPT_NM
+      FROM T_DEPARTMENT
+      where company_cd = #COMPANY_CD#
+      and UP_DEPT_CD = #UP_DEPT_CD#
+      and dept_level = '3'
+      and USE_YN = 'Y'
+      order by dept_cd
+
+    </select>
+
+    <!-- 부서3  -->
+    <select id="selPart3"  parameterClass="Hashtable"  resultClass="Hashtable">
+
+      SELECT COMPANY_CD, DEPT_CD, DEPT_NM
+      FROM T_DEPARTMENT
+      where company_cd = #COMPANY_CD#
+      and UP_DEPT_CD = #UP_DEPT_CD#
+      and dept_level = '4'
+      and USE_YN = 'Y'
+      order by dept_cd
+
+    </select>
+     
+
+    <!-- 매출조직  -->
+    <select id="DePart3"  parameterClass="Hashtable"  resultClass="Hashtable">
+
+      SELECT COMPANY_CD, DEPT_CD, DEPT_NM
+      FROM T_DEPARTMENT
+      where company_cd = #COMPANY_CD#
+      and dept_level = '3'
+      and sadept_yn = 'Y'
+      order by dept_cd
+
+    </select>
+
+    <!-- 매출조직 하위부서  -->
+    <select id="DePart4"  parameterClass="Hashtable"  resultClass="Hashtable">
+
+      SELECT COMPANY_CD, DEPT_CD, DEPT_NM
+      FROM T_DEPARTMENT
+      where company_cd = #COMPANY_CD#
+      and UP_DEPT_CD = #UP_DEPT_CD#
+      and sadept_yn = 'Y'
+      and DEPT_CD not in ('D_ROOT')
+      order by dept_cd
+
+    </select>
+
+
+    <!-- 영업담당  -->
+    <select id="DePartUser" parameterClass="Hashtable" resultClass="Hashtable">
+
+
+      SELECT a.USER_CD, a.USER_NM, a.dept_cd, b.up_dept_cd
+      FROM T_USER a
+      inner join T_DEPARTMENT b
+      on a.dept_cd = b.dept_cd
+      WHERE a.COMPANY_CD = #company_cd#
+      AND a.USE_YN = 'Y'
+      
+      <isNotEmpty property="up_dept_cd">
+        AND b.up_dept_cd = #up_dept_cd#
+      </isNotEmpty>
+
+      
+      <isNotEmpty property="dept_cd">
+        AND a.DEPT_CD = #dept_cd#
+      </isNotEmpty>
+
+     
+      <!--
+      <isEmpty property="up_dept_cd">
+        <isNotEmpty property="dept_cd">
+          AND a.DEPT_CD IN  <iterate open="(" close=")" conjunction=","> #dept_cd[]# </iterate>
+        </isNotEmpty>
+     </isEmpty>
+      -->
+
+      ORDER BY a.USER_NM ASC
+      
+      
+<!--
+      SELECT USER_CD, USER_NM
+      FROM T_USER
+      WHERE COMPANY_CD = #COMPANY_CD#
+      AND USE_YN = 'Y'
+      AND DEPT_CD IN  <iterate open="(" close=")" conjunction=","> #DEPT_CD[]# </iterate>
+      GROUP BY USER_CD, USER_NM
+      ORDER BY USER_NM ASC
+-->
+    </select>
+
+
+   <!-- 유통구조기준영업담당  -->
+    <select id="DstrUser" parameterClass="Hashtable" resultClass="Hashtable">
+     SELECT USER_CD,USER_NM 
+     FROM T_USER 
+     WHERE COMPANY_CD != 'YONWOO' 
+     AND USE_YN = 'Y' 
+      <isNotEmpty property="dstr_chn">
+        AND DSTR_CHN = #dstr_chn#
+      </isNotEmpty> 
+     ORDER BY USER_NM ASC 
+    </select>   
+    
+    <!-- 국가정보  -->
+    <select id="Nation"  resultClass="Hashtable">
+
+      SELECT NAT_CD
+      , case
+        when #language# = 'KOR' then NAT_NM
+        when #language# = 'ENG' then NAT_ENG_NM
+        else NAT_NM
+        end as NAT_NM
+      , NAT_ORDER
+      FROM T_NATION
+      WHERE USE_YN = 'Y'
+      ORDER BY NAT_NM
+
+    </select>
+
+
+    <!-- 국내/해외: DMOS_CD , 신용등급 : CUST_GRADE , 결재조건:TRMS_PAY , 활동여부:SA_YN, 업무구분:KM_WORK, 업무구분:KM_WORK, 권한정도:KM_POWER, 기준통화 : CRNY_TYPE  -->
+    <select id="TCode" parameterClass="Hashtable"  resultClass="Hashtable">
+
+      SELECT CODE_ID
+      , ISNULL(case
+      when #language# = 'ENG' then NULLIF(CODE_ENG,'')
+      when #language# = 'CHN' then NULLIF(CODE_CHN,'')
+      when #language# = 'JPN' then NULLIF(CODE_JPN,'')
+      when #language# = 'KOR' then NULLIF(CODE_KOR,'')
+      else CODE_KOR
+      end,CODE_KOR) as CODE_NM
+      FROM T_CODE
+      WHERE 1=1
+      AND USE_YN ='Y'
+      AND UP_CODE_ID = #UP_CODE_ID#
+
+      <isNotEmpty property="value_1">
+        AND VALUE_1 = #value_1#
+      </isNotEmpty>
+      <isNotEmpty property="value_2">
+        AND VALUE_2 = #value_2#
+      </isNotEmpty>
+      <isNotEmpty property="value_3">
+        AND VALUE_3 = #value_3#
+      </isNotEmpty>
+      <isNotEmpty property="value_4">
+        AND VALUE_4 = #value_4#
+      </isNotEmpty>
+
+      <isNotEmpty property="value_5">
+        AND VALUE_5 = #value_5#
+      </isNotEmpty>
+      <isNotEmpty property="mode">
+        <isEqual property="mode" compareValue="R">
+          AND VALUE_5 != 'SM'
+        </isEqual>
+        <isEqual property="mode" compareValue="A">
+          AND VALUE_5 NOT IN ('RQ','SM')
+        </isEqual>
+        <isEqual property="mode" compareValue="V">
+          AND VALUE_5 NOT IN ('RQ','RV','SM')
+        </isEqual>
+        <isEqual property="mode" compareValue="V">
+          AND VALUE_5 NOT IN ('RQ','RV','SM')
+        </isEqual>
+        <isEqual property="mode" compareValue="delay">
+          AND (VALUE_1 = 'ALL' OR VALUE_2 = #step#)
+        </isEqual>
+      </isNotEmpty> 
+         
+   
+      
+      order by code_order
+
+    </select>
+
+
+    
+    
+    <!-- 품목분류 -->
+    <select id="getItemSubLevel"  parameterClass="Hashtable"  resultClass="Hashtable">
+      SELECT DISTINCT
+      ITEM_LEVEL1 as NAME1
+      ,ITEM_LEVEL1 as CODE1
+      <isNotEmpty property="item_level1">
+        ,ITEM_LEVEL2 as NAME2
+        ,ITEM_LEVEL2 as CODE2
+      </isNotEmpty>
+      <isNotEmpty property="item_level2">
+        ,ITEM_LEVEL3 as NAME3
+        ,ITEM_LEVEL3 as CODE3
+      </isNotEmpty>
+      FROM T_ITEM
+      WHERE ITEM_LEVEL1 IS NOT NULL
+      <isNotEmpty property="item_level1">
+        AND ITEM_LEVEL1 = #item_level1#
+      </isNotEmpty>
+      <isNotEmpty property="item_level2">
+        AND ITEM_LEVEL2 = #item_level2#
+      </isNotEmpty>
+      ORDER BY ITEM_LEVEL1 ASC
+      <isNotEmpty property="item_level1">
+        , ITEM_LEVEL2 ASC
+      </isNotEmpty>
+      <isNotEmpty property="item_level2">
+        , ITEM_LEVEL3 ASC
+      </isNotEmpty>
+    </select>
+
+
+    <!-- 언어코드 -->
+    <select id="LangDecode" parameterClass="Hashtable"  resultClass="Hashtable">
+
+      SELECT
+      BASE_ITEM
+      , (CASE WHEN #language# = 'KOR' THEN TARGET_KOR
+      WHEN #language# = 'ENG' THEN TARGET_ENG
+      ELSE TARGET_KOR
+      END) AS LANG_CODE
+      FROM T_LANGUAGE
+      WHERE 1=1
+      AND BASE_ITEM <![CDATA[!=]]> ''
+      <isNotEmpty property="base_item">
+        AND BASE_ITEM = #base_item#
+      </isNotEmpty>
+    </select>
+
+  </statements>
+
+
+
+</sqlMap>

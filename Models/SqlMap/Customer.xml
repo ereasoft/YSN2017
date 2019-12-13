@@ -1,0 +1,490 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <alias>
+   <!-- <typeAlias alias="T_CustomerList"  type="YSN2017.Models.T_CustomerList" />-->
+   <!--  <typeAlias alias="T_CustomerDetail"  type="YSN2017.Models.T_CustomerDetail" /> -->
+  </alias>
+
+
+
+  <statements>
+
+
+       <!-- 거래처 리스트 -->
+       <select id="customerList" parameterClass="Hashtable" resultClass="Hashtable">
+         SELECT
+         C.CUST_CD,
+         C.CUST_CD2,
+         C.CUST_NM,
+         C.DMOS_CD,
+         DBO.FN_GET_CODE_NM(#language#,'DMOS_CD',C.DMOS_CD) AS DMOS_NM,
+         C.DEPT_CD,
+         D.DEPT_NM AS DEPT_NM,
+         C.USER_CD,
+         U.USER_NM AS USER_NM,
+         C.NAT_CD,
+         C.CUST_GRADE,
+         DBO.FN_GET_CODE_NM(#language#,'CUST_GRADE',C.CUST_GRADE) AS CUST_GRADE_NAME,
+         C.USE_YN,
+         CONVERT(NVARCHAR(10),CONVERT(DATETIME,S.SA_SDATE),23) AS SA_SDATE,
+         C.TRMS_PAY,
+         DBO.FN_GET_CODE_NM(#language#,'TRMS_PAY',C.TRMS_PAY) AS TRMS_PAY_NAME
+         FROM
+         T_CUSTOMER AS C
+         LEFT OUTER JOIN
+         T_DEPARTMENT AS D
+         ON C.COMPANY_CD = D.COMPANY_CD	AND C.DEPT_CD = D.DEPT_CD
+         LEFT OUTER JOIN T_USER AS U
+         ON C.COMPANY_CD = U.COMPANY_CD AND C.USER_CD = U.USER_CD
+         LEFT OUTER JOIN ( SELECT  CUST_CD,  MAX(SA_SDATE) AS SA_SDATE FROM  T_SALES_ACTIVITY GROUP BY CUST_CD ) AS S
+         ON C.CUST_CD = S.CUST_CD
+         WHERE  C.COMPANY_CD = #company_cd#
+         AND  C.CUST_CD IS NOT NULL
+
+         <isNotEmpty property="deptGroup">
+           AND C.DEPT_CD = #deptGroup#
+          </isNotEmpty>
+
+         <isNotEmpty property="bizGroup">
+             <isEmpty property="deptGroup">
+              AND D.UP_DEPT_CD = #bizGroup#
+              AND C.DEPT_CD IS NOT NULL
+             </isEmpty>
+          </isNotEmpty>
+
+          <isNotEmpty property="user_cd">
+           AND C.USER_CD = #user_cd#
+          </isNotEmpty>
+
+<!--
+         <isNotEmpty property="user_nm">
+             <isEmpty property="user_cd">
+              AND U.USER_NM LIKE '%' + #user_nm# + '%'
+              AND C.USER_CD IS NOT NULL
+             </isEmpty>
+          </isNotEmpty>
+-->
+
+         <isNotEmpty property="cust_type">
+           AND C.CUST_TYPE = #cust_type#
+          </isNotEmpty>
+         <isNotEmpty property="dmos_cd">
+           AND C.DMOS_CD = #dmos_cd#
+          </isNotEmpty>
+       
+         <isNotEmpty property="cust_cd">
+           AND C.CUST_CD = #cust_cd#
+          </isNotEmpty>
+
+          <isNotEmpty property="cust_nm">
+             <isEmpty property="cust_cd">
+              AND C.CUST_NM LIKE '%' + #cust_nm# + '%'
+             </isEmpty>
+          </isNotEmpty>
+
+
+         <isNotEmpty property="nat_cd">
+           AND C.NAT_CD = #nat_cd#
+          </isNotEmpty>
+         <isNotEmpty property="use_yn">
+            AND C.USE_YN = #use_yn#
+          </isNotEmpty>
+
+         <isNotEmpty property="cust_grade">
+            AND C.CUST_GRADE = #cust_grade#
+          </isNotEmpty>
+         <isNotEmpty property="trms_pay">
+            AND C.TRMS_PAY = #trms_pay#
+          </isNotEmpty>     
+
+         ORDER BY C.CUST_NM
+
+      </select>
+
+    
+    
+    <!-- 거래처 리스트 -->
+  	<select id="customerDetail"  parameterClass="Hashtable" resultClass="Hashtable">
+		SELECT 
+		       CUST_CD
+		      ,CUST_CD2
+		      ,CUST_NM
+		      ,CUST_ENG_NM
+		      ,CUST_SHT_NM
+		      ,USER_CD
+		      ,DBO.FN_GET_USER_NM(USER_CD) AS USER_NM
+		      ,DEPT_CD
+		      ,DBO.FN_GET_DEPT_NM(DEPT_CD) AS DEPT_NM
+		      ,DMOS_CD
+		      ,dbo.FN_GET_CODE_NM(#language#, 'DMOS_CD',DMOS_CD) AS DMOS_NM 
+		      ,NAT_CD
+		      ,BASE_CRNY
+		      ,CUST_TYPE
+		      ,CUST_GRP
+		      ,CUST_LEVEL1
+		      ,CUST_LEVEL2
+		      ,CUST_LEVEL3
+		      ,CUST_CEO
+		      ,CUST_NO
+		      ,CUST_CTGR
+		      ,CUST_ITEM
+		      ,CUST_GRADE
+		      ,HOME_PAGE
+		      ,TEL_NUM
+		      ,ZIP_CODE
+		      ,ADDRESS_L
+		      ,ADDRESS_M
+		      ,ADDRESS_S
+		      ,ADDRESS_D
+		      ,ADDRESS_ALL
+		      ,USE_YN
+		      ,BCUST_CD
+		      ,DBO.FN_GET_CUST_NM(BCUST_CD) AS BCUST_NM
+		      ,TRMS_PAY
+		      ,CUST_SEQ
+		FROM T_CUSTOMER
+		 WHERE	CUST_CD = #cust_cd#	
+	</select>
+
+    
+    
+  
+      <!-- 거래처 상세 하단 : 고객담당(Keyman) -->
+  	<select id="sectCustKeymanList"   parameterClass="Hashtable" resultClass="Hashtable">
+		  SELECT
+			  K.KM_CD,
+			  K.KM_NM,
+			  K.KM_USER_CD,			
+			  U.USER_NM AS KM_USER_NM,
+			  K.KM_DEPT_NM,			
+			  K.CUST_CD,
+			  C.CUST_NM,
+			  K.KM_EMAIL,
+			  K.M_PHONE,			
+			  K.USE_YN,
+			  k.KM_TITLE
+		  FROM
+			  T_KEYMAN AS K	
+			  LEFT OUTER JOIN
+			  T_CUSTOMER AS C
+		  ON
+			  K.COMPANY_CD = C.COMPANY_CD 
+        AND	  K.CUST_CD = C.CUST_CD
+			  LEFT OUTER JOIN
+			  T_USER AS U
+		  ON
+			  K.COMPANY_CD = U.COMPANY_CD 
+        AND  K.KM_USER_CD = U.USER_CD
+		  WHERE  K.COMPANY_CD = #company_cd# 
+        AND  K.CUST_CD = #cust_cd#	
+	</select>
+    
+    
+     <!-- 거래처 상세 하단 : 활동현황 -->
+  	<select id="selectCustPlayList"  parameterClass="Hashtable" resultClass="Hashtable">
+		SELECT
+				S.SA_CD,
+				CONVERT(VARCHAR(10),CONVERT(DATETIME,S.SA_SDATE,23),23) AS SA_SDATE,
+				(
+					CASE WHEN K.KM_CNT > 1
+						THEN
+							K2.KM_NM + ' 외 ' + CONVERT(VARCHAR,K.KM_CNT) + '명'
+						ELSE
+							K2.KM_NM
+					END
+				) KM_NM,			
+				S.USER_CD,			
+				U.USER_NM,
+				(
+					CASE WHEN P.TARGET_CNT > 1
+						THEN
+							C.CODE_NM + ' 외 ' + CONVERT(VARCHAR,P.TARGET_CNT) + '건'
+						ELSE
+							C.CODE_NM
+					END
+				) SA_TARGET,			
+				S.SA_BODY,	
+				S.SA_COMMENT,
+				S.DEPT_CD
+			FROM 
+				T_SALES_ACTIVITY AS S
+				LEFT OUTER JOIN
+				T_USER AS U
+			ON
+				S.COMPANY_CD = U.COMPANY_CD AND
+				S.USER_CD = U.USER_CD
+				LEFT OUTER JOIN
+				(
+					SELECT 
+						COMPANY_CD,
+						SA_CD,
+						MIN(KM_CD) AS KM_CD,
+						COUNT(KM_CD) AS KM_CNT
+					FROM 	T_SA_KEYMAN	
+					GROUP BY 
+						COMPANY_CD,
+						SA_CD
+				) AS K
+			ON
+				S.COMPANY_CD = K.COMPANY_CD AND
+				S.SA_CD = K.SA_CD
+				LEFT OUTER JOIN
+				T_KEYMAN AS K2
+			ON
+				K.COMPANY_CD = K2.COMPANY_CD AND
+				K.KM_CD = K2.KM_CD
+				LEFT OUTER JOIN
+				(
+					SELECT
+						COMPANY_CD,
+						SA_CD,
+						MIN(SA_TARGET) SA_TARGET,
+						COUNT(SA_TARGET) TARGET_CNT
+					FROM	T_SA_TARGET
+					GROUP
+						BY
+						COMPANY_CD,
+						SA_CD			
+				) AS P
+			ON
+				S.COMPANY_CD = P.COMPANY_CD AND
+				S.SA_CD = P.SA_CD
+				LEFT OUTER JOIN
+				T_CODE C
+			ON
+				P.SA_TARGET = C.CODE_ID
+			WHERE
+				S.COMPANY_CD = #company_cd# 
+        AND	S.CUST_CD = #cust_cd# 
+        AND	(CAST(S.SA_BODY AS NVARCHAR) != '' AND S.SA_BODY IS NOT NULL)
+				ORDER BY S.SA_SDATE DESC
+	</select>
+    
+    
+      <!-- 거래처 상세 하단 : 프로젝트 -->
+  	<select id="selectCustProjectList"  parameterClass="Hashtable" resultClass="Hashtable">
+ 		SELECT
+			P.PJT_CD,
+			P.PJT_NM,
+			P.CUST_CD,
+			C.CUST_NM,
+			P.USER_CD,
+			U.USER_NM,
+			P.DEPT_CD,
+			D.DEPT_NM,
+			P.DSTR_TYPE,
+			P.EUSR_CD,
+			C2.CUST_NM AS EUSR_NM,
+			(
+				CASE WHEN ISNULL(P.PJT_SDATE,'') != '' OR ISNULL(P.PJT_EDATE,'') != ''
+					THEN
+						CONVERT(NVARCHAR(10),CONVERT(DATETIME,PJT_SDATE),23) + ' ~ ' + CONVERT(NVARCHAR(10),CONVERT(DATETIME,PJT_EDATE),23)
+					ELSE
+						NULL
+				END			
+			) AS PJT_DATE,
+			P.END_YN
+		FROM
+			T_PROJECT AS P
+			LEFT OUTER JOIN
+			T_CUSTOMER AS C
+		ON
+			P.COMPANY_CD = C.COMPANY_CD AND
+			P.CUST_CD = C.CUST_CD
+			LEFT OUTER JOIN
+			T_CUSTOMER AS C2
+		ON
+			P.COMPANY_CD = C2.COMPANY_CD AND
+			P.EUSR_CD = C2.CUST_CD
+			LEFT OUTER JOIN
+			T_USER AS U
+		ON
+			P.COMPANY_CD = U.COMPANY_CD AND
+			P.USER_CD = U.USER_CD
+			LEFT OUTER JOIN
+			T_DEPARTMENT AS D
+		ON
+			P.COMPANY_CD = D.COMPANY_CD 
+      AND	P.DEPT_CD = D.DEPT_CD						
+		WHERE
+			P.COMPANY_CD = #company_cd# 
+      AND	P.CUST_CD = #cust_cd#
+			
+		ORDER BY P.PJT_CD ASC
+	</select>
+
+    
+  
+  <!-- 거래처 상세 하단 : E-mail송수신 -->
+	<select id="selectCustEmailList" parameterClass="Hashtable" resultClass="Hashtable">
+
+		SELECT
+			A.COMPANY_CD,
+			A.EMAIL_CD,
+			A.EMAIL_DT,
+			A.EMAIL_TYPE,
+			CD.CODE_KOR AS EMAIL_TYPE_NM,
+			A.USER_CD,
+			A.USER_NM + '(' + A.USER_CD + ')' AS USER_NM,
+			A.KM_CD,
+			A.KM_NM + '(' + A.KM_CD + ')' AS KM_NM,
+			SUBJECT
+		FROM(
+			SELECT 
+				E.COMPANY_CD,
+				E.EMAIL_CD,
+				E.EMAIL_TYPE,
+				E.EMAIL_DT,
+				E.RCV_USR AS USER_CD,
+				U.USER_NM AS USER_NM,
+				E.SND_USR AS KM_CD,
+				K.KM_NM AS KM_NM,
+				SUBJECT
+			FROM 
+				(SELECT COMPANY_CD,EMAIL_CD,EMAIL_TYPE,EMAIL_DT,SND_USR,RCV_USR,SUBJECT FROM T_EMAIL WHERE EMAIL_TYPE = 'RCV') AS E,
+				(SELECT COMPANY_CD,KM_CD,KM_NM,KM_EMAIL FROM T_KEYMAN WHERE CUST_CD = #cust_cd#)AS K,
+				T_USER AS U
+			WHERE
+				E.COMPANY_CD = K.COMPANY_CD AND
+				E.SND_USR = K.KM_EMAIL AND
+				E.COMPANY_CD = U.COMPANY_CD AND
+				E.RCV_USR = U.EMAIL
+			UNION
+			SELECT 
+				E.COMPANY_CD,
+				E.EMAIL_CD,
+				E.EMAIL_TYPE,
+				E.EMAIL_DT,		
+				E.SND_USR AS USER_CD,
+				U.USER_NM AS USER_NM,
+				E.RCV_USR AS KM_CD,	
+				K.KM_NM AS KM_NM,
+				SUBJECT
+			FROM 
+				(SELECT COMPANY_CD,EMAIL_CD,EMAIL_TYPE,EMAIL_DT,SND_USR,RCV_USR,SUBJECT FROM T_EMAIL WHERE EMAIL_TYPE = 'SND') AS E,
+				(SELECT COMPANY_CD,KM_CD,KM_NM,KM_EMAIL FROM T_KEYMAN WHERE CUST_CD = #cust_cd#)AS K,
+				T_USER AS U
+			WHERE
+				E.COMPANY_CD = U.COMPANY_CD AND
+				E.SND_USR = U.EMAIL AND
+				E.COMPANY_CD = K.COMPANY_CD AND
+				E.RCV_USR = K.KM_EMAIL
+		) AS A
+		LEFT OUTER JOIN
+		(SELECT CODE_ID,CODE_KOR FROM T_CODE WHERE UP_CODE_ID = 'EMAIL_TYPE') AS CD
+		ON
+			A.EMAIL_TYPE = CD.CODE_ID
+		ORDER BY EMAIL_DT DESC	
+	</select>
+
+
+    <!-- 거래처 상세 하단 : E-mail송수신 상세 팝업 -->
+    <select id="getCustEmailContent"  parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      COMPANY_CD,
+      EMAIL_CD,
+      EMAIL_TYPE,
+      EMAIL_DT,
+      SND_USR,
+      (CASE WHEN EMAIL_TYPE = 'SND' THEN dbo.FN_GET_USER_NM(dbo.FN_GET_USER_CD_TO_EMAIL(SND_USR)) ELSE dbo.FN_GET_KEYMAN_NM(dbo.FN_GET_KM_CD_TO_EMAIL(SND_USR)) END) AS SND_USER_NM,
+      RCV_USR,
+      (CASE WHEN EMAIL_TYPE = 'RCV' THEN dbo.FN_GET_USER_NM(dbo.FN_GET_USER_CD_TO_EMAIL(RCV_USR)) ELSE dbo.FN_GET_KEYMAN_NM(dbo.FN_GET_KM_CD_TO_EMAIL(RCV_USR)) END) AS RCV_USER_NM,
+      SUBJECT,
+      CONTENTS
+      FROM T_EMAIL
+      WHERE
+      EMAIL_CD = #email_cd#
+    </select>
+  
+  
+  
+   <!-- 거래처 상세 : 저장 -->
+	<update id="updateCustomer" parameterClass="Hashtable">
+  		UPDATE T_CUSTOMER
+		   SET 
+		      MOD_DT = getdate()
+		      ,MOD_USR = #mod_usr#
+		      ,USER_CD = #user_cd#
+		      ,DEPT_CD = #dept_cd#
+		      ,NAT_CD = #nat_cd#
+		      ,BASE_CRNY = #base_crncy#
+		      ,CUST_GRADE = #cust_grade#
+		      ,HOME_PAGE = #home_page#
+		      ,TRMS_PAY = #trms_pay#
+		      ,USE_YN = #use_yn#
+		 WHERE
+			CUST_CD = #cust_cd#	
+	<!-- 
+  
+  		UPDATE T_CUSTOMER
+		   SET 
+		      MOD_DT = getdate()
+		      ,MOD_USR = #mod_usr#
+		      ,USER_CD = #user_cd#
+		      ,DEPT_CD = #dept_cd#
+		      ,NAT_CD = #nat_cd#
+		      ,BASE_CRNY = #base_crncy#
+		      ,CUST_GRADE = #cust_grade#
+		      ,HOME_PAGE = #home_page#
+		      ,TRMS_PAY = #trms_pay#
+		      ,USE_YN = #use_yn#
+		 WHERE
+			CUST_CD = #cust_cd#	
+  
+  
+  
+  
+  
+  
+  
+  
+  
+		UPDATE T_CUSTOMER
+		   SET 
+		       CUST_NM = #cust_nm#
+		      ,USER_CD = #user_cd#
+		      ,DEPT_CD = #dept_cd#
+			  ,DMOS_CD = #dmos_cd#
+		      ,NAT_CD = #nat_cd#
+		      ,BASE_CRNY = #base_crncy#
+		      ,CUST_TYPE = #cust_type#
+		      ,CUST_GRP = #cust_grp#
+		      ,CUST_LEVEL1 = #cust_level1#
+		      ,CUST_LEVEL2 = #cust_level2#
+		      ,CUST_LEVEL3 = #cust_level3#
+		      ,CUST_CEO = #cust_ceo#
+		      ,CUST_NO = #cust_no#
+		      ,CUST_CTGR = #cust_ctgr#
+		      ,CUST_ITEM = #cust_item#
+		      ,CUST_GRADE = #cust_grade#
+		      ,HOME_PAGE = #home_page#
+		      ,TEL_NUM = #tel_num#
+		      ,ZIP_CODE = #zip_code#
+		      ,ADDRESS_L = #address_l#
+		      ,ADDRESS_M = #address_m#
+		      ,ADDRESS_S = #address_s#
+		      ,ADDRESS_D = #address_d#
+		      ,ADDRESS_ALL = #address_all#
+		      ,USE_YN = #use_yn#
+		      ,MOD_DT = getdate()
+		      ,MOD_USR = #mod_usr#
+		 WHERE
+			CUST_CD = #cust_cd#
+	 -->
+	</update>
+
+
+
+
+
+
+
+  </statements>
+
+
+
+</sqlMap>

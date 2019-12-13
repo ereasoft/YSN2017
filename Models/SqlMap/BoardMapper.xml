@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+
+    <!-- 게시판 :  리스트/상세 /Board/boardList -->
+    <select id="boardList"  parameterClass="Hashtable" resultClass="Hashtable" >
+
+      SELECT
+      A.COMPANY_CD
+      , B.COMP_NM
+      , A.BBS_CD
+      , A.USER_CD
+      , dbo.FN_GET_USER_NM(A.USER_CD) AS USER_NM
+      , dbo.FN_GET_USER_NM(A.USER_CD)+'   ['+B.COMP_NM+']' AS USER_NM_STR
+      , A.BBS_RDATE 
+      , A.BBS_SUBJECT
+      , A.BBS_CONTENTS
+      , A.MENU_ID
+      , A.USE_YN
+      , (SELECT COUNT(*) FROM T_BBS_CMT WHERE BBS_CD = A.BBS_CD AND USE_YN = 'Y') AS CMT_CNT
+      FROM T_BBOARD A, T_COMPANY B
+      WHERE A.COMPANY_CD = B.COMPANY_CD
+      AND A.USE_YN = 'Y'
+      AND A.MENU_ID = #menuId#
+      <isNotEmpty property="user_cd">
+        AND A.USER_CD LIKE '%'+#user_cd#+'%'
+      </isNotEmpty>
+      <isNotEmpty property="bbs_cd">
+        AND A.BBS_CD = #bbs_cd#
+      </isNotEmpty>
+      <isNotEmpty property="bbs_subject">
+        AND A.BBS_SUBJECT LIKE '%'+#bbs_subject#+'%'
+      </isNotEmpty>
+      <isNotEmpty property="sdate">
+        AND dbo.FN_GET_DATE_FORMAT(CONVERT(NVARCHAR, A.BBS_RDATE, 112), 'YYYYMMDD') BETWEEN dbo.FN_GET_DATE_FORMAT(#sdate#, 'YYYYMMDD') AND dbo.FN_GET_DATE_FORMAT(#edate#, 'YYYYMMDD')
+        ORDER BY A.BBS_RDATE ASC
+      </isNotEmpty>
+    </select>
+
+    
+    
+
+    <!-- 게시판 :  댓글 리스트 /Board/boardCmtList -->
+    <select id="boardCmtList"  parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      A.COMPANY_CD
+      , A.BBS_CD
+      , A.BBD_CD
+      , A.USER_CD
+      , dbo.FN_GET_BOARD_USER_NM(A.USER_CD,#language#) AS USER_NM
+      , dbo.FN_GET_BOARD_COMPANY_NM(A.COMPANY_CD,#language#) AS COMP_NM
+      , A.BBD_CMT
+      , A.USE_YN
+      , dbo.FN_GET_DATE_FORMAT(CONVERT(NVARCHAR, A.REG_DT, 112), 'YYYY-MM-DD') AS REG_DT
+      FROM T_BBS_CMT A, T_COMPANY B
+      WHERE A.COMPANY_CD = B.COMPANY_CD
+      AND A.USE_YN = 'Y'
+      AND A.BBS_CD = #bbs_cd#
+      <isNotEmpty property="bbd_cd">
+        AND A.BBD_CD = #bbd_cd#
+      </isNotEmpty>
+      ORDER BY REG_DT ASC
+    </select>
+    
+    
+
+    <!-- 게시판 :  게시판 PK 구하기 /Board/getBbdCd -->
+    <select id="getBbsCd"  parameterClass="Hashtable" resultClass="Hashtable" >
+    
+      SELECT
+      'BBS'+SUBSTRING(CONVERT(NVARCHAR, GETDATE(), 112), 3, 2)+dbo.FN_LPAD(ISNULL(CONVERT(NVARCHAR, MAX(SUBSTRING(BBS_CD, 6,5))+1), '1'), 5, '0') AS BBS_CD
+      FROM dbo.T_BBOARD
+      WHERE SUBSTRING(BBS_CD, 4,2) = SUBSTRING(CONVERT(NVARCHAR, GETDATE(), 112), 3, 2)
+    </select>
+
+
+    <!-- 게시판 :  글저장 /Board/boardSave -->
+    <insert id="boardSave"  parameterClass="Hashtable" resultClass="Hashtable">
+
+      IF NOT EXISTS
+      (
+      SELECT * FROM T_BBOARD
+      WHERE COMPANY_CD = #company_cd#
+      AND BBS_CD = #bbs_cd#
+      )
+      INSERT INTO T_BBOARD
+      (
+      COMPANY_CD
+      , BBS_CD
+      , USER_CD
+      , BBS_TYPE
+      , BBS_RDATE
+      , BBS_SUBJECT
+      , BBS_CONTENTS
+      , MENU_ID
+      , USE_YN
+      , REG_DT
+      , REG_USR
+      )
+      VALUES
+      (
+      #company_cd#
+      , #bbs_cd#
+      , #user_cd#
+      , #bbs_type#
+      , CONVERT(NVARCHAR(10),getdate(),112)
+      , #bbs_subject#
+      , #bbs_contents#
+      , #menuId#
+      , 'Y'
+      , getdate()
+      , #reg_usr#
+      )
+      ELSE
+      UPDATE T_BBOARD SET
+      USER_CD = #user_cd#
+      , BBS_TYPE = #bbs_type#
+      , BBS_SUBJECT = #bbs_subject#
+      , BBS_CONTENTS = #bbs_contents#
+      , MENU_ID = #menuId#
+      , MOD_DT = getdate()
+      , MOD_USR = #mod_usr#
+      WHERE COMPANY_CD = #company_cd#
+      AND BBS_CD = #bbs_cd#
+    </insert>
+
+
+    <!-- 게시판 :  글 삭제 /Board/boardDelete -->
+    <delete id="boardDelete"  parameterClass="Hashtable">
+   
+      UPDATE T_BBOARD SET USE_YN ='N' WHERE BBS_CD = #bbs_cd#
+    </delete>
+
+
+
+
+    <!-- 게시판 :  댓글 PK 구하기 /Board/getBbdCd -->
+    <select id="getBbdCd"  parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      ISNULL(MAX(BBD_CD), 0)+1 AS BBD_CD
+      FROM T_BBS_CMT WHERE BBS_CD = #bbs_cd#
+    </select>
+
+    <!-- 게시판 :  댓글 저장/수정 /Board/boardCmtSave -->
+    <insert id="boardCmtSave"  parameterClass="Hashtable" resultClass="Hashtable">
+
+      IF NOT EXISTS
+      (
+      SELECT * FROM T_BBS_CMT
+      WHERE COMPANY_CD = #company_cd#
+      AND BBS_CD = #bbs_cd#
+      AND BBD_CD = #bbd_cd#
+      )
+      INSERT INTO T_BBS_CMT
+      (
+      COMPANY_CD
+      , BBS_CD
+      , BBD_CD
+      , USER_CD
+      , BBD_CMT
+      , USE_YN
+      , REG_DT
+      , REG_USR
+      )
+      VALUES
+      (
+      #company_cd#
+      , #bbs_cd#
+      , #bbd_cd#
+      , #user_cd#
+      , #bbd_cmt#
+      , 'Y'
+      , getdate()
+      , #reg_usr#
+      )
+      ELSE
+      UPDATE T_BBS_CMT SET
+      USER_CD = #user_cd#
+      , BBD_CMT = #bbd_cmt#
+      , MOD_DT = getdate()
+      , MOD_USR = #mod_usr#
+      WHERE COMPANY_CD = #company_cd#
+      AND BBS_CD = #bbs_cd#
+      AND BBD_CD = #bbd_cd#
+    </insert> 
+
+
+    <!-- 게시판 :  댓글 삭제 /Board/boardCmtDelete -->
+    <delete id="boardCmtDelete"  parameterClass="Hashtable" >
+
+      UPDATE T_BBS_CMT SET USE_YN ='N' WHERE BBS_CD = #bbs_cd# AND BBD_CD = #bbd_cd#
+    </delete>
+
+
+
+
+
+
+
+  </statements>
+
+
+
+</sqlMap>

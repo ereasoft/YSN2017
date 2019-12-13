@@ -1,0 +1,1091 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+<!-- 영업활동관리 -->
+  <statements>
+
+
+
+    <!-- 영업활동 일정관리 : 거래처 셀렉트 박스 -->
+    <select id="custList" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      A.CUST_CD
+      , A.CUST_NM
+      FROM T_CUSTOMER A LEFT JOIN T_KEYMAN B ON A.COMPANY_CD = B.COMPANY_CD AND A.CUST_CD = B.CUST_CD
+      WHERE A.COMPANY_CD = #company_cd#
+      <isNotEmpty property="user_cd">
+        AND A.USER_CD = #user_cd#
+      </isNotEmpty>
+      GROUP BY A.CUST_CD, A.CUST_NM
+      ORDER BY CUST_NM ASC
+    </select>
+
+
+    <!-- 영업활동 일정관리 : 거래처 리스트 -->
+    <select id="getCustGrid" parameterClass="Hashtable" resultClass="Hashtable">
+ 
+      SELECT
+      CUST_CD
+      , CUST_NM
+      , (SELECT DBO.FN_GET_DATE_FORMAT(MAX(SA_SDATE), 'YYYY-MM-DD')
+          FROM T_SALES_ACTIVITY
+          WHERE CUST_CD = A.CUST_CD
+          AND USER_CD = A.USER_CD
+          AND SA_TYPE IN (SELECT CODE_ID FROM T_CODE WHERE UP_CODE_ID = 'SA_TYPE' AND VALUE_5 = 'Y') AND SA_BODY IS NOT NULL) AS LAST_VISIT_DATE
+      , BAD_AR_YN
+      FROM T_CUSTOMER A
+      WHERE A.COMPANY_CD = #company_cd#
+        AND A.USER_CD = #user_cd#
+      <isNotEmpty property="cust_cd">
+        AND A.CUST_CD = #cust_cd#
+      </isNotEmpty>
+      ORDER BY CUST_NM ASC
+    </select>
+
+
+    <!-- 영업활동 일정관리 : 프로젝트 리스트 -->
+    <select id="getProjectGrid" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      PJT_CD, PJT_NM
+      FROM T_PROJECT
+      WHERE COMPANY_CD = #company_cd#
+      AND USER_CD = #user_cd#
+      <isNotEmpty property="cust_cd">
+        AND CUST_CD = #cust_cd#
+      </isNotEmpty>
+      ORDER BY PJT_NM ASC
+    </select>
+
+
+
+    <!-- 영업활동 일정관리 : 월간 활동 내역 -->
+    <select id="getMonthSalesActivityInfo" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      (
+      SELECT
+      COUNT(SA_CD)
+      FROM T_SALES_ACTIVITY
+      WHERE COMPANY_CD = #company_cd#
+      AND USE_YN = 'Y'
+      AND USER_CD = A.USER_CD
+      AND SUBSTRING(SA_SDATE, 1, 6) = A.SEARCH_YM
+      AND SUBSTRING(SA_EDATE, 1, 6) = A.SEARCH_YM
+      AND PLAN_YN = 'Y'
+      ) AS CNT_1
+      , (
+      SELECT
+      COUNT(SA_CD)
+      FROM T_SALES_ACTIVITY
+      WHERE COMPANY_CD = #company_cd#
+      AND USE_YN = 'Y'
+      AND USER_CD = A.USER_CD
+      AND SUBSTRING(SA_SDATE, 1, 6) = A.SEARCH_YM
+      AND SUBSTRING(SA_EDATE, 1, 6) = A.SEARCH_YM
+      AND PLAN_YN = 'Y'
+      AND SA_BODY IS NOT NULL
+      ) AS CNT_2
+      , (
+      SELECT
+      COUNT(SA_CD)
+      FROM T_SALES_ACTIVITY
+      WHERE COMPANY_CD = #company_cd#
+      AND USE_YN = 'Y'
+      AND USER_CD = A.USER_CD
+      AND SUBSTRING(SA_SDATE, 1, 6) = A.SEARCH_YM
+      AND SUBSTRING(SA_EDATE, 1, 6) = A.SEARCH_YM
+      AND PLAN_YN = 'N'
+      AND (CUST_CD != '' AND CUST_CD IS NOT NULL)
+      AND SA_BODY IS NOT NULL
+      ) AS CNT_3
+      , (
+      SELECT
+      COUNT(SA_CD)
+      FROM T_SALES_ACTIVITY
+      WHERE COMPANY_CD = #company_cd#
+      AND USE_YN = 'Y'
+      AND USER_CD = A.USER_CD
+      AND SUBSTRING(SA_SDATE, 1, 6) = A.SEARCH_YM
+      AND SUBSTRING(SA_EDATE, 1, 6) = A.SEARCH_YM
+      AND SA_BODY IS NOT NULL
+      AND (CUST_CD != '' AND CUST_CD IS NOT NULL)
+      ) AS CNT_4
+      FROM (SELECT #user_cd# AS USER_CD, #search_ym# AS SEARCH_YM) A
+    </select>
+
+
+
+    <!-- 영업활동 일정관리 : 캘린더 데이터 -->
+    <select id="calCustDataList"  parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      SA_SDATE + isnull(SA_SDATE_TIME,'000000') AS START_DATE
+      , SA_EDATE + isnull(SA_EDATE_TIME,'233000') AS END_DATE
+      , SA_SUBJECT
+      , SA_CD
+      , SA_TYPE
+      FROM T_SALES_ACTIVITY
+      WHERE COMPANY_CD = #company_cd#
+      AND USE_YN = 'Y'
+      AND USER_CD = #user_cd#
+      UNION ALL
+      SELECT
+      SA_SDATE + isnull(SA_SDATE_TIME,'000000') AS START_DATE
+      , SA_EDATE + isnull(SA_EDATE_TIME,'235959') AS END_DATE
+      , SA_SUBJECT
+      , A.SA_CD
+      , 'SATYPE_999' SA_TYPE
+      FROM T_SALES_ACTIVITY A, T_SA_CWUSER B
+      WHERE 1=1
+      AND A.COMPANY_CD = B.COMPANY_CD
+      AND A.SA_CD = B.SA_CD
+      AND USE_YN = 'Y'
+      AND B.USER_CD = #user_cd#
+    </select>
+
+
+    <!-- 영업활동 일정관리 : 비계획실적 등록 key sacd  -->
+    <select id="getSaCd" parameterClass="Hashtable" resultClass="Hashtable">
+      
+      SELECT 'SA'+SUBSTRING(CONVERT(VARCHAR, GETDATE(), 112), 3,2)+CONVERT(VARCHAR, REPLICATE('0', 6-LEN(ISNULL(MAX(CONVERT(NUMERIC, SUBSTRING(SA_CD, 5, 6))),0)+1)))+''+CONVERT(VARCHAR, (ISNULL(MAX(CONVERT(NUMERIC, SUBSTRING(SA_CD, 5, 6))),0)+1)) AS SA_CD 
+      FROM T_SALES_ACTIVITY
+    </select>
+
+    <!-- 영업활동 일정관리 : 비계획실적 등록1   -->
+    <insert id="salesActivitySave" parameterClass="Hashtable" resultClass="Hashtable">
+
+      IF NOT EXISTS
+      (
+      SELECT * FROM T_SALES_ACTIVITY
+      WHERE COMPANY_CD = #company_cd#
+      AND SA_CD = #sa_cd#
+      )
+      INSERT INTO T_SALES_ACTIVITY
+      (
+      COMPANY_CD
+      , SA_CD
+      , SA_TYPE
+      , SA_CNCT
+      , USER_CD
+      , DEPT_CD
+      , SA_SDATE
+      , SA_EDATE
+      , SA_SDATE_TIME
+      , SA_EDATE_TIME
+      , CUST_CD
+      , PJT_CD
+      , SA_SUBJECT
+      <isNotEmpty property="sa_body">  
+          , SA_BODY
+        </isNotEmpty>
+      , NEXT_SA_SDATE
+      , NEXT_SA_EDATE
+      , NEXT_SA_TARGET
+      , NEXT_SA_SUBJECT
+      , USE_YN
+      , REG_DT
+      , REG_USR
+      , PLAN_YN
+      , CMT_YN
+      , SA_COMMENT
+      )
+      VALUES
+      (
+      #company_cd#
+      , #sa_cd#
+      , #sa_type#
+      , #sa_cnct#
+      , #user_cd#
+      , #dept_cd#
+      , DBO.FN_GET_DATE_FORMAT(#sa_sdate#, 'YYYYMMDD')
+      , DBO.FN_GET_DATE_FORMAT(#sa_edate#, 'YYYYMMDD')
+      , #sa_sdate_time#
+      , #sa_edate_time#
+      , #cust_cd#
+      , #pjt_cd#
+      , #sa_subject#
+      <isNotEmpty property="sa_body">
+          , <![CDATA[#sa_body#]]>
+        </isNotEmpty>
+      , DBO.FN_GET_DATE_FORMAT(#next_sa_sdate#, 'YYYYMMDD')
+      , DBO.FN_GET_DATE_FORMAT(#next_sa_edate#, 'YYYYMMDD')
+      , #next_sa_target#
+      , #next_sa_subject#
+      , #use_yn#
+      , getdate()
+      , #reg_usr#
+      , #plan_yn#
+      , #cmt_yn#
+      , #sa_comment#
+      )
+      ELSE
+      UPDATE T_SALES_ACTIVITY SET
+      SA_TYPE = #sa_type#
+      , SA_CNCT = #sa_cnct#
+      , SA_SDATE = DBO.FN_GET_DATE_FORMAT(#sa_sdate#, 'YYYYMMDD')
+      , SA_EDATE = DBO.FN_GET_DATE_FORMAT(#sa_edate#, 'YYYYMMDD')
+      , SA_SDATE_TIME = #sa_sdate_time#
+      , SA_EDATE_TIME = #sa_edate_time#
+      , CUST_CD = #cust_cd#
+      , PJT_CD = #pjt_cd#
+      , SA_SUBJECT = #sa_subject#
+      <isNotEmpty property="sa_body">
+          , SA_BODY =  <![CDATA[#sa_body#]]>
+        </isNotEmpty>
+        , NEXT_SA_SDATE = DBO.FN_GET_DATE_FORMAT(#next_sa_sdate#, 'YYYYMMDD')
+        , NEXT_SA_EDATE = DBO.FN_GET_DATE_FORMAT(#next_sa_edate#, 'YYYYMMDD')
+        , NEXT_SA_TARGET = #next_sa_target#
+        , NEXT_SA_SUBJECT = #next_sa_subject#
+        , USE_YN = #use_yn#
+        , MOD_DT = getdate()
+        , MOD_USR = #mod_usr#
+        , CMT_YN = #cmt_yn#
+        <isNotEmpty property="sa_comment">
+          , SA_COMMENT =  <![CDATA[#sa_comment#]]>
+        </isNotEmpty>
+        WHERE COMPANY_CD = #company_cd#
+        AND SA_CD = #sa_cd#
+    </insert>
+
+
+
+    <!-- 영업활동 일정관리 : 비계획실적 삭제 use_yn 처리   -->
+    <update id="salesActivityDelete" parameterClass="Hashtable" >
+      UPDATE T_SALES_ACTIVITY
+      SET USE_YN = 'N'
+        , MOD_DT = getdate()
+      WHERE COMPANY_CD = #company_cd#
+      AND SA_CD = #sa_cd#
+    </update>
+    
+    
+    
+    <!-- 영업활동 일정관리 : 비계획실적 - key pacter 삭제  -->
+    <delete id="saTargetDelete" parameterClass="Hashtable" >
+
+      DELETE T_SA_TARGET WHERE SA_CD = #sa_cd#
+    </delete>
+
+    <!-- 영업활동 일정관리 : 비계획실적 - key pacter 등록  -->
+    <insert id="saTargetSave" parameterClass="Hashtable" resultClass="Hashtable">
+
+      IF NOT EXISTS
+      (
+      SELECT * FROM T_SA_TARGET
+      WHERE COMPANY_CD = #company_cd#
+      AND SA_CD = #sa_cd#
+      AND SA_TARGET = #sa_target#
+      )
+        INSERT INTO T_SA_TARGET
+        (
+        COMPANY_CD
+        , SA_CD
+        , SA_TARGET
+        , SA_RESULT
+        , SA_DESCRIPT
+        , REG_DT
+        , REG_USR
+        )
+        VALUES
+        (
+        #company_cd#
+        , #sa_cd#
+        , #sa_target#
+        , #sa_result#
+        , #sa_descript#
+        , getdate()
+        , #reg_usr#
+        )
+      ELSE
+        UPDATE T_SA_TARGET SET
+        SA_RESULT = #sa_result#
+        , SA_DESCRIPT = #sa_descript#
+        , MOD_DT = getdate()
+        , MOD_USR = #mod_usr#
+        WHERE COMPANY_CD = #company_cd#
+        AND SA_CD = #sa_cd#
+        AND SA_TARGET = #sa_target#
+    </insert>
+
+    <!-- 영업활동 일정관리 : 비계획실적 - Keyman 삭제  -->
+    <delete id="saKeymanDelete" parameterClass="Hashtable" >
+
+      DELETE T_SA_KEYMAN WHERE SA_CD = #sa_cd#
+    </delete>
+
+    <!-- 영업활동 일정관리 : 비계획실적 - Keyman 등록  -->
+    <insert id="saKeymanSave" parameterClass="Hashtable" resultClass="Hashtable">
+
+      INSERT INTO T_SA_KEYMAN
+      (
+      COMPANY_CD
+      , SA_CD
+      , KM_CD
+      , REG_DT
+      , REG_USR
+      )
+      VALUES
+      (
+      #company_cd#
+      , #sa_cd#
+      , #km_cd#
+      , getdate()
+      , #reg_usr#
+      )
+    </insert>
+    
+    
+
+    <!-- 영업활동 일정관리 : 비계획실적 - 협업공유자 삭제  -->
+    <delete id="saCwuserDel" parameterClass="Hashtable" >
+
+      DELETE T_SA_CWUSER WHERE SA_CD = #sa_cd#
+    </delete>
+    
+    <!-- 영업활동 일정관리 : 비계획실적 - 협업공유자 등록  -->
+    <insert id="saCwuserSave" parameterClass="Hashtable" resultClass="Hashtable">
+
+      INSERT INTO T_SA_CWUSER
+      (
+      COMPANY_CD
+      , SA_CD
+      , USER_CD
+      , REG_DT
+      , REG_USR
+      )
+      VALUES
+      (
+      #company_cd#
+      , #sa_cd#
+      , #user_cd#
+      , getdate()
+      , #reg_usr#
+      )
+    </insert>
+
+
+
+
+    <!-- 영업활동 현황 : 검색 리스트 -->
+    <select id="salesActivityStatusList"  parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      A.SA_CD
+      , SA_SDATE
+      , A.SA_TYPE
+      , dbo.FN_GET_CODE_NM(#language#, 'SA_TYPE', A.SA_TYPE) AS SA_TYPE_NM
+      , DBO.FN_GET_DEPT_NM(A.DEPT_CD) AS DEPT_NM
+      , DBO.FN_GET_USER_NM(A.USER_CD) AS USER_NM
+      , A.SA_SUBJECT
+      , A.USER_CD
+      , A.DEPT_CD
+      , (SELECT
+      CONVERT(NVARCHAR, DBO.FN_GET_KEYMAN_NM(MIN(KM_CD)))
+      + (CASE WHEN (SELECT COUNT(*) FROM T_SA_KEYMAN WHERE SA_CD = A.SA_CD) > 1 THEN ' 외'+(SELECT CONVERT(NVARCHAR, COUNT(*)-1) FROM T_SA_KEYMAN WHERE SA_CD = A.SA_CD)+'건' ELSE '' END)
+      FROM T_SA_KEYMAN WHERE SA_CD = A.SA_CD) AS KM_NMS
+      , dbo.FN_GET_CODE_NM(#language#, 'SA_CNCT', A.SA_CNCT) AS SA_CNCT_NM
+      , A.SA_BODY
+      , A.CMT_YN
+      , A.PJT_CD
+      , CASE
+      WHEN A.CMT_YN = 'Y' THEN
+      CASE
+      WHEN (SELECT COUNT(DEPT_MGR) FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD)) = 0 OR A.USER_CD != (SELECT DEPT_MGR FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD)) THEN
+      (SELECT (SELECT USER_POSIT FROM T_USER WHERE USER_CD = DEPT_MGR)+' : '+ISNULL(DBO.FN_GET_USER_NM(DEPT_MGR), '')+' '+ISNULL('['+(SELECT DBO.FN_GET_DATE_FORMAT(CONVERT(NVARCHAR, REG_DT, 112), 'YYYY-MM-DD')+'] '+SA_COMMENT FROM T_SA_COMMENT WHERE COMPANY_CD = A.COMPANY_CD AND SA_CD = A.SA_CD AND CMT_MGR = AA.DEPT_MGR), '') FROM T_DEPARTMENT AA WHERE DEPT_CD = A.DEPT_CD)+' '
+      ELSE ''
+      END+(SELECT (SELECT USER_POSIT FROM T_USER WHERE USER_CD = DEPT_MGR)+' : '+ISNULL(DBO.FN_GET_USER_NM(DEPT_MGR), '')+' '+ISNULL((SELECT DBO.FN_GET_DATE_FORMAT(CONVERT(NVARCHAR, REG_DT, 112), 'YYYY-MM-DD')+' '+SA_COMMENT FROM T_SA_COMMENT WHERE COMPANY_CD = A.COMPANY_CD AND SA_CD = A.SA_CD AND CMT_MGR = AA.DEPT_MGR), '') FROM T_DEPARTMENT AA WHERE DEPT_CD = (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD)))
+      +' '+(SELECT (SELECT USER_POSIT FROM T_USER WHERE USER_CD = DEPT_MGR)+' : '+ISNULL(DBO.FN_GET_USER_NM(DEPT_MGR), '')+' '+ISNULL((SELECT DBO.FN_GET_DATE_FORMAT(CONVERT(NVARCHAR, REG_DT, 112), 'YYYY-MM-DD')+' '+SA_COMMENT FROM T_SA_COMMENT WHERE COMPANY_CD = A.COMPANY_CD AND SA_CD = A.SA_CD AND CMT_MGR = AA.DEPT_MGR), '') FROM T_DEPARTMENT AA WHERE DEPT_CD = (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD))))
+      ELSE ''
+      END AS SA_COMMENT
+      FROM T_SALES_ACTIVITY A
+      LEFT OUTER JOIN T_DEPARTMENT AS D
+      ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+      WHERE A.COMPANY_CD = #company_cd#
+      AND A.USE_YN = 'Y'
+      AND SA_TYPE IN (SELECT CODE_ID FROM T_CODE WHERE UP_CODE_ID = 'SA_TYPE' AND (VALUE_5 = 'Y' OR VALUE_5 = 'N'))
+
+      <isNotEmpty property="deptGroup">
+        AND A.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND A.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>   
+            
+      
+      
+      <isNotEmpty property="user_cd">
+        AND A.USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="sa_type">
+        AND A.SA_TYPE = #sa_type#
+      </isNotEmpty>
+      <isNotEmpty property="sa_edate">
+        <![CDATA[ AND (A.SA_SDATE <= REPLACE(#sa_edate#, '-', '') AND A.SA_EDATE >= REPLACE(#sa_sdate#, '-', '')) ]]>
+      </isNotEmpty>
+      ORDER BY A.SA_SDATE DESC
+    </select>
+
+
+
+    
+    
+    <!-- 영업활동 현황 : 활동 미등록자 팝업   -->
+    <select id="popupNonActivityUser"  parameterClass="Hashtable" resultClass="Hashtable">
+
+        SELECT
+        UP_DEPT_NM
+        , DEPT_NM
+        , USER_NM
+        FROM
+        (
+        SELECT
+        (SELECT DEPT_NM 
+          FROM T_DEPARTMENT 
+          WHERE DEPT_CD = (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = A.DEPT_CD)) AS UP_DEPT_NM
+        , dbo.FN_GET_DEPT_NM(A.DEPT_CD) AS DEPT_NM
+        , USER_NM
+        FROM T_USER A
+        WHERE SA_YN = 'Y'
+        AND USER_CD NOT IN (
+          SELECT
+          USER_CD
+          FROM T_SALES_ACTIVITY
+          WHERE SA_BODY IS NOT NULL AND CAST(SA_BODY AS NVARCHAR) !=  ''
+          AND (SA_SDATE <![CDATA[<=]]> REPLACE(#sa_edate#, '-', '') AND SA_EDATE <![CDATA[>=]]> REPLACE(#sa_sdate#, '-', ''))
+          )
+        ) Z
+        ORDER BY UP_DEPT_NM ASC, DEPT_NM ASC, USER_NM ASC
+    </select>
+
+
+
+
+
+    <select id="salesActivityCommentList"  parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      A.SA_CD
+      , A.SA_SDATE
+      , A.DEPT_CD
+      , A.USER_CD
+      , DBO.FN_GET_USER_NM(A.USER_CD) AS USER_NM
+      , DBO.FN_GET_DEPT_NM(A.DEPT_CD) AS DEPT_NM
+      , A.CUST_CD
+      , DBO.FN_GET_CUST_NM(A.CUST_CD) AS CUST_NM
+      , A.SA_BODY
+      , A.PJT_CD
+      ,(
+      (SELECT CODE_NM FROM T_CODE WHERE UP_CODE_ID = 'SA_TARGET' AND CODE_ID = (SELECT TOP 1 SA_TARGET FROM T_SA_TARGET WHERE SA_CD = A.SA_CD))
+      + (CASE WHEN (SELECT COUNT(SA_TARGET) FROM T_SA_TARGET WHERE SA_CD = A.SA_CD) > 1 THEN '외 '+ CONVERT(NVARCHAR, (SELECT COUNT(SA_TARGET)-1 FROM T_SA_TARGET WHERE SA_CD = A.SA_CD))+'건' ELSE '' END)
+      ) AS SA_TARGET
+      , CASE
+      WHEN A.CMT_YN = 'Y' THEN
+      CASE
+      WHEN (SELECT COUNT(DEPT_MGR) FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD)) = 0 OR A.USER_CD != (SELECT DEPT_MGR FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD)) THEN
+      (SELECT (SELECT USER_POSIT FROM T_USER WHERE USER_CD = DEPT_MGR)+' : '+ISNULL(DBO.FN_GET_USER_NM(DEPT_MGR), '')+' '+ISNULL('['+(SELECT DBO.FN_GET_DATE_FORMAT(CONVERT(NVARCHAR, REG_DT, 112), 'YYYY-MM-DD')+'] '+SA_COMMENT FROM T_SA_COMMENT WHERE COMPANY_CD = A.COMPANY_CD AND SA_CD = A.SA_CD AND CMT_MGR = AA.DEPT_MGR), '') FROM T_DEPARTMENT AA WHERE DEPT_CD = A.DEPT_CD)+' '
+      ELSE ''
+      END+
+      (SELECT (SELECT USER_POSIT FROM T_USER WHERE USER_CD = DEPT_MGR)+' : '+ISNULL(DBO.FN_GET_USER_NM(DEPT_MGR), '')+' '+ISNULL((SELECT DBO.FN_GET_DATE_FORMAT(CONVERT(NVARCHAR, REG_DT, 112), 'YYYY-MM-DD')+' '+SA_COMMENT FROM T_SA_COMMENT WHERE COMPANY_CD = A.COMPANY_CD AND SA_CD = A.SA_CD AND CMT_MGR = AA.DEPT_MGR), '') FROM T_DEPARTMENT AA WHERE DEPT_CD = (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD)))
+      +' '+(SELECT (SELECT USER_POSIT FROM T_USER WHERE USER_CD = DEPT_MGR)+' : '+ISNULL(DBO.FN_GET_USER_NM(DEPT_MGR), '')+' '+ISNULL((SELECT DBO.FN_GET_DATE_FORMAT(CONVERT(NVARCHAR, REG_DT, 112), 'YYYY-MM-DD')+' '+SA_COMMENT FROM T_SA_COMMENT WHERE COMPANY_CD = A.COMPANY_CD AND SA_CD = A.SA_CD AND CMT_MGR = AA.DEPT_MGR), '') FROM T_DEPARTMENT AA WHERE DEPT_CD = (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD))))
+      ELSE ''
+      END AS SA_COMMENT
+      , A.SA_TYPE
+      ,dbo.FN_GET_CODE_NM(#language#, 'SA_TYPE', A.SA_TYPE) AS SA_TYPE_NM
+      FROM T_SALES_ACTIVITY A
+      LEFT OUTER JOIN T_DEPARTMENT AS D
+      ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+      WHERE A.COMPANY_CD = #company_cd#
+      AND (CAST(SA_BODY AS NVARCHAR) !=  '' OR SA_BODY IS NOT NULL)
+
+      AND A.CMT_YN = 'Y'
+
+      <isNotEmpty property="deptGroup">
+        AND A.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND A.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="user_cd">
+        AND A.USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="sa_edate">
+        AND (A.SA_SDATE <![CDATA[<=]]> REPLACE(#sa_edate#, '-', '') AND A.SA_EDATE <![CDATA[>=]]> REPLACE(#sa_sdate#, '-', ''))
+      </isNotEmpty>
+      <isNotEmpty property="cust_cd">
+        AND A.CUST_CD = #cust_cd#
+      </isNotEmpty>
+      <isNotEmpty property="sa_mgr">
+        AND A.SA_MGR = #sa_mgr#
+      </isNotEmpty>
+
+      <isNotEmpty property="cmt_yn">
+        <isEqual property="cmt_yn" compareValue="Y">
+          AND A.SA_COMMENT IS NOT NULL AND A.SA_COMMENT <![CDATA[<>]]> ''
+        </isEqual>
+        <isEqual property="cmt_yn" compareValue="N">
+          AND (A.SA_COMMENT IS NULL OR A.SA_COMMENT <![CDATA[=]]> '')
+        </isEqual>
+      </isNotEmpty>
+      ORDER BY A.SA_CD DESC
+
+    </select>
+
+    <select id="salesActivityCommentList_bak"  parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      SA_CD
+      , GB
+      , SA_SDATE
+      , DEPT_CD
+      , USER_CD
+      , USER_NM
+      , COL1
+      , CUST_CD
+      , COL2
+      , COL3
+      , COL5
+      , PJT_CD
+      , SA_TYPE
+      , SA_TYPE_NM
+      FROM
+      (
+      SELECT
+      A.SA_CD
+      , '1' AS GB
+      , A.SA_SDATE
+      , A.DEPT_CD
+      , A.USER_CD
+      , DBO.FN_GET_USER_NM(A.USER_CD) AS USER_NM
+      , DBO.FN_GET_DEPT_NM(A.DEPT_CD) AS COL1
+      , A.CUST_CD
+      , DBO.FN_GET_CUST_NM(A.CUST_CD) AS COL2
+      , A.SA_BODY AS COL3
+      , A.PJT_CD
+      , CASE
+      WHEN A.CMT_YN = 'Y' THEN
+      CASE
+      WHEN (SELECT COUNT(DEPT_MGR) FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD)) = 0 OR A.USER_CD != (SELECT DEPT_MGR FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD)) THEN
+      (SELECT (SELECT USER_POSIT FROM T_USER WHERE USER_CD = DEPT_MGR)+' : '+ISNULL(DBO.FN_GET_USER_NM(DEPT_MGR), '')+' '+ISNULL('['+(SELECT DBO.FN_GET_DATE_FORMAT(CONVERT(NVARCHAR, REG_DT, 112), 'YYYY-MM-DD')+'] '+SA_COMMENT FROM T_SA_COMMENT WHERE COMPANY_CD = A.COMPANY_CD AND SA_CD = A.SA_CD AND CMT_MGR = AA.DEPT_MGR), '') FROM T_DEPARTMENT AA WHERE DEPT_CD = A.DEPT_CD)+' '
+      ELSE ''
+      END+
+      (SELECT (SELECT USER_POSIT FROM T_USER WHERE USER_CD = DEPT_MGR)+' : '+ISNULL(DBO.FN_GET_USER_NM(DEPT_MGR), '')+' '+ISNULL((SELECT DBO.FN_GET_DATE_FORMAT(CONVERT(NVARCHAR, REG_DT, 112), 'YYYY-MM-DD')+' '+SA_COMMENT FROM T_SA_COMMENT WHERE COMPANY_CD = A.COMPANY_CD AND SA_CD = A.SA_CD AND CMT_MGR = AA.DEPT_MGR), '') FROM T_DEPARTMENT AA WHERE DEPT_CD = (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD)))
+      +' '+(SELECT (SELECT USER_POSIT FROM T_USER WHERE USER_CD = DEPT_MGR)+' : '+ISNULL(DBO.FN_GET_USER_NM(DEPT_MGR), '')+' '+ISNULL((SELECT DBO.FN_GET_DATE_FORMAT(CONVERT(NVARCHAR, REG_DT, 112), 'YYYY-MM-DD')+' '+SA_COMMENT FROM T_SA_COMMENT WHERE COMPANY_CD = A.COMPANY_CD AND SA_CD = A.SA_CD AND CMT_MGR = AA.DEPT_MGR), '') FROM T_DEPARTMENT AA WHERE DEPT_CD = (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD))))
+      ELSE ''
+      END AS COL5
+      , A.SA_TYPE
+      ,dbo.FN_GET_CODE_NM(#language#, 'SA_TYPE', A.SA_TYPE) AS SA_TYPE_NM
+      FROM T_SALES_ACTIVITY A
+      LEFT OUTER JOIN T_DEPARTMENT AS D
+      ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+      WHERE A.COMPANY_CD = #company_cd#
+      AND (CAST(SA_BODY AS NVARCHAR) !=  '' OR SA_BODY IS NOT NULL)
+
+      AND A.CMT_YN = 'Y'
+
+      <isNotEmpty property="deptGroup">
+        AND A.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND A.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="user_cd">
+        AND A.USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="sa_edate">
+        AND (A.SA_SDATE <![CDATA[<=]]> REPLACE(#sa_edate#, '-', '') AND A.SA_EDATE <![CDATA[>=]]> REPLACE(#sa_sdate#, '-', ''))
+      </isNotEmpty>
+      <isNotEmpty property="cust_cd">
+        AND A.CUST_CD = #cust_cd#
+      </isNotEmpty>
+      <isNotEmpty property="sa_mgr">
+        AND A.SA_MGR = #sa_mgr#
+      </isNotEmpty>
+
+      <isNotEmpty property="cmt_yn">
+        <isEqual property="cmt_yn" compareValue="Y">
+          AND A.SA_COMMENT IS NOT NULL AND A.SA_COMMENT <![CDATA[<>]]> ''
+        </isEqual>
+        <isEqual property="cmt_yn" compareValue="N">
+          AND (A.SA_COMMENT IS NULL OR A.SA_COMMENT <![CDATA[=]]> '')
+        </isEqual>
+      </isNotEmpty>
+      UNION ALL
+      SELECT
+      A.SA_CD
+      , '2' AS GB
+      , A.SA_SDATE
+      , A.USER_CD
+      , DBO.FN_GET_USER_NM(A.USER_CD) AS USER_NM
+      , ''
+      , (
+      (SELECT CODE_NM FROM T_CODE WHERE UP_CODE_ID = 'SA_TARGET' AND CODE_ID = (SELECT TOP 1 SA_TARGET FROM T_SA_TARGET WHERE SA_CD = A.SA_CD))
+      + (CASE WHEN (SELECT COUNT(SA_TARGET) FROM T_SA_TARGET WHERE SA_CD = A.SA_CD) > 1 THEN '외 '+ CONVERT(NVARCHAR, (SELECT COUNT(SA_TARGET)-1 FROM T_SA_TARGET WHERE SA_CD = A.SA_CD))+'건' ELSE '' END)
+      )
+      , ''
+      , ''
+      , ''
+      , A.SA_TYPE
+      ,dbo.FN_GET_CODE_NM(#language#, 'SA_TYPE', A.SA_TYPE) AS SA_TYPE_NM
+      FROM T_SALES_ACTIVITY A
+      LEFT OUTER JOIN T_DEPARTMENT AS D
+      ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+      WHERE A.COMPANY_CD = #company_cd#
+      AND (CAST(SA_BODY AS NVARCHAR) !=  '' OR SA_BODY IS NOT NULL)
+
+      AND A.CMT_YN = 'Y'
+
+      <isNotEmpty property="deptGroup">
+        AND A.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND A.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND A.USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="sa_edate">
+        AND (A.SA_SDATE <![CDATA[<=]]> REPLACE(#sa_edate#, '-', '') AND A.SA_EDATE <![CDATA[>=]]> REPLACE(#sa_sdate#, '-', ''))
+      </isNotEmpty>
+      <isNotEmpty property="cust_cd">
+        AND A.CUST_CD = #cust_cd#
+      </isNotEmpty>
+      <isNotEmpty property="sa_mgr">
+        AND A.SA_MGR = #sa_mgr#
+      </isNotEmpty>
+
+      <isNotEmpty property="cmt_yn">
+        <isEqual property="cmt_yn" compareValue="Y">
+          AND A.SA_COMMENT IS NOT NULL AND A.SA_COMMENT <![CDATA[<>]]> ''
+        </isEqual>
+        <isEqual property="cmt_yn" compareValue="N">
+          AND (A.SA_COMMENT IS NULL OR A.SA_COMMENT <![CDATA[=]]> '')
+        </isEqual>
+      </isNotEmpty>
+
+      ) A
+      ORDER BY SA_CD DESC, GB ASC
+
+    </select>
+
+
+
+    <!-- 영업활동 모니터링 : 검색 리스트   -->
+    <select id="salesActiveMonitoringList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      COMPANY_CD
+      , UP_DEPT_NM
+      , DEPT_NM
+      , USER_NM
+      , SUM_1
+      , SUM_2
+      , SUM_3
+      , SUM_4
+      , SUM_1 + SUM_2 + SUM_3 + SUM_4 AS SUM_5
+      , SUM_6
+      , SUM_7
+      , SUM_8
+      , CASE WHEN SUM_7 != 0 AND SUM_8 != 0 THEN (SUM_8/CONVERT(numeric(18,3),SUM_7)) * 100 ELSE 0 END AS SUM_9
+      , SUM_10
+      , SUM_11
+      , CASE WHEN SUM_10 != 0 AND SUM_11 != 0 THEN (SUM_11/CONVERT(numeric(18,3),SUM_10)) * 100 ELSE 0 END AS SUM_12
+      FROM
+      (
+      SELECT
+      COMPANY_CD
+      , (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = DBO.fn_get_user_to_dept_cd(A.USER_CD)) AS UP_DEPT_CD
+      , (SELECT DEPT_NM FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = DBO.fn_get_user_to_dept_cd(A.USER_CD))) AS UP_DEPT_NM
+      , A.DEPT_CD
+      , A.DEPT_NM
+      , DBO.fn_get_user_nm(A.USER_CD) AS USER_NM
+
+
+      , (SELECT COUNT(SA_CD) FROM T_SALES_ACTIVITY WHERE   A.BASE_YM <![CDATA[<=]]> SUBSTRING(SA_EDATE, 1, 6) AND A.BASE_YM <![CDATA[>=]]> SUBSTRING(SA_SDATE, 1, 6)
+      AND USER_CD = A.USER_CD AND USE_YN = 'Y'
+      AND SA_TYPE = 'SATYPE_100'
+      ) AS SUM_1
+
+      , (SELECT COUNT(SA_CD) FROM T_SALES_ACTIVITY WHERE  A.BASE_YM <![CDATA[<=]]> SUBSTRING(SA_EDATE, 1, 6) AND A.BASE_YM <![CDATA[>=]]> SUBSTRING(SA_SDATE, 1, 6)
+      AND USER_CD = A.USER_CD AND USE_YN = 'Y'
+      AND SA_TYPE = 'SATYPE_200'
+      ) AS SUM_2
+
+      , (SELECT COUNT(SA_CD) FROM T_SALES_ACTIVITY WHERE  A.BASE_YM <![CDATA[<=]]> SUBSTRING(SA_EDATE, 1, 6) AND A.BASE_YM <![CDATA[>=]]> SUBSTRING(SA_SDATE, 1, 6)
+      AND USER_CD = A.USER_CD AND USE_YN = 'Y'
+      AND SA_TYPE = 'SATYPE_300'
+      ) AS SUM_3
+
+      , (SELECT COUNT(SA_CD) FROM T_SALES_ACTIVITY WHERE A.BASE_YM <![CDATA[<=]]> SUBSTRING(SA_EDATE, 1, 6) AND A.BASE_YM <![CDATA[>=]]> SUBSTRING(SA_SDATE, 1, 6)
+      AND USER_CD = A.USER_CD AND USE_YN = 'Y'
+      AND SA_TYPE = 'SATYPE_400'
+      ) AS SUM_4
+
+      , ISNULL((SELECT SUM(KM_QTY) FROM T_SA_KM_SUMMARY WHERE BASE_YM = A.BASE_YM AND USER_CD = A.USER_CD),0) AS SUM_6
+      , ISNULL((SELECT SUM(KM_H_QTY) FROM T_SA_KM_SUMMARY WHERE BASE_YM = A.BASE_YM AND USER_CD = A.USER_CD),0) AS SUM_7
+      , (SELECT COUNT(*) FROM ( SELECT DISTINCT KM_CD FROM T_SA_KEYMAN WHERE KM_CD IN (SELECT KM_CD FROM T_KEYMAN WHERE CUST_CD IN (SELECT CUST_CD FROM T_CUSTOMER WHERE USER_CD = A.USER_CD))
+      AND SA_CD IN (SELECT SA_CD FROM T_SALES_ACTIVITY WHERE SA_CD IN (SELECT SA_CD FROM T_SA_COMMENT WHERE (SA_COMMENT IS NOT NULL AND SA_COMMENT != '') GROUP BY SA_CD)
+      AND USE_YN = 'Y'
+      )) A) AS SUM_8
+      , (SELECT COUNT(SA_CD) FROM T_SALES_ACTIVITY WHERE A.BASE_YM <![CDATA[<=]]> SUBSTRING(SA_EDATE, 1, 6) AND A.BASE_YM <![CDATA[>=]]> SUBSTRING(SA_SDATE, 1, 6)
+      AND SA_BODY IS NOT NULL AND USER_CD = A.USER_CD AND CMT_YN = 'Y'
+      AND USE_YN = 'Y'
+      ) AS SUM_10
+      , (SELECT COUNT(SA_CD) FROM (SELECT SA_CD FROM T_SA_COMMENT WHERE (SA_COMMENT IS NOT NULL AND SA_COMMENT != '')
+      AND SA_CD IN (SELECT SA_CD FROM T_SALES_ACTIVITY WHERE  A.BASE_YM <![CDATA[<=]]> SUBSTRING(SA_EDATE, 1, 6) AND A.BASE_YM <![CDATA[>=]]> SUBSTRING(SA_SDATE, 1, 6)
+      AND SA_BODY IS NOT NULL AND USER_CD = A.USER_CD AND CMT_YN = 'Y'
+      AND USE_YN = 'Y'
+
+      ) GROUP BY SA_CD) AA) AS SUM_11
+      FROM
+      (
+      SELECT
+      T.COMPANY_CD
+      , T.USER_CD
+      , DBO.FN_GET_USER_TO_DEPT_CD(T.USER_CD) AS DEPT_CD
+      , DBO.FN_GET_USER_TO_DEPT_NM(T.USER_CD) AS DEPT_NM
+      , #base_ym# AS BASE_YM
+      FROM T_USER T
+      LEFT OUTER JOIN T_DEPARTMENT AS D
+      ON T.COMPANY_CD = D.COMPANY_CD   AND T.DEPT_CD = D.DEPT_CD
+
+      WHERE T.COMPANY_CD = #company_cd#
+      <!--AND T.SA_YN = 'Y' -->
+      AND T.DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE COMPANY_CD = #company_cd# AND sadept_yn = 'Y' AND DEPT_LEVEL IN ('3','4','5'))
+      <isNotEmpty property="deptGroup">
+        AND T.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND T.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND T.USER_CD = #user_cd#
+      </isNotEmpty>
+      ) A
+      WHERE DBO.fn_get_user_to_dept_cd(A.USER_CD) IS NOT NULL
+      ) B
+      ORDER BY UP_DEPT_CD ASC, DEPT_CD ASC
+
+    </select> 
+    
+
+
+    <!-- 영업활동 모니터링 : 검색 리스트   -->
+    <select id="salesActiveMonitoringList_back" parameterClass="Hashtable" resultClass="Hashtable">
+      
+      SELECT
+      COMPANY_CD
+      , UP_DEPT_NM
+      , DEPT_NM
+      , USER_NM
+      , SUM_1
+      , SUM_2
+      , CASE WHEN SUM_1 != 0 AND SUM_2 != 0 THEN (SUM_2/CONVERT(numeric(18,3),SUM_1)) * 100 ELSE 0 END AS SUM_3
+      , SUM_4
+      , SUM_2 + SUM_4 AS SUM_5
+      , SUM_6
+      , SUM_7
+      , SUM_8
+      , CASE WHEN SUM_7 != 0 AND SUM_8 != 0 THEN (SUM_8/CONVERT(numeric(18,3),SUM_7)) * 100 ELSE 0 END AS SUM_9
+      , SUM_10
+      , SUM_11
+      , CASE WHEN SUM_10 != 0 AND SUM_11 != 0 THEN (SUM_11/CONVERT(numeric(18,3),SUM_10)) * 100 ELSE 0 END AS SUM_12
+      FROM
+      (
+      SELECT
+      COMPANY_CD
+      , (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = DBO.fn_get_user_to_dept_cd(A.USER_CD)) AS UP_DEPT_CD
+      , (SELECT DEPT_NM FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = DBO.fn_get_user_to_dept_cd(A.USER_CD))) AS UP_DEPT_NM
+      , A.DEPT_CD
+      , A.DEPT_NM
+      , DBO.fn_get_user_nm(A.USER_CD) AS USER_NM
+      
+      , (SELECT COUNT(SA_CD) FROM T_SALES_ACTIVITY WHERE PLAN_YN = 'Y' AND A.BASE_YM <![CDATA[<=]]> SUBSTRING(SA_EDATE, 1, 6) AND A.BASE_YM <![CDATA[>=]]> SUBSTRING(SA_SDATE, 1, 6) 
+      AND USER_CD = A.USER_CD AND USE_YN = 'Y' 
+      <isNotEmpty property="sa_type">
+        AND SA_TYPE = #sa_type#
+      </isNotEmpty>
+      ) AS SUM_1
+      
+      
+      , (SELECT COUNT(SA_CD) FROM T_SALES_ACTIVITY WHERE PLAN_YN = 'Y' AND A.BASE_YM <![CDATA[<=]]> SUBSTRING(SA_EDATE, 1, 6) AND A.BASE_YM <![CDATA[>=]]> SUBSTRING(SA_SDATE, 1, 6) 
+      AND USER_CD = A.USER_CD AND SA_BODY IS NOT NULL AND USE_YN = 'Y' 
+      <isNotEmpty property="sa_type">
+        AND SA_TYPE = #sa_type#
+      </isNotEmpty>
+      ) AS SUM_2
+      
+      
+      , (SELECT COUNT(SA_CD) FROM T_SALES_ACTIVITY WHERE PLAN_YN = 'N' AND A.BASE_YM <![CDATA[<=]]> SUBSTRING(SA_EDATE, 1, 6) AND A.BASE_YM <![CDATA[>=]]> SUBSTRING(SA_SDATE, 1, 6) 
+      AND USER_CD = A.USER_CD AND SA_BODY IS NOT NULL AND USE_YN = 'Y' 
+      <isNotEmpty property="sa_type">
+        AND SA_TYPE = #sa_type#
+      </isNotEmpty>
+      ) AS SUM_4
+      
+      , (SELECT SUM(KM_QTY) FROM T_SA_KM_SUMMARY WHERE BASE_YM = A.BASE_YM AND USER_CD = A.USER_CD) AS SUM_6
+      , (SELECT SUM(KM_H_QTY) FROM T_SA_KM_SUMMARY WHERE BASE_YM = A.BASE_YM AND USER_CD = A.USER_CD) AS SUM_7
+      , (SELECT COUNT(*) FROM ( SELECT DISTINCT KM_CD FROM T_SA_KEYMAN WHERE KM_CD IN (SELECT KM_CD FROM T_KEYMAN WHERE CUST_CD IN (SELECT CUST_CD FROM T_CUSTOMER WHERE USER_CD = A.USER_CD)) 
+      AND SA_CD IN (SELECT SA_CD FROM T_SALES_ACTIVITY WHERE SA_CD IN (SELECT SA_CD FROM T_SA_COMMENT WHERE (SA_COMMENT IS NOT NULL AND SA_COMMENT != '') GROUP BY SA_CD) 
+      AND USE_YN = 'Y' 
+      <isNotEmpty property="sa_type">
+        AND SA_TYPE = #sa_type#
+      </isNotEmpty>
+      )) A) AS SUM_8
+      , (SELECT COUNT(SA_CD) FROM T_SALES_ACTIVITY WHERE A.BASE_YM <![CDATA[<=]]> SUBSTRING(SA_EDATE, 1, 6) AND A.BASE_YM <![CDATA[>=]]> SUBSTRING(SA_SDATE, 1, 6) 
+      AND SA_BODY IS NOT NULL AND USER_CD = A.USER_CD AND CMT_YN = 'Y' 
+      AND USE_YN = 'Y' 
+      <isNotEmpty property="sa_type">
+        AND SA_TYPE = #sa_type#
+      </isNotEmpty>
+      ) AS SUM_10
+      , (SELECT COUNT(SA_CD) FROM (SELECT SA_CD FROM T_SA_COMMENT WHERE (SA_COMMENT IS NOT NULL AND SA_COMMENT != '') 
+      AND SA_CD IN (SELECT SA_CD FROM T_SALES_ACTIVITY WHERE  A.BASE_YM <![CDATA[<=]]> SUBSTRING(SA_EDATE, 1, 6) AND A.BASE_YM <![CDATA[>=]]> SUBSTRING(SA_SDATE, 1, 6) 
+      AND SA_BODY IS NOT NULL AND USER_CD = A.USER_CD AND CMT_YN = 'Y' 
+      AND USE_YN = 'Y' 
+      <isNotEmpty property="sa_type">
+        AND SA_TYPE = #sa_type#
+      </isNotEmpty>
+      ) GROUP BY SA_CD) AA) AS SUM_11
+      FROM
+      (
+      SELECT
+      T.COMPANY_CD
+      , T.USER_CD
+      , DBO.FN_GET_USER_TO_DEPT_CD(T.USER_CD) AS DEPT_CD
+      , DBO.FN_GET_USER_TO_DEPT_NM(T.USER_CD) AS DEPT_NM
+      , #base_ym# AS BASE_YM
+      FROM T_USER T
+      LEFT OUTER JOIN T_DEPARTMENT AS D
+      ON T.COMPANY_CD = D.COMPANY_CD	AND T.DEPT_CD = D.DEPT_CD
+
+      WHERE T.COMPANY_CD = #company_cd#
+      AND T.SA_YN = 'Y'
+      <isNotEmpty property="deptGroup">
+            AND T.DEPT_CD = #deptGroup#
+          </isNotEmpty>
+
+            <isNotEmpty property="bizGroup">
+              <isEmpty property="deptGroup">
+                AND D.UP_DEPT_CD = #bizGroup#
+                AND T.DEPT_CD IS NOT NULL
+              </isEmpty>
+            </isNotEmpty>
+      
+            <isNotEmpty property="user_cd">
+              AND T.USER_CD = #user_cd#
+            </isNotEmpty>
+          ) A
+      WHERE DBO.fn_get_user_to_dept_cd(A.USER_CD) IS NOT NULL
+      ) B
+      ORDER BY UP_DEPT_CD ASC, DEPT_CD ASC
+    
+  </select>
+
+
+ <!--  <select id="salesActiveMonitoringList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      COMPANY_CD
+      , UP_DEPT_NM
+      , DEPT_NM
+      , USER_NM
+      , SUM_1
+      , SUM_2
+      , CASE WHEN SUM_1 != 0 AND SUM_2 != 0 THEN (SUM_2/CONVERT(numeric(18,3),SUM_1)) * 100 ELSE 0 END AS SUM_3
+      , SUM_4
+      , SUM_2 + SUM_4 AS SUM_5
+      , SUM_6
+      , SUM_7
+      , SUM_8
+      , CASE WHEN SUM_7 != 0 AND SUM_8 != 0 THEN (SUM_8/CONVERT(numeric(18,3),SUM_7)) * 100 ELSE 0 END AS SUM_9
+      , SUM_10
+      , SUM_11
+      , CASE WHEN SUM_10 != 0 AND SUM_11 != 0 THEN (SUM_11/CONVERT(numeric(18,3),SUM_10)) * 100 ELSE 0 END AS SUM_12
+      FROM
+      (
+      SELECT
+      COMPANY_CD
+      , (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = DBO.fn_get_user_to_dept_cd(A.USER_CD)) AS UP_DEPT_CD
+      , (SELECT DEPT_NM FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = DBO.fn_get_user_to_dept_cd(A.USER_CD))) AS UP_DEPT_NM
+      , A.DEPT_CD
+      , A.DEPT_NM
+      , DBO.fn_get_user_nm(A.USER_CD) AS USER_NM
+      , (SELECT COUNT(SA_CD) FROM T_SALES_ACTIVITY WHERE PLAN_YN = 'Y' AND A.BASE_YM <![CDATA[<=]]> SUBSTRING(SA_EDATE, 1, 6) AND A.BASE_YM <![CDATA[>=]]> SUBSTRING(SA_SDATE, 1, 6)
+      AND USER_CD = A.USER_CD AND USE_YN = 'Y'
+      <isNotEmpty property="sa_type">
+        AND SA_TYPE = #sa_type#
+      </isNotEmpty>
+      ) AS SUM_1
+      , (SELECT COUNT(SA_CD) FROM T_SALES_ACTIVITY WHERE PLAN_YN = 'Y' AND A.BASE_YM <![CDATA[<=]]> SUBSTRING(SA_EDATE, 1, 6) AND A.BASE_YM <![CDATA[>=]]> SUBSTRING(SA_SDATE, 1, 6)
+      AND USER_CD = A.USER_CD AND SA_BODY IS NOT NULL AND USE_YN = 'Y'
+      <isNotEmpty property="sa_type">
+        AND SA_TYPE = #sa_type#
+      </isNotEmpty>
+      ) AS SUM_2
+      , (SELECT COUNT(SA_CD) FROM T_SALES_ACTIVITY WHERE PLAN_YN = 'N' AND A.BASE_YM <![CDATA[<=]]> SUBSTRING(SA_EDATE, 1, 6) AND A.BASE_YM <![CDATA[>=]]> SUBSTRING(SA_SDATE, 1, 6)
+      AND USER_CD = A.USER_CD AND SA_BODY IS NOT NULL AND USE_YN = 'Y'
+      <isNotEmpty property="sa_type">
+        AND SA_TYPE = #sa_type#
+      </isNotEmpty>
+      ) AS SUM_4
+      , (SELECT SUM(KM_QTY) FROM T_SA_KM_SUMMARY WHERE BASE_YM = A.BASE_YM AND USER_CD = A.USER_CD) AS SUM_6
+      , (SELECT SUM(KM_H_QTY) FROM T_SA_KM_SUMMARY WHERE BASE_YM = A.BASE_YM AND USER_CD = A.USER_CD) AS SUM_7
+      , (SELECT COUNT(*) FROM ( SELECT DISTINCT KM_CD FROM T_SA_KEYMAN WHERE KM_CD IN (SELECT KM_CD FROM T_KEYMAN WHERE CUST_CD IN (SELECT CUST_CD FROM T_CUSTOMER WHERE USER_CD = A.USER_CD))
+      AND SA_CD IN (SELECT SA_CD FROM T_SALES_ACTIVITY WHERE SA_CD IN (SELECT SA_CD FROM T_SA_COMMENT WHERE (SA_COMMENT IS NOT NULL AND SA_COMMENT != '') GROUP BY SA_CD)
+      AND USE_YN = 'Y'
+      <isNotEmpty property="sa_type">
+        AND SA_TYPE = #sa_type#
+      </isNotEmpty>
+      )) A) AS SUM_8
+      , (SELECT COUNT(SA_CD) FROM T_SALES_ACTIVITY WHERE A.BASE_YM <![CDATA[<=]]> SUBSTRING(SA_EDATE, 1, 6) AND A.BASE_YM <![CDATA[>=]]> SUBSTRING(SA_SDATE, 1, 6)
+      AND SA_BODY IS NOT NULL AND USER_CD = A.USER_CD AND CMT_YN = 'Y'
+      AND USE_YN = 'Y'
+      <isNotEmpty property="sa_type">
+        AND SA_TYPE = #sa_type#
+      </isNotEmpty>
+      ) AS SUM_10
+      , (SELECT COUNT(SA_CD) FROM (SELECT SA_CD FROM T_SA_COMMENT WHERE (SA_COMMENT IS NOT NULL AND SA_COMMENT != '')
+      AND SA_CD IN (SELECT SA_CD FROM T_SALES_ACTIVITY WHERE  A.BASE_YM <![CDATA[<=]]> SUBSTRING(SA_EDATE, 1, 6) AND A.BASE_YM <![CDATA[>=]]> SUBSTRING(SA_SDATE, 1, 6)
+      AND SA_BODY IS NOT NULL AND USER_CD = A.USER_CD AND CMT_YN = 'Y'
+      AND USE_YN = 'Y'
+      <isNotEmpty property="sa_type">
+        AND SA_TYPE = #sa_type#
+      </isNotEmpty>
+      ) GROUP BY SA_CD) AA) AS SUM_11
+      FROM
+      (
+      SELECT
+      T.COMPANY_CD
+      , T.USER_CD
+      , DBO.FN_GET_USER_TO_DEPT_CD(T.USER_CD) AS DEPT_CD
+      , DBO.FN_GET_USER_TO_DEPT_NM(T.USER_CD) AS DEPT_NM
+      , #base_ym# AS BASE_YM
+      FROM T_USER T
+      LEFT OUTER JOIN T_DEPARTMENT AS D
+      ON T.COMPANY_CD = D.COMPANY_CD	AND T.DEPT_CD = D.DEPT_CD
+
+      WHERE T.COMPANY_CD = #company_cd#
+      AND T.SA_YN = 'Y'
+      <isNotEmpty property="deptGroup">
+        AND T.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND T.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND T.USER_CD = #user_cd#
+      </isNotEmpty>
+      ) A
+      WHERE DBO.fn_get_user_to_dept_cd(A.USER_CD) IS NOT NULL
+      ) B
+      ORDER BY UP_DEPT_CD ASC, DEPT_CD ASC
+
+    </select> -->
+
+
+
+    <!-- 업무보고 현황 : 리스트   -->
+    <select id="salesActivityWorkList"  parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      A.SA_CD
+      , A.SA_SDATE AS SA_SDATE
+      , dbo.FN_GET_CODE_NM(#language#, 'SA_TYPE', A.SA_TYPE) AS SA_TYPE_NM
+      , DBO.FN_GET_DEPT_NM(A.DEPT_CD) AS DEPT_NM
+      , DBO.FN_GET_USER_NM(A.USER_CD) AS USER_NM
+      , A.SA_SUBJECT
+      , A.USER_CD
+      , A.DEPT_CD
+      , (SELECT
+      CONVERT(NVARCHAR, DBO.FN_GET_KEYMAN_NM(MIN(KM_CD)))
+      + (CASE WHEN (SELECT COUNT(*) FROM T_SA_KEYMAN WHERE SA_CD = A.SA_CD) > 1 THEN ' 외'+(SELECT CONVERT(NVARCHAR, COUNT(*)-1) FROM T_SA_KEYMAN WHERE SA_CD = A.SA_CD)+'건' ELSE '' END)
+      FROM T_SA_KEYMAN WHERE SA_CD = A.SA_CD) AS KM_NMS
+      , dbo.FN_GET_CODE_NM(#language#, 'SA_CNCT', A.SA_CNCT) AS SA_CNCT_NM
+      , A.SA_BODY
+      , A.CMT_YN
+      , A.PJT_CD
+      , CASE
+      WHEN A.CMT_YN = 'Y' THEN
+      CASE
+      WHEN (SELECT COUNT(DEPT_MGR) FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD)) = 0 OR A.USER_CD != (SELECT DEPT_MGR FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD)) THEN
+      (SELECT (SELECT USER_POSIT FROM T_USER WHERE USER_CD = DEPT_MGR)+' : '+ISNULL(DBO.FN_GET_USER_NM(DEPT_MGR), '')+' '+ISNULL('['+(SELECT DBO.FN_GET_DATE_FORMAT(CONVERT(NVARCHAR, REG_DT, 112), 'YYYY-MM-DD')+'] '+SA_COMMENT FROM T_SA_COMMENT WHERE COMPANY_CD = A.COMPANY_CD AND SA_CD = A.SA_CD AND CMT_MGR = AA.DEPT_MGR), '') FROM T_DEPARTMENT AA WHERE DEPT_CD = A.DEPT_CD)+' '
+      ELSE ''
+      END+(SELECT (SELECT USER_POSIT FROM T_USER WHERE USER_CD = DEPT_MGR)+' : '+ISNULL(DBO.FN_GET_USER_NM(DEPT_MGR), '')+' '+ISNULL((SELECT DBO.FN_GET_DATE_FORMAT(CONVERT(NVARCHAR, REG_DT, 112), 'YYYY-MM-DD')+' '+SA_COMMENT FROM T_SA_COMMENT WHERE COMPANY_CD = A.COMPANY_CD AND SA_CD = A.SA_CD AND CMT_MGR = AA.DEPT_MGR), '') FROM T_DEPARTMENT AA WHERE DEPT_CD = (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD)))
+      +' '+(SELECT (SELECT USER_POSIT FROM T_USER WHERE USER_CD = DEPT_MGR)+' : '+ISNULL(DBO.FN_GET_USER_NM(DEPT_MGR), '')+' '+ISNULL((SELECT DBO.FN_GET_DATE_FORMAT(CONVERT(NVARCHAR, REG_DT, 112), 'YYYY-MM-DD')+' '+SA_COMMENT FROM T_SA_COMMENT WHERE COMPANY_CD = A.COMPANY_CD AND SA_CD = A.SA_CD AND CMT_MGR = AA.DEPT_MGR), '') FROM T_DEPARTMENT AA WHERE DEPT_CD = (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD))))
+      ELSE ''
+      END AS SA_COMMENT
+      FROM T_SALES_ACTIVITY A
+      LEFT OUTER JOIN T_DEPARTMENT AS D
+      ON A.COMPANY_CD = D.COMPANY_CD	AND A.DEPT_CD = D.DEPT_CD
+      WHERE A.COMPANY_CD = #company_cd#
+      AND SA_TYPE IN (SELECT CODE_ID FROM T_CODE WHERE UP_CODE_ID = 'SA_TYPE' AND VALUE_5 = '4')
+
+      AND A.USE_YN ='Y'
+
+      <isNotEmpty property="deptGroup">
+        AND A.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND A.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+      
+
+        <isNotEmpty property="user_cd">
+        AND A.USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="sa_type">
+        AND A.SA_TYPE = #sa_type#
+      </isNotEmpty>
+      <isNotEmpty property="sa_sdate">
+        <![CDATA[ AND (A.SA_SDATE >= REPLACE(#sa_sdate#, '-', '') AND A.SA_EDATE <= REPLACE(#sa_edate#, '-', '')) ]]>
+      </isNotEmpty>
+      ORDER BY A.SA_SDATE DESC
+    </select>
+
+
+
+
+
+
+
+
+  </statements>
+
+
+
+</sqlMap>

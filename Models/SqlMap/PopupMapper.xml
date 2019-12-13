@@ -1,0 +1,659 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+
+
+
+
+    <!-- 거래처 찾기 팝업 -->
+    <select id="popupCustList" parameterClass="Hashtable" resultClass="Hashtable">
+
+          SELECT
+          C.CUST_CD,
+          C.CUST_NM,
+          C.CUST_ENG_NM,
+          C.USER_CD,
+          C.CUST_GRADE,
+          CD.CODE_KOR AS CUST_GRADE_NM,
+          U.USER_NM,
+          C.DEPT_CD,
+          DBO.FN_GET_DEPT_NM(C.DEPT_CD) AS DEPT_NM
+          FROM
+          T_CUSTOMER C
+          LEFT OUTER JOIN
+          T_USER U
+          ON
+          C.COMPANY_CD = U.COMPANY_CD 
+          AND  C.USER_CD = U.USER_CD
+          LEFT OUTER JOIN
+          T_CODE CD
+          ON
+          C.CUST_GRADE = CD.CODE_ID
+          WHERE C.COMPANY_CD = #company_cd# 
+          AND C.USE_YN = 'Y'
+
+        <isNotEmpty property="cust_nm">
+          AND (C.CUST_CD LIKE '%' + #cust_nm# + '%' OR C.CUST_NM LIKE '%' + #cust_nm# + '%')
+        </isNotEmpty>
+        <isNotEmpty property="user_nm">
+          AND (U.USER_CD LIKE '%' + #user_nm# + '%' OR U.USER_NM LIKE '%' + #user_nm# + '%')
+          AND C.CUST_CD IS NOT NULL
+        </isNotEmpty>
+
+
+    </select>
+
+
+
+
+    <!-- 영업담당 찾기 팝업 -->
+    <select id="popupCustUserList" parameterClass="Hashtable" resultClass="Hashtable">
+
+
+
+      SELECT
+      U.USER_CD
+      ,U.USER_NM
+      ,U.DEPT_CD
+      ,D.UP_DEPT_CD
+      ,D.DEPT_NM
+      ,U.O_PHONE
+      ,U.M_PHONE
+      ,U.EMAIL
+      FROM T_USER AS U
+      LEFT OUTER JOIN
+      T_DEPARTMENT AS D
+      ON
+      U.COMPANY_CD = D.COMPANY_CD AND
+      U.DEPT_CD = D.DEPT_CD
+      WHERE <!--D.SADEPT_YN = 'Y' AND--> 
+      U.COMPANY_CD = #company_cd#
+
+      <isNotEmpty property="up_dept_cd">
+        AND D.UP_DEPT_CD = #up_dept_cd#
+      </isNotEmpty>
+
+      <isEmpty property="up_dept_cd">
+        <isNotEmpty property="dept_cd">
+          AND U.DEPT_CD = #dept_cd#
+        </isNotEmpty>
+      </isEmpty>
+      
+      <isNotEmpty property="user_nm">
+        AND U.USER_NM LIKE '%' + #user_nm# + '%'
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND U.USER_CD = #user_cd#
+      </isNotEmpty>
+
+ 
+    </select>
+
+
+
+    <!-- 키맨 찾기 팝업 -->
+    <select id="popupkeymanList"  parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      K.KM_CD,
+      K.KM_NM,
+      K.SPTNR_CD,
+      S.SPTNR_NM,
+      K.KM_DEPT_NM,
+      K.O_PHONE,
+      K.M_PHONE,
+      K.KM_EMAIL,
+      K.CUST_CD,
+      C.CUST_NM,
+      KM_TITLE
+      FROM
+      T_KEYMAN AS K
+      LEFT OUTER JOIN
+      T_SA_PARTNER AS S
+      ON
+      K.COMPANY_CD = S.COMPANY_CD AND
+      K.SPTNR_CD = S.SPTNR_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER AS C
+      ON
+      K.COMPANY_CD = C.COMPANY_CD AND
+      K.CUST_CD = C.CUST_CD
+      WHERE
+      K.USE_YN = 'Y'
+      AND K.COMPANY_CD = #company_cd#
+      <isNotEmpty property="km_nm">
+        AND K.KM_NM LIKE '%' + #km_nm# + '%'
+      </isNotEmpty>
+      <isNotEmpty property="km_cds">
+        AND K.KM_CD IN (#km_cds#)
+      </isNotEmpty>
+      <isNotEmpty property="km_cd">
+        AND K.KM_CD = #km_cd#
+      </isNotEmpty>
+      <isNotEmpty property="cust_cd">
+        AND K.CUST_CD = #cust_cd#
+      </isNotEmpty>
+      <isNotEmpty property="bcust_cd">
+        AND C.BCUST_CD = #bcust_cd#
+      </isNotEmpty>
+      <isNotEmpty property="cust_gubun">
+        AND K.CUST_GUBUN = #cust_gubun#
+      </isNotEmpty>
+      <isNotEmpty property="sptnr_nm">
+        AND K.SPTNR_CD IN (SELECT SPTNR_CD FROM T_SA_PARTNER WHERE SPTNR_NM LIKE '%' + #sptnr_nm# + '%')
+      </isNotEmpty>
+
+    </select>
+
+
+
+
+    <!-- 사용자(협업공유자)찾기 팝업 -->
+    <select id="popupUserList"  parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      U.USER_CD
+      ,U.USER_NM
+      ,U.DEPT_CD
+      ,D.DEPT_NM
+      ,U.O_PHONE
+      ,U.M_PHONE
+      ,U.EMAIL
+      FROM T_USER AS U
+      LEFT OUTER JOIN
+      T_DEPARTMENT AS D
+      ON
+      U.COMPANY_CD = D.COMPANY_CD AND
+      U.DEPT_CD = D.DEPT_CD
+      WHERE
+      U.COMPANY_CD = #company_cd#
+      
+      <isNotEmpty property="user_nm">
+        AND U.USER_NM LIKE '%' + #user_nm# + '%'
+      </isNotEmpty>
+      
+      <isNotEmpty property="user_cd">
+        AND U.USER_CD = #user_cd#
+      </isNotEmpty>
+      
+      <isNotEmpty property="up_dept_cd">
+        AND D.UP_DEPT_CD = #up_dept_cd#
+      </isNotEmpty>
+
+      <isEmpty property="up_dept_cd">
+        <isNotEmpty property="dept_cd">
+          AND U.DEPT_CD = #dept_cd#
+        </isNotEmpty>
+      </isEmpty>    
+      
+
+
+    </select>
+    
+    
+    
+    
+    
+    <!-- 영업활동 업무보고 팝업 -->
+    <select id="popupSalesActivityDetail" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      A.SA_TYPE
+      , dbo.FN_GET_CODE_NM(#language#, 'SA_TYPE', A.SA_TYPE) AS SA_TYPE_NM
+      , A.SA_CD
+      , A.USER_CD
+      , DBO.FN_GET_USER_NM(A.USER_CD) AS USER_NM
+      , A.DEPT_CD
+      , DBO.FN_GET_DEPT_NM(A.DEPT_CD) AS DEPT_NM
+      , SA_SDATE
+      , isnull(SA_SDATE_TIME,'000000') AS SA_SDATE_TIME
+      , SA_EDATE 
+      , isnull(SA_EDATE_TIME,'233000') AS SA_EDATE_TIME
+      , A.CUST_CD
+      , DBO.FN_GET_CUST_NM(A.CUST_CD) AS CUST_NM
+      , DBO.FN_GET_SALES_ACTIVITY_KEYMAN_CDS(A.COMPANY_CD, A.SA_CD) AS SA_KEYMAN_CDS
+      , DBO.FN_GET_SALES_ACTIVITY_KEYMAN_NMS(A.COMPANY_CD, A.SA_CD) AS SA_KEYMAN_NMS
+      , A.SA_CNCT
+      , dbo.FN_GET_CODE_NM(#language#, 'SA_CNCT', A.SA_CNCT) AS SA_CNCT_NM
+      , A.PJT_CD
+      , DBO.FN_GET_PJT_NM(A.PJT_CD) AS PJT_NM
+      , A.SA_SUBJECT
+      , A.SA_BODY
+      <![CDATA[
+			  , CASE
+				  WHEN A.CMT_YN = 'Y' THEN
+					  CASE
+						  WHEN (SELECT COUNT(DEPT_MGR) FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD)) = 0 OR A.USER_CD != (SELECT DEPT_MGR FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD)) THEN
+						  (SELECT (SELECT USER_POSIT FROM T_USER WHERE USER_CD = DEPT_MGR)+' : '+ISNULL(DBO.FN_GET_USER_NM(DEPT_MGR), '')+' '+ISNULL('['+(SELECT DBO.FN_GET_DATE_FORMAT(CONVERT(NVARCHAR, REG_DT, 112), 'YYYY-MM-DD')+']<br/>'+SA_COMMENT FROM T_SA_COMMENT WHERE COMPANY_CD = A.COMPANY_CD AND SA_CD = A.SA_CD AND CMT_MGR = AA.DEPT_MGR), '') FROM T_DEPARTMENT AA WHERE DEPT_CD = A.DEPT_CD)+'<br/><br/>'
+					  ELSE ''
+					  END+
+							  (SELECT (SELECT USER_POSIT FROM T_USER WHERE USER_CD = DEPT_MGR)+' : '+ISNULL(DBO.FN_GET_USER_NM(DEPT_MGR), '')+' '+ISNULL('['+(SELECT DBO.FN_GET_DATE_FORMAT(CONVERT(NVARCHAR, REG_DT, 112), 'YYYY-MM-DD')+']<br/>'+SA_COMMENT FROM T_SA_COMMENT WHERE COMPANY_CD = A.COMPANY_CD AND SA_CD = A.SA_CD AND CMT_MGR = AA.DEPT_MGR), '') FROM T_DEPARTMENT AA WHERE DEPT_CD = (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD)))
+							  +'<br/><br/>'+(SELECT (SELECT USER_POSIT FROM T_USER WHERE USER_CD = DEPT_MGR)+' : '+ISNULL(DBO.FN_GET_USER_NM(DEPT_MGR), '')+' '+ISNULL('['+(SELECT DBO.FN_GET_DATE_FORMAT(CONVERT(NVARCHAR, REG_DT, 112), 'YYYY-MM-DD')+']<br/>'+SA_COMMENT FROM T_SA_COMMENT WHERE COMPANY_CD = A.COMPANY_CD AND SA_CD = A.SA_CD AND CMT_MGR = AA.DEPT_MGR), '') FROM T_DEPARTMENT AA WHERE DEPT_CD = (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT UP_DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = A.USER_CD))))
+				  ELSE ''
+				  END AS SA_COMMENT
+			  ]]>
+        , CASE
+        WHEN A.SA_SDATE <![CDATA[>=]]> CONVERT(NVARCHAR, GETDATE(), 112) THEN 'Y'
+        WHEN (SELECT COUNT(SA_CD)
+        FROM T_SA_COMMENT
+        WHERE (SA_COMMENT IS NOT NULL AND SA_COMMENT != '')
+        AND SA_CD = A.SA_CD
+        ) = 0 AND CMT_YN = 'Y' THEN 'Y'
+        WHEN (A.SA_BODY IS NULL OR CAST(A.SA_BODY AS NVARCHAR) =  '') THEN 'Y'
+        WHEN (A.SA_BODY IS NOT NULL AND CAST(A.SA_BODY AS NVARCHAR) !=  '') AND A.CMT_YN = 'N' AND CONVERT(NVARCHAR, DATEADD(D, 3, A.SA_EDATE), 112) <![CDATA[>=]]> CONVERT(NVARCHAR, GETDATE(), 112) THEN 'Y'
+        ELSE 'N' END AS EDIT_YN
+        , DBO.FN_GET_DATE_FORMAT(A.NEXT_SA_SDATE, 'YYYY-MM-DD') AS NEXT_SA_SDATE
+        , DBO.FN_GET_DATE_FORMAT(A.NEXT_SA_EDATE, 'YYYY-MM-DD') AS NEXT_SA_EDATE
+        , A.NEXT_SA_TARGET
+        , A.NEXT_SA_SUBJECT
+        , DBO.FN_GET_SA_TARGETS(A.COMPANY_CD, A.SA_CD) AS SA_TARGETS
+        , A.CMT_YN
+        , DBO.FN_GET_USER_CDS(A.SA_CD) AS USER_CDS
+        , DBO.FN_GET_USER_NMS(A.SA_CD) AS USER_NMS
+        , DBO.FN_GET_USER_NMS_VIEW(A.SA_CD) AS USER_NMS_VIEW
+        FROM T_SALES_ACTIVITY A
+        WHERE A.USE_YN = 'Y'
+        AND A.SA_CD = #sa_cd#
+        
+    </select>
+
+
+
+    <!-- 품목찾기 팝업 - 대분류 항목명  -->
+    <select id="product_item_level1_Grp" parameterClass="Hashtable" resultClass="Hashtable">
+      
+      SELECT
+      ITEM_LEVEL1
+      FROM
+      T_ITEM
+      WHERE USE_YN = 'Y' 
+      AND ITEM_LEVEL1 IS NOT NULL
+      GROUP BY ITEM_LEVEL1
+      ORDER BY ITEM_LEVEL1
+      
+    </select>
+
+    
+    
+    <!-- 품목찾기 팝업 - 검색 -->
+    <select id="product_item" parameterClass="Hashtable" resultClass="Hashtable">
+      
+      SELECT
+      ITEM_CD,
+      ITEM_NM,
+      ITEM_LEVEL1,
+      ITEM_LEVEL2,
+      ITEM_LEVEL3
+      FROM
+      T_ITEM
+      WHERE COMPANY_CD = #company_cd# 
+      AND USE_YN = 'Y'
+
+      <isNotEmpty property="item">
+        AND (ITEM_CD LIKE '%' + #item# + '%' OR ITEM_NM LIKE '%' + #item# + '%')
+      </isNotEmpty>
+
+      <isNotEmpty property="item_level1">
+        AND ITEM_LEVEL1 = #item_level1#
+      </isNotEmpty>
+
+      ORDER BY  ITEM_NM
+    </select>
+
+
+
+    <!-- endUser 팝업 - 검색 -->
+    <select id="endUserList" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+       CUST_CD AS EUSER_CD
+      ,CUST_NM AS EUSER_NM
+      ,CUST_ENG_NM AS EUSER_ENG_NM
+      FROM T_CUSTOMER
+      WHERE
+      COMPANY_CD = #company_cd#
+      <isNotEmpty property="euser_nm">
+        AND (CUST_NM LIKE '%' + #euser_nm# + '%' OR CUST_NM LIKE '%' + #euser_nm# + '%')
+      </isNotEmpty>
+      <isNotEmpty property="euser_eng_nm">
+        AND (CUST_ENG_NM LIKE '%' + #euser_eng_nm# + '%' OR CUST_ENG_NM LIKE '%' + #euser_eng_nm# + '%')
+      </isNotEmpty>
+      <isNotEmpty property="euser_cd">
+        AND CUST_CD = #euser_cd#
+      </isNotEmpty>
+    </select>
+
+    
+    
+    
+    
+    <!-- Sample 제작관리 : 등록 - 샘플요청 팝업   -->
+    <select id="sampleRequestPopup" parameterClass="Hashtable" resultClass="Hashtable">
+
+
+      SELECT
+      SR.COMPANY_CD,
+      SR.SMR_CD,
+      SR.SMR_CHASU,
+      SR.ITEM_CD,
+      SR.ITEM_NM,
+      SR.EUSER_CD,
+      SR.EUSER_NM,
+      SR.SMP_RQTY,
+      SR.PROJECT_POSS,
+      SR.SMR_PODATE,
+      SR.PUR_OQTY
+      FROM
+      T_SAMPLE_REQUEST SR
+      LEFT OUTER JOIN
+      (SELECT SMR_CD,SMR_CHASU FROM T_SAMPLE) S
+      ON
+      SR.SMR_CD = S.SMR_CD AND
+      SR.SMR_CHASU = S.SMR_CHASU
+      WHERE
+      SR.USE_YN = 'Y' AND
+      S.SMR_CD IS NULL
+
+      <isNotEmpty property="cust_nm">
+          <isNotEmpty property="cust_cd">
+            AND SR.EUSER_CD = #cust_cd#
+          </isNotEmpty>
+          <isEmpty property="cust_cd">
+            AND SR.EUSER_NM LIKE '%' + #cust_nm# + '%'
+          </isEmpty>
+      </isNotEmpty>
+      
+
+      <isNotEmpty property="item_nm">
+        AND SR.ITEM_NM LIKE '%' + #item_nm# + '%'
+      </isNotEmpty>
+
+      <isNotEmpty property="smp_status">
+        AND SR.SMP_STATUS = #smp_status#
+      </isNotEmpty>
+
+      <isNotEmpty property="rruser_cd">
+        AND SR.RRUSER_CD = #rruser_cd#
+      </isNotEmpty>
+      
+
+      ORDER BY SR.SMR_CD DESC,SR.SMR_CHASU DESC
+    </select>
+
+
+    <!-- 기준통화 팝업   -->
+    <select id="base_crny" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+        BASE_YR,
+        BASE_CRNY,
+        EXCH_RATE
+        FROM T_BASE_CRNY
+      WHERE
+      1=1
+      <isNotEmpty property="base_yr">
+        AND BASE_YR = #base_yr#
+      </isNotEmpty>
+      ORDER BY
+      BASE_YR DESC,
+      BASE_CRNY ASC
+    </select>
+
+
+    <!--Sample제작승인 - 의뢰반려 팝업 정보 -->
+    <select id="selectSampleReturnPopup" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      S.COMPANY_CD,
+      S.SMP_CD,
+      S.SMP_CHASU,
+      S.USER_CD,
+      U.USER_NM,
+      U.DEPT_CD,
+      D.DEPT_NM,
+      S.SMP_RTDATE,
+      S.SMP_RTTYPE,
+      S.SMP_RTDESCRIPT
+      FROM
+      T_SMP_RETURN AS S
+      LEFT OUTER JOIN  T_USER AS U
+      ON S.COMPANY_CD = U.COMPANY_CD
+      AND S.USER_CD = U.USER_CD
+      LEFT OUTER JOIN T_DEPARTMENT AS D
+      ON  U.DEPT_CD = D.DEPT_CD
+      WHERE
+      S.COMPANY_CD = #company_cd#
+      AND S.SMP_CD = #smp_cd#
+      AND S.SMP_CHASU = #smp_chasu#
+      AND S.SMP_SEQ = (
+      SELECT ISNULL(MAX(SMP_SEQ),1) SMP_SEQ
+      FROM T_SMP_RETURN
+      WHERE COMPANY_CD = #company_cd#
+      AND SMP_CD = #smp_cd#
+      AND SMP_CHASU = #smp_chasu#
+      )
+    </select>
+
+
+
+    <!--Sample제작승인 - Drop 팝업 정보 -->
+    <select id="selectDropDetailPopup" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      S.COMPANY_CD,
+      S.SMP_CD,
+      S.SMP_CHASU,
+      S.USER_CD,
+      U.USER_NM,
+      U.DEPT_CD,
+      DP.DEPT_NM,
+      S.SMP_DRDATE,
+      S.SMP_DRTYPE,
+      S.SMP_DRDESCRIPT
+      FROM
+      T_SMP_DROP S
+      LEFT OUTER JOIN
+      (SELECT COMPANY_CD,USER_CD,USER_NM,DEPT_CD FROM T_USER WHERE COMPANY_CD = #company_cd#) AS U
+      ON
+      S.COMPANY_CD = U.COMPANY_CD AND
+      S.USER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      (SELECT COMPANY_CD,DEPT_CD,DEPT_NM,UP_DEPT_CD FROM T_DEPARTMENT WHERE COMPANY_CD = #company_cd#) AS DP
+      ON
+      U.COMPANY_CD = DP.COMPANY_CD AND
+      U.DEPT_CD = DP.DEPT_CD
+
+      WHERE S.COMPANY_CD = #company_cd#
+      AND S.SMP_CD = #smp_cd#
+      AND S.SMP_CHASU = #smp_chasu#
+    </select>
+
+
+    <!--Sample제작 - 재작업 팝업 -->
+    <select id="selectSampleRepair" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      S.SMP_CD,
+      S.SMP_CHASU,
+      S.USER_CD,
+      U.USER_NM,
+      U.DEPT_CD,
+      D.DEPT_NM,
+      S.SMP_CRDATE,
+      S.SMP_CRTYPE,
+      S.SMP_CRDESCRIPT
+      FROM
+      T_SMP_CREPAIR AS S
+      LEFT OUTER JOIN
+      T_USER AS U
+      ON
+      S.USER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT AS D
+      ON
+      U.DEPT_CD = D.DEPT_CD
+      WHERE
+      S.COMPANY_CD = #company_cd# AND
+      SMP_CD = #smp_cd# AND
+      SMP_CHASU = #smp_chasu#
+    </select>
+
+
+
+    <!--Sample제작 - 자체 재작업 팝업 -->
+    <select id="selectSampleMyRepair" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      S.SMP_CD,
+      S.SMP_CHASU,
+      S.USER_CD,
+      U.USER_NM,
+      U.DEPT_CD,
+      D.DEPT_NM,
+      S.SMP_QRDATE,
+      S.SMP_QRTYPE,
+      S.SMP_QRDESCRIPT
+      FROM
+      T_SMP_QREPAIR AS S
+      LEFT OUTER JOIN
+      T_USER AS U
+      ON
+      S.USER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT AS D
+      ON
+      U.DEPT_CD = D.DEPT_CD
+      WHERE
+      S.COMPANY_CD = #company_cd# AND
+      SMP_CD = #smp_cd# AND
+      SMP_CHASU = #smp_chasu#
+    </select>
+
+
+
+    <select id="selectSampleReturn" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      S.COMPANY_CD,
+      S.SMP_CD,
+      S.SMP_CHASU,
+      S.USER_CD,
+      U.USER_NM,
+      U.DEPT_CD,
+      D.DEPT_NM,
+      S.SMP_RTDATE,
+      S.SMP_RTTYPE,
+      S.SMP_RTDESCRIPT
+      FROM
+      T_SMP_RETURN AS S
+      LEFT OUTER JOIN
+      T_USER AS U
+      ON
+      S.COMPANY_CD = U.COMPANY_CD AND
+      S.USER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT AS D
+      ON
+      U.DEPT_CD = D.DEPT_CD
+      WHERE
+      S.COMPANY_CD = #company_cd# AND
+      S.SMP_CD = #smp_cd# AND
+      S.SMP_CHASU = #smp_chasu# AND
+      S.SMP_SEQ = (
+      SELECT ISNULL(MAX(SMP_SEQ),1) SMP_SEQ FROM T_SMP_RETURN WHERE
+      COMPANY_CD = #company_cd# AND
+      SMP_CD = #smp_cd# AND
+      SMP_CHASU = #smp_chasu#
+      )
+    </select>
+
+    <select id="selectSmrSampleReturn" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      S.COMPANY_CD,
+      S.SMR_CD,
+      S.SMR_CHASU,
+      S.USER_CD,
+      U.USER_NM,
+      U.DEPT_CD,
+      D.DEPT_NM,
+      S.SMR_RTDATE,
+      S.SMR_RTTYPE,
+      S.SMR_RTDESCRIPT
+      FROM
+      T_SMR_RETURN AS S
+      LEFT OUTER JOIN
+      T_USER AS U
+      ON
+      S.COMPANY_CD = U.COMPANY_CD AND
+      S.USER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT AS D
+      ON
+      U.DEPT_CD = D.DEPT_CD
+      WHERE
+      S.SMR_CD = #smr_cd# AND
+      S.SMR_CHASU = #smr_chasu# AND
+      S.SMR_SEQ = (
+      SELECT ISNULL(MAX(SMR_SEQ),1) SMR_SEQ FROM T_SMR_RETURN WHERE 
+      SMR_CD = #smr_cd# AND
+      SMR_CHASU = #smr_chasu#
+      )
+    </select>
+
+    <select id="itemSampleList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      A.SMP_CD
+      , B.ITEM_CD
+      , B.ITEM_NM
+      , A.SMP_CHASU
+      FROM
+      (
+      SELECT U.SMP_CD, MAX(U.SMP_CHASU) AS SMP_CHASU, U.ITEM_CD
+      FROM T_SAMPLE AS U
+      LEFT OUTER JOIN
+      T_DEPARTMENT AS D
+      ON  U.COMPANY_CD = D.COMPANY_CD
+      AND  U.DEPT_CD = D.DEPT_CD
+      WHERE 1=1
+      AND U.COMPANY_CD = #company_cd#
+      <isNotEmpty property="user_cd">
+        AND U.USER_CD = #user_cd#
+      </isNotEmpty>
+
+
+      <isNotEmpty property="up_dept_cd">
+        AND D.UP_DEPT_CD = #up_dept_cd#
+      </isNotEmpty>
+
+      <isEmpty property="up_dept_cd">
+        <isNotEmpty property="dept_cd">
+          AND U.DEPT_CD = #dept_cd#
+        </isNotEmpty>
+      </isEmpty>
+
+
+      <isNotEmpty property="biz_type">
+        AND U.BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      <isNotEmpty property="prdt_psblt">
+        AND U.PRDT_PSBLT = #prdt_psblt#
+      </isNotEmpty>
+      <isNotEmpty property="cust_nm">
+        AND U.CUST_CD IN (SELECT CUST_CD FROM T_CUSTOMER WHERE CUST_NM LIKE '%'+ #cust_nm# + '%')
+      </isNotEmpty>
+      GROUP BY U.SMP_CD, U.ITEM_CD
+      ) A, T_ITEM B
+      WHERE A.ITEM_CD = B.ITEM_CD
+      <isNotEmpty property="item_nm">
+        AND B.ITEM_NM LIKE '%'+ #item_nm# + '%'
+      </isNotEmpty>
+    </select>
+
+
+
+
+  </statements>
+
+
+
+</sqlMap>

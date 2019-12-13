@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+<!-- 모니터링 -->
+  <statements>
+
+    <!-- 활동유형별 실적   -->
+    <select id="saTypeStatistics" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      AA.CODE_ID,AA.CODE_NM,ISNULL(BB.TOTAL,0) AS TOTAL, #base_ym# AS BASE_YM
+      FROM
+      (SELECT CODE_ID,dbo.FN_GET_CODE_NM(#language#, 'SA_TYPE',CODE_ID) AS CODE_NM FROM T_CODE WHERE UP_CODE_ID = 'SA_TYPE') AA
+      LEFT OUTER JOIN
+      (SELECT
+      A.SA_TYPE
+      ,COUNT(A.SA_CD) AS TOTAL
+      FROM
+      T_SALES_ACTIVITY A, T_DEPARTMENT D
+      WHERE
+      A.COMPANY_CD = D.COMPANY_CD
+      AND A.DEPT_CD = D.DEPT_CD 
+      AND A.COMPANY_CD = #company_cd#
+      AND A.DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE COMPANY_CD = #company_cd# AND sadept_yn = 'Y' AND DEPT_LEVEL IN ('3','4','5'))
+      <isEqual property="condiType" compareValue="0">
+        AND #base_ym# =  SUBSTRING(A.SA_SDATE, 1, 6)
+      </isEqual>
+      <isEqual property="condiType" compareValue="1">
+        AND SUBSTRING(A.SA_SDATE, 1, 4)  =  SUBSTRING(#base_ym#, 1, 4)
+        AND SUBSTRING(A.SA_SDATE, 1, 6) <![CDATA[<=]]>  #base_ym# 
+    </isEqual>
+      
+      <isNotEmpty property="deptGroup">
+        AND A.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND A.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND A.USER_CD = #user_cd#
+      </isNotEmpty>
+      GROUP BY A.SA_TYPE) BB
+      ON AA.CODE_ID = BB.SA_TYPE
+
+
+    </select>
+
+    <!-- 활동유형별 년간실적   -->
+    <select id="saTypeYearStatistics" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      AA.CODE_ID 
+      ,ISNULL(BB.SATYPE_100,0) AS SATYPE_100
+      ,ISNULL(BB.SATYPE_200,0) AS SATYPE_200
+      ,ISNULL(BB.SATYPE_300,0) AS SATYPE_300
+      ,ISNULL(BB.SATYPE_400,0) AS SATYPE_400
+      FROM
+      (SELECT CODE_ID FROM T_CODE WHERE UP_CODE_ID = 'MONTH' ) AA
+      LEFT OUTER JOIN
+      (SELECT
+      SUBSTRING(A.SA_EDATE, 1, 6) AS BASEYM
+      ,SUM(CASE WHEN SA_TYPE = 'SATYPE_100' THEN 1 ELSE 0 END) AS SATYPE_100
+      ,SUM(CASE WHEN SA_TYPE = 'SATYPE_200' THEN 1 ELSE 0 END) AS SATYPE_200
+      ,SUM(CASE WHEN SA_TYPE = 'SATYPE_200' THEN 1 ELSE 0 END) AS SATYPE_300
+      ,SUM(CASE WHEN SA_TYPE = 'SATYPE_400' THEN 1 ELSE 0 END) AS SATYPE_400
+      FROM
+      T_SALES_ACTIVITY A, T_DEPARTMENT D
+      WHERE
+      A.COMPANY_CD = D.COMPANY_CD
+      AND A.DEPT_CD = D.DEPT_CD
+      AND A.COMPANY_CD = #company_cd#
+      AND A.DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE COMPANY_CD = #company_cd# AND sadept_yn = 'Y' AND DEPT_LEVEL IN ('3','4','5'))
+      AND ISNULL(A.SA_SDATE,'') <![CDATA[<>]]> ''
+      AND SUBSTRING(A.SA_SDATE, 1, 4)  =  SUBSTRING(#base_ym#, 1, 4)
+      <isNotEmpty property="deptGroup">
+        AND A.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND A.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND A.USER_CD = #user_cd#
+      </isNotEmpty>
+      GROUP BY SUBSTRING(A.SA_EDATE, 1, 6)) BB
+      ON AA.CODE_ID = SUBSTRING(BB.BASEYM,5,2)
+      ORDER BY AA.CODE_ID
+    </select>
+
+
+    <!-- 업무유형별 실적   -->
+    <select id="saTargetStatistics" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      AA.CODE_ID,AA.CODE_NM,ISNULL(BB.TOTAL,0) AS TOTAL, #base_ym# AS BASE_YM
+      FROM
+      (SELECT CODE_ID,dbo.FN_GET_CODE_NM(#language#, 'SA_TARGET',CODE_ID) AS CODE_NM FROM T_CODE WHERE UP_CODE_ID = 'SA_TARGET') AA
+      LEFT OUTER JOIN
+      (SELECT
+      C.SA_TARGET
+      ,COUNT(A.SA_CD) AS TOTAL
+      FROM
+      T_SALES_ACTIVITY A, T_SA_TARGET C, T_DEPARTMENT D
+      WHERE
+      A.COMPANY_CD = D.COMPANY_CD
+      AND A.SA_CD = C.SA_CD
+      AND A.COMPANY_CD = C.COMPANY_CD
+      AND A.DEPT_CD = D.DEPT_CD
+      AND A.COMPANY_CD = #company_cd#
+      AND A.DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE COMPANY_CD = #company_cd# AND sadept_yn = 'Y' AND DEPT_LEVEL IN ('3','4','5'))
+     <isEqual property="condiType" compareValue="0">
+        AND #base_ym# =  SUBSTRING(A.SA_SDATE, 1, 6)
+      </isEqual>
+      <isEqual property="condiType" compareValue="1">
+        AND SUBSTRING(A.SA_SDATE, 1, 4)  =  SUBSTRING(#base_ym#, 1, 4)
+        AND SUBSTRING(A.SA_SDATE, 1, 6) <![CDATA[<=]]>  #base_ym# 
+    </isEqual>
+      <isNotEmpty property="deptGroup">
+        AND A.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND A.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND A.USER_CD = #user_cd#
+      </isNotEmpty>
+      GROUP BY C.SA_TARGET) BB
+      ON AA.CODE_ID = BB.SA_TARGET
+      ORDER BY AA.CODE_ID DESC
+    </select>
+
+
+
+  </statements>
+
+
+
+</sqlMap>

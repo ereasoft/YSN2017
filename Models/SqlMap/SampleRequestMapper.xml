@@ -1,0 +1,1335 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+
+
+
+    <!-- Sample 요청/접수/검토 : 리스트-->
+    <select id="sampleRequestList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      SR.COMPANY_CD,
+      SR.SMR_CD,
+      SR.SMR_CHASU,
+      SR.ITEM_CD,
+      SR.ITEM_NM,
+      SR.EUSER_CD,
+      SR.EUSER_NM,
+      SR.QRUSER_CD,
+      SR.SMP_RQTY,
+      SR.PUR_OQTY,
+      U.USER_NM AS QRUSER_NM,
+      SR.QDEPT_CD,
+      D.DEPT_NM AS QDEPT_NM,
+      SR.RRUSER_CD,
+      U2.USER_NM AS RRUSER_NM,
+      SR.SMR_RAUSER AS RAUSER,
+      U3.USER_NM AS RAUSER_NM,
+      dbo.FN_GET_CODE_NM(#language#, 'SMP_STATUS',SR.SMP_STATUS) AS SMP_STATUS,
+      CD.CODE_NM AS SMP_STATUS_NM,
+      SR.SMR_RQDATE,
+      SR.SMR_BKDATE AS SMR_BKDATE,
+      SR.SMR_RRDATE AS SMR_RRDATE,
+      SR.SMR_FBDATE AS SMR_FBDATE,
+      SR.SMR_PRDATE AS SMR_PRDATE,
+      P.PRDT_PDATE AS PRDT_PDATE,
+      SR.SHIP_PDATE AS SHIP_PDATE,
+      SR.SMR_RADATE AS SMR_RADATE,
+      SR.SMR_PODATE AS SMR_PODATE,
+      SR.SMR_ORDERDATE AS SMR_ORDERDATE,
+      SR.PROJECT_POSS
+      ,SR.SMP_CD
+      ,P.TRACKING_NUM
+      ,P.PRDT_PDATE2
+      ,P.DELAY_COMMENT
+      ,dbo.FN_GET_CODE_NM(#language#, 'SMP_DELAY',P.DELAY_COMMENT) AS DELAY_COMMENT_NM
+      ,P.PROCESS
+      ,dbo.FN_GET_CODE_NM(#language#, 'SMP_STEP',P.PROCESS) AS PROCESS_NM
+      FROM
+      T_SAMPLE_REQUEST SR
+      LEFT OUTER JOIN
+      (
+      SELECT
+      SMP_CD, SMP_CHASU,TRACKING_NUM, PRDT_PDATE, PRDT_PDATE2, DELAY_COMMENT, PROCESS FROM T_SAMPLE) P
+      ON  SR.SMP_CD = P.SMP_CD
+      AND SR.SMP_CHASU = p.SMP_CHASU
+      LEFT OUTER JOIN
+      (
+      SELECT
+      COMPANY_CD,
+      USER_CD,
+      case
+      when #language# = 'ENG' then USER_ENG_NM
+      when #language# = 'KOR' then USER_NM
+      else USER_NM
+      end as USER_NM,
+      DEPT_CD,
+      DSTR_CHN FROM T_USER) U
+      ON  SR.QRUSER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      (
+      SELECT
+      COMPANY_CD,
+      USER_CD,
+
+      case
+      when #language# = 'ENG' then USER_ENG_NM
+      when #language# = 'KOR' then USER_NM
+      else USER_NM
+      end as USER_NM,
+
+      DEPT_CD,
+      DSTR_CHN FROM T_USER) U2
+      ON  SR.RRUSER_CD = U2.USER_CD
+      LEFT OUTER JOIN
+      (SELECT COMPANY_CD
+      ,DEPT_CD
+      ,case
+      when #language# = 'ENG' then DEPT_ENG_NM
+      when #language# = 'KOR' then DEPT_NM
+      else DEPT_NM
+      end as DEPT_NM
+      ,UP_DEPT_CD
+      FROM T_DEPARTMENT) D
+      ON  SR.QDEPT_CD = D.DEPT_CD
+      LEFT OUTER JOIN
+      (
+      SELECT
+      COMPANY_CD,
+      USER_CD,
+      case
+      when #language# = 'ENG' then USER_ENG_NM
+      when #language# = 'KOR' then USER_NM
+      else USER_NM
+      end as USER_NM,
+      DEPT_CD,
+      DSTR_CHN FROM T_USER) U3
+      ON SR.SMR_RAUSER = U3.USER_CD
+      INNER JOIN
+      (
+      SELECT  CODE_ID,  #language# AS CODE_NM
+      FROM T_CODE
+      WHERE  UP_CODE_ID = 'SMP_STATUS'
+      <isNotEmpty property="mode">
+        <isEqual property="mode" compareValue="R">
+          AND VALUE_5 != 'SM'
+        </isEqual>
+        <isEqual property="mode" compareValue="A">
+          AND VALUE_5 NOT IN ('RQ','SM')
+        </isEqual>
+        <isEqual property="mode" compareValue="V">
+          AND VALUE_5 NOT IN ('RQ','RV','SM')
+        </isEqual>
+      </isNotEmpty>
+      ) CD
+        ON SR.SMP_STATUS = CD.CODE_ID
+        WHERE SR.USE_YN = 'Y'
+        <isNotEmpty property="company_cd">
+          AND SR.COMPANY_CD = #company_cd#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+            <isNotEmpty property="deptGroup">  
+                AND SR.QDEPT_CD = #deptGroup#
+            </isNotEmpty>
+
+            <isEmpty property="deptGroup">
+                AND D.UP_DEPT_CD = #bizGroup#
+                AND SR.QDEPT_CD IS NOT NULL
+            </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="dstr_chn">
+          AND U.DSTR_CHN = #dstr_chn#
+          AND SR.QRUSER_CD IS NOT NULL
+        </isNotEmpty>
+
+        <isNotEmpty property="user_nm">
+          AND SR.QRUSER_CD = REPLACE(#user_nm#,'<![CDATA[#]]>',' ')
+        </isNotEmpty>
+
+        <isNotEmpty property="user_cd">
+          AND SR.QRUSER_CD = REPLACE(#user_cd#,'<![CDATA[#]]>',' ')
+        </isNotEmpty>
+
+        <isNotEmpty property="sdate">
+          <isNotEmpty property="edate">
+
+            <isEqual property="mode" compareValue="R">
+              AND	(
+              (
+              SR.SMR_RQDATE <![CDATA[>=]]> CONVERT(DATE, REPLACE(#sdate#, '-', ''))
+              AND SR.SMR_RQDATE <![CDATA[<=]]> CONVERT(DATE, REPLACE(#edate#, '-', ''))
+              )
+              OR ( SR.SMR_RQDATE IS NULL   )
+              )
+            </isEqual>
+            <isEqual property="mode" compareValue="A">
+              AND	SR.SMR_RQDATE <![CDATA[>=]]> CONVERT(DATE, REPLACE(#sdate#, '-', ''))
+              AND SR.SMR_RQDATE <![CDATA[<=]]> CONVERT(DATE, REPLACE(#edate#, '-', ''))               
+            </isEqual>
+            <isEqual property="mode" compareValue="V">
+              AND	SR.SMR_RRDATE <![CDATA[>=]]> CONVERT(DATE, REPLACE(#sdate#, '-', ''))
+              AND SR.SMR_RRDATE <![CDATA[<=]]> CONVERT(DATE, REPLACE(#edate#, '-', ''))
+            </isEqual>
+           
+
+
+
+
+          </isNotEmpty>
+        </isNotEmpty>
+      
+        <isNotEmpty property="srqdate">
+          <![CDATA[  AND SR.SMR_RQDATE >= REPLACE(#srqdate#,'-','') ]]>
+        </isNotEmpty>
+
+        <isNotEmpty property="erqdate">
+          <![CDATA[  AND SR.SMR_RQDATE <= REPLACE(#erqdate#,'-','')  ]]>
+        </isNotEmpty>
+      
+        <isNotEmpty property="srrdate">
+          <![CDATA[  AND SR.SMR_RRDATE >= REPLACE(#srrdate#,'-','') ]]>
+	      </isNotEmpty>
+
+        <isNotEmpty property="errdate">
+          <![CDATA[  AND SR.SMR_RRDATE <= REPLACE(#errdate#,'-','')  ]]>
+				</isNotEmpty>
+
+        <isNotEmpty property="cust_nm">
+          <isNotEmpty property="cust_cd">
+            AND SR.EUSER_CD = #cust_cd#
+          </isNotEmpty>
+          <isEmpty property="cust_cd">
+            AND SR.EUSER_NM LIKE '%' + #cust_nm# + '%'
+          </isEmpty>
+        </isNotEmpty>  
+        
+        <isNotEmpty property="item_nm">
+          AND SR.ITEM_NM LIKE '%' + #item_nm# + '%'
+        </isNotEmpty>
+
+        <isNotEmpty property="smp_status">
+          AND SR.SMP_STATUS = #smp_status#
+        </isNotEmpty>
+
+        <isNotEmpty property="rruser_cd">
+          AND SR.RRUSER_CD != #rruser_cd#
+        </isNotEmpty>
+        ORDER BY SR.SMR_CD DESC,SR.SMR_CHASU DESC
+    </select>
+
+
+
+
+    <!-- 샘플 요청/접수/검토 : 상세 -->
+    <select id="smrTypeDetailList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      CD.CODE_ID
+      , CD.CODE_NM
+      , CD.CODE_$language$ AS CODE_LANG
+      , CD.VALUE_1
+      , ISNULL(SMR.SMR_CODE,'') SMR_CODE
+      , ISNULL(SMR.SMR_MATERIAL,'') SMR_MATERIAL
+      , ISNULL(SMR.SMR_INJECT,'') SMR_INJECT
+      , ISNULL(SMR.SMR_COAT,'') SMR_COAT
+      , ISNULL(SMR.SMR_HSTMPC,'') SMR_HSTMPC
+      , ISNULL(SMR.SMR_HSTMPD,'') SMR_HSTMPD
+      , ISNULL(SMR.SMR_MOLDNO,'') SMR_MOLDNO
+      , ISNULL(SMR.SMR_SS,'') SMR_SS
+      FROM
+      T_CODE AS CD
+      LEFT OUTER JOIN
+      (SELECT
+      SMR_PARTNM,
+      SMR_CODE,
+      SMR_MATERIAL,
+      SMR_INJECT,
+      SMR_COAT,
+      SMR_HSTMPC,
+      SMR_HSTMPD,
+      SMR_SS,
+      SMR_MOLDNO
+      FROM $table_nm$ 
+      WHERE SMR_CD = #smr_cd#
+      AND SMR_CHASU = #smr_chasu#
+      ) AS SMR
+      ON CD.CODE_ID = SMR.SMR_PARTNM
+      WHERE CD.UP_CODE_ID = #upCodeId#
+      AND CD.VALUE_1 = #value_1#
+      AND CD.USE_YN = 'Y'
+      ORDER BY CD.CODE_ORDER
+    </select>
+
+
+
+    <select id="smrTypeDetailPkgRemark_cmt" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT $table_cls$ AS CMT
+      FROM $table_nm$
+      WHERE
+      SMR_CD = #smr_cd# AND
+      SMR_CHASU = #smr_chasu# AND
+      SMR_PARTNM = #smr_partnm#
+    </select>
+
+
+
+
+
+    <!-- Sample 요청/접수/검토 : 상세-->
+    <select id="sampleRequestDetail" parameterClass="Hashtable" resultClass="Hashtable">
+
+
+      SELECT SR.COMPANY_CD
+      ,SR.SMR_CD
+      ,SR.SMR_CHASU
+      ,SR.SMP_CD
+      ,SR.SMP_CHASU
+      ,SR.SPEC_YN
+      ,SR.SMR_TYPE
+      ,dbo.FN_GET_CODE_NM(#language#,'SMR_TYPE',SR.SMR_TYPE) AS SMR_TYPE_NM
+      ,SR.QRUSER_CD
+      ,(SELECT
+      case
+      when #language# = 'ENG' then USER_ENG_NM
+      when #language# = 'KOR' then USER_NM
+      else USER_NM
+      end as USER_NM
+      FROM T_USER WHERE USER_CD = SR.QRUSER_CD) AS QRUSER_NM
+      ,QDEPT_CD
+      ,(SELECT DEPT_NM FROM T_DEPARTMENT WHERE DEPT_CD = SR.QDEPT_CD) AS QDEPT_NM
+      ,RRUSER_CD
+      ,(SELECT
+      case
+      when #language# = 'ENG' then USER_ENG_NM
+      when #language# = 'KOR' then USER_NM
+      else USER_NM
+      end as USER_NM
+      FROM T_USER WHERE USER_CD = SR.RRUSER_CD) AS RRUSER_NM
+      ,SR.EUSER_CD
+      ,SR.EUSER_NM
+      ,SR.ITEM_CD
+      ,SR.ITEM_NM
+      ,SR.SMP_RQTY
+      ,SR.SMP_STATUS
+      ,dbo.FN_GET_CODE_NM(#language#,'SMP_STATUS',SR.SMP_STATUS) AS SMP_STATUS_NM
+      ,SR.PURP_COLOR
+      ,SR.PURP_DECO
+      ,SR.PURP_TEST
+      ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,SR.SMR_RQDATE),23) AS SMR_RQDATE
+      ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,SR.SMR_BKDATE),23) AS SMR_BKDATE
+      ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,SR.SMR_FBDATE),23) AS SMR_FBDATE
+      ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,SR.SMR_RRDATE),23) AS SMR_RRDATE
+      ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,SR.SMR_RADATE),23) AS SMR_RADATE
+
+      ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,SR.SMR_RFDATE),23) AS SMR_RFDATE
+      ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,SR.SMR_PRDATE),23) AS SMR_PRDATE
+      ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,SS.PRDT_PDATE),23) AS PRDT_PDATE
+      ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,SS.SHIP_PDATE),23) AS SHIP_PDATE
+
+
+      ,SMR_RQUSER
+      ,(SELECT
+      case
+      when #language# = 'ENG' then USER_ENG_NM
+      when #language# = 'KOR' then USER_NM
+      else USER_NM
+      end as USER_NM
+      FROM T_USER WHERE USER_CD = SR.SMR_RQUSER) AS SMR_RQUSER_NM
+      ,SMR_BKUSER
+      ,(SELECT
+      case
+      when #language# = 'ENG' then USER_ENG_NM
+      when #language# = 'KOR' then USER_NM
+      else USER_NM
+      end as USER_NM
+      FROM T_USER WHERE USER_CD = SR.SMR_BKUSER) AS SMR_BKUSER_NM
+      ,SMR_FBUSER
+      ,(SELECT
+      case
+      when #language# = 'ENG' then USER_ENG_NM
+      when #language# = 'KOR' then USER_NM
+      else USER_NM
+      end as USER_NM
+      FROM T_USER WHERE USER_CD = SR.SMR_FBUSER) AS SMR_FBUSER_NM
+      ,SMR_RRUSER
+      ,(SELECT
+      case
+      when #language# = 'ENG' then USER_ENG_NM
+      when #language# = 'KOR' then USER_NM
+      else USER_NM
+      end as USER_NM
+      FROM T_USER WHERE USER_CD = SR.SMR_RRUSER) AS SMR_RRUSER_NM
+      ,SMR_RAUSER
+      ,(SELECT
+      case
+      when #language# = 'ENG' then USER_ENG_NM
+      when #language# = 'KOR' then USER_NM
+      else USER_NM
+      end as USER_NM
+      FROM T_USER WHERE USER_CD = SR.SMR_RAUSER) AS SMR_RAUSER_NM
+      ,SMR_RFUSER
+      ,(SELECT
+      case
+      when #language# = 'ENG' then USER_ENG_NM
+      when #language# = 'KOR' then USER_NM
+      else USER_NM
+      end as USER_NM
+      FROM T_USER WHERE USER_CD = SR.SMR_RFUSER) AS SMR_RFUSER_NM
+      ,SMR_PRUSER
+      ,(SELECT
+      case
+      when #language# = 'ENG' then USER_ENG_NM
+      when #language# = 'KOR' then USER_NM
+      else USER_NM
+      end as USER_NM
+      FROM T_USER WHERE USER_CD = SR.SMR_PRUSER) AS SMR_PRUSER_NM
+      ,SR.ARTWORK_NO
+      ,SR.PACKING_INFO
+      ,dbo.FN_GET_CODE_NM(#language#,'PACKING_INFO',SR.PACKING_INFO) AS PACKING_INFO_NM
+      ,SR.SHIP_TO_ADRS
+      ,SR.REMARK_CMT
+      ,SR.PRDT_YN
+      ,SR.DROP_YN
+      ,SR.USE_YN
+      ,(SELECT (CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END) FROM
+      T_SMR_RETURN
+      WHERE
+      SMR_CD = SR.SMR_CD AND
+      SMR_CHASU = SR.SMR_CHASU ) AS REQ_RETURN_YN
+      ,(SELECT (CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END) FROM
+      T_SMR_REVIEW
+      WHERE
+      SMR_CD = SR.SMR_CD AND
+      SMR_CHASU = SR.SMR_CHASU ) AS REQ_REVIEW_YN
+      ,(SELECT (CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END) FROM
+      T_SMR_CREPAIR
+      WHERE
+      SMR_CD = SR.SMR_CD AND
+      SMR_CHASU = SR.SMR_CHASU) AS REQ_REPAIR_YN
+      ,SR.PUR_OQTY
+
+      ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,SR.SMR_CRDATE),23) AS SMR_CRDATE
+      ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,SR.SMR_PODATE),23) AS SMR_PODATE
+      ,SS.TRACKING_NUM
+      ,PROJECT_POSS
+      ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,SR.SMR_ORDERDATE),23) AS SMR_ORDERDATE
+      ,ISNULL((
+      SELECT COUNT(*) FROM
+      T_ATTACH_FILE
+      WHERE
+      BIZ_GUBUN = SR.SMR_CD AND
+      CHASU = SR.SMR_CHASU AND
+      DOC_MGT = 'sampleDec'
+      ),0) AS SMP_DETAIL_FILE_CNT
+      ,(
+      SELECT MAX(SMR_CHASU) FROM
+      T_SAMPLE_REQUEST
+      WHERE
+      SMR_CD = SR.SMR_CD
+      ) AS MAX_CHASU
+      ,SR.SMR_COMMENT
+      ,ISNULL((
+      SELECT COUNT(*) FROM
+      T_SAMPLE_SPEC
+      WHERE
+      SMP_CD = ISNULL(SR.SMP_CD,'') AND
+      SMP_CHASU = ISNULL(SR.SMP_CHASU,0)
+      ),0) AS SPECCHK_CNT
+      FROM
+      T_SAMPLE_REQUEST SR LEFT OUTER JOIN T_SAMPLE AS SS
+      ON SR.SMR_CD = SS.SMR_CD AND SR.SMR_CHASU = SS.SMR_CHASU
+      WHERE SR.SMR_CD = #smr_cd#
+      AND SR.SMR_CHASU = #smr_chasu#
+    </select>
+
+
+
+    <select id="samplePrdtInfoDetail" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+          EXTR_DIAMETER
+          ,EXTR_LAYER
+          ,EXTR_LENGTH
+          ,EXTR_COLOR
+          ,EXTR_MB
+          ,NECK_MOLD
+          ,NECK_ORIFICE
+          ,NECK_COLOR
+          ,NECK_MB
+          ,ARLS_COLOR
+          ,ARLS_SILICON
+          ,OFFSET_FILMNO
+          ,OFFSET_PASS
+          ,OFFSET_COATING
+          ,SS_FILMNO
+          ,SS_PASS
+          ,HS_FILMNO
+          ,HS_PASS
+          ,CAP_SPEC
+          ,CAP_ORIFICE
+          ,CAP_OUTERCOLOR
+          ,CAP_INNERCOLOR
+          ,CAP_DECO
+          ,CAP_SUPPLIER
+          ,CAP_SAFETYSEAL
+      FROM T_SAMPLE_PRDTINFO
+      WHERE SMR_CD = #smr_cd# 
+      AND SMR_CHASU = #smr_chasu#
+    </select>
+
+
+
+
+
+
+
+    <!-- Sample 요청 : 샘플요청 등록 -->
+    <insert id="sampleRequestinsert" parameterClass="Hashtable" resultClass="Hashtable" >
+
+      <selectKey property="smr_cd" resultClass="String" type="pre">
+        SELECT ('SMR' + SUBSTRING(CONVERT(VARCHAR(12),GETDATE(),112),3,2) +
+          dbo.FN_LPAD(
+            CONVERT(VARCHAR(5),
+              CONVERT(INTEGER,(
+                CASE WHEN MAX(SMR_CD) IS NULL THEN '0'
+                ELSE SUBSTRING(MAX(SMR_CD), 6,10)
+                END
+              )
+            )+1),5,'0')
+          ) AS SMR_CD
+        FROM T_SAMPLE_REQUEST
+      </selectKey>
+
+      INSERT INTO T_SAMPLE_REQUEST(
+          COMPANY_CD
+          ,SMR_CD
+          ,SMR_CHASU
+          ,SMR_TYPE
+          ,QRUSER_CD
+          ,QDEPT_CD
+          ,EUSER_CD
+          ,EUSER_NM
+          ,ITEM_CD
+          ,ITEM_NM
+          ,SMP_RQTY
+          ,SMP_STATUS
+          ,PURP_COLOR
+          ,PURP_DECO
+          ,PURP_TEST
+          ,ARTWORK_NO
+          ,PACKING_INFO
+          ,SHIP_TO_ADRS
+          ,REMARK_CMT
+          ,REG_USR
+          ,REG_DT
+          ,PUR_OQTY
+          ,SMR_CRDATE
+          ,SMR_PODATE
+          ,SMR_ORDERDATE
+          ,PROJECT_POSS
+          ,SMR_COMMENT
+      )VALUES(
+           #company_cd#
+          ,#smr_cd#
+          ,#smr_chasu#
+          ,#smr_type#
+          ,#qruser_cd#
+          ,#qdept_cd#
+          ,#euser_cd#
+          ,#euser_nm#
+          ,#item_cd#
+          ,#item_nm#
+          ,#smp_rqty#
+          ,#smp_status#
+          ,#purp_color#
+          ,#purp_deco#
+          ,#purp_test#
+          ,#artwork_no#
+          ,#packing_info#
+          ,#ship_to_adrs#
+          ,#remark_cmt#
+          ,#reg_usr#
+          ,getdate()
+          ,#pur_oqty#
+
+          <isNotEmpty property="smr_crdate">
+            ,REPLACE(#smr_crdate#,'-','')
+          </isNotEmpty>
+          <isEmpty property="smr_crdate">
+            ,NULL
+          </isEmpty>
+
+          <isNotEmpty property="smr_podate">
+            ,REPLACE(#smr_podate#,'-','')
+          </isNotEmpty>
+          <isEmpty property="smr_podate">
+            ,NULL
+          </isEmpty>
+
+          <isNotEmpty property="smr_orderdate">
+            ,REPLACE(#smr_orderdate#,'-','')
+          </isNotEmpty>
+          <isEmpty property="smr_orderdate">
+            ,NULL
+          </isEmpty>
+
+            ,#project_poss#
+          
+          <isNotEmpty property="smr_comment">
+            ,#smr_comment#
+          </isNotEmpty>
+          <isEmpty property="smr_comment">
+            ,NULL
+          </isEmpty>
+      )
+
+    </insert>
+
+
+
+    <!-- Sample 요청 : 샘플요청 제품정보 등록/수정 -->
+    <insert id="samplePrdtinfoProc" parameterClass="Hashtable" resultClass="Hashtable" >
+
+      IF NOT EXISTS
+      (
+      SELECT * FROM T_SAMPLE_PRDTINFO
+      WHERE COMPANY_CD = #company_cd#
+      AND SMR_CD = #smr_cd#
+      AND SMR_CHASU = #smr_chasu#
+      )
+
+      INSERT INTO T_SAMPLE_PRDTINFO(
+          COMPANY_CD
+          ,SMR_CD
+          ,SMR_CHASU
+          ,EXTR_DIAMETER
+          ,EXTR_LAYER
+          ,EXTR_LENGTH
+          ,EXTR_COLOR
+          ,EXTR_MB
+          ,NECK_MOLD
+          ,NECK_ORIFICE
+          ,NECK_COLOR
+          ,NECK_MB
+          ,ARLS_COLOR
+          ,ARLS_SILICON
+          ,OFFSET_FILMNO
+          ,OFFSET_PASS
+          ,OFFSET_COATING
+          ,SS_FILMNO
+          ,SS_PASS
+          ,HS_FILMNO
+          ,HS_PASS
+          ,CAP_SPEC
+          ,CAP_ORIFICE
+          ,CAP_OUTERCOLOR
+          ,CAP_INNERCOLOR
+          ,CAP_DECO
+          ,CAP_SUPPLIER
+          ,CAP_SAFETYSEAL
+          ,REG_DT
+          ,REG_USR
+      )VALUES(
+          #company_cd#
+          ,#smr_cd#
+          ,#smr_chasu#
+          ,#extr_diameter#
+          ,#extr_layer#
+          ,#extr_length#
+          ,#extr_color#
+          ,#extr_mb#
+          ,#neck_mold#
+          ,#neck_orifice#
+          ,#neck_color#
+          ,#neck_mb#
+          ,#arls_color#
+          ,#arls_silicon#
+          ,#offset_filmno#
+          ,#offset_pass#
+          ,#offset_coating#
+          ,#ss_filmno#
+          ,#ss_pass#
+          ,#hs_filmno#
+          ,#hs_pass#
+          ,#cap_spec#
+          ,#cap_orifice#
+          ,#cap_outercolor#
+          ,#cap_innercolor#
+          ,#cap_deco#
+          ,#cap_supplier#
+          ,#cap_safetyseal#
+          ,GETDATE()
+          ,#reg_usr#
+      )
+      ELSE
+        UPDATE
+          T_SAMPLE_PRDTINFO
+        SET
+          EXTR_DIAMETER	= #extr_diameter#
+          ,EXTR_LAYER	    = #extr_layer#
+          ,EXTR_LENGTH	  = #extr_length#
+          ,EXTR_COLOR	= #extr_color#
+          ,EXTR_MB		= #extr_mb#
+          ,NECK_MOLD	= #neck_mold#
+          ,NECK_ORIFICE	= #neck_orifice#
+          ,NECK_COLOR	  = #neck_color#
+          ,NECK_MB		  = #neck_mb#
+          ,ARLS_COLOR	  = #arls_color#
+          ,ARLS_SILICON	  = #arls_silicon#
+          ,OFFSET_FILMNO	= #offset_filmno#
+          ,OFFSET_PASS	  = #offset_pass#
+          ,OFFSET_COATING	= #offset_coating#
+          ,SS_FILMNO	= #ss_filmno#
+          ,SS_PASS		= #ss_pass#
+          ,HS_FILMNO	= #hs_filmno#
+          ,HS_PASS		= #hs_pass#
+          ,CAP_SPEC		= #cap_spec#
+          ,CAP_ORIFICE	  = #cap_orifice#
+          ,CAP_OUTERCOLOR	= #cap_outercolor#
+          ,CAP_INNERCOLOR	= #cap_innercolor#
+          ,CAP_DECO		  = #cap_deco#
+          ,CAP_SUPPLIER	= #cap_supplier#
+          ,CAP_SAFETYSEAL	= #cap_safetyseal#
+          ,MOD_DT		  = GETDATE()
+          ,MOD_USR		= #mod_usr#
+        WHERE SMR_CD     = #smr_cd# 
+          AND SMR_CHASU  = #smr_chasu#
+    </insert>
+
+
+
+    <!-- Sample 요청 : 샘플요청  수정 -->
+    <update id="sampleRequestUpdate" parameterClass="Hashtable" >
+
+      UPDATE
+      T_SAMPLE_REQUEST
+      SET
+      SMR_TYPE = #smr_type#
+      ,EUSER_CD = #euser_cd#
+      ,EUSER_NM = #euser_nm#
+      ,ITEM_CD = #item_cd#
+      ,ITEM_NM = #item_nm#
+      ,SMP_RQTY = #smp_rqty#
+      ,SMP_STATUS = #smp_status#
+      ,PURP_COLOR = #purp_color#
+      ,PURP_DECO = #purp_deco#
+      ,PURP_TEST = #purp_test#
+      ,ARTWORK_NO = #artwork_no#
+      ,PACKING_INFO = #packing_info#
+      ,SHIP_TO_ADRS = #ship_to_adrs#
+      ,REMARK_CMT = #remark_cmt#
+      ,MOD_DT = GETDATE()
+      ,MOD_USR = #mod_usr#
+      ,PUR_OQTY = #pur_oqty#
+      <isNotEmpty property="spec_yn">
+        ,SPEC_YN = #spec_yn#
+      </isNotEmpty>
+        <isNotEmpty property="smr_crdate">
+          ,SMR_CRDATE = REPLACE(#smr_crdate#,'-','')
+        </isNotEmpty>
+        <isEmpty>
+          ,SMR_CRDATE = NULL
+        </isEmpty>
+
+        <isNotEmpty property="smr_podate">
+          ,SMR_PODATE = REPLACE(#smr_podate#,'-','')
+        </isNotEmpty>
+        <isEmpty>
+          ,SMR_PODATE = NULL
+        </isEmpty>
+
+
+        <isNotEmpty property="smr_orderdate">
+          ,SMR_ORDERDATE = REPLACE(#smr_orderdate#,'-','')
+        </isNotEmpty>
+        <isEmpty>
+          ,SMR_ORDERDATE = NULL
+        </isEmpty>
+        ,PROJECT_POSS = #project_poss#
+        
+        <isNotEmpty property="smr_comment">
+          ,SMR_COMMENT = #smr_comment#
+        </isNotEmpty>       
+        
+      WHERE SMR_CD = #smr_cd#
+      AND SMR_CHASU = #smr_chasu#
+
+    </update>
+
+
+    hash["artwork_no"] = Request["artwork_no"].nullToStr();
+    hash["packing_info"] = Request["packing_info"].nullToStr();
+
+    <!-- Sample 요청 : 진행상태 변경  -->
+    <update id="sampleRequestStateUpdate" parameterClass="Hashtable" >
+      UPDATE
+      T_SAMPLE_REQUEST
+      SET
+      SMP_STATUS = #smp_status#
+      <isNotEmpty property="smr_rquser">
+        ,SMR_RQUSER = #smr_rquser#
+        ,SMR_RQDATE = CONVERT(NVARCHAR(8),GETDATE(),112)
+      </isNotEmpty>
+
+      <isNotEmpty property="smr_bkuser">
+        ,SMR_BKUSER = #smr_bkuser#
+        ,SMR_BKDATE = CONVERT(NVARCHAR(8),GETDATE(),112)
+      </isNotEmpty>
+
+      <isNotEmpty property="smr_rruser">
+        ,RRUSER_CD = #smr_rruser#
+        ,SMR_RRUSER = #smr_rruser#
+        ,SMR_RRDATE = CONVERT(NVARCHAR(8),GETDATE(),112)
+      </isNotEmpty>
+
+      <isNotEmpty property="smr_fbuser">
+        ,SMR_FBUSER = #smr_fbuser#
+        ,SMR_FBDATE = CONVERT(NVARCHAR(8),GETDATE(),112)
+      </isNotEmpty>
+
+      <isNotEmpty property="smr_rauser">
+        ,SMR_RAUSER = #smr_rauser#
+        ,SMR_RADATE = CONVERT(NVARCHAR(8),GETDATE(),112)
+      </isNotEmpty>
+
+      <isNotEmpty property="smr_rfuser">
+        ,SMR_RFUSER = #smr_rfuser#
+        ,SMR_RFDATE = CONVERT(NVARCHAR(8),GETDATE(),112)
+      </isNotEmpty>
+
+      <isNotEmpty property="smr_pruser">
+        ,SPEC_YN = #spec_yn#
+        ,SMR_PRUSER = #smr_pruser#
+        ,SMR_PRDATE = CONVERT(NVARCHAR(8),REPLACE(#smr_prdate#,'-',''),112)
+      </isNotEmpty>
+      
+       <isNotEmpty property="artwork_no">
+         ,ARTWORK_NO = #artwork_no# 
+       </isNotEmpty>
+
+      <isNotEmpty property="packing_info"> 
+        ,PACKING_INFO = #packing_info#
+      </isNotEmpty>
+      
+      <isNotEmpty property="prdt_yn">
+        ,PRDT_YN = 'Y'
+      </isNotEmpty>
+
+      <isNotEmpty property="drop_yn">
+        ,DROP_YN = 'Y'
+      </isNotEmpty>
+
+      <isNotEmpty property="use_yn">
+        ,USE_YN = 'N'
+      </isNotEmpty>
+
+      <isNotEmpty property="change_smr_charsu">
+        ,SMR_CHASU = #change_smr_charsu#
+      </isNotEmpty>
+      <isNotEmpty property="smr_comment">
+        ,SMR_COMMENT = #smr_comment#
+      </isNotEmpty>
+      WHERE SMR_CD = #smr_cd#
+      AND SMR_CHASU = #smr_chasu#
+    </update>
+    
+    
+
+
+    <!-- Sample 요청 : 상세 품목 삭제 -->
+    <delete id="smrSubDelete" parameterClass="Hashtable">
+      DELETE FROM $table_nm$ 
+      WHERE SMR_CD = #smr_cd# 
+      AND SMR_CHASU = #smr_chasu#
+      
+    </delete>
+
+
+    <!-- Sample 요청 : 상세 품목 등록  -->
+    <insert id="smrSubInsert" parameterClass="Hashtable">
+
+      INSERT INTO $table_nm$ (
+          COMPANY_CD
+          ,SMR_CD
+          ,SMR_CHASU
+          ,SMR_PARTNM
+        <isNotEmpty property="smr_code">
+          ,SMR_CODE
+        </isNotEmpty>
+        <isNotEmpty property="smr_material">
+          ,SMR_MATERIAL
+        </isNotEmpty>
+        <isNotEmpty property="smr_inject">
+          ,SMR_INJECT
+        </isNotEmpty>
+        <isNotEmpty property="smr_coat">
+          ,SMR_COAT
+        </isNotEmpty>
+        <isNotEmpty property="smr_hstmpc">
+          ,SMR_HSTMPC
+        </isNotEmpty>
+        <isNotEmpty property="smr_hstmpd">
+          ,SMR_HSTMPD
+        </isNotEmpty>
+        <isNotEmpty property="smr_ss">
+          ,SMR_SS
+        </isNotEmpty>
+        <isNotEmpty property="smr_moldno">
+          ,SMR_MOLDNO
+        </isNotEmpty>
+        <isNotEmpty property="smr_pkg">
+          ,SMR_PKG
+        </isNotEmpty>
+        <isNotEmpty property="remark_cmt">
+          ,REMARK_CMT
+        </isNotEmpty>
+          ,REG_DT
+          ,REG_USR
+      )VALUES(
+          #company_cd#
+          ,#smr_cd#
+          ,#smr_chasu#
+          ,#smr_partnm#
+        <isNotEmpty property="smr_code">
+          ,#smr_code#
+        </isNotEmpty>
+        <isNotEmpty property="smr_material">
+          ,#smr_material#
+        </isNotEmpty>
+        <isNotEmpty property="smr_inject">
+          ,#smr_inject#
+        </isNotEmpty>
+        <isNotEmpty property="smr_coat">
+          ,#smr_coat#
+        </isNotEmpty>
+        <isNotEmpty property="smr_hstmpc">
+          ,#smr_hstmpc#
+        </isNotEmpty>
+        <isNotEmpty property="smr_hstmpd">
+          ,#smr_hstmpd#
+        </isNotEmpty>
+        <isNotEmpty property="smr_ss">
+          ,#smr_ss#
+        </isNotEmpty>
+        <isNotEmpty property="smr_moldno">
+          ,#smr_moldno#
+        </isNotEmpty>
+        <isNotEmpty property="smr_pkg">
+          ,#smr_pkg#
+        </isNotEmpty>
+        <isNotEmpty property="remark_cmt">
+          ,#remark_cmt#
+        </isNotEmpty>
+        ,GETDATE()
+        ,#reg_usr#
+      )
+    
+
+  </insert>
+ 
+    <!-- Sample 요청관리 :  샘플 의뢰반려 등록 -->
+    <insert id="insertSmrReturn" parameterClass="Hashtable" resultClass="Hashtable">
+      <selectKey  resultClass="int" property="smr_seq" type="pre">
+        SELECT
+        (ISNULL(MAX(SMR_SEQ),0) + 1) AS SMR_SEQ
+        FROM
+        T_SMR_RETURN
+        WHERE 
+        SMR_CD = #smr_cd# AND
+        SMR_CHASU = #smr_chasu#
+      </selectKey>
+
+      INSERT INTO T_SMR_RETURN
+      (COMPANY_CD
+      ,SMR_CD
+      ,SMR_CHASU
+      ,SMR_SEQ
+      ,USER_CD
+      ,SMR_RTDATE
+      ,SMR_RTTYPE
+      ,SMR_RTDESCRIPT
+      ,REG_DT
+      ,REG_USR)
+      VALUES
+      (
+      #company_cd#
+      ,#smr_cd#
+      ,#smr_chasu#
+      ,#smr_seq#
+      ,#user_cd#
+      ,CONVERT(NVARCHAR(8),GETDATE(),112)
+      ,#smr_rttype#
+      ,#smr_rtdescript#
+      ,GETDATE()
+      ,#reg_usr#
+      )
+    </insert>
+
+
+    <!-- Sample 요청 : 재작업 -->
+    <select id="smrRepairDetail" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT COMPANY_CD
+      ,SMR_CD
+      ,SMR_CHASU
+      ,USER_CD
+      ,dbo.FN_GET_USER_NM(USER_CD) AS USER_NM
+      ,dbo.FN_GET_USER_TO_DEPT_NM(USER_CD) DEPT_NM
+      ,SMR_CRDATE
+      ,SMR_CRTYPE
+      ,SMR_CRDESCRIPT
+      FROM
+      T_SMR_CREPAIR
+      WHERE
+      SMR_CD = #smr_cd# AND
+      SMR_CHASU = #smr_chasu#
+    </select>
+
+
+    <!-- Sample 요청 : 드롭 -->
+    <select id="smrDropDetail" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT COMPANY_CD
+      ,SMR_CD
+      ,SMR_CHASU
+      ,USER_CD
+      ,dbo.FN_GET_USER_NM(USER_CD) AS USER_NM
+      ,dbo.FN_GET_USER_TO_DEPT_NM(USER_CD) DEPT_NM
+      ,SMR_DRDATE
+      ,SMR_DRTYPE
+      ,SMR_DRDESCRIPT
+      FROM
+      T_SMR_DROP
+      WHERE
+      SMR_CD = #smr_cd# AND
+      SMR_CHASU = #smr_chasu#
+    </select>
+
+
+    <!-- Sample 요청 : 검토반려 -->
+    <select id="smrCheckReturnDetail" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT COMPANY_CD
+      ,SMR_CD
+      ,SMR_CHASU
+      ,SMR_SEQ
+      ,USER_CD
+      ,dbo.FN_GET_USER_NM(USER_CD) AS USER_NM
+      ,dbo.FN_GET_USER_TO_DEPT_NM(USER_CD) DEPT_NM
+      ,SMR_RVDATE
+      ,SMR_RVTYPE
+      ,SMR_RVDESCRIPT
+      FROM
+      T_SMR_REVIEW
+      WHERE
+      SMR_CD = #smr_cd# AND
+      SMR_CHASU = #smr_chasu# AND
+      SMR_SEQ = (
+      SELECT ISNULL(MAX(SMR_SEQ),1) SMR_SEQ FROM T_SMR_REVIEW WHERE
+      SMR_CD = #smr_cd# AND
+      SMR_CHASU = #smr_chasu#
+      )
+    </select>
+
+
+
+
+    <!-- Sample 요청 : 샘플 재작업 실행 step1 -->
+    <insert id="smrRepairInsert" parameterClass="Hashtable">
+      INSERT INTO T_SMR_CREPAIR(
+      COMPANY_CD,
+      SMR_CD,
+      SMR_CHASU,
+      USER_CD,
+      SMR_CRDATE,
+      SMR_CRTYPE,
+      SMR_CRDESCRIPT,
+      REG_DT,
+      REG_USR
+      )VALUES(
+      #company_cd#,
+      #smr_cd#,
+      #smr_chasu#,
+      #user_cd#,
+      CONVERT(NVARCHAR(8),GETDATE(),112),
+      #smr_crtype#,
+      #smr_crdescript#,
+      getdate(),
+      #reg_usr#
+      )
+    </insert>
+
+
+    <!-- Sample 요청 : 샘플 재작업 실행  step2 -->
+    <insert id="sampleRequestRepairInsert" parameterClass="Hashtable" resultClass="int">
+
+      <selectKey resultClass="int" property="add_smr_chasu" type="pre">
+        SELECT
+        (SMR_CHASU + 1) AS ADD_SMR_CHASU
+        FROM
+        T_SAMPLE_REQUEST
+        WHERE
+        SMR_CD = #smr_cd# AND
+        SMR_CHASU = #smr_chasu#
+      </selectKey>
+
+      INSERT INTO T_SAMPLE_REQUEST(
+      COMPANY_CD
+      ,SMR_CD
+      ,SMR_CHASU
+      ,SMR_TYPE
+      ,QRUSER_CD
+      ,QDEPT_CD
+      ,EUSER_CD
+      ,EUSER_NM
+      ,ITEM_CD
+      ,ITEM_NM
+      ,SMP_RQTY
+      ,SMP_STATUS
+      ,PURP_COLOR
+      ,PURP_DECO
+      ,PURP_TEST
+      ,ARTWORK_NO
+      ,PACKING_INFO
+      ,SHIP_TO_ADRS
+      ,REMARK_CMT
+      ,REG_USR
+      ,REG_DT
+      ,PUR_OQTY
+      ,SMR_CRDATE
+      ,SMR_PODATE
+      )
+      (SELECT
+      COMPANY_CD
+      ,SMR_CD
+      ,#add_smr_chasu# AS SMR_CHASU
+      ,SMR_TYPE
+      ,QRUSER_CD
+      ,QDEPT_CD
+      ,EUSER_CD
+      ,EUSER_NM
+      ,ITEM_CD
+      ,ITEM_NM
+      ,SMP_RQTY
+      ,'SMSTAT_010' AS SMP_STATUS
+      ,PURP_COLOR
+      ,PURP_DECO
+      ,PURP_TEST
+      ,ARTWORK_NO
+      ,PACKING_INFO
+      ,SHIP_TO_ADRS
+      ,REMARK_CMT
+      ,#reg_usr# AS REG_USR
+      ,GETDATE() AS REG_DT
+      ,PUR_OQTY
+      ,SMR_CRDATE
+      ,SMR_PODATE
+      FROM
+      T_SAMPLE_REQUEST
+      WHERE
+      SMR_CD = #smr_cd# AND
+      SMR_CHASU = #smr_chasu#
+      )
+    </insert>
+
+
+    <!-- Sample 요청 : 샘플 재작업 실행  step3 -->
+    <insert id="insertPumpBottleOverCapRepair" parameterClass="Hashtable">
+      INSERT INTO $table_nm$(
+      COMPANY_CD
+      ,SMR_CD
+      ,SMR_CHASU
+      ,SMR_PARTNM
+      ,SMR_CODE
+      ,SMR_MATERIAL
+      ,SMR_INJECT
+      ,SMR_COAT
+      ,SMR_HSTMPC
+      ,SMR_HSTMPD
+      ,SMR_SS
+      ,SMR_MOLDNO
+      ,SMR_PKG
+      ,REMARK_CMT
+      ,REG_DT
+      ,REG_USR
+      )(
+      SELECT
+      COMPANY_CD
+      ,SMR_CD
+      ,#add_smr_chasu# AS SMR_CHASU
+      ,SMR_PARTNM
+      ,SMR_CODE
+      ,SMR_MATERIAL
+      ,SMR_INJECT
+      ,SMR_COAT
+      ,SMR_HSTMPC
+      ,SMR_HSTMPD
+      ,SMR_SS
+      ,SMR_MOLDNO
+      ,SMR_PKG
+      ,REMARK_CMT
+      ,GETDATE() AS REG_DT
+      ,#reg_usr# AS REG_USR
+      FROM
+      $table_nm$
+      WHERE
+      SMR_CD = #smr_cd# AND
+      SMR_CHASU = #smr_chasu#
+      )
+    </insert>
+
+
+    <!-- Sample 요청 : 샘플 재작업 실행  step4 -->
+    <insert id="insertRequestPrdtinfoRepair" parameterClass="Hashtable">
+
+      INSERT INTO T_SAMPLE_PRDTINFO(
+      COMPANY_CD
+      ,SMR_CD
+      ,SMR_CHASU
+      ,EXTR_DIAMETER
+      ,EXTR_LAYER
+      ,EXTR_LENGTH
+      ,EXTR_COLOR
+      ,EXTR_MB
+      ,NECK_MOLD
+      ,NECK_ORIFICE
+      ,NECK_COLOR
+      ,NECK_MB
+      ,ARLS_COLOR
+      ,ARLS_SILICON
+      ,OFFSET_FILMNO
+      ,OFFSET_PASS
+      ,OFFSET_COATING
+      ,SS_FILMNO
+      ,SS_PASS
+      ,HS_FILMNO
+      ,HS_PASS
+      ,CAP_SPEC
+      ,CAP_ORIFICE
+      ,CAP_OUTERCOLOR
+      ,CAP_INNERCOLOR
+      ,CAP_DECO
+      ,CAP_SUPPLIER
+      ,CAP_SAFETYSEAL
+      ,REG_DT
+      ,REG_USR
+      )(
+      SELECT
+      COMPANY_CD
+      ,SMR_CD
+      ,#add_smr_chasu# AS SMR_CHASU
+      ,EXTR_DIAMETER
+      ,EXTR_LAYER
+      ,EXTR_LENGTH
+      ,EXTR_COLOR
+      ,EXTR_MB
+      ,NECK_MOLD
+      ,NECK_ORIFICE
+      ,NECK_COLOR
+      ,NECK_MB
+      ,ARLS_COLOR
+      ,ARLS_SILICON
+      ,OFFSET_FILMNO
+      ,OFFSET_PASS
+      ,OFFSET_COATING
+      ,SS_FILMNO
+      ,SS_PASS
+      ,HS_FILMNO
+      ,HS_PASS
+      ,CAP_SPEC
+      ,CAP_ORIFICE
+      ,CAP_OUTERCOLOR
+      ,CAP_INNERCOLOR
+      ,CAP_DECO
+      ,CAP_SUPPLIER
+      ,CAP_SAFETYSEAL
+      ,GETDATE() AS REG_DT
+      ,#reg_usr# AS REG_USR
+      FROM
+      T_SAMPLE_PRDTINFO
+      WHERE
+      SMR_CD = #smr_cd# AND
+      SMR_CHASU = #smr_chasu#
+      )
+    </insert>
+
+
+    <!-- Sample 요청 : 드롭 실행 -->
+    <insert id="insertSmrDrop" parameterClass="Hashtable">
+
+      INSERT INTO T_SMR_DROP(
+      COMPANY_CD
+      ,SMR_CD
+      ,SMR_CHASU
+      ,USER_CD
+      ,SMR_DRDATE
+      ,SMR_DRTYPE
+      ,SMR_DRDESCRIPT
+      ,REG_DT
+      ,REG_USR
+      )VALUES(
+      #company_cd#
+      ,#smr_cd#
+      ,#smr_chasu#
+      ,#user_cd#
+      ,CONVERT(NVARCHAR(8),GETDATE(),112)
+      ,#smr_drtype#
+      ,#smr_drdescript#
+      ,getdate()
+      ,#reg_usr#
+      )
+    </insert>
+
+
+
+
+    <!-- Sample 요청 : 검토반려 실행 -->
+    <insert id="insertSmrCheckReturn" parameterClass="Hashtable">
+      <selectKey resultClass="int" property="smr_seq" type="pre">
+        SELECT
+        (ISNULL(MAX(SMR_SEQ),0) + 1) AS SMR_SEQ
+        FROM
+        T_SMR_REVIEW
+        WHERE
+        SMR_CD = #smr_cd# AND
+        SMR_CHASU = #smr_chasu#
+      </selectKey>
+
+      INSERT INTO T_SMR_REVIEW
+      (COMPANY_CD
+      ,SMR_CD
+      ,SMR_CHASU
+      ,SMR_SEQ
+      ,USER_CD
+      ,SMR_RVDATE
+      ,SMR_RVTYPE
+      ,SMR_RVDESCRIPT
+      ,REG_DT
+      ,REG_USR)
+      VALUES
+      (
+      #company_cd#
+      ,#smr_cd#
+      ,#smr_chasu#
+      ,#smr_seq#
+      ,#user_cd#
+      ,CONVERT(NVARCHAR(8),GETDATE(),112)
+      ,#smr_rvtype#
+      ,#smr_rvdescript#
+      ,GETDATE()
+      ,#reg_usr#
+      )
+    </insert>
+
+
+
+  </statements>
+
+
+
+</sqlMap>

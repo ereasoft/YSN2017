@@ -1,0 +1,104 @@
+.sch-taskview {
+    background-color: #f6f6f6;
+    padding: 10px;
+    border-right: 1px solid #ddd;
+}
+
+.sch-taskcolumn:last-child .sch-taskview {
+    border-right: none;
+}
+
+.sch-taskboard .x-panel-header-default {
+    background: transparent;
+}
+
+.sch-taskboard .x-panel-header-title-default {
+    font-size: 13px;
+    font-weight: 300;
+    color: #606060;
+}
+
+.sch-taskboard .x-title-icon-wrap {
+    display: none;
+}
+
+.sch-taskboard .x-title-text {
+    text-align: right;
+}
+
+.sch-task {
+    box-shadow: none;
+    opacity: 0.8;
+    transition: background-color 0.2s, opacity 0.2s;
+}
+
+.sch-task-inner {
+    padding: 6px 8px;
+}
+
+.sch-task-over {
+    opacity: 1;
+}
+
+.sch-task-state-Done {
+    background-color: #f4fdf4;
+}
+
+.sch-task-state-Test {
+    background-color: #f7fbfd;
+}
+
+.sch-task-state-InProgress {
+    background-color: #fdf6ed;
+}
+
+.sch-task-state-NotStarted {
+    background-color: #f6eaea;
+}
+
+.sch-task-selected {
+    opacity: 1;
+}
+
+.sch-task-selected span {
+    text-shadow: none;
+}
+
+.sch-taskview div.sch-task-selected.sch-task-state-Done {
+    background-color: lightgreen;
+}
+
+.sch-taskview div.sch-task-selected.sch-task-state-Test {
+    background-color: lightblue;
+}
+
+.sch-taskview div.sch-task-selected.sch-task-state-InProgress {
+    background-color: #e7a84b;
+}
+
+.sch-taskview div.sch-task-selected.sch-task-state-NotStarted {
+    background-color: brown;
+}
+
+.sch-taskboard .x-panel-body-default {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.sch-taskboard .sch-taskcolumn .x-panel-body {
+    border-top: 1px solid #ddd !important;
+    border-bottom: 1px solid #ddd !important;
+}
+
+.sch-taskboard .sch-taskcolumn:first-child .x-panel-body {
+    border-left: 1px solid #ddd !important;
+}
+
+.sch-taskboard .sch-taskcolumn:last-child .x-panel-body {
+    border-right: 1px solid #ddd !important;
+}
+
+.sch-taskboard .x-panel-header-default-horizontal.x-header-noborder {
+    padding-top: 0;
+    padding-bottom: 1px;
+}

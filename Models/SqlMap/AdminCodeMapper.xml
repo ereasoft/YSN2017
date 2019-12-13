@@ -1,0 +1,365 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+
+
+
+    <!-- 코드관리 : 상위코드 조회 리스트 -->
+    <select id="AdminupCodeList" parameterClass="Hashtable"	resultClass="Hashtable">
+
+      SELECT
+      CODE_ID
+      ,CODE_ID AS PREID
+      , CODE_NM
+      , CODE_KOR
+      , CODE_ENG
+      , CODE_CHN
+      , CODE_JPN
+      , CODE_LEVEL
+      , CODE_ORDER
+      , UP_CODE_ID
+      , VALUE_1
+      , VALUE_2
+      , VALUE_3
+      , VALUE_4
+      , VALUE_5
+      , CODE_DESCRIPT
+      , USE_YN
+      , REG_DT
+      , REG_USR
+      , MOD_DT
+      , MOD_USR
+      ,(SELECT COUNT(*) FROM T_CODE WHERE UP_CODE_ID = A.CODE_ID) AS CHILD_CNT
+      FROM T_CODE A
+      WHERE 1=1
+      <isNotEmpty property="searchCodeId">
+        AND A.CODE_ID LIKE '%' + #searchCodeId# + '%'
+      </isNotEmpty>
+      <isNotEmpty property="CodeId">
+        AND A.CODE_ID = #CodeId#
+      </isNotEmpty>
+      <isNotEmpty property="upCodeId">
+        AND A.UP_CODE_ID = #upCodeId#
+      </isNotEmpty>
+
+      <isNotEmpty property="searchCodeNm">
+        AND A.CODE_KOR LIKE '%' + #searchCodeNm#  + '%'
+      </isNotEmpty>
+      <isNotEmpty property="searchLevel">
+        AND A.CODE_LEVEL = #searchLevel#
+      </isNotEmpty>
+      <isNotEmpty property="searchPreCodeId">
+        AND A.Code_ID != #searchPreCodeId#
+      </isNotEmpty>
+
+    </select>
+
+    
+    
+    
+    
+    
+    <!-- 코드관리 : 하위코드 조회 리스트  -->
+    <select id="AdmindownCodeList" parameterClass="Hashtable"	resultClass="Hashtable">
+
+      SELECT
+      'S' AS MODE
+      , CODE_ID
+      , CODE_NM
+      , CODE_KOR
+      , CODE_ENG
+      , CODE_CHN
+      , CODE_JPN
+      , CODE_LEVEL
+      , CODE_ORDER
+      , UP_CODE_ID
+      , VALUE_1
+      , VALUE_2
+      , VALUE_3
+      , VALUE_4
+      , VALUE_5
+      , CODE_DESCRIPT
+      , USE_YN
+      , REG_DT
+      , REG_USR
+      , MOD_DT
+      , MOD_USR
+      , CODE_ID AS PRE_CODE_ID
+      FROM T_CODE
+      WHERE 1=1
+      <isNotEmpty property="upCodeId">
+        AND UP_CODE_ID = #upCodeId#
+      </isNotEmpty>
+
+
+    </select>
+
+
+
+
+    <!-- 코드관리 : 코드 등록  -->
+    <insert id="AdmininsertCode" parameterClass="Hashtable"	>
+
+      INSERT INTO T_CODE (
+      CODE_ID
+      , CODE_NM
+      , CODE_KOR
+      , CODE_ENG
+      , CODE_CHN
+      , CODE_JPN
+      , CODE_LEVEL
+      , CODE_ORDER
+      , UP_CODE_ID
+      , VALUE_1
+      , VALUE_2
+      , VALUE_3
+      , VALUE_4
+      , VALUE_5
+      , CODE_DESCRIPT
+      , USE_YN
+      , REG_DT
+      , REG_USR
+      , MOD_DT
+      , MOD_USR
+      ) VALUES (
+      #codeId#
+      ,#codeNm#
+      ,#codeKor#
+      ,#codeEng#
+      ,#codeChn#
+      ,#codeJpn#
+      ,#codeLevel#
+      ,#codeOrder#
+      ,#upCodeId#
+      ,#value1#
+      ,#value2#
+      ,#value3#
+      ,#value4#
+      ,#value5#
+      ,#codeDescript#
+      ,#useYn#
+      ,GETDATE()
+      ,#regUsr#
+      ,GETDATE()
+      ,#modUsr#
+      )
+
+    </insert>
+    
+    
+    
+    <!-- 코드관리 : 코드 수정 -->
+    <update id="AdminupdateCode" parameterClass="Hashtable">
+
+      UPDATE T_CODE SET
+          CODE_ID = #codeId#,
+          CODE_NM = #codeNm#,
+          CODE_KOR = #codeKor#,
+          CODE_ENG = #codeEng#,
+          CODE_CHN = #codeChn#,
+          CODE_JPN = #codeJpn#,
+          CODE_LEVEL = #codeLevel#,
+          CODE_ORDER = #codeOrder#,
+          UP_CODE_ID = #upCodeId#,
+          VALUE_1 = #value1#,
+          VALUE_2 = #value2#,
+          VALUE_3 = #value3#,
+          VALUE_4 = #value4#,
+          VALUE_5 = #value5#,
+          CODE_DESCRIPT = #codeDescript#,
+          USE_YN = #useYn#,
+          MOD_DT = GETDATE(),
+          MOD_USR = #modUsr#
+      WHERE CODE_ID = #preCodeId#
+      AND UP_CODE_ID = #upCodeId#
+    </update>
+
+
+
+
+
+
+
+<!--
+    <select id="downCodeValue1List" parameterClass="Hashtable"	resultClass="Hashtable">
+
+      SELECT
+      'S' AS MODE
+      , CODE_ID
+      , CODE_NM
+      , CODE_KOR
+      , CODE_ENG
+      , CODE_CHN
+      , CODE_JPN
+      , CODE_LEVEL
+      , CODE_ORDER
+      , UP_CODE_ID
+      , VALUE_1
+      , VALUE_2
+      , VALUE_3
+      , VALUE_4
+      , VALUE_5
+      , CODE_DESCRIPT
+      , USE_YN
+      , REG_DT
+      , REG_USR
+      , MOD_DT
+      , MOD_USR
+      , CODE_ID AS PRE_CODE_ID
+      FROM T_CODE
+      WHERE 1=1
+      <isNotEmpty property="upCodeId">
+        AND UP_CODE_ID = #upCodeId#
+      </isNotEmpty>
+      <isNotEmpty property="value1">
+        AND VALUE_1 = #value1#
+      </isNotEmpty>
+      <isNotEmpty property="use_yn">
+        AND USE_YN = #use_yn#
+      </isNotEmpty>
+
+
+    </select>
+
+
+
+
+
+    <select id="downCodeValueList" parameterClass="Hashtable"	resultClass="Hashtable">
+
+      SELECT
+      'S' AS MODE
+      , CODE_ID
+      , CODE_NM
+      , CODE_KOR
+      , CODE_ENG
+      , CODE_CHN
+      , CODE_JPN
+      , CODE_LEVEL
+      , CODE_ORDER
+      , UP_CODE_ID
+      , VALUE_1
+      , VALUE_2
+      , VALUE_3
+      , VALUE_4
+      , VALUE_5
+      , CODE_DESCRIPT
+      , USE_YN
+      , REG_DT
+      , REG_USR
+      , MOD_DT
+      , MOD_USR
+      , CODE_ID AS PRE_CODE_ID
+      FROM T_CODE
+      WHERE 1=1
+      <isNotEmpty property="upCodeId">
+        AND UP_CODE_ID = #upCodeId#
+      </isNotEmpty>
+      <isNotEmpty property="value1">
+        AND VALUE_1 = #value1#
+      </isNotEmpty>
+      <isNotEmpty property="value2">
+        AND VALUE_2 = #value2#
+      </isNotEmpty>
+      <isNotEmpty property="value3">
+        AND VALUE_3 = #value3#
+      </isNotEmpty>
+    </select>
+
+
+
+    <select id="upcodeWithcodeList" parameterClass="Hashtable"	resultClass="Hashtable">
+
+      SELECT
+      CODE_ID,
+      CODE_NM,
+      VALUE_1,
+      CODE_KOR,
+      CODE_ENG,
+      CODE_CHN,
+      CODE_JPN
+      FROM
+      T_CODE
+      WHERE
+      UP_CODE_ID = #up_code_id#
+      <isNotEmpty property="use_yn">
+        AND USE_YN = #use_yn#
+      </isNotEmpty>
+      ORDER BY CODE_ORDER
+    </select>
+    
+    
+    
+
+    <select id="selectNatList" parameterClass="Hashtable"	>
+      SELECT
+      NAT_CD,
+      NAT_NM,
+      NAT_ENG_NM,
+      NAT_ORDER
+      FROM
+      T_NATION
+      WHERE
+      USE_YN = 'Y'
+      ORDER BY
+      NAT_NM
+    </select>
+
+    
+    
+    
+    
+    <select id="codeValueLangList" parameterClass="Hashtable"	resultClass="Hashtable">
+
+      SELECT
+      CODE_ID
+      , CODE_NM
+      , CODE_#language# AS CODE_LANG
+      , CODE_LEVEL
+      , CODE_ORDER
+      , UP_CODE_ID
+      , VALUE_1
+      , VALUE_2
+      , VALUE_3
+      , VALUE_4
+      , VALUE_5
+      , CODE_DESCRIPT
+      , USE_YN
+      FROM T_CODE
+      WHERE 1=1
+      <isNotEmpty property="upCodeId">
+        AND UP_CODE_ID = #upCodeId#
+      </isNotEmpty>
+      <isNotEmpty property="value1">
+        AND VALUE_1 = #value1#
+      </isNotEmpty>
+      <isNotEmpty property="value2">
+        AND VALUE_2 = #value2#
+      </isNotEmpty>
+      <isNotEmpty property="value3">
+        AND VALUE_3 = #value3#
+      </isNotEmpty>
+      <isNotEmpty property="value4">
+        AND VALUE_4 = #value4#
+      </isNotEmpty>
+      <isNotEmpty property="value5">
+        AND VALUE_5 = #value5#
+      </isNotEmpty>
+      <isNotEmpty property="use_yn">
+        AND USE_YN = #use_yn#
+      </isNotEmpty>
+    
+  
+</select>
+
+-->
+
+  </statements>
+
+
+
+</sqlMap>

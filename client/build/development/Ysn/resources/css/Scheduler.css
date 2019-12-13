@@ -1,0 +1,113 @@
+.sch-event,
+.sch-event.sch-event-hover,
+.sch-event.sch-event-selected,
+.sch-event.sch-event-selected.sch-event-hover {
+    border-left-width : 7px;
+    color             : #777;
+    font-weight       : 500;
+    font-size         : 12px;
+}
+
+.sch-event-inner {
+    /*padding   : 2px 4px;
+    font-size : 1.1em;*/
+    white-space: normal;
+}
+
+.sch-event.sch-event-selected,
+.sch-event.sch-event-selected.sch-event-hover {
+    color : #fff;
+}
+
+.x-column-header {
+    border-right-color: transparent;
+    font-weight: 300;
+}
+
+.x-column-header-inner {
+    padding: 0 5px 2px 0;
+}
+
+.x-column-header-text,
+.x-column-header-text-inner {
+    text-align: right;
+}
+
+.sch-daycolumn-header-weekend .x-column-header-text {
+    color: #ea3b06;
+}
+
+.sch-calendarcolumn-hours {
+    font-size: 13px;
+}
+
+.x-grid-body {
+    border-top-width: 1px;
+    border-color: #ddd;
+}
+
+.x-grid-locked-split .x-grid-inner-normal {
+    border-left-width: 0;
+}
+
+.x-grid-locked .x-grid-inner-locked {
+    border-right-width: 0;
+}
+
+.x-grid-with-col-lines .x-grid-cell {
+    border-color: #ddd;
+}
+
+.x-grid-inner-locked .x-grid-body {
+    border-top-color: transparent;
+    border-right: 1px solid #ddd !important;
+}
+
+.cal-month-header-day {
+    padding-top: 2px;
+}
+
+.cal-event {
+    opacity: 0.8;
+    transition: opacity 0.2s, background 0.2s
+}
+
+.cal-event:hover,
+.cal-event-selected {
+    opacity: 1;
+}
+
+
+
+.sch-vertical .sch-verticaltimeaxis-cell {
+    background: #fff;
+}
+
+.sch-vertical .x-grid-cell.sch-verticaltimeaxis-cell {
+    border-top-color: transparent;
+}
+
+.sch-simple-timeheader {
+    text-align: left;
+}
+
+/*
+Horizontal time axis shouldn't have border set, otherwise it's height will increase on each layout update.
+Can be handled in Sch.view.HorizontalTimeAxis#getHTML, but for now just disable header.
+.sch-horizontaltimeaxis-ct {
+    border-top: 1px solid #ddd;
+}
+*/
+
+.sch-horizontal .x-column-header {
+    border-right: 1px solid #ddd !important;
+}
+
+.sch-horizontal .x-grid-locking-body .x-grid-body {
+    border-top: 1px solid #ddd !important;
+}
+
+.sch-horizontal .x-column-header-text,
+.sch-horizontal .x-column-header-text-inner {
+    text-align: center;
+}

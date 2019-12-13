@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+
+
+
+    <!-- 파일 리스트 ( 관련자료 )-->
+    <select id="selectAttachFile"  parameterClass="Hashtable" resultClass="Hashtable">
+        SELECT
+        FILE_NO,
+        DOC_MGT,
+        DOC_TYPE,
+        FILE_TYPE,
+        FILE_SIZE,
+        FILE_NM,
+        FILE_PATH
+        FROM  T_ATTACH_FILE
+        WHERE 
+        BIZ_GUBUN = #biz_gubun#
+      <isNotEmpty property="chasu">
+        AND CHASU = CONVERT(NUMERIC(18,0),#chasu#)
+      </isNotEmpty>
+
+      <isNotEmpty property="doc_mgt">
+        AND DOC_MGT = #doc_mgt#
+      </isNotEmpty>
+      <isEmpty property="doc_mgt">
+        AND ISNULL(DOC_MGT,'') = ''
+      </isEmpty>      
+     
+        AND USE_YN = 'Y'
+        ORDER BY
+        FILE_NO ASC
+      </select>
+
+
+
+
+
+
+    <!-- 파일 등록 -->
+    <insert id="insertAttachFile" parameterClass="Hashtable">
+      <selectKey property="file_no" resultClass="String" type="pre">  
+        SELECT ('FN' + SUBSTRING(CONVERT(VARCHAR(12),GETDATE(),112),3,2) +
+                dbo.FN_LPAD(
+                CONVERT(VARCHAR(6),
+                CONVERT(INTEGER,(
+                CASE WHEN MAX(FILE_NO) IS NULL THEN '0'
+                ELSE SUBSTRING(MAX(FILE_NO), 5,6)
+                END
+                )
+            )+1),6,'0')
+        ) AS FILE_NO
+        FROM T_ATTACH_FILE
+      </selectKey>
+
+      INSERT INTO T_ATTACH_FILE
+      (COMPANY_CD
+      ,FILE_NO
+      ,BIZ_GUBUN
+      ,CHASU
+      ,DOC_MGT
+      ,DOC_TYPE
+      ,FILE_TYPE
+      ,FILE_PATH
+      ,FILE_SIZE
+      ,FILE_NM
+      ,REG_DT
+      ,REG_USR)
+      VALUES
+      (#company_cd#
+      ,#file_no#
+      ,#biz_gubun#
+      ,#chasu#
+      ,#doc_mgt#
+      ,#doc_type#
+      ,#file_type#
+      ,#file_path#
+      ,#file_size#
+      ,#file_nm#
+      ,getdate()
+      ,#user_cd#
+      )
+    </insert>
+
+    
+
+
+    <!-- 파일 수정 -->
+    <update id="updateAttachFile" parameterClass="Hashtable">
+      UPDATE T_ATTACH_FILE
+      SET
+        BIZ_GUBUN = #biz_gubun#,
+        CHASU = #chasu#,
+        DOC_MGT = #doc_mgt#,
+        DOC_TYPE = #doc_type#,
+        FILE_TYPE = #file_type#,
+        MOD_DT = getdate(),
+        MOD_USR = #user_cd#
+      WHERE
+        FILE_NO = #file_no# 
+      AND  COMPANY_CD = #company_cd#
+    </update>
+    
+    
+
+
+    <!-- 파일 삭제 -->
+    <delete id="deleteAttachFile" parameterClass="Hashtable">
+      UPDATE T_ATTACH_FILE
+        SET
+        USE_YN = 'N'
+      WHERE
+      COMPANY_CD = #company_cd# 
+      AND FILE_NO = #file_no#
+    </delete>
+
+
+    <!-- 파일 다운로드 -->
+    <select id="downAttachFile" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      FILE_NO,
+      FILE_PATH,
+      FILE_TYPE,
+      FILE_NM
+      FROM
+      T_ATTACH_FILE
+      WHERE
+      FILE_NO = #file_no#
+    </select>
+
+
+
+
+
+  </statements>
+
+
+
+</sqlMap>

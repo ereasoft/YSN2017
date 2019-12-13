@@ -1,0 +1,503 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+    <!-- 유통구조별 수주진척상황 /DaliyInfo/salesDailyList -->
+    <select id="salesDailyList" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      UP_DEPT_NM, UP_DEPT_CD, DSTR_TYPE, CODE_KOR AS DSTR_TYPE_NM,
+      NOW_BASE_AMOUNT_PUMP,
+      NOW_BASE_AMOUNT_TUBE,
+      NOW_BASE_AMOUNT_PUMP + NOW_BASE_AMOUNT_TUBE AS NOW_BASE_AMOUNT_SUM,
+      NOW_AMOUNT_PUMP1 + NOW_AMOUNT_PUMP2 AS NOW_TOT_AMOUNT_PUMP,
+      NOW_AMOUNT_TUBE1 + NOW_AMOUNT_TUBE2 AS NOW_TOT_AMOUNT_TUBE,
+      NOW_AMOUNT_PUMP1 + NOW_AMOUNT_PUMP2 + NOW_AMOUNT_TUBE1 + NOW_AMOUNT_TUBE2 AS NOW_TOT_AMOUNT_SUM,
+      NOW_AMOUNT_PUMP1,
+      NOW_AMOUNT_TUBE1,
+      NOW_AMOUNT_PUMP1 + NOW_AMOUNT_TUBE1 AS NOW_AMOUNT_SUM1,
+      NOW_AMOUNT_PUMP2,
+      NOW_AMOUNT_TUBE2,
+      NOW_AMOUNT_PUMP2 + NOW_AMOUNT_TUBE2 AS NOW_AMOUNT_SUM2,
+      CASE WHEN (NOW_BASE_AMOUNT_PUMP + NOW_BASE_AMOUNT_TUBE) = 0 THEN 0 ELSE 100*(NOW_AMOUNT_PUMP2 + NOW_AMOUNT_TUBE2)/(NOW_BASE_AMOUNT_PUMP + NOW_BASE_AMOUNT_TUBE) END AS NOW_AMOUNT_PERCENT2,
+      NEXT_BASE_AMOUNT_PUMP,
+      NEXT_BASE_AMOUNT_TUBE,
+      NEXT_BASE_AMOUNT_PUMP + NEXT_BASE_AMOUNT_TUBE AS NEXT_BASE_AMOUNT_SUM,
+      NEXT_TOT_AMOUNT_PUMP,
+      NEXT_TOT_AMOUNT_TUBE,
+      NEXT_TOT_AMOUNT_PUMP + NEXT_TOT_AMOUNT_TUBE AS NEXT_TOT_AMOUNT_SUM,
+      CASE WHEN (NEXT_BASE_AMOUNT_PUMP + NEXT_BASE_AMOUNT_TUBE) = 0 THEN 0 ELSE 100*(NEXT_TOT_AMOUNT_PUMP + NEXT_TOT_AMOUNT_TUBE)/(NEXT_BASE_AMOUNT_PUMP + NEXT_BASE_AMOUNT_TUBE) END AS NEXT_TOT_AMOUNT_PERCENT,
+      ISNULL((SELECT NOW_AMOUNT_PUMP2 + NOW_AMOUNT_TUBE2 - PDATE_AMOUNT_SUM FROM T_STATIC_AMOUNT_DSTR_MONTH WHERE TO_DATE = #preday# AND DSTR_TYPE = ZZ.DSTR_TYPE),0) AS DIFF_DAY_SUM,
+      ISNULL((SELECT NEXT_TOT_AMOUNT_PUMP + NEXT_TOT_AMOUNT_TUBE - NEXT_AMOUNT_SUM FROM T_STATIC_AMOUNT_DSTR_MONTH WHERE TO_DATE = #preday# AND DSTR_TYPE = ZZ.DSTR_TYPE),0) AS DIFF_MONTH_SUM
+      FROM
+      (SELECT
+      DBO.FN_GET_DEPT_NM(VALUE_2) AS UP_DEPT_NM, VALUE_2 AS UP_DEPT_CD, CODE_ID AS DSTR_TYPE, CODE_KOR,
+      ISNULL((SELECT SUM(KRW_AMOUNT) FROM T_SALES_MRF_SUMRY WHERE COMPANY_CD = 'YONWOO' AND SALES_GUBUN = '목표' AND SALES_YM = #nowyymm# AND ITEM_TYPE='1008253002' AND DSTR_TYPE = A.CODE_ID),0) AS NOW_BASE_AMOUNT_PUMP,
+      ISNULL((SELECT SUM(KRW_AMOUNT) FROM T_SALES_MRF_SUMRY WHERE COMPANY_CD = 'YONWOO' AND SALES_GUBUN = '목표' AND SALES_YM = #nowyymm# AND ITEM_TYPE='1008253001' AND DSTR_TYPE = A.CODE_ID),0) AS NOW_BASE_AMOUNT_TUBE,
+      ISNULL((SELECT SUM(C.WSO_KRW_AMOUNT) FROM  T_SALES_ORDER B, T_SO_WSO_AMOUNT C, (SELECT ITEM_CD, item_type from T_ITEM where ITEM_TYPE ='1008253002') D
+      WHERE
+      DBO.FN_GET_DATE_FORMAT(C.SALES_PDATE, 'YYYYMM') <![CDATA[<]]> #nowyymm#
+      AND B.COMPANY_CD = C.COMPANY_CD
+      AND B.SO_CD = C.SO_CD
+      AND B.SO_SEQ = C.SO_SEQ
+      AND B.DSTR_TYPE = A.CODE_ID
+      AND C.ITEM_CD = D.ITEM_CD),0) AS NOW_AMOUNT_PUMP1,
+      ISNULL((SELECT SUM(C.WSO_KRW_AMOUNT) FROM  T_SALES_ORDER B, T_SO_WSO_AMOUNT C, (SELECT ITEM_CD, item_type from T_ITEM where ITEM_TYPE ='1008253001') D
+      WHERE
+      DBO.FN_GET_DATE_FORMAT(C.SALES_PDATE, 'YYYYMM') <![CDATA[<]]> #nowyymm#
+      AND B.COMPANY_CD = C.COMPANY_CD
+      AND B.SO_CD = C.SO_CD
+      AND B.SO_SEQ = C.SO_SEQ
+      AND B.DSTR_TYPE = A.CODE_ID
+      AND C.ITEM_CD = D.ITEM_CD),0) AS NOW_AMOUNT_TUBE1,
+      ISNULL((SELECT SUM(C.WSO_KRW_AMOUNT) FROM  T_SALES_ORDER B, T_SO_WSO_AMOUNT C, (SELECT ITEM_CD, item_type from T_ITEM where ITEM_TYPE ='1008253002') D
+      WHERE
+      DBO.FN_GET_DATE_FORMAT(C.SALES_PDATE, 'YYYYMM') = #nowyymm#
+      AND B.COMPANY_CD = C.COMPANY_CD
+      AND B.SO_CD = C.SO_CD
+      AND B.SO_SEQ = C.SO_SEQ
+      AND B.DSTR_TYPE = A.CODE_ID
+      AND C.ITEM_CD = D.ITEM_CD),0) AS NOW_AMOUNT_PUMP2,
+      ISNULL((SELECT SUM(C.WSO_KRW_AMOUNT) FROM  T_SALES_ORDER B, T_SO_WSO_AMOUNT C, (SELECT ITEM_CD, item_type from T_ITEM where ITEM_TYPE ='1008253001') D
+      WHERE
+      DBO.FN_GET_DATE_FORMAT(C.SALES_PDATE, 'YYYYMM') = #nowyymm#
+      AND B.COMPANY_CD = C.COMPANY_CD
+      AND B.SO_CD = C.SO_CD
+      AND B.SO_SEQ = C.SO_SEQ
+      AND B.DSTR_TYPE = A.CODE_ID
+      AND C.ITEM_CD = D.ITEM_CD),0) AS NOW_AMOUNT_TUBE2,
+      ISNULL((SELECT SUM(KRW_AMOUNT) FROM T_SALES_MRF_SUMRY WHERE COMPANY_CD = 'YONWOO' AND SALES_GUBUN = '목표' AND SALES_YM = #nextyymm# AND ITEM_TYPE='1008253002' AND DSTR_TYPE = A.CODE_ID),0) AS NEXT_BASE_AMOUNT_PUMP,
+      ISNULL((SELECT SUM(KRW_AMOUNT) FROM T_SALES_MRF_SUMRY WHERE COMPANY_CD = 'YONWOO' AND SALES_GUBUN = '목표' AND SALES_YM = #nextyymm# AND ITEM_TYPE='1008253001' AND DSTR_TYPE = A.CODE_ID),0) AS NEXT_BASE_AMOUNT_TUBE,
+      ISNULL((SELECT SUM(C.WSO_KRW_AMOUNT) FROM  T_SALES_ORDER B, T_SO_WSO_AMOUNT C, (SELECT ITEM_CD, item_type from T_ITEM where ITEM_TYPE ='1008253002') D
+      WHERE
+      DBO.FN_GET_DATE_FORMAT(C.SALES_PDATE, 'YYYYMM') = #nextyymm#
+      AND B.COMPANY_CD = C.COMPANY_CD
+      AND B.SO_CD = C.SO_CD
+      AND B.SO_SEQ = C.SO_SEQ
+      AND B.DSTR_TYPE = A.CODE_ID
+      AND C.ITEM_CD = D.ITEM_CD),0) AS NEXT_TOT_AMOUNT_PUMP,
+      ISNULL((SELECT SUM(C.WSO_KRW_AMOUNT) FROM  T_SALES_ORDER B, T_SO_WSO_AMOUNT C, (SELECT ITEM_CD, item_type from T_ITEM where ITEM_TYPE ='1008253001') D
+      WHERE
+      DBO.FN_GET_DATE_FORMAT(C.SALES_PDATE, 'YYYYMM') = #nextyymm#
+      AND B.COMPANY_CD = C.COMPANY_CD
+      AND B.SO_CD = C.SO_CD
+      AND B.SO_SEQ = C.SO_SEQ
+      AND B.DSTR_TYPE = A.CODE_ID
+      AND C.ITEM_CD = D.ITEM_CD),0) AS NEXT_TOT_AMOUNT_TUBE
+      FROM T_CODE A
+      WHERE A.UP_CODE_ID = 'DSTR_TYPE'
+      ) ZZ
+      ORDER BY CAST(UP_DEPT_CD AS INT)
+    </select>
+
+      <!-- 일일집계 : 유통구조별 /DaliyInfo/daliyDstrList -->
+    <select id="daliyDstrList" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      UP_DEPT_CD,dbo.FN_GET_DEPT_NM(UP_DEPT_CD) AS UP_DEPT_NM,
+      DSTR_TYPE,DSTR_TYPE_NM,CDATE_AMOUNT_TUBE,CDATE_AMOUNT_PUMP,CDATE_AMOUNT_SUM,SALES_GOAL,
+      CASE WHEN SALES_GOAL = 0 THEN 0 ELSE 100*(CDATE_AMOUNT_SUM/SALES_GOAL) END AS SALES_PERCENT
+      FROM (
+      select
+      (SELECT VALUE_2 FROM T_CODE WHERE UP_CODE_ID = 'DSTR_TYPE' AND CODE_ID = A.DSTR_TYPE) AS UP_DEPT_CD,
+      dbo.FN_GET_DEPT_NM(#up_dept_cd#) AS UP_DEPT_NM,
+      DSTR_TYPE,
+      dbo.FN_GET_CODE_NM('KOR', 'DSTR_TYPE',DSTR_TYPE) AS DSTR_TYPE_NM,
+      SUM(CDATE_AMOUNT_TUBE) AS CDATE_AMOUNT_TUBE,
+      SUM(CDATE_AMOUNT_PUMP) AS CDATE_AMOUNT_PUMP,
+      SUM(CDATE_AMOUNT_SUM) AS CDATE_AMOUNT_SUM,
+      ISNULL((SELECT SUM(KRW_AMOUNT) FROM T_SALES_MRF_SUMRY WHERE COMPANY_CD = 'YONWOO' AND SALES_GUBUN = '목표' AND SALES_YM = #YYYYMM# AND DSTR_TYPE =  A.DSTR_TYPE),0) AS  SALES_GOAL
+      FROM T_STATIC_AMOUNT_DSTR A
+
+      <isNotEmpty property="st_date">
+        WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD') <![CDATA[ >= ]]>  #st_date#
+        AND DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD')   <![CDATA[ <= ]]>  #ed_date#
+        <isNotEmpty property="up_dept_cd">
+          <isEqual property="up_dept_cd" compareValue="3">
+            AND DSTR_TYPE IN (SELECT CODE_ID FROM T_CODE WHERE UP_CODE_ID = 'DSTR_TYPE' AND VALUE_1 = '국영')
+          </isEqual>
+          <isEqual property="up_dept_cd" compareValue="4">
+            AND DSTR_TYPE IN (SELECT CODE_ID FROM T_CODE WHERE UP_CODE_ID = 'DSTR_TYPE' AND VALUE_1 = '해영' AND CODE_ID <![CDATA[<>]]> '8004011')
+          </isEqual>
+          <isEqual property="up_dept_cd" compareValue="241">
+            AND DSTR_TYPE = '8004011'
+          </isEqual>
+        </isNotEmpty> 
+        GROUP BY  DSTR_TYPE
+      </isNotEmpty>
+      
+      <isEmpty property="st_date">
+              <isEmpty property="month">
+                WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYY')  =  #year#
+                GROUP BY DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYY'), DSTR_TYPE
+              </isEmpty>
+              <isNotEmpty property="month">
+                <isEmpty property="day">
+                  WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMM')  =  #year# + #month#
+                  GROUP BY DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMM'), DSTR_TYPE
+                </isEmpty>
+                <isNotEmpty property="day">
+                  WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD')  =  #year# + #month# + #day#
+                  GROUP BY DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD'), DSTR_TYPE
+                </isNotEmpty>
+              </isNotEmpty>
+        <isNotEmpty property="up_dept_cd">
+          <isEqual property="up_dept_cd" compareValue="3">
+            AND DSTR_TYPE IN (SELECT CODE_ID FROM T_CODE WHERE UP_CODE_ID = 'DSTR_TYPE' AND VALUE_1 = '국영')
+          </isEqual>
+          <isEqual property="up_dept_cd" compareValue="4">
+            AND DSTR_TYPE IN (SELECT CODE_ID FROM T_CODE WHERE UP_CODE_ID = 'DSTR_TYPE' AND VALUE_1 = '해영' AND CODE_ID <![CDATA[<>]]> '8004011')
+          </isEqual>
+          <isEqual property="up_dept_cd" compareValue="241">
+            AND DSTR_TYPE = '8004011'
+          </isEqual>
+        </isNotEmpty>
+      </isEmpty>
+
+
+      ) B
+      ORDER BY CAST(UP_DEPT_CD AS INT),DSTR_TYPE
+    </select>
+
+
+    
+    
+    
+    <!-- 일일집계 : 파트별 /DaliyInfo/daliyDeptList -->
+    <select id="daliyDeptList" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      UP_DEPT_CD,dbo.FN_GET_DEPT_NM(UP_DEPT_CD) AS UP_DEPT_NM,
+      DEPT_CD,DEPT_NM,CDATE_AMOUNT_TUBE,CDATE_AMOUNT_PUMP,CDATE_AMOUNT_SUM,SALES_GOAL,
+      CASE WHEN SALES_GOAL = 0 THEN 0 ELSE 100*(CDATE_AMOUNT_SUM/SALES_GOAL) END AS SALES_PERCENT
+      FROM (
+      select
+      DBO.FN_GET_UP_DEPT_CD(DEPT_CD) AS UP_DEPT_CD,
+      DEPT_CD,
+      dbo.FN_GET_DEPT_NM(DEPT_CD) AS DEPT_NM,
+      SUM(CDATE_AMOUNT_TUBE) AS CDATE_AMOUNT_TUBE,
+      SUM(CDATE_AMOUNT_PUMP) AS CDATE_AMOUNT_PUMP,
+      SUM(CDATE_AMOUNT_SUM) AS CDATE_AMOUNT_SUM,
+      ISNULL((SELECT SUM(KRW_AMOUNT) FROM T_SALES_MRF_SUMRY WHERE COMPANY_CD = 'YONWOO' AND SALES_GUBUN = '목표' AND SALES_YM = #YYYYMM# AND DEPT_CD =  A.DEPT_CD),0) AS  SALES_GOAL
+      FROM T_STATIC_AMOUNT_DEPT A
+      <isNotEmpty property="st_date">
+        WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD') <![CDATA[ >= ]]>  #st_date#
+        AND DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD')   <![CDATA[ <= ]]>  #ed_date#
+        <isNotEmpty property="up_dept_cd">
+          AND DBO.FN_GET_UP_DEPT_CD(DEPT_CD) = #up_dept_cd#
+        </isNotEmpty>
+        GROUP BY DEPT_CD
+      </isNotEmpty>
+
+      <isEmpty property="st_date">
+          <isEmpty property="month">
+            WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYY')  =  #year#
+            GROUP BY DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYY'), DEPT_CD
+          </isEmpty>
+          <isNotEmpty property="month">
+            <isEmpty property="day">
+              WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMM')  =  #year# + #month#
+              GROUP BY DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMM'), DEPT_CD
+            </isEmpty>
+            <isNotEmpty property="day">
+              WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD')  =  #year# + #month# + #day#
+              GROUP BY DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD'), DEPT_CD
+            </isNotEmpty>
+          </isNotEmpty>
+        <isNotEmpty property="up_dept_cd">
+          AND DBO.FN_GET_UP_DEPT_CD(DEPT_CD) = #up_dept_cd#
+        </isNotEmpty>
+      </isEmpty>
+
+
+      ) B
+      ORDER BY CAST(UP_DEPT_CD AS INT),CAST(DEPT_CD AS INT)
+    </select>
+
+    
+
+
+    <!-- 일일집계 : 담당자별 /DaliyInfo/daliyUserList -->
+    <select id="daliyUserList" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      UP_DEPT_CD,dbo.FN_GET_DEPT_NM(UP_DEPT_CD) AS UP_DEPT_NM,
+      USER_CD,USER_NM,CDATE_AMOUNT_TUBE,CDATE_AMOUNT_PUMP,CDATE_AMOUNT_SUM,SALES_GOAL,
+      CASE WHEN SALES_GOAL = 0 THEN 0 ELSE 100*(CDATE_AMOUNT_SUM/SALES_GOAL) END AS SALES_PERCENT
+      FROM (
+      select
+      DBO.FN_USER_UP_DEPT_CD(USER_CD) AS UP_DEPT_CD,
+      USER_CD,
+      dbo.FN_GET_USER_NM(USER_CD) AS USER_NM,
+      SUM(CDATE_AMOUNT_TUBE) AS CDATE_AMOUNT_TUBE,
+      SUM(CDATE_AMOUNT_PUMP) AS CDATE_AMOUNT_PUMP,
+      SUM(CDATE_AMOUNT_SUM) AS CDATE_AMOUNT_SUM,
+      ISNULL((SELECT SUM(KRW_AMOUNT) FROM T_SALES_MRF_SUMRY WHERE COMPANY_CD = 'YONWOO' AND SALES_GUBUN = '목표' AND SALES_YM = #YYYYMM# AND USER_CD =  A.USER_CD),0) AS  SALES_GOAL
+      FROM T_STATIC_AMOUNT_USER A
+      <isNotEmpty property="st_date">
+        WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD') <![CDATA[ >= ]]>  #st_date#
+        AND DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD')   <![CDATA[ <= ]]>  #ed_date#
+        <isNotEmpty property="up_dept_cd">
+          AND DBO.FN_USER_UP_DEPT_CD(USER_CD) = #up_dept_cd#
+        </isNotEmpty>
+        GROUP BY USER_CD
+      </isNotEmpty>
+
+      <isEmpty property="st_date">    
+      
+              <isEmpty property="month">
+                WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYY')  =  #year#
+                GROUP BY DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYY'), USER_CD
+              </isEmpty>
+              <isNotEmpty property="month">
+                <isEmpty property="day">
+                  WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMM')  =  #year# + #month#
+                  GROUP BY DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMM'), USER_CD
+                </isEmpty>
+                <isNotEmpty property="day">
+                  WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD')  =  #year# + #month# + #day#
+                  GROUP BY DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD'), USER_CD
+                </isNotEmpty>
+              </isNotEmpty>
+        <isNotEmpty property="up_dept_cd">
+          AND DBO.FN_USER_UP_DEPT_CD(USER_CD) = #up_dept_cd#
+        </isNotEmpty>
+      </isEmpty>
+
+
+      ) B
+      ORDER BY CAST(UP_DEPT_CD AS INT),USER_CD
+    </select>
+
+    <!-- 월별집계 : 유통구조별 /DaliyInfo/daliyDstrList_Year -->
+    <select id="daliyDstrList_Year" parameterClass="Hashtable" resultClass="Hashtable">
+
+      select
+
+      DSTR_TYPE,
+      dbo.FN_GET_CODE_NM('KOR', 'DSTR_TYPE',DSTR_TYPE) AS DSTR_TYPE_NM,
+      SUM(CDATE_AMOUNT_TUBE) AS CDATE_AMOUNT_TUBE,
+      SUM(CDATE_AMOUNT_PUMP) AS CDATE_AMOUNT_PUMP,
+      SUM(CDATE_AMOUNT_SUM) AS CDATE_AMOUNT_SUM
+      FROM T_STATIC_AMOUNT_DSTR
+
+      <isNotEmpty property="st_date">
+        WHERE ORD_CDATE <![CDATA[ >= ]]>  #st_date#
+        AND ORD_CDATE, 'YYYYMMDD')   <![CDATA[ <= ]]>  #ed_date#
+        GROUP BY  DSTR_TYPE
+      </isNotEmpty>
+
+      <isEmpty property="st_date">
+        <isEmpty property="month">
+          WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYY')  =  #year#
+          GROUP BY DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYY'), DSTR_TYPE
+        </isEmpty>
+        <isNotEmpty property="month">
+          <isEmpty property="day">
+            WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMM')  =  #year# + #month#
+            GROUP BY DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMM'), DSTR_TYPE
+          </isEmpty>
+          <isNotEmpty property="day">
+            WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD')  =  #year# + #month# + #day#
+            GROUP BY DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD'), DSTR_TYPE
+          </isNotEmpty>
+        </isNotEmpty>
+      </isEmpty>
+
+      ORDER BY  DSTR_TYPE
+
+    </select>
+
+
+
+
+
+    <!-- 월별집계 : 파트별 /DaliyInfo/daliyDeptList_Year -->
+    <select id="daliyDeptList_Year" parameterClass="Hashtable" resultClass="Hashtable">
+
+      select
+
+      DEPT_CD,
+      dbo.FN_GET_DEPT_NM(DEPT_CD) AS DEPT_NM,
+      SUM(CDATE_AMOUNT_TUBE) AS CDATE_AMOUNT_TUBE,
+      SUM(CDATE_AMOUNT_PUMP) AS CDATE_AMOUNT_PUMP,
+      SUM(CDATE_AMOUNT_SUM) AS CDATE_AMOUNT_SUM
+      FROM T_STATIC_AMOUNT_DEPT
+
+
+      <isNotEmpty property="st_date">
+        WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD') <![CDATA[ >= ]]>  #st_date#
+        AND DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD')   <![CDATA[ <= ]]>  #ed_date#
+        GROUP BY DEPT_CD
+      </isNotEmpty>
+
+      <isEmpty property="st_date">
+        <isEmpty property="month">
+          WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYY')  =  #year#
+          GROUP BY DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYY'), DEPT_CD
+        </isEmpty>
+        <isNotEmpty property="month">
+          <isEmpty property="day">
+            WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMM')  =  #year# + #month#
+            GROUP BY DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMM'), DEPT_CD
+          </isEmpty>
+          <isNotEmpty property="day">
+            WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD')  =  #year# + #month# + #day#
+            GROUP BY DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD'), DEPT_CD
+          </isNotEmpty>
+        </isNotEmpty>
+      </isEmpty>
+
+      ORDER BY  DEPT_CD
+
+    </select>
+
+
+
+
+    <!-- 월별집계 : 담당자별 /DaliyInfo/daliyUserList_Year -->
+    <select id="daliyUserList_Year" parameterClass="Hashtable" resultClass="Hashtable">
+
+      select
+
+      USER_CD,
+      dbo.FN_GET_USER_NM(USER_CD) AS USER_NM,
+      SUM(CDATE_AMOUNT_TUBE) AS CDATE_AMOUNT_TUBE,
+      SUM(CDATE_AMOUNT_PUMP) AS CDATE_AMOUNT_PUMP,
+      SUM(CDATE_AMOUNT_SUM) AS CDATE_AMOUNT_SUM
+      FROM T_STATIC_AMOUNT_USER
+
+
+      <isNotEmpty property="st_date">
+        WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD') <![CDATA[ >= ]]>  #st_date#
+        AND DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD')   <![CDATA[ <= ]]>  #ed_date#
+        GROUP BY USER_CD
+      </isNotEmpty>
+
+      <isEmpty property="st_date">
+
+        <isEmpty property="month">
+          WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYY')  =  #year#
+          GROUP BY DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYY'), USER_CD
+        </isEmpty>
+        <isNotEmpty property="month">
+          <isEmpty property="day">
+            WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMM')  =  #year# + #month#
+            GROUP BY DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMM'), USER_CD
+          </isEmpty>
+          <isNotEmpty property="day">
+            WHERE DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD')  =  #year# + #month# + #day#
+            GROUP BY DBO.FN_GET_DATE_FORMAT(ORD_CDATE, 'YYYYMMDD'), USER_CD
+          </isNotEmpty>
+        </isNotEmpty>
+      </isEmpty>
+
+      ORDER BY  USER_CD
+
+    </select>
+
+
+
+    <!-- 일일실적 업데이트1  : 지정일 유통구조 삭제 -->
+    <delete id="amountDstrDelete" parameterClass="Hashtable">
+      DELETE T_STATIC_AMOUNT_DSTR where ORD_CDATE = #yyyymmdd#
+    </delete>
+
+    <!-- 일일실적 업데이트1  : 지정일 부서 삭제 -->
+    <delete id="amountDeptDelete" parameterClass="Hashtable">
+      DELETE T_STATIC_AMOUNT_DEPT where ORD_CDATE = #yyyymmdd#
+    </delete>
+
+    <!-- 일일실적 업데이트1  : 지정일 사용자 삭제 -->
+    <delete id="amountUserDelete" parameterClass="Hashtable">
+      DELETE T_STATIC_AMOUNT_USER where ORD_CDATE = #yyyymmdd#
+    </delete>
+
+    <!-- 일일실적 업데이트2  : 지정일 유통구조 업데이트 -->
+    <insert id="amountDstrUpdate" parameterClass="Hashtable">
+
+      INSERT INTO T_STATIC_AMOUNT_DSTR
+      SELECT T1.ORD_CDATE, T1.DSTR_TYPE,
+      ISNULL(SUM(T1.KRW_AMOUNT_TUBE),0) as CDATE_AMOUNT_TUBE,
+      ISNULL(SUM(T1.KRW_AMOUNT_PUMP),0) as CDATE_AMOUNT_PUMP,
+      ISNULL(SUM(T1.KRW_AMOUNT_TUBE),0) + ISNULL(SUM(T1.KRW_AMOUNT_PUMP),0) AS CDATE_AMOUNT_SUM
+      FROM(
+      SELECT A.ORD_CDATE, A.DSTR_TYPE,  C.ITEM_TYPE
+      ,(case ITEM_TYPE when '1008253001' then SUM(B.AMOUNT) end) as KRW_AMOUNT_TUBE
+      ,(case ITEM_TYPE when '1008253002' then SUM(B.AMOUNT) end) as KRW_AMOUNT_PUMP
+      FROM  V_IF_SALES_ORDER A INNER JOIN V_IF_SO_CNTR_AMOUNT B
+      ON A.COMPANY_CD = B.COMPANY_CD
+      AND A.SO_CD = B.SO_CD
+      AND A.SO_SEQ = B.SO_SEQ
+      INNER JOIN T_ITEM C
+      ON B.ITEM_CD = C.ITEM_CD
+      WHERE DBO.FN_GET_DATE_FORMAT(A.ORD_CDATE, 'YYYYMMDD')  =  #yyyymmdd#
+      GROUP BY A.ORD_CDATE, A.DSTR_TYPE, C.ITEM_TYPE
+
+      ) T1
+      GROUP BY ORD_CDATE, DSTR_TYPE
+      order  by ORD_CDATE
+    </insert>
+
+
+    <!-- 일일실적 업데이트2  : 지정일 부서 업데이트 -->
+    <insert id="amountDeptUpdate" parameterClass="Hashtable">
+
+      INSERT INTO T_STATIC_AMOUNT_DEPT
+      SELECT T1.ORD_CDATE, T1.DEPT_CD,
+      ISNULL(SUM(T1.KRW_AMOUNT_TUBE),0) as CDATE_AMOUNT_TUBE,
+      ISNULL(SUM(T1.KRW_AMOUNT_PUMP),0) as CDATE_AMOUNT_PUMP,
+      ISNULL(SUM(T1.KRW_AMOUNT_TUBE),0) + ISNULL(SUM(T1.KRW_AMOUNT_PUMP),0) AS CDATE_AMOUNT_SUM
+      FROM(
+      SELECT A.ORD_CDATE, A.DEPT_CD,  C.ITEM_TYPE
+      ,(case ITEM_TYPE when '1008253001' then SUM(B.AMOUNT) end) as KRW_AMOUNT_TUBE
+      ,(case ITEM_TYPE when '1008253002' then SUM(B.AMOUNT) end) as KRW_AMOUNT_PUMP
+      FROM  V_IF_SALES_ORDER A INNER JOIN V_IF_SO_CNTR_AMOUNT B
+      ON A.COMPANY_CD = B.COMPANY_CD
+      AND A.SO_CD = B.SO_CD
+      AND A.SO_SEQ = B.SO_SEQ
+      INNER JOIN T_ITEM C
+      ON B.ITEM_CD = C.ITEM_CD
+      WHERE DBO.FN_GET_DATE_FORMAT(A.ORD_CDATE, 'YYYYMMDD')  =  #yyyymmdd#
+      GROUP BY A.ORD_CDATE, A.DEPT_CD, C.ITEM_TYPE
+
+      ) T1
+      GROUP BY ORD_CDATE, DEPT_CD
+    </insert>
+
+
+
+    <!-- 일일실적 업데이트2  : 지정일 사용자 업데이트 -->
+    <insert id="amountUserUpdate" parameterClass="Hashtable">
+
+      INSERT INTO T_STATIC_AMOUNT_USER
+      SELECT T1.ORD_CDATE,
+      (SELECT USER_CD FROM T_USER WHERE USER_SEQ = T1.USER_SEQ) AS USER_CD,
+      ISNULL(SUM(T1.KRW_AMOUNT_TUBE),0) as CDATE_AMOUNT_TUBE,
+      ISNULL(SUM(T1.KRW_AMOUNT_PUMP),0) as CDATE_AMOUNT_PUMP,
+      ISNULL(SUM(T1.KRW_AMOUNT_TUBE),0) + ISNULL(SUM(T1.KRW_AMOUNT_PUMP),0) AS CDATE_AMOUNT_SUM,
+      T1.USER_SEQ
+      FROM(
+      SELECT A.ORD_CDATE, A.USER_SEQ,  C.ITEM_TYPE
+      ,(case ITEM_TYPE when '1008253001' then SUM(B.AMOUNT) end) as KRW_AMOUNT_TUBE
+      ,(case ITEM_TYPE when '1008253002' then SUM(B.AMOUNT) end) as KRW_AMOUNT_PUMP
+      FROM  V_IF_SALES_ORDER A INNER JOIN V_IF_SO_CNTR_AMOUNT B
+      ON A.COMPANY_CD = B.COMPANY_CD
+      AND A.SO_CD = B.SO_CD
+      AND A.SO_SEQ = B.SO_SEQ
+      INNER JOIN T_ITEM C
+      ON B.ITEM_CD = C.ITEM_CD
+      WHERE DBO.FN_GET_DATE_FORMAT(A.ORD_CDATE, 'YYYYMMDD')  =  #yyyymmdd#
+      GROUP BY A.ORD_CDATE, A.USER_SEQ, C.ITEM_TYPE
+      --ORDER BY A.ORD_CDATE DESC
+      ) T1
+      GROUP BY ORD_CDATE, USER_SEQ
+    </insert>
+    
+    
+
+
+  </statements>
+
+
+
+</sqlMap>

@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+
+
+
+    <!-- 회원 로그인체크 -->
+    <select id="loginCheck"  parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      U.COMPANY_CD
+      , (SELECT COMP_NM FROM T_COMPANY WHERE COMPANY_CD = U.COMPANY_CD) AS COMP_NM
+      , (SELECT COMP_ENG_NM FROM T_COMPANY WHERE COMPANY_CD = U.COMPANY_CD) AS COMP_ENG_NM
+      ,U.USER_CD
+      ,U.USER_NM
+      ,U.USER_ENG_NM
+      ,ISNULL(MAX(U.SA_YN),'N') AS SA_YN
+      ,ISNULL(U.DEPT_CD,'') AS DEPT_CD
+      ,ISNULL(D.UP_DEPT_CD,'') AS UP_DEPT_CD
+      ,CONVERT(VARCHAR,ISNULL(D.DEPT_LEVEL,0)) AS DEPT_LEVEL
+      ,U.USER_TITLE
+      ,dbo.FN_GET_CODE_NM(#language#, 'USER_TITLE',U.USER_TITLE) AS USER_TITLE_NM
+      ,U.USER_POSIT
+      ,dbo.FN_GET_CODE_NM(#language#, 'USER_POSIT',U.USER_POSIT) AS USER_POSIT_NM
+      ,ISNULL(D.DEPT_NM,'') AS DEPT_NM
+      ,D.DEPT_ENG_NM
+      ,AUTH.AUTH_ID
+      ,ISNULL(U.MULTI_LANG,'') AS MULTI_LANG
+      ,U.USER_IMG
+      ,CONVERT(VARCHAR(20),LAST_LOGIN,120) AS LAST_LOGIN
+      ,U.PASSWD
+      ,U.M_PHONE
+      ,ISNULL(COMPANY_YN,'N') AS COMPANY_YN
+      ,ISNULL(D.SADEPT_YN,'N') AS SADEPT_YN
+      ,ISNULL(U.DSTR_CHN,'') AS DSTR_CHN
+      ,ISNULL(dbo.FN_GET_CODE_NM(#language#, 'DSTR_TYPE',ISNULL(U.DSTR_CHN,'')),'') AS DSTR_CHN_NM
+      ,ISNULL(AUTH.AUTH_DIV,'N') AS AUTH_DIV
+      ,ISNULL(AUTH.AUTH_TEAM,'N') AS AUTH_TEAM
+      ,ISNULL(AUTH.AUTH_PERS_1,'N') AS AUTH_PERS_1
+      ,ISNULL(AUTH.AUTH_PERS_2,'N') AS AUTH_PERS_2
+      ,ISNULL(MAX(U.THEME),'NOTHING') AS THEME
+      FROM
+      T_USER AS U
+      LEFT OUTER JOIN
+      T_DEPARTMENT AS D
+      ON
+      U.COMPANY_CD = D.COMPANY_CD AND
+      U.DEPT_CD = D.DEPT_CD
+      LEFT OUTER JOIN
+      T_AUTH_USER AS AUSR
+      ON
+      U.USER_CD = AUSR.USER_CD
+      LEFT OUTER JOIN
+      T_AUTHORITY AS AUTH
+      ON
+      AUTH.AUTH_ID = AUSR.AUTH_ID
+      WHERE 1=1
+
+      <isNotEmpty property="user_cd">
+        AND U.USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="pass_wd">
+        AND U.PASSWD = #pass_wd#
+      </isNotEmpty>
+      <isNotEmpty property="use_yn">
+        AND U.USE_YN = #use_yn#
+      </isNotEmpty>
+
+      GROUP BY
+      U.COMPANY_CD
+      ,U.USER_CD
+      ,U.USER_NM
+      ,D.DEPT_LEVEL
+      ,U.USER_ENG_NM 
+      ,U.DEPT_CD
+      ,D.UP_DEPT_CD
+      ,U.USER_TITLE
+      ,U.USER_POSIT
+      ,D.DEPT_NM
+      ,D.DEPT_ENG_NM
+      ,AUTH.AUTH_ID
+      ,U.MULTI_LANG
+      ,U.USER_IMG
+      ,U.LAST_LOGIN
+      ,U.PASSWD
+      ,U.M_PHONE
+      ,U.MGR_YN
+      ,U.COMPANY_YN
+      ,U.DSTR_CHN
+      ,D.SADEPT_YN
+      ,AUTH.AUTH_DIV
+      ,AUTH.AUTH_TEAM
+      ,AUTH.AUTH_PERS_1
+      ,AUTH.AUTH_PERS_2
+
+    </select>
+
+
+
+
+    <update id="updateLastLogin" parameterClass="Hashtable">
+      UPDATE T_USER
+      SET  LAST_LOGIN = GETDATE()
+      WHERE  COMPANY_CD = #company_cd# 
+      AND USER_CD = #user_cd#
+    </update>
+
+    <update id="updateTheme" parameterClass="Hashtable">
+      UPDATE T_USER
+      SET  THEME = #theme#
+      WHERE  COMPANY_CD = #company_cd#
+      AND USER_CD = #user_cd#
+    </update>
+
+
+
+
+
+
+    <!-- 회원 정보 -->
+    <select id="userInfo"  parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      U.COMPANY_CD 
+      , (SELECT COMP_NM FROM T_COMPANY WHERE COMPANY_CD = U.COMPANY_CD) AS COMP_NM 
+      , (SELECT COMP_ENG_NM FROM T_COMPANY WHERE COMPANY_CD = U.COMPANY_CD) AS COMP_ENG_NM 
+      ,U.USER_CD  
+      ,U.USER_NM  
+      ,U.USER_ENG_NM 
+      ,U.DEPT_CD 
+      ,D.DEPT_NM    
+      ,D.UP_DEPT_CD 
+      ,CONVERT(VARCHAR,D.DEPT_LEVEL) AS DEPT_LEVEL 
+      ,U.USER_TITLE 
+      ,U.USER_POSIT 
+      ,AUTH.AUTH_ID 
+      ,U.MULTI_LANG 
+      ,U.USER_IMG   
+      ,CONVERT(VARCHAR(20),LAST_LOGIN,120) AS LAST_LOGIN 
+      ,U.M_PHONE   
+      ,ISNULL(COMPANY_YN,'N') AS COMPANY_YN  
+      ,U.DSTR_CHN
+      ,U.PASSWD
+      FROM
+      T_USER AS U
+      LEFT OUTER JOIN
+      T_DEPARTMENT AS D
+      ON
+      U.COMPANY_CD = D.COMPANY_CD AND
+      U.DEPT_CD = D.DEPT_CD
+      LEFT OUTER JOIN
+      T_AUTH_USER AS AUSR
+      ON
+      U.USER_CD = AUSR.USER_CD
+      LEFT OUTER JOIN
+      T_AUTHORITY AS AUTH
+      ON
+      AUTH.AUTH_ID = AUSR.AUTH_ID
+      WHERE 1=1
+      AND U.USER_CD = #user_cd#
+      AND U.USE_YN = 'Y'
+    </select>
+
+
+    <!-- 회원 패스워드 변경 -->
+    <update id="changeUserPasswd" parameterClass="Hashtable">
+      UPDATE T_USER
+      SET  PASSWD = #pass_wd#
+      WHERE USER_CD = #user_cd#
+    </update>
+
+
+  </statements>
+
+
+
+</sqlMap>

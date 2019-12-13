@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+
+
+
+
+
+    <!--  User관리 :  user 현황 리스트/상세 -->
+    <select id="userList" parameterClass="Hashtable"	resultClass="Hashtable">
+
+      SELECT
+      USR.COMPANY_CD
+      ,(SELECT COMP_NM FROM T_COMPANY WHERE COMPANY_CD = USR.COMPANY_CD) AS COMPANY_NM
+      ,USR.USER_CD
+      ,USR.USER_NM
+      ,USR.USER_ENG_NM
+      ,USR.DEPT_CD
+      ,DEP.DEPT_NM
+      ,USR.USER_TITLE
+      ,(SELECT CODE_NM FROM  T_CODE CODE WHERE CODE.UP_CODE_ID = 'USER_TITLE' AND CODE.CODE_ID = USR.USER_TITLE) AS USER_TITLE_NM
+      ,USR.USER_POSIT
+      ,(SELECT CODE_NM FROM  T_CODE CODE WHERE CODE.UP_CODE_ID = 'USER_POSIT' AND CODE.CODE_ID = USR.USER_POSIT) AS USER_POSIT_NM
+      ,USR.O_PHONE
+      ,USR.M_PHONE
+      ,USR.EMAIL
+      ,USR.USER_WORK
+      ,USR.MULTI_LANG
+      ,USR.USER_IMG
+      ,ISNULL(USR.USE_YN,'N') AS USE_YN
+      ,USR.REG_DT
+      ,USR.REG_USR
+      ,USR.MOD_DT
+      ,USR.MOD_USR
+      ,ISNULL(USR.MGR_YN,'N') AS MGR_YN
+      ,ISNULL(USR.MBO_YN,'N') AS MBO_YN
+      ,ISNULL(USR.SA_YN,'N') AS SA_YN
+      ,USR.DSTR_CHN
+      FROM T_USER USR
+      LEFT JOIN
+      T_DEPARTMENT DEP ON USR.DEPT_CD = DEP.DEPT_CD
+
+      WHERE 1=1
+      <isNotEmpty property="selPart3">
+        AND USR.DEPT_CD = #selPart3#
+      </isNotEmpty>
+      <isEmpty property="selPart3">
+        <isNotEmpty property="selPart2">
+          AND (DEP.UP_DEPT_CD = #selPart2#
+          OR USR.DEPT_CD = #selPart2#)
+        </isNotEmpty>
+        <isEmpty property="selPart2">
+          <isNotEmpty property="selPart1">
+            AND (DEP.UP_DEPT_CD in (SELECT DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = #selPart1#)
+            OR USR.DEPT_CD = #selPart1#)
+          </isNotEmpty>
+          <isEmpty property="selCompany">
+            AND USR.COMPANY_CD = #company_cd#
+          </isEmpty>
+        </isEmpty>
+      </isEmpty>   
+      <isNotEmpty property="searchUseYn">
+        AND USR.USE_YN =  #searchUseYn#
+      </isNotEmpty>
+      <isNotEmpty property="searchUserNm">
+        AND USR.USER_NM LIKE '%' + #searchUserNm# + '%'
+      </isNotEmpty>
+      <isNotEmpty property="userCd">
+        AND USR.USER_CD =  #userCd#
+      </isNotEmpty> 
+
+      ORDER BY USR.USER_NM
+    </select>
+
+
+
+
+    <!--  User관리 :  user 등록 -->
+    <insert id="userReg" parameterClass="Hashtable"> 
+      INSERT INTO T_USER
+      (
+      COMPANY_CD
+      ,USER_CD
+      ,USER_NM
+      ,USER_ENG_NM
+      ,DEPT_CD
+      ,USER_TITLE
+      ,USER_POSIT
+      ,O_PHONE
+      ,M_PHONE
+      ,EMAIL
+      ,USER_WORK
+      ,MULTI_LANG
+
+      ,PASSWD
+      ,USE_YN
+      ,REG_DT
+      ,REG_USR
+      ,MOD_DT
+      ,MOD_USR
+      ,MGR_YN
+      ,MBO_YN
+      ,SA_YN
+      ,DSTR_CHN
+      )
+      VALUES
+      (
+      #companyCd#
+      , #userCd#
+      , #userNm#
+      , #userEngNm#
+      , #deptCd#
+      , #userTitle#
+      , #userPosit#
+      , #qPhone#
+      , #mPhone#
+      , #email#
+      , #userWork#
+      , #multiLang#
+
+      , #passwd#
+      , #useYn#
+      , GETDATE()
+      , #regUsrCd#
+      , GETDATE()
+      , #regUsrCd#
+      , #mgr_Yn#
+      , #mbo_Yn#
+      , #sa_Yn#
+      , #dstrChn#
+      ) 
+    </insert>
+
+    <!--  User관리 :  user 변경 -->
+    <update id="userModify" parameterClass="Hashtable"> 
+      UPDATE T_USER SET
+      USER_CD      = #userCd#
+      ,USER_NM     = #userNm#
+      ,USER_ENG_NM = #userEngNm#
+      ,DEPT_CD     = #deptCd#
+      ,USER_TITLE  = #userTitle#
+      ,USER_POSIT  = #userPosit#
+      ,O_PHONE     = #qPhone#
+      ,M_PHONE     = #mPhone#
+      ,EMAIL       = #email#
+      ,USER_WORK   = #userWork#
+      ,MULTI_LANG  = #multiLang# 
+      ,USE_YN      = #useYn#
+      ,MOD_DT      = GETDATE()
+      ,MOD_USR     = #regUsrCd#
+      ,MGR_YN		 = #mgr_Yn#
+      ,MBO_YN		 = #mbo_Yn#
+      ,SA_YN		 = #sa_Yn#
+      ,DSTR_CHN	 = #dstrChn#
+      WHERE COMPANY_CD = #companyCd#
+      AND USER_CD = #preUserCd#
+    </update>
+
+
+
+
+
+  </statements>
+
+
+
+</sqlMap>

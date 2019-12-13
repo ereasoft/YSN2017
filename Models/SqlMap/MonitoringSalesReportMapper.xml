@@ -1,0 +1,1510 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+<!-- 모니터링 -->
+  <statements>
+
+    <!-- 매출분석 : MBO Analysis    -->
+    <select id="salesReport1List" parameterClass="Hashtable" resultClass="Hashtable">
+
+      <isEqual property="sales_ym_type" compareValue="당월">
+        SELECT
+        (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '목표'
+        AND SALES_YM = A.YYYYMM
+
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+
+        ) AS REPORT1_LEFT_VALUE1
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = #sales_base#
+        AND SALES_YM = A.YYYYMM
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+
+        ) AS REPORT1_LEFT_VALUE2
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '세금계산서'
+        AND SALES_YM = A.PRE_YYYYMM
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT1_LEFT_VALUE3
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+ 
+        <isEqual property="sales_base" compareValue="거래명세표">
+          AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미출고')
+        </isEqual>
+        <isEqual property="sales_base" compareValue="세금계산서">
+          AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미청구')
+        </isEqual>
+        AND SALES_YM = A.YYYYMM
+        AND BASE_YM = A.YYYYPRE_MM
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT1_LEFT_VALUE4
+        FROM
+        (
+        SELECT
+        #yyyynext_mm# AS YYYYNEXT_MM
+        , #yyyymm# AS YYYYMM
+        , #yyyypre_mm# AS YYYYPRE_MM
+        , #pre_yyyynext_mm# AS PRE_YYYYNEXT_MM
+        , #pre_yyyymm# AS PRE_YYYYMM
+        , #pre_yyyypre_mm# AS PRE_YYYYPRE_MM
+        , #yyyy01# AS YYYY01
+        , #yyyy12# AS YYYY12
+        , #pre_yyyy01# AS PRE_YYYY01
+        , #pre_yyyy12# AS PRE_YYYY12
+        ) A
+      </isEqual>
+
+
+      <isEqual property="sales_ym_type" compareValue="누계">
+        SELECT
+        (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '목표'
+        AND SALES_YM BETWEEN A.YYYY01 AND A.YYYYMM
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT1_LEFT_VALUE1
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '세금계산서'
+        AND SALES_YM BETWEEN A.YYYY01 AND A.YYYYPRE_MM
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        )+(SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = #sales_base#
+        AND SALES_YM = A.YYYYMM
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT1_LEFT_VALUE2
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '세금계산서'
+        AND SALES_YM BETWEEN A.PRE_YYYY01 AND A.PRE_YYYYMM
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT1_LEFT_VALUE3
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '세금계산서'
+        AND SALES_YM BETWEEN A.YYYY01 AND A.YYYYPRE_MM
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        )+(SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        <isEqual property="sales_base" compareValue="거래명세표">
+          AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미출고')
+        </isEqual>
+        <isEqual property="sales_base" compareValue="세금계산서">
+          AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미청구')
+        </isEqual>
+
+        AND SALES_YM = A.YYYYMM
+        AND BASE_YM = A.YYYYPRE_MM
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT1_LEFT_VALUE4
+        FROM
+        (
+        SELECT
+        #yyyynext_mm# AS YYYYNEXT_MM
+        , #yyyymm# AS YYYYMM
+        , #yyyypre_mm# AS YYYYPRE_MM
+        , #pre_yyyynext_mm# AS PRE_YYYYNEXT_MM
+        , #pre_yyyymm# AS PRE_YYYYMM
+        , #pre_yyyypre_mm# AS PRE_YYYYPRE_MM
+        , #yyyy01# AS YYYY01
+        , #yyyy12# AS YYYY12
+        , #pre_yyyy01# AS PRE_YYYY01
+        , #pre_yyyy12# AS PRE_YYYY12
+        ) A
+      </isEqual>
+      
+      <isNotEqual property="sales_ym_type" compareValue="당월">
+        <isNotEqual property="sales_ym_type" compareValue="누계">
+          <isNotEqual property="sales_ym_type" compareValue="년간">
+      
+        SELECT
+        (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '목표'
+        AND SALES_YM BETWEEN A.YYYY01 AND
+        <isEqual property="sales_ym_type" compareValue="M1">CONVERT(NVARCHAR, CONVERT(NUMERIC, A.YYYYMM)+1)</isEqual>
+        <isEqual property="sales_ym_type" compareValue="M2">CONVERT(NVARCHAR, CONVERT(NUMERIC, A.YYYYMM)+2)</isEqual>
+        <isEqual property="sales_ym_type" compareValue="M3">CONVERT(NVARCHAR, CONVERT(NUMERIC, A.YYYYMM)+3)</isEqual>
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT1_LEFT_VALUE1
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '세금계산서'
+        AND SALES_YM BETWEEN A.YYYY01 AND A.YYYYPRE_MM
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        )+(SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = #sales_base#
+        AND SALES_YM = A.YYYYMM
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        )+(SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        <isEqual property="sales_base" compareValue="거래명세표">
+          AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미출고')
+        </isEqual>
+        <isEqual property="sales_base" compareValue="세금계산서">
+          AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미청구')
+        </isEqual>
+        AND SALES_YM BETWEEN CONVERT(NVARCHAR, CONVERT(NUMERIC, A.YYYYMM)+1) AND
+        <isEqual property="sales_ym_type" compareValue="M1">CONVERT(NVARCHAR, CONVERT(NUMERIC, A.YYYYMM)+1)</isEqual>
+        <isEqual property="sales_ym_type" compareValue="M2">CONVERT(NVARCHAR, CONVERT(NUMERIC, A.YYYYMM)+2)</isEqual>
+        <isEqual property="sales_ym_type" compareValue="M3">CONVERT(NVARCHAR, CONVERT(NUMERIC, A.YYYYMM)+3)</isEqual>        
+        AND BASE_YM = A.YYYYMM
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT1_LEFT_VALUE2
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = #sales_base#
+        AND SALES_YM BETWEEN A.PRE_YYYY01 AND
+        <isEqual property="sales_ym_type" compareValue="M1">CONVERT(NVARCHAR, CONVERT(NUMERIC, A.PRE_YYYYMM)+1)</isEqual>
+        <isEqual property="sales_ym_type" compareValue="M2">CONVERT(NVARCHAR, CONVERT(NUMERIC, A.PRE_YYYYMM)+2)</isEqual>
+        <isEqual property="sales_ym_type" compareValue="M3">CONVERT(NVARCHAR, CONVERT(NUMERIC, A.PRE_YYYYMM)+3)</isEqual>            
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT1_LEFT_VALUE3
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '세금계산서'
+        AND SALES_YM BETWEEN A.YYYY01 AND A.YYYYPRE_MM
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        )+(SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        <isEqual property="sales_base" compareValue="거래명세표">
+          AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미출고')
+        </isEqual>
+        <isEqual property="sales_base" compareValue="세금계산서">
+          AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미청구')
+        </isEqual>
+        AND SALES_YM BETWEEN A.YYYYMM AND
+        <isEqual property="sales_ym_type" compareValue="M1">CONVERT(NVARCHAR, CONVERT(NUMERIC, A.YYYYMM)+1)</isEqual>
+        <isEqual property="sales_ym_type" compareValue="M2">CONVERT(NVARCHAR, CONVERT(NUMERIC, A.YYYYMM)+2)</isEqual>
+        <isEqual property="sales_ym_type" compareValue="M3">CONVERT(NVARCHAR, CONVERT(NUMERIC, A.YYYYMM)+3)</isEqual>      
+        AND BASE_YM = A.YYYYPRE_MM
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT1_LEFT_VALUE4
+        FROM
+        (
+        SELECT
+        #yyyynext_mm# AS YYYYNEXT_MM
+        , #yyyymm# AS YYYYMM
+        , #yyyypre_mm# AS YYYYPRE_MM
+        , #pre_yyyynext_mm# AS PRE_YYYYNEXT_MM
+        , #pre_yyyymm# AS PRE_YYYYMM
+        , #pre_yyyypre_mm# AS PRE_YYYYPRE_MM
+        , #yyyy01# AS YYYY01
+        , #yyyy12# AS YYYY12
+        , #pre_yyyy01# AS PRE_YYYY01
+        , #pre_yyyy12# AS PRE_YYYY12
+        ) A
+          
+    
+          </isNotEqual>
+        </isNotEqual>
+      </isNotEqual>
+
+
+      <isEqual property="sales_ym_type" compareValue="년간">
+        SELECT
+        (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '목표'
+        AND SALES_YM BETWEEN A.YYYY01 AND A.YYYY12
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT1_LEFT_VALUE1
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '세금계산서'
+        AND SALES_YM BETWEEN A.YYYY01 AND A.YYYYPRE_MM
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        )+(SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = #sales_base#
+        AND SALES_YM = A.YYYYMM
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        )+(SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        <isEqual property="sales_base" compareValue="거래명세표">
+          AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미출고')
+        </isEqual>
+        <isEqual property="sales_base" compareValue="세금계산서">
+          AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미청구')
+        </isEqual>
+        AND SALES_YM BETWEEN A.YYYYNEXT_MM AND A.YYYY12
+        AND BASE_YM = A.YYYYMM
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT1_LEFT_VALUE2
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = #sales_base#
+        AND SALES_YM BETWEEN A.PRE_YYYY01 AND A.PRE_YYYY12
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT1_LEFT_VALUE3
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '세금계산서'
+        AND SALES_YM BETWEEN A.YYYY01 AND A.YYYYPRE_MM
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        )+(SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        <isEqual property="sales_base" compareValue="거래명세표">
+          AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미출고')
+        </isEqual>
+        <isEqual property="sales_base" compareValue="세금계산서">
+          AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미청구')
+        </isEqual>
+        AND SALES_YM BETWEEN A.YYYYMM AND A.YYYY12
+        AND BASE_YM = A.YYYYPRE_MM
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT1_LEFT_VALUE4
+        FROM
+        (
+        SELECT
+        #yyyynext_mm# AS YYYYNEXT_MM
+        , #yyyymm# AS YYYYMM
+        , #yyyypre_mm# AS YYYYPRE_MM
+        , #pre_yyyynext_mm# AS PRE_YYYYNEXT_MM
+        , #pre_yyyymm# AS PRE_YYYYMM
+        , #pre_yyyypre_mm# AS PRE_YYYYPRE_MM
+        , #yyyy01# AS YYYY01
+        , #yyyy12# AS YYYY12
+        , #pre_yyyy01# AS PRE_YYYY01
+        , #pre_yyyy12# AS PRE_YYYY12
+        ) A
+      </isEqual>
+    </select>
+
+
+
+    <!-- 매출분석 : Business Detail 국영/해영 -->
+    <select id="salesReport2List" parameterClass="Hashtable" resultClass="Hashtable">
+      
+      <isEqual property="sales_ym_type" compareValue="당월">
+         SELECT
+        CODE_NM
+        , REPORT2_VALUE1_1
+        , REPORT2_VALUE1_2
+        , REPORT2_VALUE1_2-REPORT2_VALUE1_1 AS REPORT2_VALUE1_3
+        , CASE WHEN REPORT2_VALUE1_1 != 0 THEN (REPORT2_VALUE1_2/REPORT2_VALUE1_1)*100 END AS REPORT2_VALUE1_4
+        FROM
+        (
+        SELECT
+        CODE_NM
+        , CODE_ORDER
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '목표'
+        AND DSTR_TYPE = A.CODE_ID
+        AND SALES_YM = #yyyymm#
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT2_VALUE1_1
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = #sales_base#
+        AND DSTR_TYPE = A.CODE_ID
+        AND SALES_YM = #yyyymm#
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT2_VALUE1_2
+        FROM (SELECT CODE_ID, CODE_NM, CODE_ORDER FROM T_CODE WHERE UP_CODE_ID = 'DSTR_TYPE' AND VALUE_1 = #gubun#) A
+        ) B
+        ORDER BY CODE_ORDER ASC
+      </isEqual>
+      
+      <isEqual property="sales_ym_type" compareValue="누계">
+      
+        SELECT
+        CODE_NM
+        , REPORT2_VALUE1_1
+        , REPORT2_VALUE1_2
+        , REPORT2_VALUE1_2-REPORT2_VALUE1_1 AS REPORT2_VALUE1_3
+        , CASE WHEN REPORT2_VALUE1_1 != 0 THEN (REPORT2_VALUE1_2/REPORT2_VALUE1_1)*100 END AS REPORT2_VALUE1_4
+        FROM
+        (
+        SELECT
+        CODE_NM
+        , CODE_ORDER
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '목표'
+        AND DSTR_TYPE = A.CODE_ID
+        AND SALES_YM BETWEEN #yyyy01# AND #yyyymm#
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT2_VALUE1_1
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '세금계산서'
+        AND DSTR_TYPE = A.CODE_ID
+        AND SALES_YM BETWEEN #yyyy01# AND #yyyypre_mm#
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        )+(SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = #sales_base#
+        AND DSTR_TYPE = A.CODE_ID
+        AND SALES_YM = #yyyymm#
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT2_VALUE1_2
+        FROM (SELECT CODE_ID, CODE_NM, CODE_ORDER FROM T_CODE WHERE UP_CODE_ID = 'DSTR_TYPE' AND VALUE_1 = #gubun#) A
+        ) B
+        ORDER BY CODE_ORDER ASC
+      </isEqual>
+
+      <isNotEqual property="sales_ym_type" compareValue="당월">
+        <isNotEqual property="sales_ym_type" compareValue="누계">
+          <isNotEqual property="sales_ym_type" compareValue="년간">
+        SELECT
+        CODE_NM
+        , REPORT2_VALUE1_1
+        , REPORT2_VALUE1_2
+        , REPORT2_VALUE1_2-REPORT2_VALUE1_1 AS REPORT2_VALUE1_3
+        , CASE WHEN REPORT2_VALUE1_1 != 0 THEN (REPORT2_VALUE1_2/REPORT2_VALUE1_1)*100 END AS REPORT2_VALUE1_4
+        FROM
+        (
+        SELECT
+        CODE_NM
+        , CODE_ORDER
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '목표'
+        AND DSTR_TYPE = A.CODE_ID
+        AND SALES_YM BETWEEN #yyyy01# AND
+        <isEqual property="sales_ym_type" compareValue="M1">CONVERT(NVARCHAR, CONVERT(NUMERIC, #yyyymm#)+1)</isEqual>
+        <isEqual property="sales_ym_type" compareValue="M2">CONVERT(NVARCHAR, CONVERT(NUMERIC, #yyyymm#)+2)</isEqual>
+        <isEqual property="sales_ym_type" compareValue="M3">CONVERT(NVARCHAR, CONVERT(NUMERIC, #yyyymm#)+3)</isEqual>      
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT2_VALUE1_1
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '세금계산서'
+        AND DSTR_TYPE = A.CODE_ID
+        AND SALES_YM BETWEEN #yyyy01# AND #yyyypre_mm#
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        )+(SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '세금계산서'
+        AND DSTR_TYPE = A.CODE_ID
+        AND SALES_YM = #yyyymm#
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        )+(SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        <isEqual property="sales_base" compareValue="거래명세표">
+          AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미출고')
+        </isEqual>
+        <isEqual property="sales_base" compareValue="세금계산서">
+          AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미청구')
+        </isEqual>
+        AND DSTR_TYPE = A.CODE_ID
+        AND SALES_YM BETWEEN CONVERT(NVARCHAR, CONVERT(NUMERIC, #yyyymm#)+1) AND
+        <isEqual property="sales_ym_type" compareValue="M1">CONVERT(NVARCHAR, CONVERT(NUMERIC, #yyyymm#)+1)</isEqual>
+        <isEqual property="sales_ym_type" compareValue="M2">CONVERT(NVARCHAR, CONVERT(NUMERIC, #yyyymm#)+2)</isEqual>
+        <isEqual property="sales_ym_type" compareValue="M3">CONVERT(NVARCHAR, CONVERT(NUMERIC, #yyyymm#)+3)</isEqual>     
+        AND BASE_YM = #yyyymm#
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT2_VALUE1_2
+        FROM (SELECT CODE_ID, CODE_NM, CODE_ORDER FROM T_CODE WHERE UP_CODE_ID = 'DSTR_TYPE' AND VALUE_1 = #gubun#) A
+        ) B
+        ORDER BY CODE_ORDER ASC
+          </isNotEqual>
+        </isNotEqual>
+      </isNotEqual>
+
+      <isEqual property="sales_ym_type" compareValue="년간">
+
+        SELECT
+        CODE_NM
+        , REPORT2_VALUE1_1
+        , REPORT2_VALUE1_2
+        , REPORT2_VALUE1_2-REPORT2_VALUE1_1 AS REPORT2_VALUE1_3
+        , CASE WHEN REPORT2_VALUE1_1 != 0 THEN (REPORT2_VALUE1_2/REPORT2_VALUE1_1)*100 END AS REPORT2_VALUE1_4
+        FROM
+        (
+        SELECT
+        CODE_NM
+        , CODE_ORDER
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '목표'
+        AND DSTR_TYPE = A.CODE_ID
+        AND SALES_YM BETWEEN #yyyy01# AND #yyyy12#
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT2_VALUE1_1
+        , (SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '세금계산서'
+        AND DSTR_TYPE = A.CODE_ID
+        AND SALES_YM BETWEEN #yyyy01# AND #yyyypre_mm#
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        )+(SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        AND SALES_GUBUN = '세금계산서'
+        AND DSTR_TYPE = A.CODE_ID
+        AND SALES_YM = #yyyymm#
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        )+(SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+        FROM T_SALES_MRF_SUMRY
+        WHERE COMPANY_CD = #company_cd#
+        <isEqual property="sales_base" compareValue="거래명세표">
+          AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미출고')
+        </isEqual>
+        <isEqual property="sales_base" compareValue="세금계산서">
+          AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미청구')
+        </isEqual>
+        AND DSTR_TYPE = A.CODE_ID
+        AND SALES_YM BETWEEN #yyyynext_mm# AND #yyyy12#
+        AND BASE_YM = #yyyymm#
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+        ) AS REPORT2_VALUE1_2
+        FROM (SELECT CODE_ID, CODE_NM, CODE_ORDER FROM T_CODE WHERE UP_CODE_ID = 'DSTR_TYPE' AND VALUE_1 = #gubun#) A
+        ) B
+        ORDER BY CODE_ORDER ASC
+      </isEqual>
+    </select>
+
+
+
+
+    <!-- 매출분석 : Actual / Forecasting by Business -->
+    <select id="salesReport3List" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      A.CODE_ID
+      , A.CODE_NM
+      , ISNULL(B.REPORT3_VALUE1_1,0) AS REPORT3_VALUE1_1
+      , ISNULL(C.REPORT3_VALUE1_2,0) AS REPORT3_VALUE1_2
+      , ISNULL(D.REPORT3_VALUE1_3,0) AS REPORT3_VALUE1_3
+      FROM
+      (
+      SELECT
+      CODE_ID
+      , CODE_NM
+      FROM T_CODE
+      WHERE UP_CODE_ID = 'BIZ_TYPE'
+      ) A LEFT JOIN
+      (
+      SELECT
+      BIZ_TYPE
+      , CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END AS REPORT3_VALUE1_1
+      FROM T_SALES_MRF_SUMRY
+      WHERE COMPANY_CD = #company_cd#
+      AND SALES_GUBUN = '목표'
+      AND SALES_YM BETWEEN #yyyy01# AND #yyyy12#
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      GROUP BY BIZ_TYPE
+      ) B ON A.CODE_ID = B.BIZ_TYPE LEFT JOIN
+      (
+      SELECT
+      BIZ_TYPE
+      , CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END
+      +(
+      SELECT
+      ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END,0)
+      FROM T_SALES_MRF_SUMRY
+      WHERE COMPANY_CD = #company_cd#
+      AND SALES_GUBUN = #sales_base#
+      AND SALES_YM = #yyyymm#
+      AND BIZ_TYPE = AA.BIZ_TYPE
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      )+(
+      SELECT
+      ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END,0)
+      FROM T_SALES_MRF_SUMRY
+      WHERE COMPANY_CD = #company_cd#
+      <isEqual property="sales_base" compareValue="거래명세표">
+        AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미출고')
+      </isEqual>
+      <isEqual property="sales_base" compareValue="세금계산서">
+        AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미청구')
+      </isEqual>
+      AND BASE_YM = #yyyymm#
+      AND SALES_YM BETWEEN #yyyynext_mm# AND #yyyy12#
+      AND BIZ_TYPE = AA.BIZ_TYPE
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      ) AS REPORT3_VALUE1_2
+      FROM T_SALES_MRF_SUMRY AA
+      WHERE COMPANY_CD = #company_cd#
+      AND SALES_GUBUN = '세금계산서'
+      AND SALES_YM BETWEEN #yyyy01# AND #yyyypre_mm#
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      GROUP BY BIZ_TYPE
+      ) C ON A.CODE_ID = C.BIZ_TYPE LEFT JOIN
+      (
+      SELECT
+      BIZ_TYPE
+      , CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END
+      +(
+      SELECT
+      ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END,0)
+      FROM T_SALES_MRF_SUMRY
+      WHERE COMPANY_CD = #company_cd#
+      AND SALES_GUBUN = #sales_base#
+      AND SALES_YM = #yyyymm#
+      AND BIZ_TYPE = AA.BIZ_TYPE
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      ) AS REPORT3_VALUE1_3
+      FROM T_SALES_MRF_SUMRY AA
+      WHERE COMPANY_CD = #company_cd#
+      AND SALES_GUBUN = '세금계산서'
+      AND SALES_YM BETWEEN #yyyy01# AND #yyyypre_mm#
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      GROUP BY BIZ_TYPE
+      ) D ON A.CODE_ID = D.BIZ_TYPE
+    </select>
+
+
+
+
+    <!-- 매출분석 : Actual / Forecasting 실적   -->
+    <select id="salesNomonthChart1" parameterClass="Hashtable" resultClass="Hashtable">
+      
+      SELECT
+      SUBSTRING(WORK_YM, 5, 2) AS SALES_YM
+      , (
+      SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+      FROM T_SALES_MRF_SUMRY
+      WHERE COMPANY_CD = #company_cd#
+      AND SALES_GUBUN = '세금계산서'
+      AND SALES_YM LIKE #year# + '%'
+      AND SALES_YM BETWEEN #yyyy01# AND #yyyypre_mm#
+      AND SALES_YM <![CDATA[<]]> A.WORK_YM
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="item_type">
+        AND ITEM_TYPE = #item_type#
+      </isNotEmpty>
+      )+(
+      SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+      FROM T_SALES_MRF_SUMRY
+      WHERE COMPANY_CD = #company_cd#
+      AND SALES_GUBUN = CASE WHEN A.WORK_YM = #yyyymm# THEN #sales_base# ELSE '세금계산서' END
+      AND SALES_YM = A.WORK_YM
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="item_type">
+        AND ITEM_TYPE = #item_type#
+      </isNotEmpty>
+      ) AS KRW_AMOUNT
+      FROM
+      (
+      SELECT WORK_YM
+      FROM T_WORK_MCALENDAR
+      WHERE WORK_YM LIKE #year#+'%'
+      ) A
+      WHERE WORK_YM <![CDATA[<=]]> #yyyymm#
+    </select>
+
+
+
+    <!-- 매출분석 : Actual / Forecasting 추정   -->
+    <select id="salesNomonthChart2" parameterClass="Hashtable" resultClass="Hashtable">
+     
+      SELECT
+      SUBSTRING(WORK_YM, 5, 2) AS SALES_YM
+      , (
+      SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+      FROM T_SALES_MRF_SUMRY
+      WHERE COMPANY_CD = #company_cd#
+      AND SALES_GUBUN = '세금계산서'
+      AND SALES_YM LIKE #year# + '%'
+      AND SALES_YM <![CDATA[<]]> CASE WHEN A.WORK_YM <![CDATA[<=]]> #yyyymm# THEN A.WORK_YM ELSE #yyyymm# END
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="item_type">
+        AND ITEM_TYPE = #item_type#
+      </isNotEmpty>
+      )+(
+      SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+      FROM T_SALES_MRF_SUMRY
+      WHERE COMPANY_CD = #company_cd#
+      AND SALES_GUBUN = CASE WHEN A.WORK_YM <![CDATA[<]]> #yyyymm# THEN '세금계산서' ELSE #sales_base# END
+      AND SALES_YM <![CDATA[=]]> CASE WHEN A.WORK_YM <![CDATA[<=]]> #yyyymm# THEN A.WORK_YM ELSE #yyyymm# END
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="item_type">
+        AND ITEM_TYPE = #item_type#
+      </isNotEmpty>
+      )+(
+      SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+      FROM T_SALES_MRF_SUMRY
+      WHERE COMPANY_CD = #company_cd#
+      <isEqual property="sales_base" compareValue="거래명세표">
+        AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미출고')
+      </isEqual>
+      <isEqual property="sales_base" compareValue="세금계산서">
+        AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미청구')
+      </isEqual>
+      AND BASE_YM = #yyyymm#
+      AND SALES_YM BETWEEN #yyyynext_mm# AND A.WORK_YM
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="item_type">
+        AND ITEM_TYPE = #item_type#
+      </isNotEmpty>
+      ) AS KRW_AMOUNT
+      FROM
+      (
+      SELECT WORK_YM
+      FROM T_WORK_MCALENDAR
+      WHERE WORK_YM LIKE #year#+'%'
+      ) A
+      ORDER BY WORK_YM ASC
+    </select>
+
+
+
+    <!-- 매출분석 : Actual / Forecasting 목표   -->
+    <select id="salesNomonthChart3" parameterClass="Hashtable" resultClass="Hashtable">
+      
+      SELECT
+      SUBSTRING(WORK_YM, 5, 2) AS SALES_YM
+      , (
+      SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+      FROM T_SALES_MRF_SUMRY
+      WHERE COMPANY_CD = #company_cd#
+      AND SALES_GUBUN = '목표'
+      AND SALES_YM LIKE #year# + '%'
+      AND SALES_YM BETWEEN #yyyy01# AND #yyyy12#
+      AND SALES_YM <![CDATA[<=]]> A.WORK_YM
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="item_type">
+        AND ITEM_TYPE = #item_type#
+      </isNotEmpty>
+      ) AS KRW_AMOUNT
+      FROM
+      (
+      SELECT WORK_YM
+      FROM T_WORK_MCALENDAR
+      WHERE WORK_YM LIKE #year#+'%'
+      ) A
+    </select>
+
+
+
+    <!-- 매출분석 : Actual / Forecasting 추정(전월)   -->
+    <select id="salesNomonthChart4" parameterClass="Hashtable" resultClass="Hashtable">
+      
+      SELECT
+      SUBSTRING(WORK_YM, 5, 2) AS SALES_YM
+      , (
+      SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+      FROM T_SALES_MRF_SUMRY
+      WHERE COMPANY_CD = #company_cd#
+      AND SALES_GUBUN = '세금계산서'
+      AND SALES_YM LIKE #year# + '%'
+      AND SALES_YM <![CDATA[<=]]> #yyyypre_mm#
+      AND SALES_YM BETWEEN #yyyy01# AND (CASE WHEN A.WORK_YM <![CDATA[<=]]> #yyyypre_mm# THEN A.WORK_YM ELSE SUBSTRING(CONVERT(NVARCHAR, DATEADD(M, -1, A.WORK_YM+'01'), 112), 1, 6) END)
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="item_type">
+        AND ITEM_TYPE = #item_type#
+      </isNotEmpty>
+      )+(
+      SELECT ISNULL(CASE WHEN #wso_psblt# = '적용' then SUM(PSBLT_KRW_AMOUNT) ELSE SUM(KRW_AMOUNT) END, 0)
+      FROM T_SALES_MRF_SUMRY
+      WHERE COMPANY_CD = #company_cd#
+      <isEqual property="sales_base" compareValue="거래명세표">
+        AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미출고')
+      </isEqual>
+      <isEqual property="sales_base" compareValue="세금계산서">
+        AND (SALES_GUBUN = '추정_기회' OR SALES_GUBUN = '추정_미청구')
+      </isEqual>
+      AND BASE_YM = #yyyypre_mm#
+      AND SALES_YM LIKE #year# + '%'
+      AND SALES_YM BETWEEN #yyyymm# AND  A.WORK_YM
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="item_type">
+        AND ITEM_TYPE = #item_type#
+      </isNotEmpty>
+      ) AS KRW_AMOUNT
+      FROM
+      (
+      SELECT WORK_YM
+      FROM T_WORK_MCALENDAR
+      WHERE WORK_YM LIKE #year#+'%'
+      ) A
+    </select>
+
+
+  </statements>
+
+
+
+</sqlMap>

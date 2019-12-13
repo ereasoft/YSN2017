@@ -1,0 +1,136 @@
+Ext.define('Ysn.model.customerList', {  
+            extend: 'Ext.data.Model', 
+            fields: [  
+                {name: 'CUST_CD', type: 'string'},
+				{name: 'CUST_CD2', type: 'string'},
+				{name: 'CUST_NM', type: 'string'},
+				{name: 'DMOS_NM', type: 'string'},
+				{name: 'DEPT_CD', type: 'string'},
+				{name: 'DEPT_NM', type: 'string'},
+				{name: 'USER_CD', type: 'string'},
+				{name: 'USER_NM', type: 'string'},
+				{name: 'CUST_GRADE', type: 'string'},
+				{name: 'CUST_GRADE_NAME', type: 'string'},
+				{name: 'NAT_CD', type: 'string'},
+				{name: 'USE_YN', type: 'string'},
+				{name: 'SA_SDATE', type: 'date', dateFormat:'Ymd'},
+				{name: 'TRMS_PAY', type: 'string'},  
+				{name: 'TRMS_PAY_NAME', type: 'string'}  
+            ]  
+});  
+
+Ext.define('Ysn.model.customerDetail', {  
+            extend: 'Ext.data.Model', 
+            fields: [  
+                {name: 'cust_cd', mapping: 'CUST_CD', type: 'string'},
+				{name: 'cust_cd2', mapping: 'CUST_CD2', type: 'string'},
+				{name: 'cust_nm', mapping: 'CUST_NM', type: 'string'},
+				{name: 'cust_eng_nm', mapping: 'CUST_ENG_NM', type: 'string'},
+				{name: 'cust_sht_nm', mapping: 'CUST_SHT_NM', type: 'string'},
+				{name: 'user_cd', mapping: 'USER_CD', type: 'string'},
+				{name: 'dept_cd', mapping: 'DEPT_CD', type: 'string'},
+				{name: 'user_nm', mapping: 'USER_NM', type: 'string'},
+				{name: 'dept_nm', mapping: 'DEPT_NM', type: 'string'},
+				{name: 'dmos_cd', mapping: 'DMOS_CD', type: 'string'},
+				{name: 'dmos_nm', mapping: 'DMOS_NM', type: 'string'},
+				{name: 'nat_cd', mapping: 'NAT_CD', type: 'string'},
+				{name: 'base_crncy', mapping: 'BASE_CRNY', type: 'string'},
+				{name: 'cust_type', mapping: 'CUST_TYPE', type: 'string'},
+				{name: 'cust_grp', mapping: 'CUST_GRP', type: 'string'},
+				{name: 'cust_level1', mapping: 'CUST_LEVEL1', type: 'string'},
+				{name: 'cust_level2', mapping: 'CUST_CD', type: 'string'},
+				{name: 'cust_level3', mapping: 'CUST_LEVEL2', type: 'string'},
+				{name: 'cust_ceo', mapping: 'CUST_CEO', type: 'string'},
+				{name: 'cust_no', mapping: 'CUST_NO', type: 'string'},
+				{name: 'cust_ctgr', mapping: 'CUST_CTGR', type: 'string'}, 
+				{name: 'cust_item', mapping: 'CUST_ITEM', type: 'string'},
+				{name: 'cust_grade', mapping: 'CUST_GRADE', type: 'string'},
+				{name: 'home_page', mapping: 'HOME_PAGE', type: 'string'},
+				{name: 'tel_num', mapping: 'TEL_NUM', type: 'string'},
+				{name: 'zip_code', mapping: 'ZIP_CODE', type: 'string'},
+				{name: 'address_l', mapping: 'ADDRESS_L', type: 'string'},
+				{name: 'address_m', mapping: 'ADDRESS_M', type: 'string'},
+				{name: 'address_s', mapping: 'ADDRESS_S', type: 'string'},
+				{name: 'address_d', mapping: 'ADDRESS_D', type: 'string'},
+				{name: 'address_all', mapping: 'ADDRESS_ALL', type: 'string'},
+				{name: 'use_yn', mapping: 'USE_YN', type: 'string'},
+				{name: 'bcust_cd', mapping: 'BCUST_CD', type: 'string'},
+				{name: 'bcust_nm', mapping: 'BCUST_NM', type: 'string'},
+				{name: 'trms_pay', mapping: 'TRMS_PAY', type: 'string'},
+				{name: 'cust_seq',  mapping: 'CUST_SEQ',type: 'string'} 
+            ]  
+});  
+
+Ext.define('Ysn.model.keymanList', {  
+            extend: 'Ext.data.Model', 
+            fields: [  
+				{name: 'KM_CD', type: 'string'},
+				{name: 'KM_NM', type: 'string'},
+				{name: 'CUST_CD', type: 'string'},
+				{name: 'SPTNR_CD', type: 'string'},
+				{name: 'SPTNR_NM', type: 'string'},
+				{name: 'KM_REP_WORK', type: 'string'},
+				{name: 'KM_USER_CD', type: 'string'},
+				{name: 'KM_USER_NM', type: 'string'},
+				{name: 'KM_DEPT_NM', type: 'string'}, 
+                {name: 'CUST_CD', type: 'string'}, 
+				{name: 'CUST_NM', type: 'string'},
+				{name: 'KM_EMAIL', type: 'string'},
+				{name: 'KM_WORK', type: 'string'}, 
+				{name: 'KM_WORK_NM', type: 'string'},
+				{name: 'KM_POWER', type: 'string'},
+				{name: 'KM_POWER_NM', type: 'string'},
+				{name: 'O_PHONE', type: 'string'},
+				{name: 'M_PHONE', type: 'string'},
+				{name: 'USE_YN', type: 'string'},
+				{name: 'USE_YN_NM', type: 'string'},
+				{name: 'KM_TITLE_NM', type: 'string'},
+				{name: 'KM_REG_DATE', type: 'date', dateFormat:'Ymd'} 
+            ]  
+});  
+
+Ext.define('Ysn.model.keymanDetail', {  
+            extend: 'Ext.data.Model', 
+            fields: [  
+				{name: 'km_cd' ,mapping: 'KM_CD', type: 'string'},
+				{name: 'km_nm' ,mapping: 'KM_NM', type: 'string'},
+				{name: 'sptnr_cd' ,mapping: 'SPTNR_CD', type: 'string'},
+				{name: 'km_work' ,mapping: 'KM_WORK', type: 'string'},
+				{name: 'sptnr_nm' ,mapping: 'SPTNR_NM', type: 'string'},
+				{name: 'km_dept_nm' ,mapping: 'KM_DEPT_NM', type: 'string'},
+				{name: 'km_posit' ,mapping: 'KM_POSIT', type: 'string'},
+				{name: 'km_title' ,mapping: 'KM_TITLE', type: 'string'},
+				{name: 'km_rep_work' ,mapping: 'KM_REP_WORK', type: 'string'}, 
+                {name: 'km_power' ,mapping: 'KM_POWER', type: 'string'}, 
+				{name: 'km_friend' ,mapping: 'KM_FRIEND', type: 'string'},
+				{name: 'km_user_cd' ,mapping: 'KM_USER_CD', type: 'string'},
+				{name: 'km_user_nm' ,mapping: 'KM_USER_NM', type: 'string'}, 
+				{name: 'km_dept_cd' ,mapping: 'KM_DEPT_CD', type: 'string'},
+				{name: 'dept_nm' ,mapping: 'DEPT_NM', type: 'string'},
+				{name: 'km_power_nm' ,mapping: 'KM_POWER_NM', type: 'string'},
+				{name: 'km_reg_date' ,mapping: 'REG_DT', type: 'string'},
+				{name: 'cust_cd' ,mapping: 'CUST_CD', type: 'string'},
+				{name: 'cust_nm' ,mapping: 'CUST_NM', type: 'string'},
+				{name: 'dom_ab' ,mapping: 'DOM_AB', type: 'string'},
+				{name: 'ab_nation' ,mapping: 'AB_NATION', type: 'string'},
+				{name: 'ab_region' ,mapping: 'AB_REGION', type: 'string'},
+				{name: 'km_email' ,mapping: 'KM_EMAIL', type: 'string'},
+				{name: 'm_phone' ,mapping: 'M_PHONE', type: 'string'},
+				{name: 'km_school' ,mapping: 'KM_SCHOOL', type: 'string'},
+				{name: 'km_hobby' ,mapping: 'KM_HOBBY', type: 'string'},
+				{name: 'km_religion' ,mapping: 'KM_RELIGION', type: 'string'},
+				{name: 'km_address' ,mapping: 'KM_ADDRESS', type: 'string'},
+				{name: 'km_descript' ,mapping: 'KM_DESCRIPT', type: 'string'},
+				{name: 'km_o_email' ,mapping: 'KM_O_EMAIL', type: 'string'},
+				{name: 'b_mth' ,mapping: 'B_MTH', type: 'string'},
+				{name: 'b_data' ,mapping: 'B_DATA', type: 'string'},
+				{name: 'w_mth' ,mapping: 'W_MTH', type: 'string'},
+				{name: 'w_data' ,mapping: 'W_DATA', type: 'string'},
+				{name: 'use_yn' ,mapping: 'USE_YN', type: 'string'},
+				{name: 'address_all' ,mapping: 'ADDRESS_ALL', type: 'string'},
+				{name: 'mod_dt' ,mapping: 'MOD_DT', type: 'string'} 
+				
+            ]  
+}); 
+
+ 

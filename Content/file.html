@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body>
+
+    <form action="/File/TempFileUpload" method="post" enctype = "multipart/form-data">
+        <div class="form-group">
+            <input type="file" id="file_name" name="file_name"  />
+            <input type="file" id="file_name" name="file_name" />
+
+            <input type="submit" value="TempUpload" class="btn btn-default" />
+        </div>
+    </form>
+
+    <form action="/File/TempFileDelete" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <input type="text" id="file_name" name="file_name" value="HanGok.exe" />
+            <input type="text" id="file_name" name="file_name" value="HanGok_1.exe" />
+
+            <input type="submit" value="TempDelete" class="btn btn-default" />
+        </div>
+    </form>
+
+
+    <form action="/File/RealFileTest" method="post" >
+        <div class="form-group">
+            <input type="text" id="smr_cd" name="smr_cd" value="SMR1703188" />
+            <input type="text" id="chasu" name="chasu" value="1" />
+ <!--
+            <input type="text" name="mode" value="P" />
+            <input type="text" name="file_code" value="" />
+            <input type="text" name="file_name" value="170315_테이블생성.txt" />
+              
+            <input type="text" name="mode" value="P" />
+            <input type="text" name="file_code" value="" />
+            <input type="text" name="file_name" value="엑셀 테스트.xlsx" />
+
+  
+            <input type="text" name="mode" value="I" />
+            <input type="text" name="file_code" value="" />
+            <input type="text" name="file_name" value="filelist.xml" />
+      -->
+            <input type="text" name="mode" value="P" />
+            <input type="text" name="file_code" value="" />
+            <input type="text" name="file_name" value="stylesheet.css" />
+
+            <input type="text" name="mode" value="I" />
+            <input type="text" name="file_code" value="" />
+            <input type="text" name="file_name" value="14.jpg" />
+
+  
+            <input type="text" name="del_file" value="FN17023633" />
+      
+
+<!--
+
+
+            <input type="text" name="mode" value="" />
+            <input type="text" name="del_file" value="신규업로드2.xlsx" />
+                -->
+
+
+
+            <input type="submit" value="MovUpload" class="btn btn-default" />
+        </div>
+    </form>
+</body>
+</html>

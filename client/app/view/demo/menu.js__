@@ -1,0 +1,52 @@
+
+Ext.define('Ysn.view.demo.menu',{
+    extend: 'Ext.Container',
+    xtype: 'demomenu',
+    requires: [
+        'Ysn.view.demo.menuController',
+        'Ysn.view.demo.menuModel',
+		'Ysn.store.Files',
+		'Ext.tree.*',
+		'Ext.panel.*', 
+		'Ysn.*'
+    ],
+
+    controller: 'demo-menu', 
+    viewModel: {
+        type: 'demo-menu'
+    },
+	title: 'Menu', 
+    items: {
+        xtype: 'treepanel',
+        width: 220, 
+		//	textAlign: 'left',
+        rootVisible: false,
+        // Sharing the store synchronizes the views:
+       store: {type: 'files'},
+	   listeners:{
+			 itemclick: function(view, record, item, index, e)
+			  {
+				if(record.data.leaf == true) {
+					//Ext.getCmp("centerregion").remove();
+					//this.viewport = Ext.getCmp('main');
+					//this.centerRegion = this.viewport.down('[region=center]');
+                    //Ext.getCmp('main').viewport.down('[region=center]').add( Ext.create('Ext.panel.Panel', { 
+                    //                        title:'테스트'
+					Ext.getCmp('centerregion').removeAll();
+					Ext.getCmp('centerregion').add({xtype: 'demo'});  
+					/*	new Ext.menu.Menu(
+						{ items:
+								[
+									{ text: 'More details', handler: function() {console.log("Moreils");} },
+									{ text: 'Delete', handler: function() {console.log("Delete");}}
+								]
+						}
+						)
+			);              /* other things here if needed */
+           // })); 
+                    Ext.getCmp('main').updateLayout();
+				}
+			  } 
+	   }
+    } 
+});

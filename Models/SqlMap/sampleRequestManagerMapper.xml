@@ -1,0 +1,1180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+
+
+
+    <!-- Sample 제작관리 : 의뢰/배송|승인|완료 - 리스트 -->
+    <select id="sampleManageList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT  S.SMP_CD
+      ,CONVERT(NVARCHAR, S.SMP_CHASU)+'차' AS SMP_CHASU
+      ,S.ITEM_CD
+      ,I.ITEM_NM
+      ,S.CUST_CD
+      ,C.CUST_NM
+      ,S.EUSER_CD
+      ,C2.CUST_NM AS EUSER_NM
+      ,S.DSTR_TYPE
+      ,dbo.FN_GET_CODE_NM(#language#, 'DSTR_TYPE', S.DSTR_TYPE) AS DSTR_TYPE_NM
+      ,S.DEPT_CD
+      ,D.DEPT_NM
+      ,S.USER_CD
+      ,U.USER_NM
+      ,S.MUSER_CD
+      ,U2.USER_NM AS MUSER_NM
+      ,S.BIZ_TYPE
+      ,dbo.FN_GET_CODE_NM(#language#, 'BIZ_TYPE', S.BIZ_TYPE) AS BIZ_TYPE_NM
+      ,S.SMP_STATUS
+      ,dbo.FN_GET_CODE_NM(#language#, 'SMP_STATUS', S.SMP_STATUS) AS SMP_STATUS_NM
+      ,S.PRDT_PSBLT
+      ,dbo.FN_GET_CODE_NM(#language#, 'PRDT_PSBLT', S.PRDT_PSBLT) AS PRDT_PSBLT_NM
+      ,CONVERT(DATE,S.SMP_RDATE) AS SMP_RDATE
+      ,CONVERT(DATE,S.PRDT_RCDATE) AS PRDT_RCDATE
+      ,CONVERT(DATE,S.CMPT_RDATE) AS CMPT_RDATE
+      ,CONVERT(DATE,S.PRDT_RDATE) AS PRDT_RDATE
+      ,CONVERT(DATE,S.PRDT_ADATE) AS PRDT_ADATE
+      ,CONVERT(DATE,S.PRDT_PDATE) AS PRDT_PDATE
+      ,CONVERT(DATE,S.PRDT_CDATE) AS PRDT_CDATE
+      ,CONVERT(DATE,S.SHIP_PDATE) AS SHIP_PDATE
+      ,CONVERT(DATE,S.FILM_FDATE) AS FILM_FDATE
+      ,CONVERT(DATE,S.FILM_RDATE) AS FILM_RDATE
+      ,S.PJT_CD
+      ,P.PJT_NM
+      ,I.ITEM_TYPE
+      ,dbo.FN_GET_CODE_NM(#language#, 'ITEM_TYPE', I.ITEM_TYPE) AS ITEM_TYPE_NM
+      ,ISNULL(C.BAD_AR_YN,'N') BAD_AR_YN
+      FROM
+      T_SAMPLE S
+      LEFT OUTER JOIN
+      T_ITEM I
+      ON
+      S.COMPANY_CD = I.COMPANY_CD AND
+      S.ITEM_CD = I.ITEM_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER C
+      ON
+      S.COMPANY_CD = C.COMPANY_CD AND
+      S.CUST_CD = C.CUST_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER C2
+      ON
+      S.COMPANY_CD = C2.COMPANY_CD AND
+      S.EUSER_CD = C2.CUST_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT D
+      ON
+      S.COMPANY_CD = D.COMPANY_CD AND
+      S.DEPT_CD = D.DEPT_CD
+      LEFT OUTER JOIN
+      T_USER U
+      ON
+      S.COMPANY_CD = U.COMPANY_CD AND
+      S.USER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      T_USER U2
+      ON
+      S.COMPANY_CD = U2.COMPANY_CD AND
+      S.MUSER_CD = U2.USER_CD
+      LEFT OUTER JOIN
+      T_PROJECT P
+      ON
+      S.COMPANY_CD = P.COMPANY_CD AND
+      S.PJT_CD = P.PJT_CD
+      LEFT OUTER JOIN
+      T_CODE CD
+      ON
+      S.SMP_STATUS = CD.CODE_ID
+
+      WHERE
+      S.COMPANY_CD = #company_cd# AND
+      S.USE_YN = 'Y'
+
+
+      <isNotEmpty property="deptGroup">
+        AND S.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND S.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="dstr_type">
+        AND S.DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="user_nm">
+        AND S.USER_CD = #user_nm#
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND S.USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="sdate">
+        <![CDATA[	AND S.SMP_RDATE >= REPLACE(#sdate#,'-','')	]]>
+      </isNotEmpty>
+
+      <isNotEmpty property="edate">
+        <![CDATA[	AND S.SMP_RDATE <= REPLACE(#edate#,'-','')	]]>
+      </isNotEmpty>
+
+      <isNotEmpty property="s_prdt_rdate">
+        <![CDATA[	AND S.PRDT_RDATE >= REPLACE(#s_prdt_rdate#,'-','')	]]>
+      </isNotEmpty>
+
+      <isNotEmpty property="e_prdt_rdate">
+        <![CDATA[	AND S.PRDT_RDATE <= REPLACE(#e_prdt_rdate#,'-','')	]]>
+      </isNotEmpty>
+
+      <isNotEmpty property="s_prdt_adate">
+        <![CDATA[	AND S.PRDT_ADATE >= REPLACE(#s_prdt_adate#,'-','')	]]>
+      </isNotEmpty>
+
+      <isNotEmpty property="e_prdt_adate">
+        <![CDATA[	AND S.PRDT_ADATE <= REPLACE(#e_prdt_adate#,'-','') ]]>
+      </isNotEmpty>
+
+      <isNotEmpty property="cust_nm">
+        <isNotEmpty property="cust_cd">
+          AND S.CUST_CD = #cust_cd#
+        </isNotEmpty>
+        <isEmpty property="cust_cd">
+          AND (S.CUST_CD LIKE '%' + #cust_nm# + '%' OR C.CUST_NM LIKE '%' + #cust_nm# + '%')
+          AND S.CUST_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND S.BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="muser_nm">
+        AND S.MUSER_CD = #muser_nm#
+      </isNotEmpty>
+
+      <isNotEmpty property="smp_status">
+        AND S.SMP_STATUS = #smp_status#
+      </isNotEmpty>
+
+      <isNotEmpty property="prdt_psblt">
+        AND S.PRDT_PSBLT = #prdt_psblt#
+      </isNotEmpty>
+
+
+      <isNotEmpty property="end_user_nm">
+        <isNotEmpty property="end_user_cd">
+          AND S.EUSER_CD = #end_user_cd#
+        </isNotEmpty>
+        <isEmpty property="end_user_cd">
+          AND (S.EUSER_CD LIKE '%' + #end_user_nm# + '%' OR C2.CUST_NM LIKE '%' + #end_user_nm# + '%')
+          AND S.EUSER_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="pjt_nm">
+        <isNotEmpty property="pjt_cd">
+          AND S.PJT_CD = #pjt_cd#
+        </isNotEmpty>
+        <isEmpty property="pjt_cd">
+          AND (S.PJT_CD LIKE '%' + #pjt_nm# + '%' OR P.PJT_NM LIKE '%' + #pjt_nm# + '%')
+          AND P.PJT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="muser_cd">
+        AND S.MUSER_CD = #muser_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="prdt_auser">
+        AND S.PRDT_AUSER = #prdt_auser#
+      </isNotEmpty>
+
+
+      <isNotEmpty property="smp_state">
+        <isEqual property="smp_state" compareValue="suc">
+          AND CD.UP_CODE_ID = 'SMP_STATUS' AND CD.VALUE_2 = 'Y'
+        </isEqual>
+        <isEqual property="smp_state" compareValue="end">
+          AND CD.UP_CODE_ID = 'SMP_STATUS' AND CD.VALUE_3 = 'Y'
+        </isEqual>
+        AND S.SMP_STATUS IS NOT NULL
+      </isNotEmpty>
+
+
+      <isNotEmpty property="item_type">
+        AND I.ITEM_TYPE = #item_type#
+        AND S.ITEM_CD IS NOT NULL
+      </isNotEmpty>
+
+      ORDER BY S.SMP_CD DESC,S.SMP_CHASU DESC
+
+    </select>
+
+
+
+
+
+    <!-- Sample 제작관리 : 의뢰/배송|승인|완료 - 상세 -->
+    <select id="selectSampleDetail" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      SMP_CD
+      ,SMP_CHASU
+      ,ITEM_CD
+      ,DBO.FN_GET_ITEM_NM(ITEM_CD) AS ITEM_NM
+      ,PJT_CD
+      ,DBO.FN_GET_PJT_NM(PJT_CD) AS PJT_NM
+      ,CUST_CD
+      ,DBO.FN_GET_CUST_NM(CUST_CD) AS CUST_NM
+      ,EUSER_CD
+      ,DBO.FN_GET_CUST_NM(EUSER_CD) AS EUSER_NM
+      ,BIZ_TYPE
+      ,dbo.FN_GET_CODE_NM(#language#, 'BIZ_TYPE',BIZ_TYPE) AS BIZ_TYPE_NM
+      ,DSTR_TYPE
+      ,dbo.FN_GET_CODE_NM(#language#, 'DSTR_TYPE',DSTR_TYPE) AS DSTR_TYPE_NM
+      ,USER_CD
+      ,DBO.FN_GET_USER_NM(USER_CD) AS USER_NM
+      ,DEPT_CD
+      ,DBO.FN_GET_DEPT_NM(DEPT_CD) AS DEPT_NM
+      ,CUST_SMP_CD
+      ,MOLD_NO
+      ,SMP_RQTY
+      ,DBO.FN_GET_SMP_USER_NMS(SMP_CD,SMP_CHASU) AS RUSER_NM
+      ,MUSER_CD
+      ,DBO.FN_GET_USER_NM(MUSER_CD) AS MUSER_NM
+      ,MDEPT_CD
+      ,DBO.FN_GET_DEPT_NM(MDEPT_CD) AS MDEPT_NM
+      ,SMP_STATUS
+      ,dbo.FN_GET_CODE_NM(#language#, 'SMP_STATUS',SMP_STATUS) AS SMP_STATUS_NM
+      ,PRDT_PSBLT
+      ,DBO.FN_GET_CODE_VALUE_NM('PRDT_PSBLT',PRDT_PSBLT,'1') AS PRDT_PSBLT_VALUE_NM
+      ,dbo.FN_GET_CODE_NM(#language#, 'PRDT_PSBLT',PRDT_PSBLT) AS PRDT_PSBLT_NM
+      ,CONVERT(DATE,SMP_RDATE) AS SMP_RDATE
+      ,CONVERT(DATE,PRDT_RCDATE) AS PRDT_RCDATE
+      ,CONVERT(DATE,CMPT_RDATE) AS CMPT_RDATE
+      ,CONVERT(DATE,PRDT_RDATE) AS PRDT_RDATE
+      ,PRDT_RUSER
+      ,DBO.FN_GET_USER_NM(PRDT_RUSER) AS PRDT_RUSER_NM
+      ,CONVERT(DATE,PRDT_ADATE) AS PRDT_ADATE
+      ,PRDT_AUSER
+      ,DBO.FN_GET_USER_NM(PRDT_AUSER) AS PRDT_AUSER_NM
+      ,CONVERT(DATE,PRDT_PDATE) AS PRDT_PDATE
+      ,CONVERT(DATE,PRDT_CDATE) AS PRDT_CDATE
+      ,PRDT_CUSER
+      ,DBO.FN_GET_USER_NM(PRDT_CUSER) AS PRDT_CUSER_NM
+      ,CONVERT(DATE,SHIP_PDATE) AS SHIP_PDATE
+      ,SHIP_PUSER
+      ,DBO.FN_GET_USER_NM(SHIP_PUSER) AS SHIP_PUSER_NM
+      ,SMP_SUMRY
+      ,BASE_CRNY
+      ,EXCH_RATE
+      ,BASE_YR
+      ,SMP_QTY
+      ,SMP_TYPE
+      ,PRDT_CMT
+      ,dbo.FN_GET_CODE_NM(#language#, 'SMP_TYPE',SMP_TYPE) AS SMP_TYPE_NM
+      ,CONVERT(DATE,FILM_FDATE) AS FILM_FDATE
+      ,CONVERT(DATE,FILM_RDATE) AS FILM_RDATE
+      ,DBO.FN_GET_USER_NM(FILM_RUSER) AS FILM_RUSER_NM
+      ,(
+      CASE WHEN SMP_STATUS = 'SMSTAT_900'
+      THEN
+      'N'
+      ELSE
+      'Y'
+      END
+      ) DROP_BTN_YN
+      ,(
+      SELECT
+      (CASE WHEN ISNULL(COUNT(*),0) = 0 THEN 'N' ELSE 'Y' END)
+      FROM
+      T_SMP_CREPAIR
+      WHERE
+      COMPANY_CD = T_SAMPLE.COMPANY_CD AND
+      SMP_CD = T_SAMPLE.SMP_CD AND SMP_CHASU = T_SAMPLE.SMP_CHASU
+      ) SMP_RE_YN
+      ,(
+      SELECT
+      (CASE WHEN ISNULL(COUNT(*),0) = 0 THEN 'N' ELSE 'Y' END)
+      FROM
+      T_SMP_QREPAIR
+      WHERE
+      COMPANY_CD = T_SAMPLE.COMPANY_CD AND
+      SMP_CD = T_SAMPLE.SMP_CD AND SMP_CHASU = T_SAMPLE.SMP_CHASU
+      ) SMP_MY_RE_YN
+      ,(
+      SELECT
+      (CASE WHEN ISNULL(COUNT(*),0) = 0 THEN 'N' ELSE 'Y' END)
+      FROM
+      T_SMP_RETURN
+      WHERE
+      COMPANY_CD = T_SAMPLE.COMPANY_CD AND
+      SMP_CD = T_SAMPLE.SMP_CD AND SMP_CHASU = T_SAMPLE.SMP_CHASU
+      ) SMP_RT_YN
+      ,SMR_CD
+      ,SMR_CHASU
+
+      FROM T_SAMPLE
+      WHERE
+      COMPANY_CD = #company_cd#
+
+
+      <isNotEmpty property="smp_cd">
+        AND SMP_CD = #smp_cd#
+      </isNotEmpty>
+      <isEmpty property="smp_cd">
+        <isNotEmpty property="search_smp_cd">
+          AND SMP_CD = #search_smp_cd#
+        </isNotEmpty>
+      </isEmpty>
+
+
+      <isNotEmpty property="smp_chasu">
+        AND SMP_CHASU = #smp_chasu#
+      </isNotEmpty>
+      <isEmpty property="smp_chasu">
+        <isNotEmpty property="search_smp_chasu">
+          AND SMP_CHASU = CONVERT(NUMERIC(18,0), #search_smp_chasu# )
+        </isNotEmpty>
+      </isEmpty>
+
+
+
+    </select>
+
+
+
+
+    <!-- Sample Drop 현황 : 리스트 -->
+    <select id="selectDropList" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      D.COMPANY_CD,
+      D.SMP_CD,
+      D.SMP_CHASU,
+      CONVERT(DATE,D.SMP_DRDATE) AS SMP_DRDATE,
+      S.ITEM_CD,
+      I.ITEM_NM,
+      S.CUST_CD,
+      C.CUST_NM,
+      S.EUSER_CD,
+      C2.CUST_NM AS EUSER_NM,
+      S.DSTR_TYPE,
+      CD1.CODE_NM AS DSTR_TYPE_NM,
+      D.USER_CD,
+      U.USER_NM,
+      U.DEPT_CD,
+      DP.DEPT_NM,
+      D.SMP_DRTYPE,
+      CD3.CODE_NM AS SMP_DRTYPE_NM,
+      S.BIZ_TYPE,
+      CD2.CODE_NM AS BIZ_TYPE_NM,
+      I.ITEM_TYPE,
+      CD4.CODE_NM AS ITEM_TYPE_NM,
+      CONVERT(DATE,S.SMP_RDATE) AS SMP_RDATE,
+      CONVERT(DATE,S.CMPT_RDATE) AS CMPT_RDATE,
+      CONVERT(DATE,S.PRDT_CDATE) AS PRDT_CDATE,
+      CONVERT(DATE,S.SHIP_PDATE) AS SHIP_PDATE,
+      C.BAD_AR_YN,
+      SMP_DRDESCRIPT
+      FROM
+      (SELECT COMPANY_CD,SMP_CD,SMP_CHASU,USER_CD,SMP_DRDATE,SMP_DRTYPE,SMP_DRDESCRIPT FROM T_SMP_DROP) AS D
+      LEFT OUTER JOIN
+      (SELECT COMPANY_CD,SMP_CD,SMP_CHASU,ITEM_CD,CUST_CD,EUSER_CD,BIZ_TYPE,DSTR_TYPE,SMP_RDATE,CMPT_RDATE,PRDT_CDATE,SHIP_PDATE FROM T_SAMPLE WHERE COMPANY_CD = #company_cd#) AS S
+      ON
+      D.COMPANY_CD = S.COMPANY_CD AND
+      D.SMP_CD = S.SMP_CD AND
+      D.SMP_CHASU = S.SMP_CHASU
+      LEFT OUTER JOIN
+      (SELECT COMPANY_CD,ITEM_CD,ITEM_NM,ITEM_TYPE FROM T_ITEM WHERE COMPANY_CD = #company_cd#) AS I
+      ON
+      S.COMPANY_CD = I.COMPANY_CD AND
+      S.ITEM_CD = I.ITEM_CD
+      LEFT OUTER JOIN
+      (SELECT COMPANY_CD,CUST_CD,CUST_NM,BAD_AR_YN FROM T_CUSTOMER WHERE COMPANY_CD = #company_cd#) AS C
+      ON
+      S.COMPANY_CD = C.COMPANY_CD AND
+      S.CUST_CD = C.CUST_CD
+      LEFT OUTER JOIN
+      (SELECT COMPANY_CD,CUST_CD,CUST_NM FROM T_CUSTOMER WHERE COMPANY_CD = #company_cd#) AS C2
+      ON
+      S.COMPANY_CD = C2.COMPANY_CD AND
+      S.EUSER_CD = C2.CUST_CD
+      LEFT OUTER JOIN
+      (SELECT CODE_ID, #language# AS CODE_NM FROM T_CODE WHERE UP_CODE_ID = 'DSTR_TYPE') AS CD1
+      ON
+      S.DSTR_TYPE = CD1.CODE_ID
+      LEFT OUTER JOIN
+      (SELECT CODE_ID, #language# AS CODE_NM FROM T_CODE WHERE UP_CODE_ID = 'BIZ_TYPE') AS CD2
+      ON
+      S.BIZ_TYPE = CD2.CODE_ID
+      LEFT OUTER JOIN
+      (SELECT CODE_ID, #language# AS CODE_NM FROM T_CODE WHERE UP_CODE_ID = 'SMP_DRTYPE') AS CD3
+      ON
+      D.SMP_DRTYPE = CD3.CODE_ID
+      LEFT OUTER JOIN
+      (SELECT CODE_ID, #language# AS CODE_NM FROM T_CODE WHERE UP_CODE_ID = 'ITEM_TYPE') AS CD4
+      ON
+      i.ITEM_TYPE = CD4.CODE_ID
+      LEFT OUTER JOIN
+      (SELECT COMPANY_CD,USER_CD,USER_NM,DEPT_CD FROM T_USER WHERE COMPANY_CD = #company_cd#) AS U
+      ON
+      D.COMPANY_CD = U.COMPANY_CD AND
+      D.USER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      (SELECT COMPANY_CD,DEPT_CD,DEPT_NM,UP_DEPT_CD FROM T_DEPARTMENT WHERE COMPANY_CD = #company_cd#) AS DP
+      ON
+      U.COMPANY_CD = DP.COMPANY_CD AND
+      U.DEPT_CD = DP.DEPT_CD
+
+      WHERE
+      S.COMPANY_CD IS NOT NULL AND
+      S.SMP_CD IS NOT NULL AND
+      S.SMP_CHASU IS NOT NULL
+
+      <isNotEmpty property="deptGroup">
+        AND DP.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DP.UP_DEPT_CD = #bizGroup#
+        </isEmpty>
+      </isNotEmpty>
+
+
+
+      <isNotEmpty property="dstr_type">
+        AND S.DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="user_nm">
+        AND D.USER_CD = #user_nm#
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND D.USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="sdate">
+        <![CDATA[	AND D.SMP_DRDATE >= REPLACE(#sdate#,'-','') ]]>
+      </isNotEmpty>
+
+      <isNotEmpty property="edate">
+        <![CDATA[	AND D.SMP_DRDATE <= REPLACE(#edate#,'-','') ]]>
+      </isNotEmpty>
+
+      <isNotEmpty property="deptGroup">
+        <isNotEmpty property="cust_cd">
+          AND S.CUST_CD = #cust_cd#
+        </isNotEmpty>
+        <isEmpty property="cust_cd">
+          AND (S.CUST_CD LIKE '%' + #cust_nm# + '%' OR C.CUST_NM LIKE '%' + #cust_nm# + '%')
+          AND S.CUST_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND S.BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="item_type">
+        AND I.ITEM_TYPE = #item_type#
+        AND S.ITEM_CD IS NOT NULL
+      </isNotEmpty>
+
+      <isNotEmpty property="smp_drtype">
+        AND D.SMP_DRTYPE = #smp_drtype#
+      </isNotEmpty>
+
+      ORDER BY
+      D.SMP_DRDATE DESC
+    </select>
+
+
+
+
+
+    <!-- Sample Drop 현황 : 상세 -->
+    <select id="selectDropDetail" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      SMP_CD
+      ,SMP_CHASU
+      ,ITEM_CD
+      ,DBO.FN_GET_ITEM_NM(ITEM_CD) AS ITEM_NM
+      ,PJT_CD
+      ,DBO.FN_GET_PJT_NM(PJT_CD) AS PJT_NM
+      ,CUST_CD
+      ,DBO.FN_GET_CUST_NM(CUST_CD) AS CUST_NM
+      ,EUSER_CD
+      ,DBO.FN_GET_CUST_NM(EUSER_CD) AS EUSER_NM
+      ,BIZ_TYPE
+      ,dbo.FN_GET_CODE_NM(#language#, 'BIZ_TYPE',BIZ_TYPE) AS BIZ_TYPE_NM
+      ,DSTR_TYPE
+      ,dbo.FN_GET_CODE_NM(#language#, 'DSTR_TYPE',DSTR_TYPE) AS DSTR_TYPE_NM
+      ,USER_CD
+      ,DBO.FN_GET_USER_NM(USER_CD) AS USER_NM
+      ,DEPT_CD
+      ,DBO.FN_GET_DEPT_NM(DEPT_CD) AS DEPT_NM
+      ,CUST_SMP_CD
+      ,MOLD_NO
+      ,SMP_RQTY
+      ,DBO.FN_GET_SMP_USER_NMS(SMP_CD,SMP_CHASU) AS RUSER_NM
+      ,MUSER_CD
+      ,DBO.FN_GET_USER_NM(MUSER_CD) AS MUSER_NM
+      ,MDEPT_CD
+      ,DBO.FN_GET_DEPT_NM(MDEPT_CD) AS MDEPT_NM
+      ,SMP_STATUS
+      ,dbo.FN_GET_CODE_NM(#language#, 'SMP_STATUS',SMP_STATUS) AS SMP_STATUS_NM
+      ,PRDT_PSBLT
+      ,DBO.FN_GET_CODE_VALUE_NM('PRDT_PSBLT',PRDT_PSBLT,'1') AS PRDT_PSBLT_VALUE_NM
+      ,dbo.FN_GET_CODE_NM(#language#, 'PRDT_PSBLT',PRDT_PSBLT) AS PRDT_PSBLT_NM
+      ,CONVERT(DATE,SMP_RDATE) AS SMP_RDATE
+      ,CONVERT(DATE,PRDT_RCDATE) AS PRDT_RCDATE
+      ,CONVERT(DATE,CMPT_RDATE) AS CMPT_RDATE
+      ,CONVERT(DATE,PRDT_RDATE) AS PRDT_RDATE
+      ,PRDT_RUSER
+      ,DBO.FN_GET_USER_NM(PRDT_RUSER) AS PRDT_RUSER_NM
+      ,CONVERT(DATE,PRDT_ADATE) AS PRDT_ADATE
+      ,PRDT_AUSER
+      ,DBO.FN_GET_USER_NM(PRDT_AUSER) AS PRDT_AUSER_NM
+      ,CONVERT(DATE,PRDT_PDATE) AS PRDT_PDATE
+      ,CONVERT(DATE,PRDT_CDATE) AS PRDT_CDATE
+      ,PRDT_CUSER
+      ,DBO.FN_GET_USER_NM(PRDT_CUSER) AS PRDT_CUSER_NM
+      ,CONVERT(DATE,SHIP_PDATE) AS SHIP_PDATE
+      ,SHIP_PUSER
+      ,DBO.FN_GET_USER_NM(SHIP_PUSER) AS SHIP_PUSER_NM
+      ,SMP_SUMRY
+      ,BASE_CRNY
+      ,EXCH_RATE
+      ,BASE_YR
+      ,SMP_QTY
+      ,SMP_TYPE
+      ,PRDT_CMT
+      ,dbo.FN_GET_CODE_NM(#language#, 'SMP_TYPE',SMP_TYPE) AS SMP_TYPE_NM
+      ,CONVERT(DATE,FILM_FDATE) AS FILM_FDATE
+      ,CONVERT(DATE,FILM_RDATE) AS FILM_RDATE
+      ,DBO.FN_GET_USER_NM(FILM_RUSER) AS FILM_RUSER_NM
+      ,(
+      CASE WHEN SMP_STATUS = 'SMSTAT_900'
+      THEN
+      'N'
+      ELSE
+      'Y'
+      END
+      ) DROP_BTN_YN
+      ,(
+      SELECT
+      (CASE WHEN ISNULL(COUNT(*),0) = 0 THEN 'N' ELSE 'Y' END)
+      FROM
+      T_SMP_CREPAIR
+      WHERE
+      COMPANY_CD = T_SAMPLE.COMPANY_CD AND
+      SMP_CD = T_SAMPLE.SMP_CD AND SMP_CHASU = T_SAMPLE.SMP_CHASU
+      ) SMP_RE_YN
+      ,(
+      SELECT
+      (CASE WHEN ISNULL(COUNT(*),0) = 0 THEN 'N' ELSE 'Y' END)
+      FROM
+      T_SMP_QREPAIR
+      WHERE
+      COMPANY_CD = T_SAMPLE.COMPANY_CD AND
+      SMP_CD = T_SAMPLE.SMP_CD AND SMP_CHASU = T_SAMPLE.SMP_CHASU
+      ) SMP_MY_RE_YN
+      ,(
+      SELECT
+      (CASE WHEN ISNULL(COUNT(*),0) = 0 THEN 'N' ELSE 'Y' END)
+      FROM
+      T_SMP_RETURN
+      WHERE
+      COMPANY_CD = T_SAMPLE.COMPANY_CD AND
+      SMP_CD = T_SAMPLE.SMP_CD AND SMP_CHASU = T_SAMPLE.SMP_CHASU
+      ) SMP_RT_YN
+      ,SMR_CD
+      ,SMR_CHASU
+
+      FROM T_SAMPLE
+      WHERE
+      COMPANY_CD = #company_cd#
+      <isNotEmpty property="smp_cd">
+        AND SMP_CD = #smp_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="smp_chasu">
+        AND SMP_CHASU = #smp_chasu#
+      </isNotEmpty>
+
+    </select>
+
+
+
+
+
+    <!-- Sample 제작관리 : 신규 접수등록 -->
+    <insert id="newSmpinsert" parameterClass="Hashtable"  >
+      <selectKey resultClass="String" property="smp_cd" type="pre">
+        SELECT ('SMP' + SUBSTRING(CONVERT(VARCHAR(12),GETDATE(),112),3,2) +
+        dbo.FN_LPAD(
+        CONVERT(VARCHAR(5),
+        CONVERT(INTEGER,(
+        CASE WHEN MAX(SMP_CD) IS NULL THEN '0'
+        ELSE SUBSTRING(MAX(SMP_CD), 6,10)
+        END
+        )
+        )+1),5,'0')
+        ) AS SMP_CD
+        FROM T_SAMPLE
+      </selectKey>
+
+      INSERT INTO T_SAMPLE(
+      COMPANY_CD
+      ,SMP_CD
+      ,ITEM_CD
+      ,PJT_CD
+      ,CUST_CD
+      ,EUSER_CD
+      ,BIZ_TYPE
+      ,DSTR_TYPE
+      ,USER_CD
+      ,DEPT_CD
+      ,CUST_SMP_CD
+      ,MOLD_NO
+      ,SMP_RQTY
+      ,SMP_TYPE
+      ,SMP_STATUS
+      ,PRDT_PSBLT
+      ,SMP_RDATE
+      ,PRDT_RCDATE
+      ,CMPT_RDATE
+      ,SMP_SUMRY
+      ,BASE_CRNY
+      ,EXCH_RATE
+      ,BASE_YR
+      ,REG_DT
+      ,REG_USR
+      ,FILM_FDATE
+      <isNotEmpty property="smr_cd">
+        ,SMR_CD
+      </isNotEmpty>
+      <isNotEmpty property="smr_chasu">
+        ,SMR_CHASU
+      </isNotEmpty>
+
+      )VALUES(
+      #company_cd#
+      ,#smp_cd#
+      ,#item_cd#
+      ,#pjt_cd#
+      ,#cust_cd#
+      ,#euser_cd#
+      ,#biz_type#
+      ,#dstr_type#
+      ,#user_cd#
+      ,#dept_cd#
+      ,#cust_smp_cd#
+      ,#mold_no#
+      ,#smp_rqty#
+      ,#smp_type#
+      ,#smp_status#
+      ,#prdt_psblt#
+
+      <isNotEmpty property="smp_rdate">
+        ,#smp_rdate#
+      </isNotEmpty>
+      <isEmpty property="smp_rdate">
+        ,null
+      </isEmpty>
+
+      <isNotEmpty property="prdt_rcdate">
+        ,#prdt_rcdate#
+      </isNotEmpty>
+      <isEmpty property="prdt_rcdate">
+        ,null
+      </isEmpty>
+
+      <isNotEmpty property="cmpt_rdate">
+        ,#cmpt_rdate#
+      </isNotEmpty>
+      <isEmpty property="cmpt_rdate">
+        ,null
+      </isEmpty>
+
+      ,#smp_sumry#
+      ,#base_crny#
+      ,#exch_rate#
+      ,#base_yr#
+      ,getdate()
+      ,#reg_usr#
+
+      <isNotEmpty property="film_fdate">
+        ,#film_fdate#
+      </isNotEmpty>
+      <isEmpty property="film_fdate">
+        ,null
+      </isEmpty>
+
+      <isNotEmpty property="smr_cd">
+        ,#smr_cd#
+      </isNotEmpty>
+      <isEmpty property="smr_chasu">
+        ,#smr_chasu#
+      </isEmpty>
+      )
+    </insert>
+
+
+
+    <!-- Sample 제작관리 : 샘플 의뢰자 등록 -->
+    <insert id="insertSmpRuser" parameterClass="Hashtable">
+      INSERT INTO T_SMP_RUSER
+      (
+      COMPANY_CD
+      ,SMP_CD
+      ,SMP_CHASU
+      ,RUSER_CD
+      ,REG_DT
+      ,REG_USR
+      )
+      (
+      SELECT
+      U.COMPANY_CD,
+      #smp_cd# AS SMP_CD,
+      #smp_chasu# AS SMP_CHASU,
+      A.USER_CD AS RUSER_CD,
+      GETDATE() AS REG_DT,
+      #reg_usr# AS REG_USR
+      FROM T_AUTH_USER A
+      LEFT OUTER JOIN T_USER U
+      ON A.USER_CD = U.USER_CD
+      WHERE   A.AUTH_ID = 'A012'
+      AND A.USE_YN = 'Y'
+      AND U.USE_YN = 'Y'
+      AND U.COMPANY_CD = #company_cd#
+      AND A.USER_CD IS NOT NULL
+      )
+    </insert>
+
+
+
+    <!-- Sample 제작관리 : 샘플key 초기화  -->
+    <update id="uptSampleRequestSmpInit" parameterClass="Hashtable">
+      UPDATE
+      T_SAMPLE_REQUEST
+      SET
+      SMP_CD = NULL,
+      SMP_CHASU = NULL
+      WHERE SMP_CD = #smp_cd#
+      AND  SMP_CHASU = #smp_chasu#
+    </update>
+
+
+
+
+    <!-- Sample 제작관리 : 샘플 상태값 변경 -->
+    <update id="updateSmpDetail" parameterClass="Hashtable">
+      UPDATE T_SAMPLE
+      SET
+      MOD_DT = getdate()
+      ,MOD_USR = #mod_usr#
+      ,SMP_STATUS = #smp_status#
+      <isEqual property="state" compareValue="SMSTAT_100">
+        ,ITEM_CD = #item_cd#
+        ,PJT_CD =	#pjt_cd#
+        ,CUST_CD = #cust_cd#
+        ,EUSER_CD = #euser_cd#
+        ,BIZ_TYPE = #biz_type#
+        ,DSTR_TYPE = #dstr_type#
+        ,USER_CD = #user_cd#
+        ,DEPT_CD = #dept_cd#
+        ,CUST_SMP_CD = #cust_smp_cd#
+        ,MOLD_NO = #mold_no#
+        ,SMP_RQTY = #smp_rqty#
+        ,PRDT_PSBLT = #prdt_psblt#
+
+        <isNotEmpty property="smp_rdate">
+          ,SMP_RDATE = #smp_rdate#
+        </isNotEmpty>
+        <isEmpty property="smp_rdate">
+          ,SMP_RDATE = null
+        </isEmpty>
+
+        <isNotEmpty property="prdt_rcdate">
+          ,PRDT_RCDATE = #prdt_rcdate#
+        </isNotEmpty>
+        <isEmpty property="prdt_rcdate">
+          ,PRDT_RCDATE = null
+        </isEmpty>
+
+
+        <isNotEmpty property="cmpt_rdate">
+          ,CMPT_RDATE = #cmpt_rdate#
+        </isNotEmpty>
+        <isEmpty property="cmpt_rdate">
+          ,CMPT_RDATE = null
+        </isEmpty>
+
+
+        ,SMP_SUMRY = #smp_sumry#
+        ,BASE_CRNY = #base_crny#
+        ,EXCH_RATE = #exch_rate#
+        ,BASE_YR = #base_yr#
+        ,SMP_TYPE = #smp_type#
+
+        <isNotEmpty property="film_fdate">
+          ,FILM_FDATE = #film_fdate#
+        </isNotEmpty>
+        <isEmpty property="film_fdate">
+          ,FILM_FDATE = null
+        </isEmpty>
+
+
+      </isEqual>
+
+      <isEqual property="state" compareValue="SMSTAT_200">
+        ,PRDT_RDATE = #prdt_rdate#
+        ,PRDT_RUSER = #prdt_ruser#
+      </isEqual>
+
+      <isEqual property="state" compareValue="SMSTAT_300">
+        ,PRDT_RDATE = NULL
+        ,PRDT_RUSER = NULL
+      </isEqual>
+
+      <isEqual property="state" compareValue="SMSTAT_600">
+        ,SHIP_PDATE = #ship_pdate#
+        ,SHIP_PUSER = #ship_puser#
+      </isEqual>
+
+      <isEqual property="state" compareValue="SMSTAT_700">
+        ,PRDT_DATE = #prdt_pdate#
+        ,PRDT_USER = #prdt_user#
+      </isEqual>
+
+      <isEqual property="state" compareValue="chasu">
+        ,SMP_CHASU = #smp_chasu#
+      </isEqual>
+
+      <isEqual property="state" compareValue="commition_cancel">
+        ,PRDT_RDATE = NULL
+        ,PRDT_RUSER = NULL
+      </isEqual>
+
+      <isEqual property="state" compareValue="commition_rejected">
+        ,PRDT_RJDATE = #prdt_rjdate#
+        ,PRDT_RJUSER = #prdt_rjuser#
+        ,PRDT_RDATE = NULL
+        ,PRDT_RUSER = NULL
+      </isEqual>
+
+      <isEqual property="state" compareValue="commition_success">
+        ,PRDT_ADATE = #prdt_adate#
+        ,PRDT_AUSER = #prdt_auser#
+        ,MUSER_CD = #muser_cd#
+        ,PRDT_PDATE = #prdt_pdate#
+        ,PRDT_CMT = #prdt_cmt#
+      </isEqual>
+
+      <isEqual property="state" compareValue="commition_success_cancel">
+        ,PRDT_ADATE = NULL
+        ,PRDT_AUSER = NULL
+        ,MUSER_CD = NULL
+        ,PRDT_PDATE = NULL
+      </isEqual>
+
+      <isEqual property="state" compareValue="complete">
+        ,PRDT_CDATE = #prdt_cdate#
+        ,PRDT_CUSER = #prdt_cuser#
+        ,SMP_QTY = #smp_qty#
+      </isEqual>
+
+      <isEqual property="state" compareValue="complete_cancel">
+        ,PRDT_CDATE = NULL
+        ,PRDT_CUSER = NULL
+        ,SMP_QTY = NULL
+      </isEqual>
+
+      <isEqual property="state" compareValue="shipping">
+        ,SHIP_PDATE = #ship_pdate#
+        ,SHIP_PUSER = #ship_puser#
+        ,TRACKING_NUM = #tracking_num#
+      </isEqual>
+
+      <isEqual property="state" compareValue="production">
+        ,PRDT_DATE = #prdt_date#
+        ,PRDT_USER = #prdt_user#
+      </isEqual>
+
+      <isEqual property="state" compareValue="delete">
+        ,USE_YN = 'N'
+      </isEqual>
+
+      <isEqual property="state" compareValue="drop">
+        ,DROP_YN = 'Y'
+      </isEqual>
+
+      <isEqual property="state" compareValue="myrepair">
+        ,MUSER_CD = NULL
+        ,MDEPT_CD = NULL
+        ,PRDT_PSBLT = NULL
+        ,PRDT_RCDATE = NULL
+        ,CMPT_RDATE = NULL
+        ,PRDT_RDATE = NULL
+        ,PRDT_RJDATE = NULL
+        ,PRDT_ADATE = NULL
+        ,PRDT_PDATE = NULL
+        ,PRDT_CDATE = NULL
+        ,SHIP_PDATE = NULL
+        ,PRDT_DATE = NULL
+        ,PRDT_RUSER = NULL
+        ,PRDT_RJUSER = NULL
+        ,PRDT_AUSER = NULL
+        ,PRDT_CUSER = NULL
+        ,SHIP_PUSER = NULL
+        ,PRDT_USER = NULL
+        ,SMP_QTY = NULL
+      </isEqual>
+
+      <isEqual property="state" compareValue="film_receipt">
+        ,FILM_RDATE = #film_rdate#
+        ,FILM_RUSER = #film_ruser#
+      </isEqual>
+
+      <isNotEmpty property="smr_cd">
+        ,SMR_CD = #smr_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="smr_chasu">
+        ,SMR_CHASU = #smr_chasu#
+      </isNotEmpty>
+
+      WHERE
+      COMPANY_CD = #company_cd# AND
+      SMP_CD = #smp_cd# AND
+      SMP_CHASU = #smp_chasu#
+      <!-- 		  		  
+		  ,RUSER_CD = #ruser_cd#
+		  ,MUSER_CD = #muser_cd#
+		  ,MDEPT_CD = #mdept_cd#
+		  ,SMP_STATUS = #smp_status#
+
+		  
+		  ,PRDT_RJDATE = #prdt_rjdate#
+		  ,PRDT_ADATE = #prdt_adate#
+
+		  ,PRDT_CDATE = #prdt_cdate#
+		  
+		  ,PRDT_DATE = #prdt_date#
+		  
+		  ,PRDT_RJUSER = #prdt_rjuser#
+		  ,PRDT_AUSER = #prdt_auser#
+		  ,PRDT_CUSER = #prdt_cuser#
+		  
+		 
+		  ,SMP_QTY = #smp_qty#
+		  ,PRDT_YN = #prdt_yn#
+		  ,DROP_YN = #drop_yn#
+ -->
+    </update>
+
+
+
+    <!-- Sample 제작관리 : 샘플 차수 업데이트 -->
+    <update id="uptSampleRequestSmpInfo" parameterClass="Hashtable">
+      UPDATE
+      T_SAMPLE_REQUEST
+      SET
+      SMP_CD = #smp_cd#,
+      SMP_CHASU = #smp_chasu#
+      WHERE SMR_CD = #smr_cd#
+      AND  SMR_CHASU = #smr_chasu#
+    </update>
+
+
+
+    <!-- Sample 제작관리 : 샘플 요청 상태 변경 -->
+    <update id="uptSampleRequestCS" parameterClass="Hashtable">
+      UPDATE
+      T_SAMPLE_REQUEST
+      SET
+      <isEqual property="state" compareValue="commition_success">
+        PRDT_AUSER = #reg_usr#,
+        PRDT_ADATE = CONVERT(NVARCHAR(8),GETDATE(),112)	,
+        PRDT_PDATE = #prdt_pdate#,
+        SMP_STATUS = 'SMSTAT_400'
+      </isEqual>
+      <isEqual property="state" compareValue="shipping">
+        SHIP_PDATE = CONVERT(NVARCHAR(8),GETDATE(),112),
+        SHIP_PUSER = #reg_usr#,
+        SMP_STATUS = 'SMSTAT_600'
+      </isEqual>
+      WHERE  SMP_CD = #smp_cd#
+      AND   SMP_CHASU = #smp_chasu#
+
+    </update>
+
+
+    <!-- Sample 제작관리 : 드롭 샘플 등록 -->
+    <insert id="insertSmpDrop" parameterClass="Hashtable">
+
+      INSERT INTO T_SMP_DROP
+      (
+      COMPANY_CD
+      ,SMP_CD
+      ,SMP_CHASU
+      ,USER_CD
+      ,SMP_DRDATE
+      ,SMP_DRTYPE
+      ,SMP_DRDESCRIPT
+      ,REG_DT
+      ,REG_USR
+      )
+      VALUES
+      (
+      #company_cd#
+      ,#smp_cd#
+      ,#smp_chasu#
+      ,#user_cd#
+      ,#smp_drdate#
+      ,#smp_drtype#
+      ,#smp_drdescript#
+      ,getdate()
+      ,#reg_usr#
+      )
+    </insert>
+
+
+    <insert id="insertSmpCrepair" parameterClass="Hashtable">
+      INSERT INTO T_SMP_CREPAIR
+      (
+      COMPANY_CD
+      ,SMP_CD
+      ,SMP_CHASU
+      ,USER_CD
+      ,SMP_CRDATE
+      ,SMP_CRTYPE
+      ,SMP_CRDESCRIPT
+      ,REG_DT
+      ,REG_USR
+      )
+      VALUES
+      (
+      #company_cd#
+      ,#smp_cd#
+      ,#smp_chasu#
+      ,#user_cd#
+      ,#smp_crdate#
+      ,#smp_crtype#
+      ,#smp_crdescript#
+      ,GETDATE()
+      ,#reg_usr#
+      )
+    </insert>
+
+
+
+    <select id="checkSmrReqStatus070"  parameterClass="Hashtable" resultClass="int">
+      SELECT
+      COUNT(*) AS CNT
+      FROM
+      T_SAMPLE_REQUEST
+      WHERE
+      SMP_STATUS = 'SMSTAT_070' AND
+      SMR_CD = #smr_cd# AND
+      SMR_CHASU = #smr_chasu#
+    </select>
+
+
+
+
+
+    <insert id="insertSmpRepairNew"  parameterClass="Hashtable" resultClass="Hashtable">
+
+      <selectKey resultClass="String" property="smp_chasu2" type="pre" >
+        SELECT (MAX(SMP_CHASU) + 1) AS SMP_CHASU2 FROM T_SAMPLE WHERE SMP_CD = #smp_cd#
+      </selectKey>
+
+      INSERT INTO T_SAMPLE
+      (
+      COMPANY_CD
+      ,SMP_CD
+      ,SMP_CHASU
+      ,ITEM_CD
+      ,PJT_CD
+      ,CUST_CD
+      ,EUSER_CD
+      ,BIZ_TYPE
+      ,DSTR_TYPE
+      ,USER_CD
+      ,DEPT_CD
+      ,CUST_SMP_CD
+      ,MOLD_NO
+      ,SMP_RQTY
+      ,SMP_STATUS
+      ,SMP_SUMRY
+      ,SMP_RDATE
+      ,PRDT_RCDATE
+      ,CMPT_RDATE
+      ,PRDT_PSBLT
+      ,BASE_CRNY
+      ,EXCH_RATE
+      ,BASE_YR
+      ,REG_DT
+      ,REG_USR
+      ,SMR_CD
+      ,SMR_CHASU
+      )
+      (
+      SELECT
+      COMPANY_CD
+      ,SMP_CD
+      ,#smp_chasu2# AS SMP_CHASU
+      ,ITEM_CD
+      ,PJT_CD
+      ,CUST_CD
+      ,EUSER_CD
+      ,BIZ_TYPE
+      ,DSTR_TYPE
+      ,USER_CD
+      ,DEPT_CD
+      ,CUST_SMP_CD
+      ,MOLD_NO
+      ,SMP_RQTY
+      ,'SMSTAT_100' AS SMP_STATUS
+      ,SMP_SUMRY
+      ,CONVERT(NVARCHAR,GETDATE(),112) AS SMP_RDATE
+      ,NULL AS PRDT_RCDATE
+      ,NULL AS CMPT_RDATE
+      ,PRDT_PSBLT
+      ,BASE_CRNY
+      ,EXCH_RATE
+      ,BASE_YR
+      ,GETDATE() AS REG_DT
+      ,#reg_usr# AS REG_USR
+      ,#smr_cd#
+      ,#smr_chasu#
+      FROM
+      T_SAMPLE	S
+      WHERE
+      SMP_CD  = #smp_cd# AND
+      SMP_CHASU = #smp_chasu#
+      )
+    </insert>
+
+
+
+
+  </statements>
+
+
+
+</sqlMap>

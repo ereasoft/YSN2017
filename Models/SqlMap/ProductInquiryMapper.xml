@@ -1,0 +1,965 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+
+
+    <!-- 제품문의 사후조치 : 리스트 -->
+    <select id="inquiryList" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      P.INQ_CD,
+      CONVERT(NVARCHAR(10),CONVERT(DATETIME,P.INQ_RDATE),126) AS INQ_RDATE,
+      ISNULL((SELECT
+      CASE
+      WHEN #language# = 'KOR' THEN NAT_NM
+      ELSE NAT_ENG_NM
+      END AS NAT_NM
+      FROM T_NATION WHERE NAT_CD = P.NAT_CD),'') AS NAT_NM, 
+      P.INQ_CHNL,
+      dbo.FN_GET_CODE_NM(#language#, 'INQ_CHNL',INQ_CHNL) AS INQ_CHNL_NM,
+      P.INQ_RUSER_CD,
+      U.USER_NM AS INQ_RUSER_NM,
+      P.USER_CD,
+      ISNULL(U2.USER_NM,P.USER_CD) AS USER_NM,
+      P.INQ_STATUS,
+      dbo.FN_GET_CODE_NM(#language#, 'INQ_STATUS',INQ_STATUS) AS INQ_STATUS_NM,
+      P.INQ_USER_NM,
+      P.INQ_TYPE,
+      dbo.FN_GET_CODE_NM(#language#, 'INQ_TYPE',INQ_TYPE) AS INQ_TYPE_NM,
+      I.INQ_ITEM_NM,
+      P.POST_ARNG,
+      P.DSTR_TYPE,
+      dbo.FN_GET_CODE_NM(#language#, 'DSTR_TYPE',DSTR_TYPE) AS DSTR_TYPE_NM,
+      P.ORDER_YN,
+      P.ORDER_AMOUNT
+      FROM
+      T_PRDT_INQRY AS P
+      LEFT OUTER JOIN
+      T_USER AS U
+      ON
+      P.COMPANY_CD = U.COMPANY_CD AND
+      P.INQ_RUSER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      T_USER AS U2
+      ON
+      P.COMPANY_CD = U2.COMPANY_CD AND
+      P.USER_CD = U2.USER_CD
+      LEFT OUTER JOIN
+      (
+      SELECT
+      COMPANY_CD,
+      INQ_CD,
+      (
+      CASE WHEN COUNT(INQ_CD) > 1
+      THEN
+      MIN(INQ_ITEM_NM) + ' 외 ' + CONVERT(VARCHAR,(COUNT(INQ_CD) - 1)) + '건'
+      ELSE
+      MIN(INQ_ITEM_NM)
+      END
+      ) AS INQ_ITEM_NM
+      FROM
+      T_PRDT_INQRY_ITEM
+      GROUP BY
+      COMPANY_CD,
+      INQ_CD
+      ) AS I
+      ON
+      P.COMPANY_CD = I.COMPANY_CD AND
+      P.INQ_CD = I.INQ_CD
+      LEFT OUTER JOIN
+      T_CODE AS CD
+      ON
+      P.INQ_STATUS = CD.CODE_ID
+      LEFT OUTER JOIN
+      T_DEPARTMENT D
+      ON
+      P.COMPANY_CD = D.COMPANY_CD AND
+      P.DEPT_CD = D.DEPT_CD
+
+      WHERE
+      P.COMPANY_CD = #company_cd# AND
+      P.USE_YN = 'Y'
+
+
+      <!--
+      <isNotEmpty property="inq_ruser_nm">
+
+          <isNotEmpty property="inq_ruser_cd">
+            AND P.INQ_RUSER_CD = #inq_ruser_cd#
+          </isNotEmpty>
+
+          <isEmpty property="inq_ruser_cd">
+            AND U.USER_NM LIKE '%' + #inq_ruser_nm# + '%'
+            AND P.INQ_RUSER_CD IS NOT NULL
+          </isEmpty>
+
+      </isNotEmpty>
+ -->
+      <isNotEmpty property="nat_cd">
+        AND P.NAT_CD = #nat_cd#
+      </isNotEmpty>
+      
+      <isNotEmpty property="user_cd">
+        AND P.USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="inq_rsdate">
+        <![CDATA[
+               AND P.INQ_RDATE >= REPLACE(#inq_rsdate#,'-','')
+            ]]>
+      </isNotEmpty>
+
+      <isNotEmpty property="inq_redate">
+        <![CDATA[
+               AND P.INQ_RDATE <= REPLACE(#inq_redate#,'-','')
+            ]]>
+      </isNotEmpty>
+
+      <isNotEmpty property="inq_type">
+        AND P.INQ_TYPE = #inq_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="inq_chnl">
+        AND P.INQ_CHNL = #inq_chnl#
+      </isNotEmpty>
+
+      <isNotEmpty property="inq_status">
+        AND P.INQ_STATUS = #inq_status#
+      </isNotEmpty>
+
+      <isNotEmpty property="pi_state">
+        <isEmpty property="inq_status">
+          AND (CD.VALUE_2 = 'PA' OR CD.CODE_ID = 'INQSTAT_900')
+          AND P.INQ_STATUS IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="dstr_type">
+        AND P.DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+
+      <isNotEmpty property="deptGroup">
+        AND P.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="order_yn">
+        AND ISNULL(P.ORDER_YN,'N') = 'Y'
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND P.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+      
+      ORDER BY P.INQ_CD DESC
+
+    </select>
+
+
+
+    <!-- 제품문의 사후조치 : 리스트 상단 건수 -->
+    <select id="inquiryRegCnt" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      concat('1.회신후 대기 : ',ISNULL(SUM(A.WAITING),0) ,'건          2.상담진행 : ' , ISNULL(SUM(A.PROGRESS),0) ,'건          3.상담종료 : ', ISNULL(SUM(A.ENDS),0)  ,'건          4.Drop : ', ISNULL(SUM(A.DROPS),0) ,'건') as ETC_TOTAL
+
+      FROM(
+      SELECT
+      P.INQ_CD,
+      P.INQ_STATUS,
+      (
+      CASE WHEN P.INQ_STATUS = 'INQSTAT_400'
+      THEN
+      1
+      ELSE
+      0
+      END
+      ) WAITING,
+      (
+      CASE WHEN P.INQ_STATUS = 'INQSTAT_500'
+      THEN
+      1
+      ELSE
+      0
+      END
+      ) PROGRESS,
+      (
+      CASE WHEN P.INQ_STATUS = 'INQSTAT_600'
+      THEN
+      1
+      ELSE
+      0
+      END
+      ) ENDS,
+      (
+      CASE WHEN P.INQ_STATUS = 'INQSTAT_900'
+      THEN
+      1
+      ELSE
+      0
+      END
+      ) DROPS
+      FROM
+      T_PRDT_INQRY AS P
+      LEFT OUTER JOIN
+      T_USER AS U
+      ON
+      P.COMPANY_CD = U.COMPANY_CD AND
+      P.INQ_RUSER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      T_USER AS U2
+      ON
+      P.COMPANY_CD = U2.COMPANY_CD AND
+      P.USER_CD = U2.USER_CD
+      LEFT OUTER JOIN
+      T_CODE AS CD
+      ON
+      P.INQ_STATUS = CD.CODE_ID
+      LEFT OUTER JOIN
+      T_DEPARTMENT D
+      ON
+      P.COMPANY_CD = D.COMPANY_CD AND
+      P.DEPT_CD = D.DEPT_CD
+
+      WHERE
+      P.COMPANY_CD = #company_cd# AND
+      P.USE_YN = 'Y'
+      <!--
+      
+            ISNULL(SUM(A.WAITING),0) AS WAITING,
+      ISNULL(SUM(A.PROGRESS),0) AS PROGRESS,
+      ISNULL(SUM(A.ENDS),0) AS ENDS,
+      ISNULL(SUM(A.DROPS),0) AS DROPS
+      <isNotEmpty property="inq_ruser_nm">
+
+          <isNotEmpty property="inq_ruser_cd">
+            AND P.INQ_RUSER_CD = #inq_ruser_cd#
+          </isNotEmpty>
+
+          <isEmpty property="inq_ruser_cd">
+            AND U.USER_NM LIKE '%' + #inq_ruser_nm# + '%'
+            AND P.INQ_RUSER_CD IS NOT NULL
+          </isEmpty>
+
+      </isNotEmpty>
+ -->
+
+      <isNotEmpty property="nat_cd">
+        AND P.NAT_CD = #nat_cd#
+      </isNotEmpty>
+      
+      <isNotEmpty property="user_cd">
+        AND P.USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="inq_rsdate">
+        <![CDATA[
+					AND P.INQ_RDATE >= REPLACE(#inq_rsdate#,'-','')
+				]]>
+      </isNotEmpty>
+
+      <isNotEmpty property="inq_redate">
+        <![CDATA[
+					AND P.INQ_RDATE <= REPLACE(#inq_redate#,'-','')
+				]]>
+      </isNotEmpty>
+      
+      
+
+      <isNotEmpty property="inq_type">
+        AND P.INQ_TYPE = #inq_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="inq_chnl">
+        AND P.INQ_CHNL = #inq_chnl#
+      </isNotEmpty>
+
+      <isNotEmpty property="inq_status">
+        AND P.INQ_STATUS = #inq_status#
+      </isNotEmpty>
+
+      <isNotEmpty property="dstr_type">
+        AND P.DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+      
+
+      <isEmpty property="inq_status">
+        AND (CD.VALUE_2 = 'PA' OR CD.CODE_ID = 'INQSTAT_900')
+        AND P.INQ_STATUS IS NOT NULL
+      </isEmpty>
+
+      <isNotEmpty property="deptGroup">
+        AND P.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="order_yn">
+        AND ISNULL(P.ORDER_YN,'N') = 'Y'
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND P.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      ) A
+    </select>
+
+    <!-- 제품문의 사후조치 : 파트너사 리스트 -->
+    <select id="inquiryList_pt" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      P.INQ_CD,
+      CONVERT(NVARCHAR(10),CONVERT(DATETIME,P.INQ_RDATE),126) AS INQ_RDATE,
+      ISNULL((SELECT
+      CASE
+      WHEN #language# = 'KOR' THEN NAT_NM
+      ELSE NAT_ENG_NM
+      END AS NAT_NM
+      FROM T_NATION WHERE NAT_CD = P.NAT_CD),'') AS NAT_NM,
+      P.INQ_CHNL,
+      dbo.FN_GET_CODE_NM(#language#, 'INQ_CHNL',INQ_CHNL) AS INQ_CHNL_NM,
+      P.INQ_RUSER_CD,
+      (SELECT USER_NM FROM T_USER WHERE COMPANY_CD = #company_cd# AND USER_CD = P.INQ_RUSER_CD) AS INQ_RUSER_NM,
+      P.USER_CD,
+      (SELECT USER_NM FROM T_USER WHERE COMPANY_CD = #company_cd2# AND USER_CD = P.USER_CD) AS USER_NM,
+      P.INQ_STATUS,
+      dbo.FN_GET_CODE_NM(#language#, 'INQ_STATUS',INQ_STATUS) AS INQ_STATUS_NM,
+      P.INQ_USER_NM,
+      P.INQ_TYPE,
+      dbo.FN_GET_CODE_NM(#language#, 'INQ_TYPE',INQ_TYPE) AS INQ_TYPE_NM,
+      I.INQ_ITEM_NM,
+      P.POST_ARNG,
+      P.DSTR_TYPE,
+      dbo.FN_GET_CODE_NM(#language#, 'DSTR_TYPE',DSTR_TYPE) AS DSTR_TYPE_NM,
+      P.ORDER_YN,
+      P.ORDER_AMOUNT
+      FROM
+      T_PRDT_INQRY AS P
+      LEFT OUTER JOIN
+      (
+      SELECT
+      COMPANY_CD,
+      INQ_CD,
+      (
+      CASE WHEN COUNT(INQ_CD) > 1
+      THEN
+      MIN(INQ_ITEM_NM) + ' 외 ' + CONVERT(VARCHAR,(COUNT(INQ_CD) - 1)) + '건'
+      ELSE
+      MIN(INQ_ITEM_NM)
+      END
+      ) AS INQ_ITEM_NM
+      FROM
+      T_PRDT_INQRY_ITEM
+      GROUP BY
+      COMPANY_CD,
+      INQ_CD
+      ) AS I
+      ON
+      P.COMPANY_CD = I.COMPANY_CD AND
+      P.INQ_CD = I.INQ_CD
+      LEFT OUTER JOIN
+      T_CODE AS CD
+      ON
+      P.INQ_STATUS = CD.CODE_ID
+
+      WHERE
+      P.COMPANY_CD = #company_cd# AND
+      P.USE_YN = 'Y'
+
+      <!--
+      <isNotEmpty property="inq_ruser_nm">
+
+          <isNotEmpty property="inq_ruser_cd">
+            AND P.INQ_RUSER_CD = #inq_ruser_cd#
+          </isNotEmpty>
+
+          <isEmpty property="inq_ruser_cd">
+            AND U.USER_NM LIKE '%' + #inq_ruser_nm# + '%'
+            AND P.INQ_RUSER_CD IS NOT NULL
+          </isEmpty>
+
+      </isNotEmpty>
+ -->
+      <isNotEmpty property="nat_cd">
+        AND P.NAT_CD = #nat_cd#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND P.USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="inq_rsdate">
+        <![CDATA[
+               AND P.INQ_RDATE >= REPLACE(#inq_rsdate#,'-','')
+            ]]>
+      </isNotEmpty>
+
+      <isNotEmpty property="inq_redate">
+        <![CDATA[
+               AND P.INQ_RDATE <= REPLACE(#inq_redate#,'-','')
+            ]]>
+      </isNotEmpty>
+
+      <isNotEmpty property="inq_type">
+        AND P.INQ_TYPE = #inq_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="inq_chnl">
+        AND P.INQ_CHNL = #inq_chnl#
+      </isNotEmpty>
+
+      <isNotEmpty property="inq_status">
+        AND P.INQ_STATUS = #inq_status#
+      </isNotEmpty>
+
+      <isNotEmpty property="pi_state">
+        <isEmpty property="inq_status">
+          AND (CD.VALUE_2 = 'PA' OR CD.CODE_ID = 'INQSTAT_900')
+          AND P.INQ_STATUS IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="dstr_type">
+        AND P.DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+
+      ORDER BY P.INQ_CD DESC
+
+    </select>
+
+
+
+    <!-- 제품문의 사후조치 : 리스트 상단 건수 -->
+    <select id="inquiryRegCnt_pt" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      concat('1.회신후 대기 : ',ISNULL(SUM(A.WAITING),0) ,'건          2.상담진행 : ' , ISNULL(SUM(A.PROGRESS),0) ,'건          3.상담종료 : ', ISNULL(SUM(A.ENDS),0)  ,'건          4.Drop : ', ISNULL(SUM(A.DROPS),0) ,'건') as ETC_TOTAL
+
+      FROM(
+      SELECT
+      P.INQ_CD,
+      P.INQ_STATUS,
+      (
+      CASE WHEN P.INQ_STATUS = 'INQSTAT_400'
+      THEN
+      1
+      ELSE
+      0
+      END
+      ) WAITING,
+      (
+      CASE WHEN P.INQ_STATUS = 'INQSTAT_500'
+      THEN
+      1
+      ELSE
+      0
+      END
+      ) PROGRESS,
+      (
+      CASE WHEN P.INQ_STATUS = 'INQSTAT_600'
+      THEN
+      1
+      ELSE
+      0
+      END
+      ) ENDS,
+      (
+      CASE WHEN P.INQ_STATUS = 'INQSTAT_900'
+      THEN
+      1
+      ELSE
+      0
+      END
+      ) DROPS
+      FROM
+      T_PRDT_INQRY AS P 
+      LEFT OUTER JOIN
+      T_CODE AS CD
+      ON
+      P.INQ_STATUS = CD.CODE_ID 
+
+      WHERE
+      P.COMPANY_CD = #company_cd# AND
+      P.USE_YN = 'Y'
+      <!--
+      
+            ISNULL(SUM(A.WAITING),0) AS WAITING,
+      ISNULL(SUM(A.PROGRESS),0) AS PROGRESS,
+      ISNULL(SUM(A.ENDS),0) AS ENDS,
+      ISNULL(SUM(A.DROPS),0) AS DROPS
+      <isNotEmpty property="inq_ruser_nm">
+
+          <isNotEmpty property="inq_ruser_cd">
+            AND P.INQ_RUSER_CD = #inq_ruser_cd#
+          </isNotEmpty>
+
+          <isEmpty property="inq_ruser_cd">
+            AND U.USER_NM LIKE '%' + #inq_ruser_nm# + '%'
+            AND P.INQ_RUSER_CD IS NOT NULL
+          </isEmpty>
+
+      </isNotEmpty>
+ -->
+      <isNotEmpty property="nat_cd">
+        AND P.NAT_CD = #nat_cd#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND P.USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="inq_rsdate">
+        <![CDATA[
+					AND P.INQ_RDATE >= REPLACE(#inq_rsdate#,'-','')
+				]]>
+      </isNotEmpty>
+
+      <isNotEmpty property="inq_redate">
+        <![CDATA[
+					AND P.INQ_RDATE <= REPLACE(#inq_redate#,'-','')
+				]]>
+      </isNotEmpty>
+
+
+
+      <isNotEmpty property="inq_type">
+        AND P.INQ_TYPE = #inq_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="inq_chnl">
+        AND P.INQ_CHNL = #inq_chnl#
+      </isNotEmpty>
+
+      <isNotEmpty property="inq_status">
+        AND P.INQ_STATUS = #inq_status#
+      </isNotEmpty>
+
+      <isNotEmpty property="dstr_type">
+        AND P.DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+
+
+      <isEmpty property="inq_status">
+        AND (CD.VALUE_2 = 'PA' OR CD.CODE_ID = 'INQSTAT_900')
+        AND P.INQ_STATUS IS NOT NULL
+      </isEmpty>
+
+      <isNotEmpty property="deptGroup">
+        AND P.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND P.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      ) A
+    </select>
+
+
+    <!-- 제품문의 사후조치 : 상세화면 -->
+    <select id="inquiryDetail" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      INQ_CD
+      ,INQ_CHNL
+      ,dbo.FN_GET_CODE_NM(#language#, 'INQ_CHNL',INQ_CHNL) AS INQ_CHNL_NM
+      ,INQ_TYPE
+      ,dbo.FN_GET_CODE_NM(#language#, 'INQ_TYPE',INQ_TYPE) AS INQ_TYPE_NM
+      ,INQ_RUSER_CD
+      ,dbo.FN_GET_USER_NM(INQ_RUSER_CD) AS INQ_RUSER_NM
+      ,USER_CD
+      ,dbo.FN_GET_USER_NM(USER_CD) AS USER_NM
+      ,DEPT_CD
+      ,dbo.FN_GET_DEPT_NM(DEPT_CD) AS DEPT_NM
+      ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,INQ_RDATE),126) AS INQ_RDATE
+      ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,INQ_DDATE),126) AS INQ_DDATE
+      ,DLV_USER_CD
+      ,dbo.FN_GET_USER_NM(DLV_USER_CD) AS DLV_USER_NM
+      ,DSTR_TYPE
+      ,dbo.FN_GET_CODE_NM(#language#, 'DSTR_TYPE',DSTR_TYPE) AS DSTR_TYPE_NM
+      ,INQ_STATUS
+      ,dbo.FN_GET_CODE_NM(#language#, 'INQ_STATUS',INQ_STATUS) AS INQ_STATUS_NM
+      ,INQ_USER_NM
+      ,INQ_EMAIL
+      ,INQ_MPHONE
+      ,POST_ARNG
+      ,INQ_CONTENTS
+      ,NAT_CD
+      ,USE_YN
+      ,INQ_ADDR
+      ,INQ_COMPANY 
+      ,ORDER_YN
+      ,ORDER_AMOUNT
+      FROM
+      T_PRDT_INQRY
+      WHERE
+      COMPANY_CD = #company_cd#
+      AND INQ_CD = #inq_cd#
+    </select>
+
+
+    
+    
+    <!-- 제품문의 사후조치 : 상세화면 문의제품 항목 -->
+    <select id="inquiryItemList" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      INQ_CD
+      ,SEQ_NO 
+      ,INQ_ITEM_NM
+      FROM
+      T_PRDT_INQRY_ITEM
+      WHERE
+      COMPANY_CD = #company_cd#
+      AND  INQ_CD = #inq_cd#
+      ORDER BY
+      SEQ_NO
+    </select>
+
+
+
+
+
+    <!-- 제품문의/사후조치 : 등록  -->
+    <insert id="insertProudctInquiry" parameterClass="Hashtable" resultClass="Hashtable">
+      <selectKey property="inq_cd" resultClass="String" type="pre">
+        SELECT ('INQ' + SUBSTRING(CONVERT(VARCHAR(12),GETDATE(),112),3,2) +
+        dbo.FN_LPAD(
+        CONVERT(VARCHAR(5),
+        CONVERT(INTEGER,(
+        CASE WHEN MAX(INQ_CD) IS NULL THEN '0'
+        ELSE SUBSTRING(MAX(INQ_CD), 6,10)
+        END
+        )
+        )+1),5,'0')
+        ) AS inq_cd
+        FROM T_PRDT_INQRY
+        WHERE
+        INQ_CD LIKE 'INQ' + SUBSTRING(CONVERT(VARCHAR(12),GETDATE(),112),3,2) + '%'
+      </selectKey>
+
+      INSERT INTO T_PRDT_INQRY
+      (COMPANY_CD
+      ,INQ_CD
+      ,INQ_CHNL
+      ,INQ_TYPE
+      ,INQ_RUSER_CD
+      ,USER_CD
+      ,DEPT_CD
+      ,INQ_RDATE
+      ,DLV_USER_CD
+      ,DSTR_TYPE
+      ,INQ_STATUS
+      ,INQ_USER_NM
+      ,INQ_EMAIL
+      ,INQ_MPHONE
+      ,POST_ARNG
+      ,INQ_CONTENTS
+      ,NAT_CD
+      ,USE_YN
+      ,REG_DT
+      ,REG_USR
+      ,INQ_ADDR
+      ,INQ_COMPANY 
+      )
+      VALUES
+      (#company_cd#
+      ,#inq_cd#
+      ,#inq_chnl#
+      ,#inq_type#
+      ,#inq_ruser_cd#
+      ,#user_cd#
+      ,#dept_cd#
+      ,CONVERT(NVARCHAR,GETDATE(),112)
+      ,#dlv_user_cd#
+      ,#dstr_type#
+      ,'INQSTAT_100'
+      ,#inq_user_nm#
+      ,#inq_email#
+      ,#inq_mphone#
+      ,#post_arng#
+      ,#inq_contents#
+      <isNotEmpty property="excel">
+        , (select isnull(NAT_CD,'') NAT_CD from T_NATION
+          where nat_eng_nm = #nat_cd# )
+      </isNotEmpty>
+      <isEmpty property="excel">
+        ,#nat_cd#
+      </isEmpty>
+      ,'Y'
+      ,GETDATE()
+      ,#reg_usr#
+      ,#inq_addr#
+      ,#inq_company# 
+      )
+    </insert>
+
+    <!-- 제품문의/사후조치 : 수정 -->
+    <update id="updatePrductInquiry" parameterClass="Hashtable" >
+      UPDATE T_PRDT_INQRY
+      SET
+      MOD_DT		= GETDATE()
+      ,MOD_USR		= #mod_usr#
+      <isEqual property="inq_status" compareValue="INQSTAT_100">
+        ,INQ_CHNL		= #inq_chnl#
+        ,INQ_TYPE		= #inq_type#
+        ,USER_CD		= #user_cd#
+        ,DEPT_CD		= #dept_cd#
+        ,DSTR_TYPE	= #dstr_type#
+        ,INQ_USER_NM	= #inq_user_nm#
+        ,INQ_EMAIL	= #inq_email#
+        ,INQ_MPHONE	= #inq_mphone#
+        ,INQ_CONTENTS = #inq_contents#
+        ,NAT_CD		    = #nat_cd#
+        ,INQ_ADDR		  = #inq_addr#
+        ,INQ_COMPANY  = #inq_company#
+      </isEqual>
+
+
+
+      <!-- 문의사항 전달 -->
+      <isEqual property="inq_status" compareValue="INQSTAT_200">
+        ,INQ_STATUS	= #inq_status#
+        ,INQ_DDATE	= CONVERT(NVARCHAR,GETDATE(),112)
+        ,DLV_USER_CD = #dlv_user_cd#
+        ,USER_CD		= #user_cd#
+        ,DEPT_CD		= #dept_cd#
+        ,DSTR_TYPE	= #dstr_type#
+        ,NAT_CD		  = #nat_cd#
+      </isEqual>
+
+      <!-- 문의사항 전달취소 -->
+      <isEqual property="inq_status" compareValue="div_delete">
+        ,USE_YN = 'N'
+      </isEqual>
+
+      <!-- 문의사항 삭제 -->
+      <isEqual property="inq_status" compareValue="dlv_cancel">
+        ,INQ_STATUS	= 'INQSTAT_100'
+        ,INQ_DDATE	= NULL
+        ,DLV_USER_CD = NULL
+      </isEqual>
+
+      <!-- 문의사항 전달반려  -->
+      <isEqual property="inq_status" compareValue="INQSTAT_300">
+        ,INQ_STATUS	= #inq_status#
+        ,INQ_DDATE	= NULL
+        ,DLV_USER_CD = NULL
+      </isEqual>
+
+      <!--  회신후 대기   -->
+      <isEqual property="inq_status" compareValue="INQSTAT_400">
+        ,INQ_STATUS	= #inq_status#
+        ,INQ_WDATE = CONVERT(NVARCHAR,GETDATE(),112)
+        ,DSTR_TYPE	= #dstr_type#
+        ,POST_ARNG	= #post_arng#
+        ,NAT_CD		  = #nat_cd#
+      </isEqual>
+
+      <!--  상담중   -->
+      <isEqual property="inq_status" compareValue="INQSTAT_500">
+        ,INQ_STATUS	= #inq_status#
+        ,DSTR_TYPE	= #dstr_type#
+        ,POST_ARNG	= #post_arng#
+        ,NAT_CD		  = #nat_cd#
+      </isEqual>
+
+      <!--  상담완료   -->
+      <isEqual property="inq_status" compareValue="INQSTAT_600">
+        ,INQ_STATUS	= #inq_status#
+        ,DSTR_TYPE	= #dstr_type#
+        ,POST_ARNG	= #post_arng#
+        ,NAT_CD		  = #nat_cd#
+      </isEqual>
+
+      <!--  DROP(고객)   -->
+      <isEqual property="inq_status" compareValue="INQSTAT_900">
+        ,INQ_STATUS	= #inq_status#
+        ,POST_ARNG	= #post_arng#
+      </isEqual>
+
+
+
+
+      <!-- 문의사항 사후조취자 재지정  -->
+      <isEqual property="inq_status" compareValue="user_redirect">
+        ,USER_CD		= #user_cd#
+        ,DEPT_CD		= #dept_cd#
+        ,DSTR_TYPE	= #dstr_type#
+        ,NAT_CD		  = #nat_cd#
+      </isEqual>
+
+      <!-- 매출발생여부지정  -->
+      <isEqual property="inq_status" compareValue="order_yn">
+        ,ORDER_YN = #order_yn#
+        ,ORDER_AMOUNT = #order_amount#
+      </isEqual>
+
+      WHERE COMPANY_CD = #company_cd#
+      AND INQ_CD = #inq_cd#
+    </update>
+
+    <update id="updatePrductInquiryAll" parameterClass="Hashtable" >
+      UPDATE T_PRDT_INQRY
+      SET
+      MOD_DT		= GETDATE()
+      ,MOD_USR		= #mod_usr#
+      ,INQ_STATUS	= #inq_status#
+      ,INQ_CHNL		= #inq_chnl#
+      ,INQ_TYPE		= #inq_type#
+      ,USER_CD		= #user_cd#
+      ,DEPT_CD		= #dept_cd#
+      ,DSTR_TYPE	= #dstr_type#
+      ,INQ_USER_NM	= #inq_user_nm#
+      ,INQ_EMAIL	= #inq_email#
+      ,INQ_MPHONE	= #inq_mphone#
+      ,INQ_CONTENTS = #inq_contents#
+      ,NAT_CD		    = #nat_cd#
+      ,INQ_ADDR		  = #inq_addr#
+      ,INQ_COMPANY  = #inq_company#
+      ,POST_ARNG	= #post_arng#
+      ,ORDER_YN = #order_yn#
+      ,ORDER_AMOUNT = #order_amount#
+      WHERE COMPANY_CD = #company_cd#
+      AND INQ_CD = #inq_cd#
+    </update>
+
+      <!-- 제품문의/사후조치 : 수정 백업 -->
+    <update id="updatePrductInquiry_BAK" parameterClass="Hashtable" >
+      UPDATE T_PRDT_INQRY
+      SET
+         MOD_DT		= GETDATE()
+        ,MOD_USR		= #mod_usr#
+      ,INQ_STATUS	= #inq_status#
+      ,INQ_CHNL		= #inq_chnl#
+      ,INQ_TYPE		= #inq_type#
+      ,USER_CD		= #user_cd#
+      ,DEPT_CD		= #dept_cd#
+      ,DSTR_TYPE	= #dstr_type#
+      ,INQ_USER_NM	= #inq_user_nm#
+      ,INQ_EMAIL	= #inq_email#
+      ,INQ_MPHONE	= #inq_mphone#
+      ,INQ_CONTENTS = #inq_contents#
+      ,NAT_CD		    = #nat_cd#
+      ,INQ_ADDR		  = #inq_addr#
+      ,INQ_COMPANY  = #inq_company#
+      ,POST_ARNG	= #post_arng#
+      
+
+
+        <!-- 문의사항 전달 -->
+        <isEqual property="inq_status" compareValue="INQSTAT_200"> 
+          ,INQ_DDATE	= CONVERT(NVARCHAR,GETDATE(),112)
+          ,DLV_USER_CD = #dlv_user_cd# 
+        </isEqual>
+
+        <!-- 문의사항 전달취소 -->
+        <isEqual property="inq_status" compareValue="div_delete">
+          ,USE_YN = 'N'
+        </isEqual>
+
+      <!-- 문의사항 삭제 -->
+      <isEqual property="inq_status" compareValue="dlv_cancel">
+        ,INQ_DDATE	= NULL
+        ,DLV_USER_CD = NULL
+      </isEqual>
+      
+        <!-- 문의사항 전달반려  -->
+        <isEqual property="inq_status" compareValue="INQSTAT_300">
+          ,INQ_DDATE	= NULL
+          ,DLV_USER_CD = NULL
+        </isEqual>
+
+        <!--  회신후 대기   -->
+        <isEqual property="inq_status" compareValue="INQSTAT_400">
+          ,INQ_WDATE = CONVERT(NVARCHAR,GETDATE(),112)
+        </isEqual>
+      
+        <!--  상담중   -->
+
+      
+        <!--  상담완료   -->
+
+      
+        <!--  DROP(고객)   -->
+
+      <!-- 문의사항 사후조취자 재지정  -->
+
+
+      <!-- 매출발생여부지정  -->
+      <isEqual property="inq_status" compareValue="order_yn">
+        ,ORDER_YN = #order_yn#
+        ,ORDER_AMOUNT = #order_amount# 
+      </isEqual>
+ 
+      WHERE COMPANY_CD = #company_cd#
+      AND INQ_CD = #inq_cd#
+    </update>
+
+
+    
+
+
+
+    <!-- 제품문의/사후조치 : 삭제 -->
+    <update id="deletePrductInquiry" parameterClass="Hashtable" >
+      UPDATE T_PRDT_INQRY
+      SET
+       MOD_DT		= GETDATE()
+      ,MOD_USR		= #mod_usr#
+      ,USE_YN	= 'N'
+
+      WHERE COMPANY_CD = #company_cd#
+      AND INQ_CD = #inq_cd#
+    </update>
+       
+
+
+    <!-- 제품문의 등록 세부 : 아이템 삭제 -->
+    <delete id="deleteProductInquiryItem" parameterClass="Hashtable" >
+      DELETE FROM T_PRDT_INQRY_ITEM 
+      WHERE COMPANY_CD = #company_cd# AND INQ_CD = #inq_cd#
+    </delete>
+
+
+    <!-- 제품문의 등록 세부 : 아이템 등록 -->
+    <insert id="insertProductInquiryItem" parameterClass="Hashtable" resultClass="Hashtable">
+      <selectKey property="seq_no" resultClass="Int" type="pre">
+        SELECT ISNULL((MAX(SEQ_NO) + 1),1) SEQ_NO
+        FROM T_PRDT_INQRY_ITEM
+        WHERE COMPANY_CD = #company_cd# 
+        AND INQ_CD = #inq_cd#
+      </selectKey>
+
+      INSERT INTO T_PRDT_INQRY_ITEM(
+          COMPANY_CD
+          ,INQ_CD
+          ,SEQ_NO
+          ,INQ_ITEM_NM
+          ,REG_DT
+          ,REG_USR
+          )
+      VALUES(
+          #company_cd#
+          ,#inq_cd#
+          ,#seq_no#
+          ,#inq_item_nm#
+          ,GETDATE()
+          ,#reg_usr#
+          )
+    </insert>
+
+
+
+  </statements>
+
+
+
+</sqlMap>

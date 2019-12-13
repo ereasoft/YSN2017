@@ -1,0 +1,473 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+  
+  <!-- [고객정보DB - 고객담당(Keyman)] -->
+  <statements>
+
+
+
+
+    <!-- 고객담당(Keyman) 리스트 -->
+    <select id="keyManList" parameterClass="Hashtable" resultClass="Hashtable">
+          SELECT
+          K.KM_CD,
+          K.KM_NM,
+          K.SPTNR_CD,
+          S.SPTNR_NM,
+          K.KM_POSIT,
+          ISNULL(K.KM_REP_WORK,'') AS KM_REP_WORK,
+          K.KM_USER_CD,
+          U.USER_NM AS KM_USER_NM,
+          K.KM_DEPT_NM,
+          K.CUST_CD,
+          C.CUST_NM,
+          K.KM_EMAIL,
+          K.KM_WORK,
+          dbo.FN_GET_CODE_NM(#language#, 'KM_WORK',K.KM_WORK) AS KM_WORK_NM,
+          K.KM_POWER,
+          dbo.FN_GET_CODE_NM(#language#, 'KM_POWER',K.KM_POWER) AS KM_POWER_NM,
+          K.O_PHONE,
+          K.M_PHONE,
+          K.USE_YN,
+          dbo.FN_GET_CODE_NM(#language#, 'SA_YN',K.USE_YN) AS USE_YN_NM,
+          K.KM_TITLE AS KM_TITLE_NM,
+          CONVERT(NVARCHAR(10),CONVERT(DATETIME,K.KM_REG_DATE),126) AS KM_REG_DATE
+          FROM
+          T_KEYMAN AS K
+          LEFT OUTER JOIN
+          T_SA_PARTNER AS S
+          ON
+          K.COMPANY_CD = S.COMPANY_CD AND K.SPTNR_CD = S.SPTNR_CD
+          LEFT OUTER JOIN
+          T_CUSTOMER AS C
+          ON
+          K.COMPANY_CD = C.COMPANY_CD AND K.CUST_CD = CONVERT(VARCHAR,C.CUST_CD)
+          LEFT OUTER JOIN
+          T_USER AS U
+          ON
+          K.COMPANY_CD = U.COMPANY_CD AND K.KM_USER_CD = U.USER_CD
+          WHERE
+          K.COMPANY_CD = #company_cd#
+
+
+        <isNotEmpty property="cust_cd">
+          AND K.CUST_CD = #cust_cd#
+        </isNotEmpty>
+        <isEmpty property="cust_cd">
+          <isNotEmpty property="cust_nm">
+            AND C.CUST_NM LIKE '%' + #cust_nm# + '%'
+          </isNotEmpty>
+        </isEmpty>
+
+        <isNotEmpty property="km_nm">
+          AND K.KM_NM LIKE '%' + #km_nm# + '%'
+        </isNotEmpty>
+        <isNotEmpty property="km_user_nm">
+          AND K.KM_USER_CD = #km_user_nm#
+        </isNotEmpty>
+        <isNotEmpty property="use_yn">
+          AND K.USE_YN = #use_yn#
+        </isNotEmpty>
+      
+
+      
+        <isNotEmpty property="bizGroup">
+          AND K.KM_USER_CD IN (
+              SELECT USER_CD FROM T_USER WHERE DEPT_CD IN(
+              <isNotEmpty property="deptGroup">
+                  SELECT DEPT_CD FROM T_DEPARTMENT
+                  WHERE DEPT_CD = #deptGroup#
+              </isNotEmpty>
+              <isEmpty property="deptGroup">
+                  SELECT DEPT_CD FROM T_DEPARTMENT
+                  WHERE DEPT_CD = #bizGroup# OR UP_DEPT_CD = #bizGroup#
+              </isEmpty>
+              )
+          )
+        </isNotEmpty>
+
+        <isNotEmpty property="km_title">
+          AND K.KM_TITLE LIKE '%' + #km_title# + '%'
+        </isNotEmpty>
+
+        <isNotEmpty property="s_reg_date">
+          <![CDATA[
+				  AND K.KM_REG_DATE >= REPLACE(#s_reg_date#,'-','')
+			    ]]>
+        </isNotEmpty>
+      
+        <isNotEmpty property="e_reg_date">
+          <![CDATA[
+				  AND K.KM_REG_DATE <= REPLACE(#e_reg_date#,'-','')
+			    ]]>
+        </isNotEmpty>
+
+        <isNotEmpty property="km_work">
+          AND K.KM_WORK = #km_work#
+        </isNotEmpty>
+        <isNotEmpty property="km_power">
+          AND K.KM_POWER = #km_power#
+        </isNotEmpty>
+      
+          ORDER BY K.KM_NM ASC
+
+    </select>
+
+
+
+
+
+    <!-- 고객담당(Keyman) 상세 -->
+    <select id="keyManDetail" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      K.KM_CD
+      ,K.KM_NM
+      ,K.SPTNR_CD
+      ,K.KM_WORK
+      ,K.KM_DEPT_NM
+      ,K.KM_POSIT
+      ,K.KM_TITLE
+      ,K.KM_REP_WORK
+      ,K.KM_POWER
+      ,K.KM_FRIEND
+      ,K.KM_USER_CD
+      ,U.USER_NM AS KM_USER_NM
+      ,U.DEPT_CD AS KM_DEPT_CD
+      ,dbo.FN_GET_DEPT_NM(U.DEPT_CD) AS DEPT_NM
+      ,CONVERT(NVARCHAR(10),K.REG_DT,23) AS REG_DT
+      ,K.CUST_CD
+      ,C.CUST_NM
+      ,K.DOM_AB
+      ,K.AB_NATION
+      ,K.AB_REGION
+      ,K.KM_EMAIL
+      ,K.O_PHONE
+      ,K.M_PHONE
+      ,K.KM_SCHOOL
+      ,K.KM_HOBBY
+      ,K.KM_RELIGION
+      ,K.KM_ADDRESS
+      ,K.KM_DESCRIPT
+      ,K.KM_O_EMAIL
+      ,K.B_MTH
+      ,K.B_DATA
+      ,K.W_MTH
+      ,K.W_DATA
+      ,K.USE_YN
+      ,C.ADDRESS_ALL
+      ,CONVERT(NVARCHAR(10),K.MOD_DT,23) AS MOD_DT
+      FROM T_KEYMAN AS K
+      LEFT OUTER JOIN
+      T_CUSTOMER AS C
+      ON
+      K.COMPANY_CD = C.COMPANY_CD AND K.CUST_CD = C.CUST_CD
+      LEFT OUTER JOIN
+      T_USER AS U
+      ON
+      K.COMPANY_CD = U.COMPANY_CD AND  K.KM_USER_CD = U.USER_CD
+      WHERE
+      K.COMPANY_CD = #company_cd# 
+      <isNotEmpty property="km_cd">
+        AND  K.KM_CD = #km_cd#
+      </isNotEmpty>
+      <isNotEmpty property="km_nm">
+        AND  K.KM_NM = #km_nm#
+      </isNotEmpty> 
+  </select>
+
+
+
+
+
+    <!-- 고객담당(Keyman) 상세하단 - 활동현황  -->
+    <select id="BottomKeymanPlayList" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      S.SA_CD,
+      CONVERT(VARCHAR(10),CONVERT(DATETIME,S.SA_SDATE,23),23) AS SA_SDATE,
+      (
+      CASE WHEN K.KM_CNT > 1
+      THEN
+      K2.KM_NM + ' 외 ' + CONVERT(VARCHAR,K.KM_CNT) + '명'
+      ELSE
+      K2.KM_NM
+      END
+      ) KM_NM,
+      S.USER_CD,
+      U.USER_NM,
+      (
+      CASE WHEN P.TARGET_CNT > 1
+      THEN
+      C.CODE_NM + ' 외 ' + CONVERT(VARCHAR,P.TARGET_CNT) + '건'
+      ELSE
+      C.CODE_NM
+      END
+      ) SA_TARGET,
+      S.SA_BODY,
+      S.SA_COMMENT,
+      S.DEPT_CD
+      FROM
+      T_SALES_ACTIVITY AS S
+      LEFT OUTER JOIN
+      T_USER AS U
+      ON
+      S.COMPANY_CD = U.COMPANY_CD AND  S.USER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      (
+      SELECT
+      COMPANY_CD,
+      SA_CD,
+      MIN(KM_CD) AS KM_CD,
+      COUNT(KM_CD) AS KM_CNT
+      FROM
+      T_SA_KEYMAN
+      WHERE
+      COMPANY_CD = #company_cd# AND  KM_CD = #km_cd#
+      GROUP BY
+      COMPANY_CD,
+      SA_CD
+      ) AS K
+      ON
+      S.COMPANY_CD = K.COMPANY_CD AND  S.SA_CD = K.SA_CD
+      LEFT OUTER JOIN
+      T_KEYMAN AS K2
+      ON
+      K.COMPANY_CD = K2.COMPANY_CD AND K.KM_CD = K2.KM_CD
+      LEFT OUTER JOIN
+      (
+      SELECT
+      COMPANY_CD,
+      SA_CD,
+      MIN(SA_TARGET) SA_TARGET,
+      COUNT(SA_TARGET) TARGET_CNT
+      FROM
+      T_SA_TARGET
+      GROUP
+      BY
+      COMPANY_CD,
+      SA_CD
+      ) AS P
+      ON
+      S.COMPANY_CD = P.COMPANY_CD AND
+      S.SA_CD = P.SA_CD
+      LEFT OUTER JOIN
+      T_CODE C
+      ON
+      P.SA_TARGET = C.CODE_ID
+      WHERE
+      K.KM_CD IS NOT NULL AND
+      (CAST(S.SA_BODY AS NVARCHAR) != '' AND S.SA_BODY IS NOT NULL)
+
+      ORDER BY S.SA_SDATE DESC
+    </select>
+
+
+
+    <!-- 고객담당(Keyman) 상세하단 - E-mail송수신  -->
+    <select id="BottomKeymanEmailList" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      A.COMPANY_CD,
+      A.EMAIL_CD,
+      CONVERT(NVARCHAR(10),A.EMAIL_DT,23) AS EMAIL_DT,
+      A.EMAIL_TYPE,
+      CD.CODE_KOR AS EMAIL_TYPE_NM,
+      A.USER_CD,
+      A.USER_NM + '(' + A.USER_CD + ')' AS USER_NM,
+      A.KM_CD,
+      A.KM_NM + '(' + A.KM_CD + ')' AS KM_NM,
+      SUBJECT
+      FROM(
+      SELECT
+      E.COMPANY_CD,
+      E.EMAIL_CD,
+      E.EMAIL_TYPE,
+      E.EMAIL_DT,
+      E.RCV_USR AS USER_CD,
+      U.USER_NM AS USER_NM,
+      E.SND_USR AS KM_CD,
+      K.KM_NM AS KM_NM,
+      SUBJECT
+      FROM
+      (SELECT COMPANY_CD,EMAIL_CD,EMAIL_TYPE,EMAIL_DT,SND_USR,RCV_USR,SUBJECT FROM T_EMAIL WHERE EMAIL_TYPE = 'RCV') AS E,
+      (SELECT COMPANY_CD,KM_CD,KM_NM,KM_EMAIL FROM T_KEYMAN WHERE KM_CD = #km_cd#)AS K,
+      T_USER AS U
+      WHERE
+      E.COMPANY_CD = K.COMPANY_CD AND  E.SND_USR = K.KM_EMAIL AND
+      E.COMPANY_CD = U.COMPANY_CD AND  E.RCV_USR = U.EMAIL
+      UNION
+      SELECT
+      E.COMPANY_CD,
+      E.EMAIL_CD,
+      E.EMAIL_TYPE,
+      E.EMAIL_DT,
+      E.SND_USR AS USER_CD,
+      U.USER_NM AS USER_NM,
+      E.RCV_USR AS KM_CD,
+      K.KM_NM AS KM_NM,
+      SUBJECT
+      FROM
+      (SELECT COMPANY_CD,EMAIL_CD,EMAIL_TYPE,EMAIL_DT,SND_USR,RCV_USR,SUBJECT FROM T_EMAIL WHERE EMAIL_TYPE = 'SND') AS E,
+      (SELECT COMPANY_CD,KM_CD,KM_NM,KM_EMAIL FROM T_KEYMAN WHERE KM_CD = #km_cd#)AS K,
+      T_USER AS U
+      WHERE
+      E.COMPANY_CD = U.COMPANY_CD AND E.SND_USR = U.EMAIL AND
+      E.COMPANY_CD = K.COMPANY_CD AND E.RCV_USR = K.KM_EMAIL
+      ) AS A
+      LEFT OUTER JOIN
+      (SELECT CODE_ID,CODE_KOR FROM T_CODE WHERE UP_CODE_ID = 'EMAIL_TYPE') AS CD
+      ON
+      A.EMAIL_TYPE = CD.CODE_ID
+      ORDER BY EMAIL_DT DESC
+    </select>
+
+
+
+    <!-- 고객담당(Keyman) 등록  -->
+    <insert id="keyManInsert" parameterClass="Hashtable" >
+
+      <selectKey property="km_cd" resultClass="String" type="pre">
+        SELECT ('KM' + SUBSTRING(CONVERT(VARCHAR(12),GETDATE(),112),3,2) +
+        dbo.FN_LPAD(
+        CONVERT(VARCHAR(6),
+        CONVERT(INTEGER,(
+        CASE WHEN MAX(KM_CD) IS NULL THEN '0'
+        ELSE SUBSTRING(MAX(KM_CD), 5,6)
+        END
+        )
+        )+1),6,'0')
+        ) AS KM_CD
+        FROM T_KEYMAN
+        WHERE KM_CD LIKE 'KM%'
+      </selectKey>
+
+      INSERT INTO T_KEYMAN
+      (COMPANY_CD
+      ,KM_CD
+      ,KM_NM
+      ,SPTNR_CD
+      ,KM_WORK
+      ,KM_DEPT_NM
+      ,KM_POSIT
+      ,KM_TITLE
+      ,KM_REP_WORK
+      ,KM_POWER
+      ,KM_FRIEND
+      ,KM_USER_CD
+      ,KM_REG_DATE
+      ,CUST_GUBUN
+      ,CUST_CD
+      ,DOM_AB
+      ,AB_NATION
+      ,AB_REGION
+      ,KM_EMAIL
+      ,O_PHONE
+      ,M_PHONE
+      ,KM_SCHOOL
+      ,KM_HOBBY
+      ,KM_RELIGION
+      ,KM_ADDRESS
+      ,KM_DESCRIPT
+      ,KM_O_EMAIL
+      ,B_MTH
+      ,B_DATA
+      ,W_MTH
+      ,W_DATA
+      ,REG_DT
+      ,REG_USR
+      ,USE_YN
+      )
+      VALUES
+      (#company_cd#,
+      #km_cd#,
+      #km_nm#,
+      #sptnr_cd#,
+      #km_work#,
+      #km_dept_nm#,
+      #km_posit#,
+      #km_title#,
+      #km_rep_work#,
+      #km_power#,
+      #km_friend#,
+      #km_user_cd#,
+      CONVERT(NVARCHAR(8),GETDATE(),112),
+      #cust_gb#,
+      #cust_cd#,
+      #dom_ab#,
+      #ab_nation#,
+      #ab_region#,
+      #km_email#,
+      #o_phone#,
+      #m_phone#,
+      #km_school#,
+      #km_hobby#,
+      #km_religion#,
+      #km_address#,
+      #km_descript#,
+      #km_o_email#,
+      #b_mth#,
+      #b_data#,
+      #w_mth#,
+      #w_data#,
+      getdate(),
+      #user_cd#,
+      #use_yn#
+      )
+    </insert>
+
+
+
+    <!-- 고객담당(Keyman) 수정  -->
+    <update id="keyManUpdate" parameterClass="Hashtable">
+      UPDATE T_KEYMAN
+      SET
+        KM_WORK = #km_work#
+        ,KM_DEPT_NM = #km_dept_nm#
+        ,KM_POSIT = #km_posit#
+        ,KM_TITLE = #km_title#
+        ,KM_REP_WORK = #km_rep_work#
+        ,KM_POWER = #km_power#
+        ,KM_FRIEND = #km_friend#
+        ,CUST_GUBUN = #cust_gb#
+        ,CUST_CD = #cust_cd#
+        ,DOM_AB =	 #dom_ab#
+        ,AB_NATION = #ab_nation#
+        ,AB_REGION = #ab_region#
+        ,KM_EMAIL = #km_email#
+        ,O_PHONE = #o_phone#
+        ,M_PHONE = #m_phone#
+        ,KM_SCHOOL = #km_school#
+        ,KM_HOBBY = #km_hobby#
+        ,KM_RELIGION = #km_religion#
+        ,KM_ADDRESS = #km_address#
+        ,KM_DESCRIPT = #km_descript#
+        ,KM_O_EMAIL = #km_o_email#
+        ,B_MTH = #b_mth#
+        ,B_DATA =	#b_data#
+        ,W_MTH = #w_mth#
+        ,W_DATA = #w_data#
+        ,USE_YN = #use_yn#
+        ,MOD_DT = getdate()
+        ,MOD_USR = #user_cd#
+      WHERE COMPANY_CD = #company_cd#
+      AND KM_CD = #km_cd#
+    </update>
+
+    <!-- 고객담당(Keyman) 이름 중복체크  -->
+    <select id="keyManDupliChk" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT COUNT(*) AS CNT
+      FROM T_KEYMAN
+      WHERE KM_NM = #km_nm#
+      <!-- 
+				AND ISNULL(REPLACE(M_PHONE,'-',''),'') = ISNULL(REPLACE(#m_phone#,'-',''),'')
+				-->
+    </select>
+
+
+
+  </statements>
+
+
+
+</sqlMap>

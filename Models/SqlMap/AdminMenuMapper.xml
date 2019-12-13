@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+
+
+
+
+
+    <!-- 메뉴관리 : 상위 메뉴 조회 리스트   -->
+    <select id="upMenuList" parameterClass="Hashtable"	resultClass="Hashtable">
+
+      SELECT
+      MENU_ID
+      ,MENU_ID AS PREID
+      , MENU_NM
+      , MENU_LEVEL
+      , MENU_ORDER
+      , UP_MENU_ID
+      , MENU_URL
+      , MENU_URL2
+      , MENU_DESCRIPT
+      , USE_YN
+      , REG_DT
+      , REG_USR
+      , MOD_DT
+      , MOD_USR
+      , CLASS_NAME
+      ,(SELECT COUNT(*) FROM T_MENU WHERE UP_MENU_ID = A.MENU_ID) AS CHILD_CNT
+      FROM T_MENU A
+      WHERE 1=1
+      <isNotEmpty property="searchMenuId">
+        AND A.MENU_ID LIKE '%' + #searchMenuId# + '%'
+      </isNotEmpty>
+      <isNotEmpty property="menuId">
+        AND A.MENU_ID LIKE '%' + #menuId# + '%'
+      </isNotEmpty>
+      <isNotEmpty property="searchMenuNm">
+        AND A.MENU_NM LIKE '%' + #searchMenuNm# + '%'
+      </isNotEmpty>
+      <isNotEmpty property="searchLevel">
+        AND A.MENU_LEVEL = #searchLevel#
+      </isNotEmpty>
+      <isNotEmpty property="searchPreMenuId">
+        AND A.MENU_ID != #searchPreMenuId#
+      </isNotEmpty>
+      <isNotEmpty property="upmenuId">
+        AND ISNULL(A.UP_MENU_ID,'top') = #upmenuId#
+      </isNotEmpty>
+      <isNotEmpty property="menuId">
+        AND A.MENU_ID = #menuId#
+      </isNotEmpty>
+
+    </select>
+
+
+
+    <!-- 메뉴관리 : 하위 메뉴 조회 리스트     -->
+    <select id="downMenuList" parameterClass="Hashtable"	resultClass="Hashtable">
+   
+      SELECT
+      'S' AS MODE
+      ,MENU_ID
+      , MENU_NM
+      , MENU_LEVEL
+      , MENU_ORDER
+      , UP_MENU_ID
+      , MENU_URL
+      , CLASS_NAME
+      , MENU_DESCRIPT
+      , USE_YN
+      , REG_DT
+      , REG_USR
+      , MOD_DT
+      , MOD_USR
+      , MENU_ID AS PRE_MENU_ID
+      FROM T_MENU
+      WHERE 1=1
+      <isNotEmpty property="upMenuId">
+        AND UP_MENU_ID = #upMenuId#
+      </isNotEmpty>
+
+
+    </select>
+
+
+
+
+
+    <!-- 메뉴관리 : 메뉴등록     -->
+    <insert id="insertMenu" parameterClass="Hashtable">
+
+      INSERT INTO T_MENU (
+      MENU_ID
+      ,MENU_NM
+      ,MENU_LEVEL
+      ,MENU_ORDER
+      ,UP_MENU_ID
+      ,MENU_URL2
+      ,MENU_DESCRIPT 
+      ,USE_YN
+      ,REG_DT
+      ,REG_USR
+      ,MOD_DT
+      ,MOD_USR
+
+      ) VALUES (
+      #menuId#
+      ,#menuNm#
+      ,#menuLevel#
+      ,#menuOrder#
+      ,#upMenuId#
+      ,#menuUrl2#
+      ,#menuDescript#
+      ,#useYn#
+      ,GETDATE()
+      ,#regUsr#
+      ,GETDATE()
+      ,#modUsr#
+      )
+
+    </insert>
+
+
+
+
+    <!-- 메뉴관리 : 메뉴수정     -->
+    <update id="updateMenu" parameterClass="Hashtable">
+
+      UPDATE T_MENU SET
+      MENU_ID = #menuId#,
+      MENU_NM = #menuNm#,
+      MENU_LEVEL = #menuLevel#,
+      MENU_ORDER = #menuOrder#,
+      UP_MENU_ID = #upMenuId#,
+      MENU_URL2   = #menuUrl2#,
+      MENU_DESCRIPT = #menuDescript#, 
+      USE_YN = #useYn#,
+      MOD_DT = GETDATE(),
+      MOD_USR = #modUsr#
+      WHERE MENU_ID = #menuId#
+    </update>
+
+
+
+
+
+
+
+
+  </statements>
+
+
+
+</sqlMap>

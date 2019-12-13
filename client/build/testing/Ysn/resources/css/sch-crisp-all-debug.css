@@ -1,0 +1,4269 @@
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/column/timeAxis/Horizontal.scss:1 */
+.sch-header-row .x-column-header-inner,
+.sch-timeheader {
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/column/timeAxis/Horizontal.scss:8 */
+.sch-simple-timeaxis .x-column-header-text-container {
+    /* Hide default Ext JS column text container since it's not used in the timeaxis column*/
+    display: none !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/column/timeAxis/Horizontal.scss:12 */
+.sch-column-header.sch-header-cell-center {
+    padding-left: 0;
+    padding-right: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/column/timeAxis/Horizontal.scss:17 */
+.sch-simple-timeaxis .x-column-header-inner {
+    padding: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/column/timeAxis/Horizontal.scss:21 */
+.sch-column-header {
+    padding: 7px 10px;
+    color: #666;
+    border-right: 1px solid #cfcfcf;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/column/timeAxis/Horizontal.scss:30 */
+.sch-header-row {
+    border-top: 1px solid #cfcfcf;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/column/timeAxis/Horizontal.scss:34 */
+.sch-column-header-over {
+    background-color: #eff6fb;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/column/timeAxis/Horizontal.scss:41 */
+.sch-simple-timeaxis .sch-simple-timeheader {
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 0 6px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/column/timeAxis/Horizontal.scss:47 */
+.sch-simple-timeheader-pad {
+    padding: 0 6px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/column/timeAxis/Horizontal.scss:52 */
+.sch-simple-timeaxis .sch-header-row-compact .sch-simple-timeheader {
+    /* Adjust font size and padding for very narrow cells */
+    padding-left: 1px;
+    padding-right: 1px;
+    font-size: 85%;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/column/timeAxis/Horizontal.scss:58 */
+.sch-simple-timeaxis .sch-header-row-compact .sch-column-header {
+    padding-left: 0;
+    padding-right: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/column/timeAxis/Horizontal.scss:63 */
+.x-safari .sch-simple-timeaxis .sch-header-row-compact .sch-simple-timeheader {
+    padding-left: 0;
+    padding-right: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/column/timeAxis/Horizontal.scss:68 */
+.sch-timeaxiscolumn .x-column-header-inner {
+    padding: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/column/timeAxis/Horizontal.scss:72 */
+.sch-header-row {
+    table-layout: fixed;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/column/timeAxis/Horizontal.scss:76 */
+.sch-header-single-row .x-group-sub-header {
+    border-top-width: 0 !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/column/timeAxis/Horizontal.scss:80 */
+.x-webkit .sch-column-header .x-column-header-inner {
+    white-space: normal;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/column/timeAxis/Horizontal.scss:84 */
+.sch-header-secondary-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/column/timeAxis/Horizontal.scss:90 */
+.sch-horizontal .sch-header-secondary-canvas {
+    height: 100%;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Lines.scss:1 */
+.sch-timeline {
+    cursor: pointer;
+    position: absolute;
+    border-style: dotted;
+    border-color: #aaa;
+    overflow: hidden;
+    z-index: 4;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Lines.scss:10 */
+.sch-timeline:hover {
+    z-index: 1000;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Lines.scss:14 */
+.x-ie .sch-timeline {
+    margin-left: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Lines.scss:18 */
+.sch-horizontal .sch-timeline {
+    border-width: 0 0 0 1px;
+    height: 100%;
+    margin-left: -1px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Lines.scss:24 */
+.sch-vertical .sch-timeline {
+    border-width: 1px 0 0 0;
+    width: 100%;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Lines.scss:29 */
+.sch-header-indicator {
+    position: absolute;
+    width: 11px;
+    height: 11px;
+    border: 2px solid #f33;
+    background: #fff;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    -webkit-box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Lines.scss:45 */
+.x-ie8 .sch-header-indicator {
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+    background: transparent;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Lines.scss:52 */
+.sch-horizontal .sch-header-indicator {
+    bottom: 3px;
+    margin: 0 -5px 0 -6px;
+    border-radius: 8px 8px 8px 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Lines.scss:59 */
+.x-ie .sch-horizontal .sch-header-indicator {
+    /* IE 9 */
+    margin: 0 -5px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Lines.scss:64 */
+.x-ie .sch-horizontal .sch-header-indicator-start,
+.x-ie .sch-horizontal .sch-header-indicator-end {
+    /* IE 9 */
+    margin: 0 -5px 0 -6px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Lines.scss:70 */
+.x-ie8 .sch-horizontal .sch-header-indicator {
+    /* IE < 9 */
+    bottom: 0;
+    border-bottom: none !important;
+    border-top-color: #f33;
+    margin: 0 -4px 0 -5px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Lines.scss:77 */
+.sch-vertical .sch-header-indicator {
+    right: 3px;
+    margin: -5px 0 0 0;
+    border-radius: 8px 8px 0 8px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Lines.scss:83 */
+.sch-vertical.x-rtl .sch-header-indicator {
+    right: auto;
+    left: 3px;
+    border-radius: 0 8px 8px 8px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Lines.scss:89 */
+.x-ie8 .sch-vertical .sch-header-indicator {
+    right: 0;
+    margin: -5px 0 0 0;
+    border-right: none !important;
+    border-left-color: #f33;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Lines.scss:96 */
+.x-ie8 .sch-vertical.x-rtl .sch-header-indicator {
+    right: auto;
+    left: 0;
+    border-left: none !important;
+    border-right: 5px solid #f33;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ColumnLines.scss:1 */
+.sch-column-line {
+    border-style: solid;
+    border-color: #cfcfcf;
+    pointer-events: none;
+    z-index: auto;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ColumnLines.scss:11 */
+.sch-vertical .sch-verticaltimeaxis-cell.sch-column-line-solid,
+.sch-column-line-solid {
+    /* To use columnlines plugin .x-grid-item borders are disabled in vertical view and moved to .x-grid-cell
+ We need such detailed rule to provide better match for cell color as we want one darker line across locked and normal view
+ */
+    border-color: #d0d0d0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ColumnLines.scss:18 */
+.x-ie10 .sch-column-line,
+.x-ie9m .sch-column-line {
+    /* Need to prevent the lines from blocking UI interactions in old IE lacking pointer-events support */
+    /* 1104_column_lines */
+    z-index: -1;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/ClockTemplate.scss:1 */
+.sch-clockwrap {
+    position: relative;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/ClockTemplate.scss:5 */
+.sch-clock {
+    position: absolute;
+    height: 21px;
+    width: 21px;
+    white-space: nowrap;
+    display: inline-block;
+    text-indent: -100px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/ClockTemplate.scss:14 */
+.sch-clock,
+.sch-clock .sch-hourIndicator,
+.sch-clock .sch-minuteIndicator {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/ClockTemplate.scss:23 */
+.sch-supports-border-radius.sch-clock-hour .sch-clock {
+    border: 2px solid #bddbe1;
+    background-color: #fff;
+    box-shadow: 0px 1px 1px #444 inset;
+    border-radius: 100%;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/ClockTemplate.scss:30 */
+.x-ie8m .sch-clock {
+    background: url(bryntum-scheduler-theme-base/images/clock-bare.png) no-repeat left top !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/ClockTemplate.scss:34 */
+.sch-clock-day .sch-clock {
+    background: #fff none !important;
+    border: 1px solid #ccc;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/ClockTemplate.scss:39 */
+.sch-clock-text {
+    margin-left: 25px;
+    padding-bottom: 5px;
+    padding-top: 2px;
+    display: inline-block;
+    white-space: nowrap;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/ClockTemplate.scss:47 */
+.x-rtl .sch-clock-text {
+    margin-left: auto;
+    margin-right: 25px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/ClockTemplate.scss:52 */
+.sch-clock-day .sch-clock .sch-hourIndicator {
+    width: inherit;
+    position: static !important;
+    background-color: #5966b0;
+    border-bottom: 1px solid navy;
+    font-size: 7px;
+    line-height: 8px;
+    text-align: center;
+    color: #fff;
+    height: 8px;
+    text-indent: 0px;
+    margin-top: -1px;
+    text-shadow: rgba(200, 200, 200, 0.2) 0 -1px 0;
+    border: 0 none;
+    transform: none !important;
+    -moz-transform: none !important;
+    -webkit-transform: none !important;
+    -o-transform: none !important;
+    -ms-transform: none !important;
+    filter: none !important;
+    -ms-filter: none !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/ClockTemplate.scss:75 */
+.sch-clock-day .sch-clock .sch-minuteIndicator {
+    width: inherit;
+    color: #555;
+    position: static !important;
+    height: 16px;
+    background-color: transparent;
+    font-size: 10px;
+    text-align: center;
+    text-indent: 0;
+    text-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0;
+    line-height: 12px;
+    border: 0 none;
+    transform: none !important;
+    -moz-transform: none !important;
+    -webkit-transform: none !important;
+    -o-transform: none !important;
+    -ms-transform: none !important;
+    filter: none !important;
+    -ms-filter: none !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/ClockTemplate.scss:96 */
+.sch-clock .sch-minuteIndicator,
+.sch-clock .sch-hourIndicator {
+    position: absolute;
+    left: 50%;
+    top: 1px;
+    width: 2px;
+    height: 8px;
+    overflow: hidden;
+    margin-left: -1px;
+    transform-origin: 50% 100%;
+    -o-transform-origin: 50% 100%;
+    -moz-transform-origin: 50% 100%;
+    -webkit-transform-origin: 50% 100%;
+    -ms-transform-origin: 50% 100%;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/ClockTemplate.scss:112 */
+.sch-clock .sch-hourIndicator {
+    border-top: 2px solid transparent;
+    border-bottom: 6px solid #777;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/ClockTemplate.scss:117 */
+.sch-clock .sch-minuteIndicator {
+    border-top: 8px solid #777;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/ClockTemplate.scss:121 */
+.sch-clock-hour.sch-supports-border-radius .sch-clock-dot {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 4px;
+    height: 4px;
+    margin-left: -2px;
+    margin-top: -2px;
+    background: #777;
+    border-radius: 3px;
+    z-index: 2;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/ClockTemplate.scss:134 */
+.sch-clock-day .sch-clock-dot {
+    display: none;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/Tooltip.scss:1 */
+.sch-tip-ok {
+    padding-left: 20px;
+    background: url(bryntum-scheduler-theme-base/images/drop-yes.png) no-repeat left top;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/Tooltip.scss:6 */
+.sch-tip-notok {
+    padding-left: 20px;
+    background: url(bryntum-scheduler-theme-base/images/drop-no.png) no-repeat left top;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/Tooltip.scss:11 */
+.sch-tooltip-enddate {
+    padding-top: 2px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/Tooltip.scss:16 */
+.sch-tip-message {
+    margin: 3px 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/DragCreator.scss:1 */
+div.sch-dragcreator-proxy {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    border: 1px solid #39b;
+    border-radius: 3px;
+    cursor: auto !important;
+    opacity: 0.5;
+    filter: opacity=50;
+    zoom: 1;
+    background-color: #c3daf9;
+    z-index: 10000;
+    -moz-transition-property: none !important;
+    -webkit-transition-property: none !important;
+    -ms-transition-property: none !important;
+    transition-property: none !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/DragDrop.scss:1 */
+.sch-dd-newtime {
+    font-weight: bold;
+    color: #274490;
+    display: block;
+    margin: 0 0 5px 4px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/DragDrop.scss:8 */
+.x-dd-drag-proxy.sch-dragproxy,
+.sch-dragproxy {
+    background: none !important;
+    overflow: visible !important;
+    height: 1px;
+    /*Required for the Ext drag drop to work */
+    width: 1px;
+    /*Required for the Ext drag drop to work */
+    /*Required for the Ext drag drop to work */
+    border-left-width: 0px;
+    /*Required for the Ext drag drop to work */
+    /* Ext 6.0.1 defines borders on this element and slightly moves content */
+    border-top-width: 0px;
+    /* Ext 6.0.1 defines borders on this element and slightly moves content */
+    /* Ext 6.0.1 defines borders on this element and slightly moves content */
+    pointer-events: auto;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/DragDrop.scss:19 */
+.sch-dragproxy .sch-event {
+    opacity: 0.6;
+    filter: opacity=60;
+    cursor: pointer;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/DragDrop.scss:25 */
+.sch-dragproxy .x-resizable-handle,
+.sch-dragproxy .x-dd-drop-icon {
+    display: none !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/DragDrop.scss:30 */
+.sch-dragproxy .x-dd-drag-ghost {
+    background-color: transparent;
+    border: 0 none;
+    padding: 0;
+    white-space: nowrap;
+    /* Gantt tasks elements are sized based on row height */
+    height: inherit;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/DragDrop.scss:40 */
+.sch-rtl .sch-dragproxy .sch-event {
+    text-align: right;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/DragDrop.scss:44 */
+.sch-rtl .sch-dragproxy .x-dd-drag-ghost .sch-event {
+    right: auto !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/DragDrop.scss:51 */
+.sch-dragproxy.sch-before-drag-finalized {
+    /*
+    In case Ext JS sets a very high Z-index, lower it temporarily so it doesn't interfere with popups etc
+*/
+    z-index: 10 !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/Grouping.scss:1 */
+.sch-schedulerview .x-grid-group-hd {
+    padding-left: 0;
+    padding-right: 0;
+    overflow: hidden;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/Grouping.scss:7 */
+.sch-schedulerview .x-grid-group-title,
+.sch-schedulerview .x-grid-group-hd-collapsible .x-grid-group-title {
+    visibility: visible !important;
+    background-image: none;
+    text-indent: -1000em;
+    font-weight: normal;
+    padding-left: 0;
+    padding-right: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/Grouping.scss:17 */
+.sch-grid-group-hd-cell {
+    text-indent: 0;
+    float: left;
+    text-align: center;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/Grouping.scss:23 */
+.sch-grid-group-custom-header div.x-grid-group-hd {
+    padding: 0 !important;
+    background: none;
+    /* http://www.mikepadgett.com/technology/technical/alternative-to-the-pie-clearfix-hack/ */
+    height: 1%;
+    /* http://www.mikepadgett.com/technology/technical/alternative-to-the-pie-clearfix-hack/ */
+    overflow: hidden;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ResizeZone.scss:1 */
+.sch-schedulerpanel .sch-resizable-handle {
+    position: absolute;
+    visibility: hidden;
+    overflow: hidden;
+    border-color: #ddd;
+    border-style: double;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ResizeZone.scss:9 */
+.sch-schedulerpanel.sch-vertical .sch-resizable-handle-start {
+    border-width: 3px 0 0 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ResizeZone.scss:13 */
+.sch-schedulerpanel.sch-vertical .sch-resizable-handle-end {
+    border-width: 0 0 3px 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ResizeZone.scss:17 */
+.sch-schedulerpanel.sch-horizontal .sch-resizable-handle-start,
+.sch-schedulerpanel.sch-horizontal .sch-resizable-handle-end {
+    width: 7px;
+    height: 50%;
+    top: 25%;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ResizeZone.scss:24 */
+.sch-schedulerpanel.sch-horizontal .sch-resizable-handle-start {
+    border-width: 0 3px 0 0;
+    cursor: w-resize;
+    left: -2px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ResizeZone.scss:30 */
+.sch-schedulerpanel.sch-horizontal .sch-resizable-handle-end {
+    border-width: 0 0 0 3px;
+    cursor: e-resize;
+    right: -2px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ResizeZone.scss:36 */
+.sch-schedulerpanel.sch-horizontal .x-rtl .sch-resizable-handle-start {
+    border-width: 0 0 0 3px;
+    cursor: e-resize;
+    right: -2px;
+    left: auto;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ResizeZone.scss:43 */
+.sch-schedulerpanel.sch-horizontal .x-rtl .sch-resizable-handle-end {
+    border-width: 0 3px 0 0;
+    cursor: w-resize;
+    left: -2px;
+    right: auto;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ResizeZone.scss:50 */
+.sch-vertical .sch-resizable-handle {
+    width: 50%;
+    left: 25%;
+    cursor: n-resize;
+    height: 7px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ResizeZone.scss:57 */
+.sch-vertical .sch-resizable-handle-start {
+    top: 1px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ResizeZone.scss:61 */
+.sch-vertical .sch-resizable-handle-end {
+    bottom: 1px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ResizeZone.scss:65 */
+.sch-event-endsoutside .sch-resizable-handle-end,
+.sch-event-startsoutside .sch-resizable-handle-start,
+.sch-schedulerview-readonly .sch-resizable-handle,
+.sch-event-resizable-false .sch-resizable-handle,
+.sch-event-resizable-start .sch-resizable-handle-end,
+.sch-event-resizable-end .sch-resizable-handle-start {
+    display: none !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ResizeZone.scss:74 */
+.sch-event .x-resizable-handle {
+    background: none;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ResizeZone.scss:78 */
+.sch-schedulerpanel .sch-event-hover .sch-resizable-handle {
+    visibility: visible;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ResizeZone.scss:82 */
+.sch-event-resizing .sch-resizable-handle {
+    display: none !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ResizeZone.scss:89 */
+.sch-touch-only.sch-schedulerpanel .sch-resizable-handle {
+    /* TOUCH DEVICE ADAPTIONS */
+    /* Skip bg for resize handles */
+    visibility: visible;
+    border: 0 none;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ResizeZone.scss:95 */
+.sch-touch-only.sch-horizontal .sch-event .sch-resizable-handle {
+    /* Make it easier to grab */
+    width: 20px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/feature/ResizeZone.scss:99 */
+.sch-touch-only.sch-vertical .sch-event .sch-resizable-handle {
+    height: 20px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Zones.scss:1 */
+.sch-zone {
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+    margin-left: -1px;
+    z-index: -1;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Zones.scss:9 */
+.sch-horizontal .sch-zone {
+    height: 100%;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Zones.scss:13 */
+.sch-vertical .sch-zone {
+    width: 100%;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Zones.scss:17 */
+.x-ie8m .sch-zone {
+    background: transparent;
+    zoom: 1;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Zones.scss:23 */
+.sch-print-body .sch-zone {
+    border-left-style: solid;
+    border-left-color: #f4f4f4;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/ResourceZones.scss:1 */
+.sch-resourcezone {
+    position: absolute;
+    overflow: hidden;
+    background: #eee;
+    pointer-events: none;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/ResourceZones.scss:8 */
+.x-ie .sch-resourcezone {
+    z-index: -1;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/ResourceZones.scss:12 */
+.sch-horizontal .sch-resourcezone {
+    top: 0 !important;
+    height: 100% !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/ResourceZones.scss:17 */
+.sch-vertical .sch-resourcezone {
+    width: 100% !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/ResourceZones.scss:21 */
+.sch-ltr.sch-vertical .sch-resourcezone {
+    left: 0 !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/ResourceZones.scss:25 */
+.sch-rtl.sch-vertical .sch-resourcezone {
+    right: 0 !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:1 */
+.sch-event {
+    color: #fff;
+    border-color: #118914;
+    border-style: solid;
+    border-width: 1px;
+    background-color: #118914;
+    font-weight: normal;
+    position: absolute;
+    overflow: hidden;
+    cursor: pointer;
+    z-index: 5;
+    text-align: left;
+    opacity: 0.8;
+    transition: none;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:17 */
+.sch-scheduler-with-dependencies .sch-event {
+    overflow: visible;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:21 */
+.sch-scheduler-with-dependencies .sch-event-inner {
+    width: 100%;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:25 */
+.sch-timelineview .x-grid-item-focused .x-grid-cell-inner {
+    z-index: 5;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:29 */
+div.sch-event-fixed {
+    cursor: default;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:33 */
+.sch-event-inner {
+    overflow: hidden;
+    height: 100%;
+    white-space: nowrap;
+    padding: 3px 1px 3px 3px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:40 */
+.sch-event-withicon .sch-event-inner {
+    padding-left: 19px;
+    min-height: 16px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:46 */
+.sch-horizontal.sch-ltr .sch-event.sch-event-endsoutside,
+.sch-horizontal.sch-rtl .sch-event.sch-event-startsoutside {
+    /* Hide right border for events ending outside the view */
+    border-right-color: #118914;
+    border-right-style: dashed;
+    border-right-width: 1px;
+    -moz-border-radius-topright: 0 !important;
+    -moz-border-radius-bottomright: 0 !important;
+    -webkit-border-radius-top-right: 0 !important;
+    -webkit-border-radius-bottom-right: 0 !important;
+    -ms-border-radius-top-right: 0 !important;
+    -ms-border-radius-bottom-right: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:62 */
+.sch-horizontal.sch-ltr .sch-event.sch-event-startsoutside,
+.sch-horizontal.sch-rtl .sch-event.sch-event-endsoutside {
+    /* Hide left border for events starting outside the view */
+    border-left-color: #118914;
+    border-left-style: dashed;
+    border-left-width: 1px;
+    -moz-border-radius-topleft: 0 !important;
+    -moz-border-radius-bottomleft: 0 !important;
+    -webkit-border-radius-top-left: 0 !important;
+    -webkit-border-radius-bottom-left: 0 !important;
+    -ms-border-radius-top-left: 0 !important;
+    -ms-border-radius-bottom-left: 0 !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:77 */
+.x-rtl .sch-event {
+    text-align: right;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:81 */
+.sch-vertical .sch-event-startsoutside {
+    border-top-color: #118914;
+    border-top-style: dashed;
+    border-top-width: 1px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:87 */
+.sch-vertical .sch-event-endsoutside {
+    border-bottom-color: #118914;
+    border-bottom-style: dashed;
+    border-bottom-width: 1px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:93 */
+div.sch-event.sch-event-highlighted {
+    box-shadow: inset 0 0 0 2px red !important;
+    border-width: 1px;
+    border-color: red;
+    border-style: solid;
+    z-index: 1000;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:102 */
+.sch-horizontal .sch-event {
+    /* Ensure events are always visible if zoomed out */
+    min-width: 2px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:106 */
+.sch-vertical .sch-event {
+    min-height: 2px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:110 */
+div.sch-event-selected,
+div.sch-event-hover.sch-event-selected {
+    color: #fff;
+    background-color: #118914;
+    border-width: 1px;
+    border-color: #157fcc;
+    border-style: solid;
+    box-shadow: 1px 1px 1px 0 rgba(100, 100, 100, 0.5);
+    opacity: 1;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:122 */
+.sch-event.sch-event-hover {
+    border-width: 1px;
+    border-color: #888;
+    border-style: solid;
+    box-shadow: 0 0 0 0 transparent;
+    opacity: 1;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:131 */
+.sch-terminal {
+    /* TERMINAL STYLES */
+    display: none;
+    position: absolute;
+    width: 11px;
+    height: 11px;
+    background: #fff;
+    border-width: 1px;
+    border-style: solid;
+    border-color: inherit;
+    border-radius: 11px;
+    cursor: pointer;
+    z-index: 1000;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:145 */
+.sch-event-hover .sch-terminal {
+    display: block;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:149 */
+.sch-terminal:hover {
+    background: #d9d9d9;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:153 */
+.sch-terminal-left {
+    left: 0;
+    top: 50%;
+    margin-top: -6px;
+    margin-left: -9px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:160 */
+.sch-terminal-right {
+    right: 0;
+    top: 50%;
+    margin-top: -6px;
+    margin-right: -9px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:167 */
+.sch-terminal-top {
+    left: 50%;
+    top: 0;
+    margin-left: -6px;
+    margin-top: -9px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/template/Event.scss:174 */
+.sch-terminal-bottom {
+    left: 50%;
+    bottom: 0;
+    margin-left: -6px;
+    margin-bottom: -9px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Vertical.scss:1 */
+.sch-vertical .sch-verticaltimeaxis-cell {
+    background: #f9f9f9;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Vertical.scss:5 */
+.sch-vertical .sch-verticaltimeaxis-cell .x-grid-cell-inner {
+    color: #666;
+    padding: 0 5px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Vertical.scss:10 */
+.sch-vertical .sch-schedulerview .x-grid-cell-inner {
+    padding: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Vertical.scss:15 */
+.sch-vertical .sch-timetd {
+    border-top-color: transparent;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Vertical.scss:19 */
+.sch-vertical .sch-animations-enabled .sch-event {
+    -moz-transition-property: width, left;
+    -moz-transition-duration: 0.4s;
+    -webkit-transition-property: width, left;
+    -webkit-transition-duration: 0.4s;
+    -ms-transition-property: width, left;
+    -ms-transition-duration: 0.4s;
+    transition-property: width, left;
+    transition-duration: 0.4s;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Vertical.scss:30 */
+.sch-vertical .sch-schedulerview .x-grid-cell-inner {
+    height: 100%;
+    overflow: visible;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Vertical.scss:35 */
+.sch-vertical .sch-schedulerview td.sch-timetd,
+.sch-vertical .sch-schedulerview .x-grid-item-alt {
+    background: transparent;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Vertical.scss:41 */
+.sch-vertical .sch-schedulerview td.sch-col-alt {
+    /* Alternating coloring for columns */
+    background: url(bryntum-scheduler-theme-base/images/altrow.png) repeat;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Vertical.scss:46 */
+.sch-vertical .x-grid-item-over .sch-verticaltimeaxis-cell {
+    /* No mouse over effect for vertical time column cells */
+    background-color: #f9f9f9;
+    border-color: #fafafa #ededed #ededed;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Vertical.scss:51 */
+.sch-verticaltimeaxis-header .x-column-header-text {
+    background-image: none;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Vertical.scss:56 */
+.sch-vertical .sch-schedulerview .x-grid-cell-inner:before {
+    /* visual divider for rows in day/week view */
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+    content: " ";
+    border-top: 1px dotted #e9e9e9;
+    margin-top: -1px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Vertical.scss:67 */
+.sch-vertical .sch-header-secondary-canvas {
+    width: 100%;
+    z-index: 1;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Vertical.scss:73 */
+.sch-vertical .x-grid-item {
+    /* Border is moved from .x-grid-item to .x-grid-cell to highlight properly and use along with column lines feature */
+    border-top-width: 0;
+    border-color: transparent;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Vertical.scss:78 */
+.sch-vertical .x-grid-cell {
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: #cfcfcf;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Vertical.scss:84 */
+.sch-vertical .sch-lockedview .x-grid-item:first-child .x-grid-cell {
+    border-color: transparent;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Vertical.scss:88 */
+.sch-vertical .sch-normalview .x-grid-cell {
+    border-top-color: transparent;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/mixin/AbstractTimelinePanel.scss:2 */
+.sch-timelinepanel .x-grid-item-focused .x-grid-cell-inner:before {
+    /* Ext adds a dotted outline of focused cells, remove it */
+    border: none;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Horizontal.scss:1 */
+.x-ie .sch-horizontal .sch-timelineview td.sch-timetd {
+    z-index: 0;
+    background-image: url(bryntum-scheduler-theme-base/images/1px.png);
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Horizontal.scss:7 */
+.x-webkit .sch-horizontal td.sch-timetd {
+    /* Make sure column lines are always out of reach in Chrome */
+    position: relative;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Horizontal.scss:12 */
+.sch-horizontal td.sch-timetd .x-grid-cell-inner {
+    /* Ext Triton sets this to 1 which leads to dependencies rendering above terminals */
+    z-index: auto;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Horizontal.scss:17 */
+.sch-timelinepanel .x-grid-with-row-lines .x-grid-item[data-recordindex="0"] {
+    border-top-color: transparent;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/Horizontal.scss:26 */
+.sch-locked-column-fixer {
+    /* Locked column in RTL positioned incorrectly by EXT
+ https://www.sencha.com/forum/showthread.php?299582-RTL-locking-grid-bug
+ https://www.sencha.com/forum/showthread.php?304826-Locked-column-content-is-misaligned-with-RTL-ext
+ TODO: try to get rid of it
+ */
+    margin: 0 !important;
+    right: auto !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/mixin/FilterableTreeView.scss:1 */
+.sch-tree-filtered .x-tree-expander {
+    visibility: hidden;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/mixin/GridViewCanvas.scss:1 */
+.sch-item-canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/mixin/GridViewCanvas.scss:7 */
+.sch-horizontal .sch-item-canvas {
+    height: 100%;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/mixin/GridViewCanvas.scss:11 */
+.sch-vertical .sch-item-canvas {
+    width: 100%;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/mixin/GridViewCanvas.scss:19 */
+.sch-dependencyview-ct.sch-item-canvas-layer {
+    z-index: 1 !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/mixin/GridViewCanvas.scss:24 */
+.x-rtl .sch-secondary-canvas,
+.x-rtl .sch-item-canvas {
+    right: 0;
+    left: auto;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/tooltip/EventTip.scss:1 */
+.sch-tooltip-eventtip .x-tip-anchor {
+    pointer-events: none;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/mixin/TimelineView.scss:2 */
+.sch-timelineview .x-grid-item td.sch-timetd {
+    /* Use 3 specifiers to make sure we don't "lose" to .x-reset .x-grid-row .x-grid-cell which sets it to #fff */
+    overflow: visible;
+    background-color: transparent;
+    border-top-color: transparent;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/mixin/TimelineView.scss:8 */
+.sch-timelineview td.sch-timetd {
+    overflow: hidden;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/mixin/TimelineView.scss:12 */
+td.sch-timetd .x-grid-cell-inner {
+    position: relative;
+    padding-left: 0;
+    /*For IE in quirks mode */
+    padding-right: 0;
+    /*For IE in quirks mode */
+    /* No need for horizontal padding */
+    cursor: default;
+    /* No need for horizontal padding */
+    /* For trees, Ext sets it to pointer for some reason */
+    overflow: visible;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/mixin/TimelineView.scss:21 */
+.sch-timelineview .x-grid-item-container {
+    /* Make sure zones are always below the TRs/TDs */
+    position: relative;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/mixin/TimelineView.scss:25 */
+.sch-animations-enabled .sch-resourcezone,
+.sch-animations-enabled .sch-timeline,
+.sch-animations-enabled .sch-zone {
+    -moz-transition-property: width, left, top, height;
+    -moz-transition-duration: 0.4s;
+    -webkit-transition-property: width, left, top, height;
+    -webkit-transition-duration: 0.4s;
+    -ms-transition-property: width, left, top, height;
+    -ms-transition-duration: 0.4s;
+    transition-property: width, left, top, height;
+    transition-duration: 0.4s;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/mixin/TimelineView.scss:40 */
+.sch-timelinepanel .x-grid-item-focused .x-grid-cell-inner:before {
+    /* Ext adds a dotted outline of focused cells, remove it */
+    border: none;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/mixin/TimelineView.scss:46 */
+.x-ie9m.sch-timelinepanel .x-grid-locking-body > .x-splitter,
+.x-ie10.sch-timelinepanel .x-grid-locking-body > .x-splitter,
+.x-ie9m .sch-timelinepanel .x-grid-locking-body > .x-splitter,
+.x-ie10 .sch-timelinepanel .x-grid-locking-body > .x-splitter {
+    /* PATCH for: https://www.sencha.com/forum/showthread.php?333061-IE10-Editing-plugin-doesn-t-work-in-locking-grid */
+    /* first two lines are required for viewport */
+    z-index: 4;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/mixin/TimelineView.scss:54 */
+.x-ie9m.sch-timelinepanel .x-grid-scroll-container,
+.x-ie10.sch-timelinepanel .x-grid-scroll-container,
+.x-ie9m .sch-timelinepanel .x-grid-scroll-container,
+.x-ie10 .sch-timelinepanel .x-grid-scroll-container {
+    /* First two lines are required for viewport */
+    z-index: 2;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/mixin/TimelineView.scss:64 */
+.x-ie10 .sch-timelineview .x-grid-item {
+    /* EOF PATCH */
+    /* PATCH override translateZ(0) style in IE10 to make events reachable in vertical view */
+    transform: none;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/WeekView.scss:1 */
+.sch-calendar .sch-verticaltimeaxis-cell {
+    background: #fff;
+    overflow: visible;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/WeekView.scss:6 */
+.sch-calendar .x-grid-cell {
+    border-bottom-color: #e0e0e0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/WeekView.scss:10 */
+.sch-calendar .sch-schedulerview td.sch-col-alt {
+    background-image: none;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/WeekView.scss:14 */
+.sch-calendar .x-grid-item:first-child .sch-verticaltimeaxis-cell .sch-calendarcolumn-ct {
+    display: none;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/WeekView.scss:18 */
+.sch-calendar .sch-verticaltimeaxis-cell .x-grid-cell-inner {
+    overflow: visible;
+    padding-left: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/WeekView.scss:23 */
+.sch-calendarcolumn-ct {
+    color: #999;
+    background: #fff;
+    margin-top: -8px;
+    position: absolute;
+    padding: 0 3px 0 5px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/WeekView.scss:31 */
+.sch-calendarcolumn-minutes,
+.sch-calendarcolumn-hours {
+    display: block;
+    float: left;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/WeekView.scss:37 */
+.sch-calendarcolumn-hours {
+    font-size: 1.5em;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/WeekView.scss:41 */
+.sch-calendarcolumn-minutes {
+    font-size: 0.8em;
+    margin-top: -0.2em;
+    margin-left: 2px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/WeekView.scss:47 */
+.sch-calendar .sch-schedulerview td.sch-daycolumn-weekend {
+    background-color: rgba(242, 242, 242, 0.4);
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/WeekView.scss:52 */
+.sch-daycolumn-header-weekend .x-column-header-text {
+    color: #888;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/WeekView.scss:57 */
+.sch-calendar .sch-schedulerview td.sch-daycolumn-today {
+    background-color: rgba(255, 236, 236, 0.5);
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/WeekView.scss:62 */
+.sch-daycolumn-header-today .x-column-header-text {
+    color: #b26c3e;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:3 */
+.sch-dependencyview-ct {
+    /* z-index 2 to make sure lines are on top of row inner elements - we reset .x-grid-cell-inner to z-index:auto toofocused */
+    /* See tests 201_create.t.js and 052_dependency_events.t.js */
+    position: absolute;
+    top: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:8 */
+.sch-ltr .sch-dependencyview-ct {
+    left: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:12 */
+.x-rtl .sch-dependencyview-ct {
+    right: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:16 */
+.sch-dependency-line {
+    position: absolute;
+    border-style: solid;
+    border-color: #777;
+    border-width: 1px;
+    overflow: hidden;
+    z-index: 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    background-color: transparent;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:28 */
+div.sch-dependency-line-horizontal {
+    border-width: 1px 0px 0px 0px;
+    height: 4px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:33 */
+div.sch-dependency-line-vertical {
+    border-width: 0px 0px 0px 1px;
+    width: 4px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:38 */
+.x-rtl div.sch-dependency-line-vertical {
+    border-width: 0px 1px 0px 0px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:42 */
+.sch-export .sch-dependency-line {
+    -webkit-box-sizing: content-box;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:46 */
+.sch-export.x-chrome .sch-dependency-line,
+.sch-export.x-safari .sch-dependency-line,
+.sch-export.sch-ie-export .sch-dependency-line {
+    -webkit-box-sizing: border-box;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:52 */
+.sch-dependency-arrow {
+    position: absolute;
+    height: 0px;
+    width: 0px;
+    border-style: solid;
+    border-color: #777;
+    line-height: 0;
+    /* Required for IE in quirks mode */
+    z-index: 1;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:63 */
+.sch-dependency-arrow-left {
+    /* The extra 0.5 offset makes the alignment better in Firefox (no effect in Chrome) */
+    margin-top: -3.5px;
+    margin-left: -8px;
+    border-top-color: transparent !important;
+    border-bottom-color: transparent !important;
+    border-left-color: transparent !important;
+    border-width: 4px 8px 4px 0;
+    border-style: solid;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:73 */
+.sch-dependency-arrow-right {
+    margin-top: -3.5px;
+    border-width: 4px 0 4px 8px;
+    border-style: solid;
+    border-top-color: transparent !important;
+    border-bottom-color: transparent !important;
+    border-right-color: transparent !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:82 */
+.sch-dependency-arrow-up {
+    margin-left: -3.5px;
+    margin-top: -8px;
+    border-right-color: transparent !important;
+    border-left-color: transparent !important;
+    border-width: 0px 4px 8px 4px;
+    border-style: solid;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:91 */
+.sch-dependency-arrow-down {
+    margin-left: -3.5px;
+    border-right-color: transparent !important;
+    border-left-color: transparent !important;
+    border-width: 8px 4px 0;
+    border-style: solid;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:99 */
+.x-rtl .sch-dependency-arrow-up,
+.x-rtl .sch-dependency-arrow-down {
+    margin-left: 0;
+    margin-right: -3.5px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:105 */
+.x-rtl .sch-dependency-arrow-right {
+    margin-right: -8px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:109 */
+.sch-dependency-selected {
+    z-index: 4;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:113 */
+.sch-dependency.sch-dependency-selected {
+    border-color: red;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:117 */
+.sch-dependency-connector-proxy {
+    position: absolute;
+    width: 2px;
+    border-left: 2px dashed gray;
+    z-index: 20;
+    transform-origin: 0 0;
+    -ms-transform-origin: 0 0;
+    -o-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:129 */
+.sch-terminal-valid-drop {
+    background: #a4cf6d;
+    border-color: green;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:134 */
+.sch-terminal-invalid-drop {
+    background: #d9705d;
+    border-color: red;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:139 */
+.sch-terminals-visible .sch-terminal {
+    display: block;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:143 */
+.sch-schedulerview-readonly .sch-terminal,
+.sch-terminal.sch-terminal-hidden {
+    display: none;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:148 */
+.sch-create-dependency-tip .x-dd-drop-icon {
+    vertical-align: top;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:152 */
+.sch-dep-tip {
+    margin: 0px;
+    min-width: 100px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/view/dependency/View.scss:157 */
+.sch-dep-tip dd {
+    margin: 0 0 10px 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/panel/TimelineTreePanel.scss:2 */
+.sch-timelinetreeview .x-grid-item .x-grid-cell-inner {
+    /* Default cursor for tree scheduler should be auto */
+    cursor: default;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/panel/TimelineTreePanel.scss:6 */
+.sch-tree-filtered .x-tree-expander {
+    visibility: hidden;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/CellPlugin.scss:1 */
+.sch-cellplugin-highlighter {
+    position: absolute;
+    z-index: 10;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/CellPlugin.scss:6 */
+.sch-cellplugin-active .sch-cellplugin-border {
+    border-color: green;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/CellPlugin.scss:10 */
+.sch-cellplugin-border {
+    position: absolute;
+    z-index: 1;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/CellPlugin.scss:15 */
+.sch-cellplugin-border-horizontal {
+    height: 0;
+    width: inherit;
+    border-top: 1px solid black;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/CellPlugin.scss:21 */
+.sch-cellplugin-border-vertical {
+    width: 0;
+    height: inherit;
+    border-left: 1px solid black;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/CellPlugin.scss:27 */
+.sch-cellplugin-border-top {
+    top: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/CellPlugin.scss:31 */
+.sch-cellplugin-border-bottom {
+    bottom: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/CellPlugin.scss:35 */
+.sch-cellplugin-border-left {
+    left: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/CellPlugin.scss:39 */
+.sch-cellplugin-border-right {
+    right: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/DragSelector.scss:2 */
+.sch-drag-selector {
+    /* Make sure the drag selector is shown above any event nodes */
+    z-index: 5000;
+    position: absolute;
+    left: -100px;
+    top: 0;
+    background-color: #c3daf9;
+    border: 1px dotted #39b;
+    filter: opacity=50;
+    opacity: 0.5;
+    zoom: 1;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/EventEditor.scss:1 */
+.sch-eventeditor-floating-container {
+    -webkit-box-shadow: 1px 1px 5px rgba(100, 100, 100, 0.5);
+    -moz-box-shadow: 1px 1px 5px rgba(100, 100, 100, 0.5);
+    box-shadow: 1px 1px 5px rgba(100, 100, 100, 0.5);
+    border-radius: 3px;
+    border-top-left-radius: 0px;
+    border: 1px solid #ddd;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/EventEditor.scss:10 */
+.sch-eventeditor {
+    background: #fff;
+    z-index: 5000;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/EventEditor.scss:15 */
+.sch-eventeditor-floating-container {
+    top: -1000px;
+    left: -1000px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/EventEditor.scss:20 */
+.sch-eventeditor .x-border-layout-ct {
+    background: transparent;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/EventEditor.scss:24 */
+.sch-eventeditor-timefields .x-form-text {
+    padding-right: 2px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/EventEditor.scss:28 */
+.sch-event-editor-durationlabel {
+    padding-top: 7px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/EventEditor.scss:32 */
+.sch-eventeditor-timefields {
+    background: #ececec;
+    border-top-right-radius: 3px;
+    border-bottom: 1px solid #ddd;
+    padding: 7px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/EventEditor.scss:39 */
+.sch-eventeditor-timefields .x-field,
+.sch-eventeditor-timefields .label {
+    margin-right: 5px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/EventEditor.scss:44 */
+.sch-eventeditor-timefields .label {
+    line-height: 21px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/EventEditor.scss:48 */
+.sch-eventeditor.x-panel-collapsed {
+    border: 0px none;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/EventEditor.scss:52 */
+.sch-eventeditor > .x-panel-body {
+    background: transparent;
+    border-top: 0 none;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/EventEditor.scss:57 */
+.sch-eventeditor .x-toolbar-footer {
+    padding-bottom: 5px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/EventTools.scss:1 */
+.sch-event-tools {
+    border: thin solid #8eaace;
+    background: #e9f2ff;
+    padding: 3px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/EventTools.scss:10 */
+.sch-tool {
+    float: left;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/EventTools.scss:14 */
+.sch-tool-img {
+    width: 18px;
+    height: 18px;
+    padding: 1px;
+    margin: 1px;
+    cursor: pointer;
+    overflow: hidden;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/EventTools.scss:25 */
+.sch-tool-over .sch-tool-img {
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 0;
+    border-radius: inherit;
+    box-shadow: 0 0 2px 0 #dc7f00;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/widget/ColumnPicker.scss:1 */
+.sch-columnpicker-list li.x-boundlist-item {
+    height: 100%;
+    border: 0;
+    padding-left: 28px;
+    line-height: 30px;
+    background-color: transparent;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/widget/ColumnPicker.scss:9 */
+.sch-columnpicker-list li.x-boundlist-item.x-boundlist-selected {
+    background: transparent url(bryntum-scheduler-theme-base/images/check.png) no-repeat 3px center;
+    background-size: 20px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Export.scss:2 */
+.sch-export {
+    /* Styles for Exporting. */
+    padding: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Export.scss:6 */
+.sch-none {
+    display: none;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Export.scss:10 */
+.sch-export-header {
+    background: #99bce8;
+    border: 1px solid #c5c5c5;
+    height: 40px;
+    padding-top: 7px;
+    text-align: center;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Export.scss:18 */
+.sch-export-header h2 {
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-size: 16px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Export.scss:25 */
+.sch-export-mask {
+    opacity: 0.95;
+    background: #f8f8f8;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Export.scss:30 */
+.sch-exportdialog-msg {
+    padding: 10px;
+    color: black;
+    font-size: 13px;
+    background-color: white;
+    min-height: 100px;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Export.scss:38 */
+.sch-ux-range-picker {
+    position: relative;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Export.scss:42 */
+.sch-ux-range-picker .x-panel-body {
+    background: #aaa url(bryntum-scheduler-theme-base/images/pattern.png) repeat scroll 0 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Export.scss:46 */
+.sch-ux-range-value {
+    height: 16px;
+    width: 16px;
+    background: lightseagreen;
+    border: 2px solid #fff;
+    border-radius: 100%;
+    -webkit-box-shadow: 1px 1px 5px rgba(45, 45, 45, 0.7);
+    -moz-box-shadow: 1px 1px 5px rgba(45, 45, 45, 0.7);
+    -ms-box-shadow: 1px 1px 5px rgba(45, 45, 45, 0.7);
+    box-shadow: 1px 1px 5px rgba(45, 45, 45, 0.7);
+    cursor: pointer;
+    position: absolute;
+    overflow: visible;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Export.scss:61 */
+.sch-ux-range-value span {
+    font-size: 9px;
+    color: #fff;
+    display: block;
+    left: -25px;
+    top: -18px;
+    position: absolute;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Export.scss:70 */
+.sch-fieldcontainer-label-wrap {
+    font: inherit;
+    width: 100%;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Export.scss:75 */
+.sch-fieldcontainer-label-wrap td {
+    padding: 0;
+    margin: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Export.scss:80 */
+.sch-fieldcontainer-label {
+    color: #999;
+    white-space: nowrap;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Export.scss:85 */
+.sch-fieldcontainer-separator {
+    margin: 2px 0 3px 5px;
+    height: 0;
+    line-height: 0;
+    border: 0;
+    border-top: 1px solid #ccc;
+    border-width: 1px;
+    display: block;
+    font-size: 1px;
+    overflow: hidden;
+    cursor: default;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Printable.scss:1 */
+.sch-print-body {
+    /* If component is in a viewport, it puts overflow:hidden on the body which prevents
+       print from working.
+    */
+    /* If component is in a viewport, it puts overflow:hidden on the body which prevents
+       print from working.
+    */
+    overflow: visible !important;
+    /* If component is in a viewport, it puts overflow:hidden on the body which prevents
+       print from working.
+    */
+    background-color: transparent !important;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Printable.scss:12 */
+.sch-print-ct {
+    overflow: visible !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Printable.scss:17 */
+.sch-print-ct .x-grid-inner-locked {
+    border-right-color: #99bce8;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Printable.scss:23 */
+.sch-print-header-wrap * {
+    /* Remove any background image since they won't be printed anyway unless user changes browser setting. */
+    background: transparent none !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Printable.scss:29 */
+.sch-print-fake-background .sch-event {
+    /* Use border-width to achieve background color*/
+    overflow: visible !important;
+    width: 0 !important;
+    border-left-style: solid;
+    border-right-style: solid !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Printable.scss:38 */
+.sch-print-fake-background .sch-event-inner {
+    /* Make sure the inner content is "above" the border */
+    overflow: visible !important;
+    z-index: 10000;
+    position: absolute;
+    left: 0;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Printable.scss:47 */
+.sch-print-normalheader {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Printable.scss:54 */
+.sch-print-headerbg {
+    position: absolute;
+    left: 0;
+    width: 0;
+    border-left: 1px solid #eee;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Printable.scss:62 */
+.sch-print-lockedheader {
+    z-index: 2;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Printable.scss:67 */
+.sch-print-locked-rows-ct {
+    z-index: 2;
+    float: left;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Printable.scss:73 */
+div.sch-print-normal-rows-ct {
+    overflow: hidden !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Printable.scss:78 */
+@media print {
+    /* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-base/sass/src/Sch/plugin/Printable.scss:79 */
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_path.scss:5 */
+@font-face {
+    /* FONT PATH
+ * -------------------------- */
+    /* FONT PATH
+ * -------------------------- */
+    font-family: 'FontAwesome';
+    src: url('font-awesome/fonts/fontawesome-webfont.eot?v=4.4.0');
+    src: url('font-awesome/fonts/fontawesome-webfont.eot?#iefix&v=4.4.0') format('embedded-opentype'), url('font-awesome/fonts/fontawesome-webfont.woff2?v=4.4.0') format('woff2'), url('font-awesome/fonts/fontawesome-webfont.woff?v=4.4.0') format('woff'), url('font-awesome/fonts/fontawesome-webfont.ttf?v=4.4.0') format('truetype'), url('font-awesome/fonts/fontawesome-webfont.svg?v=4.4.0#fontawesomeregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_core.scss:4 */
+.fa {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_larger.scss:5 */
+.fa-lg {
+    /* makes the font 33% larger relative to the icon container */
+    font-size: 1.33333em;
+    line-height: 0.75em;
+    vertical-align: -15%;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_larger.scss:10 */
+.fa-2x {
+    font-size: 2em;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_larger.scss:11 */
+.fa-3x {
+    font-size: 3em;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_larger.scss:12 */
+.fa-4x {
+    font-size: 4em;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_larger.scss:13 */
+.fa-5x {
+    font-size: 5em;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_fixed-width.scss:3 */
+.fa-fw {
+    width: 1.28571em;
+    text-align: center;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_list.scss:4 */
+.fa-ul {
+    padding-left: 0;
+    margin-left: 2.14286em;
+    list-style-type: none;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_list.scss:8 */
+.fa-ul > li {
+    position: relative;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_list.scss:10 */
+.fa-li {
+    position: absolute;
+    left: -2.14286em;
+    width: 2.14286em;
+    top: 0.14286em;
+    text-align: center;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_list.scss:16 */
+.fa-li.fa-lg {
+    left: -1.85714em;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_bordered-pulled.scss:4 */
+.fa-border {
+    padding: 0.2em 0.25em 0.15em;
+    border: solid 0.08em #eee;
+    border-radius: 0.1em;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_bordered-pulled.scss:10 */
+.fa-pull-left {
+    float: left;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_bordered-pulled.scss:11 */
+.fa-pull-right {
+    float: right;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_bordered-pulled.scss:14 */
+.fa.fa-pull-left {
+    margin-right: 0.3em;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_bordered-pulled.scss:15 */
+.fa.fa-pull-right {
+    margin-left: 0.3em;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_bordered-pulled.scss:19 */
+.pull-right {
+    /* Deprecated as of 4.4.0 */
+    float: right;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_bordered-pulled.scss:20 */
+.pull-left {
+    float: left;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_bordered-pulled.scss:23 */
+.fa.pull-left {
+    margin-right: 0.3em;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_bordered-pulled.scss:24 */
+.fa.pull-right {
+    margin-left: 0.3em;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_animated.scss:4 */
+.fa-spin {
+    -webkit-animation: fa-spin 2s infinite linear;
+    animation: fa-spin 2s infinite linear;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_animated.scss:9 */
+.fa-pulse {
+    -webkit-animation: fa-spin 1s infinite steps(8);
+    animation: fa-spin 1s infinite steps(8);
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_animated.scss:14 */
+@-webkit-keyframes fa-spin {
+    /* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_animated.scss:15 */
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    /* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_animated.scss:19 */
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_animated.scss:25 */
+@keyframes fa-spin {
+    /* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_animated.scss:26 */
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    /* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_animated.scss:30 */
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_rotated-flipped.scss:4 */
+.fa-rotate-90 {
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+    -webkit-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_rotated-flipped.scss:5 */
+.fa-rotate-180 {
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_rotated-flipped.scss:6 */
+.fa-rotate-270 {
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    -webkit-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    transform: rotate(270deg);
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_rotated-flipped.scss:8 */
+.fa-flip-horizontal {
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0);
+    -webkit-transform: scale(-1, 1);
+    -ms-transform: scale(-1, 1);
+    transform: scale(-1, 1);
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_rotated-flipped.scss:9 */
+.fa-flip-vertical {
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+    -webkit-transform: scale(1, -1);
+    -ms-transform: scale(1, -1);
+    transform: scale(1, -1);
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_rotated-flipped.scss:14 */
+:root .fa-rotate-90,
+:root .fa-rotate-180,
+:root .fa-rotate-270,
+:root .fa-flip-horizontal,
+:root .fa-flip-vertical {
+    filter: none;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_stacked.scss:4 */
+.fa-stack {
+    position: relative;
+    display: inline-block;
+    width: 2em;
+    height: 2em;
+    line-height: 2em;
+    vertical-align: middle;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_stacked.scss:12 */
+.fa-stack-1x,
+.fa-stack-2x {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_stacked.scss:18 */
+.fa-stack-1x {
+    line-height: inherit;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_stacked.scss:19 */
+.fa-stack-2x {
+    font-size: 2em;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_stacked.scss:20 */
+.fa-inverse {
+    color: #fff;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:4 */
+.fa-glass:before {
+    /* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
+   readers do not read off random characters that represent icons */
+    content: "\f000" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:5 */
+.fa-music:before {
+    content: "\f001" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:6 */
+.fa-search:before {
+    content: "\f002" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:7 */
+.fa-envelope-o:before {
+    content: "\f003" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:8 */
+.fa-heart:before {
+    content: "\f004" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:9 */
+.fa-star:before {
+    content: "\f005" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:10 */
+.fa-star-o:before {
+    content: "\f006" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:11 */
+.fa-user:before {
+    content: "\f007" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:12 */
+.fa-film:before {
+    content: "\f008" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:13 */
+.fa-th-large:before {
+    content: "\f009" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:14 */
+.fa-th:before {
+    content: "\f00a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:15 */
+.fa-th-list:before {
+    content: "\f00b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:16 */
+.fa-check:before {
+    content: "\f00c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:17 */
+.fa-remove:before,
+.fa-close:before,
+.fa-times:before {
+    content: "\f00d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:20 */
+.fa-search-plus:before {
+    content: "\f00e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:21 */
+.fa-search-minus:before {
+    content: "\f010" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:22 */
+.fa-power-off:before {
+    content: "\f011" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:23 */
+.fa-signal:before {
+    content: "\f012" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:24 */
+.fa-gear:before,
+.fa-cog:before {
+    content: "\f013" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:26 */
+.fa-trash-o:before {
+    content: "\f014" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:27 */
+.fa-home:before {
+    content: "\f015" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:28 */
+.fa-file-o:before {
+    content: "\f016" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:29 */
+.fa-clock-o:before {
+    content: "\f017" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:30 */
+.fa-road:before {
+    content: "\f018" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:31 */
+.fa-download:before {
+    content: "\f019" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:32 */
+.fa-arrow-circle-o-down:before {
+    content: "\f01a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:33 */
+.fa-arrow-circle-o-up:before {
+    content: "\f01b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:34 */
+.fa-inbox:before {
+    content: "\f01c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:35 */
+.fa-play-circle-o:before {
+    content: "\f01d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:36 */
+.fa-rotate-right:before,
+.fa-repeat:before {
+    content: "\f01e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:38 */
+.fa-refresh:before {
+    content: "\f021" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:39 */
+.fa-list-alt:before {
+    content: "\f022" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:40 */
+.fa-lock:before {
+    content: "\f023" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:41 */
+.fa-flag:before {
+    content: "\f024" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:42 */
+.fa-headphones:before {
+    content: "\f025" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:43 */
+.fa-volume-off:before {
+    content: "\f026" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:44 */
+.fa-volume-down:before {
+    content: "\f027" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:45 */
+.fa-volume-up:before {
+    content: "\f028" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:46 */
+.fa-qrcode:before {
+    content: "\f029" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:47 */
+.fa-barcode:before {
+    content: "\f02a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:48 */
+.fa-tag:before {
+    content: "\f02b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:49 */
+.fa-tags:before {
+    content: "\f02c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:50 */
+.fa-book:before {
+    content: "\f02d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:51 */
+.fa-bookmark:before {
+    content: "\f02e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:52 */
+.fa-print:before {
+    content: "\f02f" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:53 */
+.fa-camera:before {
+    content: "\f030" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:54 */
+.fa-font:before {
+    content: "\f031" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:55 */
+.fa-bold:before {
+    content: "\f032" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:56 */
+.fa-italic:before {
+    content: "\f033" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:57 */
+.fa-text-height:before {
+    content: "\f034" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:58 */
+.fa-text-width:before {
+    content: "\f035" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:59 */
+.fa-align-left:before {
+    content: "\f036" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:60 */
+.fa-align-center:before {
+    content: "\f037" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:61 */
+.fa-align-right:before {
+    content: "\f038" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:62 */
+.fa-align-justify:before {
+    content: "\f039" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:63 */
+.fa-list:before {
+    content: "\f03a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:64 */
+.fa-dedent:before,
+.fa-outdent:before {
+    content: "\f03b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:66 */
+.fa-indent:before {
+    content: "\f03c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:67 */
+.fa-video-camera:before {
+    content: "\f03d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:68 */
+.fa-photo:before,
+.fa-image:before,
+.fa-picture-o:before {
+    content: "\f03e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:71 */
+.fa-pencil:before {
+    content: "\f040" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:72 */
+.fa-map-marker:before {
+    content: "\f041" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:73 */
+.fa-adjust:before {
+    content: "\f042" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:74 */
+.fa-tint:before {
+    content: "\f043" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:75 */
+.fa-edit:before,
+.fa-pencil-square-o:before {
+    content: "\f044" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:77 */
+.fa-share-square-o:before {
+    content: "\f045" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:78 */
+.fa-check-square-o:before {
+    content: "\f046" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:79 */
+.fa-arrows:before {
+    content: "\f047" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:80 */
+.fa-step-backward:before {
+    content: "\f048" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:81 */
+.fa-fast-backward:before {
+    content: "\f049" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:82 */
+.fa-backward:before {
+    content: "\f04a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:83 */
+.fa-play:before {
+    content: "\f04b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:84 */
+.fa-pause:before {
+    content: "\f04c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:85 */
+.fa-stop:before {
+    content: "\f04d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:86 */
+.fa-forward:before {
+    content: "\f04e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:87 */
+.fa-fast-forward:before {
+    content: "\f050" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:88 */
+.fa-step-forward:before {
+    content: "\f051" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:89 */
+.fa-eject:before {
+    content: "\f052" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:90 */
+.fa-chevron-left:before {
+    content: "\f053" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:91 */
+.fa-chevron-right:before {
+    content: "\f054" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:92 */
+.fa-plus-circle:before {
+    content: "\f055" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:93 */
+.fa-minus-circle:before {
+    content: "\f056" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:94 */
+.fa-times-circle:before {
+    content: "\f057" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:95 */
+.fa-check-circle:before {
+    content: "\f058" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:96 */
+.fa-question-circle:before {
+    content: "\f059" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:97 */
+.fa-info-circle:before {
+    content: "\f05a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:98 */
+.fa-crosshairs:before {
+    content: "\f05b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:99 */
+.fa-times-circle-o:before {
+    content: "\f05c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:100 */
+.fa-check-circle-o:before {
+    content: "\f05d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:101 */
+.fa-ban:before {
+    content: "\f05e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:102 */
+.fa-arrow-left:before {
+    content: "\f060" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:103 */
+.fa-arrow-right:before {
+    content: "\f061" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:104 */
+.fa-arrow-up:before {
+    content: "\f062" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:105 */
+.fa-arrow-down:before {
+    content: "\f063" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:106 */
+.fa-mail-forward:before,
+.fa-share:before {
+    content: "\f064" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:108 */
+.fa-expand:before {
+    content: "\f065" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:109 */
+.fa-compress:before {
+    content: "\f066" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:110 */
+.fa-plus:before {
+    content: "\f067" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:111 */
+.fa-minus:before {
+    content: "\f068" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:112 */
+.fa-asterisk:before {
+    content: "\f069" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:113 */
+.fa-exclamation-circle:before {
+    content: "\f06a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:114 */
+.fa-gift:before {
+    content: "\f06b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:115 */
+.fa-leaf:before {
+    content: "\f06c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:116 */
+.fa-fire:before {
+    content: "\f06d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:117 */
+.fa-eye:before {
+    content: "\f06e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:118 */
+.fa-eye-slash:before {
+    content: "\f070" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:119 */
+.fa-warning:before,
+.fa-exclamation-triangle:before {
+    content: "\f071" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:121 */
+.fa-plane:before {
+    content: "\f072" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:122 */
+.fa-calendar:before {
+    content: "\f073" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:123 */
+.fa-random:before {
+    content: "\f074" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:124 */
+.fa-comment:before {
+    content: "\f075" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:125 */
+.fa-magnet:before {
+    content: "\f076" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:126 */
+.fa-chevron-up:before {
+    content: "\f077" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:127 */
+.fa-chevron-down:before {
+    content: "\f078" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:128 */
+.fa-retweet:before {
+    content: "\f079" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:129 */
+.fa-shopping-cart:before {
+    content: "\f07a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:130 */
+.fa-folder:before {
+    content: "\f07b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:131 */
+.fa-folder-open:before {
+    content: "\f07c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:132 */
+.fa-arrows-v:before {
+    content: "\f07d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:133 */
+.fa-arrows-h:before {
+    content: "\f07e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:134 */
+.fa-bar-chart-o:before,
+.fa-bar-chart:before {
+    content: "\f080" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:136 */
+.fa-twitter-square:before {
+    content: "\f081" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:137 */
+.fa-facebook-square:before {
+    content: "\f082" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:138 */
+.fa-camera-retro:before {
+    content: "\f083" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:139 */
+.fa-key:before {
+    content: "\f084" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:140 */
+.fa-gears:before,
+.fa-cogs:before {
+    content: "\f085" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:142 */
+.fa-comments:before {
+    content: "\f086" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:143 */
+.fa-thumbs-o-up:before {
+    content: "\f087" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:144 */
+.fa-thumbs-o-down:before {
+    content: "\f088" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:145 */
+.fa-star-half:before {
+    content: "\f089" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:146 */
+.fa-heart-o:before {
+    content: "\f08a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:147 */
+.fa-sign-out:before {
+    content: "\f08b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:148 */
+.fa-linkedin-square:before {
+    content: "\f08c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:149 */
+.fa-thumb-tack:before {
+    content: "\f08d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:150 */
+.fa-external-link:before {
+    content: "\f08e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:151 */
+.fa-sign-in:before {
+    content: "\f090" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:152 */
+.fa-trophy:before {
+    content: "\f091" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:153 */
+.fa-github-square:before {
+    content: "\f092" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:154 */
+.fa-upload:before {
+    content: "\f093" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:155 */
+.fa-lemon-o:before {
+    content: "\f094" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:156 */
+.fa-phone:before {
+    content: "\f095" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:157 */
+.fa-square-o:before {
+    content: "\f096" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:158 */
+.fa-bookmark-o:before {
+    content: "\f097" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:159 */
+.fa-phone-square:before {
+    content: "\f098" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:160 */
+.fa-twitter:before {
+    content: "\f099" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:161 */
+.fa-facebook-f:before,
+.fa-facebook:before {
+    content: "\f09a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:163 */
+.fa-github:before {
+    content: "\f09b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:164 */
+.fa-unlock:before {
+    content: "\f09c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:165 */
+.fa-credit-card:before {
+    content: "\f09d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:166 */
+.fa-feed:before,
+.fa-rss:before {
+    content: "\f09e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:168 */
+.fa-hdd-o:before {
+    content: "\f0a0" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:169 */
+.fa-bullhorn:before {
+    content: "\f0a1" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:170 */
+.fa-bell:before {
+    content: "\f0f3" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:171 */
+.fa-certificate:before {
+    content: "\f0a3" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:172 */
+.fa-hand-o-right:before {
+    content: "\f0a4" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:173 */
+.fa-hand-o-left:before {
+    content: "\f0a5" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:174 */
+.fa-hand-o-up:before {
+    content: "\f0a6" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:175 */
+.fa-hand-o-down:before {
+    content: "\f0a7" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:176 */
+.fa-arrow-circle-left:before {
+    content: "\f0a8" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:177 */
+.fa-arrow-circle-right:before {
+    content: "\f0a9" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:178 */
+.fa-arrow-circle-up:before {
+    content: "\f0aa" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:179 */
+.fa-arrow-circle-down:before {
+    content: "\f0ab" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:180 */
+.fa-globe:before {
+    content: "\f0ac" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:181 */
+.fa-wrench:before {
+    content: "\f0ad" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:182 */
+.fa-tasks:before {
+    content: "\f0ae" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:183 */
+.fa-filter:before {
+    content: "\f0b0" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:184 */
+.fa-briefcase:before {
+    content: "\f0b1" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:185 */
+.fa-arrows-alt:before {
+    content: "\f0b2" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:186 */
+.fa-group:before,
+.fa-users:before {
+    content: "\f0c0" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:188 */
+.fa-chain:before,
+.fa-link:before {
+    content: "\f0c1" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:190 */
+.fa-cloud:before {
+    content: "\f0c2" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:191 */
+.fa-flask:before {
+    content: "\f0c3" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:192 */
+.fa-cut:before,
+.fa-scissors:before {
+    content: "\f0c4" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:194 */
+.fa-copy:before,
+.fa-files-o:before {
+    content: "\f0c5" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:196 */
+.fa-paperclip:before {
+    content: "\f0c6" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:197 */
+.fa-save:before,
+.fa-floppy-o:before {
+    content: "\f0c7" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:199 */
+.fa-square:before {
+    content: "\f0c8" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:200 */
+.fa-navicon:before,
+.fa-reorder:before,
+.fa-bars:before {
+    content: "\f0c9" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:203 */
+.fa-list-ul:before {
+    content: "\f0ca" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:204 */
+.fa-list-ol:before {
+    content: "\f0cb" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:205 */
+.fa-strikethrough:before {
+    content: "\f0cc" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:206 */
+.fa-underline:before {
+    content: "\f0cd" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:207 */
+.fa-table:before {
+    content: "\f0ce" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:208 */
+.fa-magic:before {
+    content: "\f0d0" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:209 */
+.fa-truck:before {
+    content: "\f0d1" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:210 */
+.fa-pinterest:before {
+    content: "\f0d2" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:211 */
+.fa-pinterest-square:before {
+    content: "\f0d3" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:212 */
+.fa-google-plus-square:before {
+    content: "\f0d4" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:213 */
+.fa-google-plus:before {
+    content: "\f0d5" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:214 */
+.fa-money:before {
+    content: "\f0d6" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:215 */
+.fa-caret-down:before {
+    content: "\f0d7" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:216 */
+.fa-caret-up:before {
+    content: "\f0d8" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:217 */
+.fa-caret-left:before {
+    content: "\f0d9" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:218 */
+.fa-caret-right:before {
+    content: "\f0da" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:219 */
+.fa-columns:before {
+    content: "\f0db" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:220 */
+.fa-unsorted:before,
+.fa-sort:before {
+    content: "\f0dc" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:222 */
+.fa-sort-down:before,
+.fa-sort-desc:before {
+    content: "\f0dd" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:224 */
+.fa-sort-up:before,
+.fa-sort-asc:before {
+    content: "\f0de" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:226 */
+.fa-envelope:before {
+    content: "\f0e0" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:227 */
+.fa-linkedin:before {
+    content: "\f0e1" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:228 */
+.fa-rotate-left:before,
+.fa-undo:before {
+    content: "\f0e2" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:230 */
+.fa-legal:before,
+.fa-gavel:before {
+    content: "\f0e3" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:232 */
+.fa-dashboard:before,
+.fa-tachometer:before {
+    content: "\f0e4" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:234 */
+.fa-comment-o:before {
+    content: "\f0e5" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:235 */
+.fa-comments-o:before {
+    content: "\f0e6" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:236 */
+.fa-flash:before,
+.fa-bolt:before {
+    content: "\f0e7" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:238 */
+.fa-sitemap:before {
+    content: "\f0e8" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:239 */
+.fa-umbrella:before {
+    content: "\f0e9" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:240 */
+.fa-paste:before,
+.fa-clipboard:before {
+    content: "\f0ea" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:242 */
+.fa-lightbulb-o:before {
+    content: "\f0eb" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:243 */
+.fa-exchange:before {
+    content: "\f0ec" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:244 */
+.fa-cloud-download:before {
+    content: "\f0ed" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:245 */
+.fa-cloud-upload:before {
+    content: "\f0ee" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:246 */
+.fa-user-md:before {
+    content: "\f0f0" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:247 */
+.fa-stethoscope:before {
+    content: "\f0f1" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:248 */
+.fa-suitcase:before {
+    content: "\f0f2" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:249 */
+.fa-bell-o:before {
+    content: "\f0a2" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:250 */
+.fa-coffee:before {
+    content: "\f0f4" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:251 */
+.fa-cutlery:before {
+    content: "\f0f5" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:252 */
+.fa-file-text-o:before {
+    content: "\f0f6" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:253 */
+.fa-building-o:before {
+    content: "\f0f7" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:254 */
+.fa-hospital-o:before {
+    content: "\f0f8" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:255 */
+.fa-ambulance:before {
+    content: "\f0f9" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:256 */
+.fa-medkit:before {
+    content: "\f0fa" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:257 */
+.fa-fighter-jet:before {
+    content: "\f0fb" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:258 */
+.fa-beer:before {
+    content: "\f0fc" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:259 */
+.fa-h-square:before {
+    content: "\f0fd" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:260 */
+.fa-plus-square:before {
+    content: "\f0fe" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:261 */
+.fa-angle-double-left:before {
+    content: "\f100" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:262 */
+.fa-angle-double-right:before {
+    content: "\f101" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:263 */
+.fa-angle-double-up:before {
+    content: "\f102" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:264 */
+.fa-angle-double-down:before {
+    content: "\f103" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:265 */
+.fa-angle-left:before {
+    content: "\f104" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:266 */
+.fa-angle-right:before {
+    content: "\f105" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:267 */
+.fa-angle-up:before {
+    content: "\f106" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:268 */
+.fa-angle-down:before {
+    content: "\f107" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:269 */
+.fa-desktop:before {
+    content: "\f108" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:270 */
+.fa-laptop:before {
+    content: "\f109" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:271 */
+.fa-tablet:before {
+    content: "\f10a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:272 */
+.fa-mobile-phone:before,
+.fa-mobile:before {
+    content: "\f10b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:274 */
+.fa-circle-o:before {
+    content: "\f10c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:275 */
+.fa-quote-left:before {
+    content: "\f10d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:276 */
+.fa-quote-right:before {
+    content: "\f10e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:277 */
+.fa-spinner:before {
+    content: "\f110" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:278 */
+.fa-circle:before {
+    content: "\f111" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:279 */
+.fa-mail-reply:before,
+.fa-reply:before {
+    content: "\f112" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:281 */
+.fa-github-alt:before {
+    content: "\f113" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:282 */
+.fa-folder-o:before {
+    content: "\f114" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:283 */
+.fa-folder-open-o:before {
+    content: "\f115" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:284 */
+.fa-smile-o:before {
+    content: "\f118" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:285 */
+.fa-frown-o:before {
+    content: "\f119" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:286 */
+.fa-meh-o:before {
+    content: "\f11a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:287 */
+.fa-gamepad:before {
+    content: "\f11b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:288 */
+.fa-keyboard-o:before {
+    content: "\f11c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:289 */
+.fa-flag-o:before {
+    content: "\f11d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:290 */
+.fa-flag-checkered:before {
+    content: "\f11e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:291 */
+.fa-terminal:before {
+    content: "\f120" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:292 */
+.fa-code:before {
+    content: "\f121" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:293 */
+.fa-mail-reply-all:before,
+.fa-reply-all:before {
+    content: "\f122" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:295 */
+.fa-star-half-empty:before,
+.fa-star-half-full:before,
+.fa-star-half-o:before {
+    content: "\f123" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:298 */
+.fa-location-arrow:before {
+    content: "\f124" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:299 */
+.fa-crop:before {
+    content: "\f125" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:300 */
+.fa-code-fork:before {
+    content: "\f126" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:301 */
+.fa-unlink:before,
+.fa-chain-broken:before {
+    content: "\f127" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:303 */
+.fa-question:before {
+    content: "\f128" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:304 */
+.fa-info:before {
+    content: "\f129" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:305 */
+.fa-exclamation:before {
+    content: "\f12a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:306 */
+.fa-superscript:before {
+    content: "\f12b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:307 */
+.fa-subscript:before {
+    content: "\f12c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:308 */
+.fa-eraser:before {
+    content: "\f12d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:309 */
+.fa-puzzle-piece:before {
+    content: "\f12e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:310 */
+.fa-microphone:before {
+    content: "\f130" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:311 */
+.fa-microphone-slash:before {
+    content: "\f131" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:312 */
+.fa-shield:before {
+    content: "\f132" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:313 */
+.fa-calendar-o:before {
+    content: "\f133" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:314 */
+.fa-fire-extinguisher:before {
+    content: "\f134" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:315 */
+.fa-rocket:before {
+    content: "\f135" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:316 */
+.fa-maxcdn:before {
+    content: "\f136" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:317 */
+.fa-chevron-circle-left:before {
+    content: "\f137" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:318 */
+.fa-chevron-circle-right:before {
+    content: "\f138" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:319 */
+.fa-chevron-circle-up:before {
+    content: "\f139" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:320 */
+.fa-chevron-circle-down:before {
+    content: "\f13a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:321 */
+.fa-html5:before {
+    content: "\f13b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:322 */
+.fa-css3:before {
+    content: "\f13c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:323 */
+.fa-anchor:before {
+    content: "\f13d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:324 */
+.fa-unlock-alt:before {
+    content: "\f13e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:325 */
+.fa-bullseye:before {
+    content: "\f140" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:326 */
+.fa-ellipsis-h:before {
+    content: "\f141" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:327 */
+.fa-ellipsis-v:before {
+    content: "\f142" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:328 */
+.fa-rss-square:before {
+    content: "\f143" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:329 */
+.fa-play-circle:before {
+    content: "\f144" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:330 */
+.fa-ticket:before {
+    content: "\f145" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:331 */
+.fa-minus-square:before {
+    content: "\f146" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:332 */
+.fa-minus-square-o:before {
+    content: "\f147" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:333 */
+.fa-level-up:before {
+    content: "\f148" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:334 */
+.fa-level-down:before {
+    content: "\f149" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:335 */
+.fa-check-square:before {
+    content: "\f14a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:336 */
+.fa-pencil-square:before {
+    content: "\f14b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:337 */
+.fa-external-link-square:before {
+    content: "\f14c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:338 */
+.fa-share-square:before {
+    content: "\f14d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:339 */
+.fa-compass:before {
+    content: "\f14e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:340 */
+.fa-toggle-down:before,
+.fa-caret-square-o-down:before {
+    content: "\f150" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:342 */
+.fa-toggle-up:before,
+.fa-caret-square-o-up:before {
+    content: "\f151" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:344 */
+.fa-toggle-right:before,
+.fa-caret-square-o-right:before {
+    content: "\f152" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:346 */
+.fa-euro:before,
+.fa-eur:before {
+    content: "\f153" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:348 */
+.fa-gbp:before {
+    content: "\f154" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:349 */
+.fa-dollar:before,
+.fa-usd:before {
+    content: "\f155" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:351 */
+.fa-rupee:before,
+.fa-inr:before {
+    content: "\f156" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:353 */
+.fa-cny:before,
+.fa-rmb:before,
+.fa-yen:before,
+.fa-jpy:before {
+    content: "\f157" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:357 */
+.fa-ruble:before,
+.fa-rouble:before,
+.fa-rub:before {
+    content: "\f158" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:360 */
+.fa-won:before,
+.fa-krw:before {
+    content: "\f159" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:362 */
+.fa-bitcoin:before,
+.fa-btc:before {
+    content: "\f15a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:364 */
+.fa-file:before {
+    content: "\f15b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:365 */
+.fa-file-text:before {
+    content: "\f15c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:366 */
+.fa-sort-alpha-asc:before {
+    content: "\f15d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:367 */
+.fa-sort-alpha-desc:before {
+    content: "\f15e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:368 */
+.fa-sort-amount-asc:before {
+    content: "\f160" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:369 */
+.fa-sort-amount-desc:before {
+    content: "\f161" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:370 */
+.fa-sort-numeric-asc:before {
+    content: "\f162" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:371 */
+.fa-sort-numeric-desc:before {
+    content: "\f163" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:372 */
+.fa-thumbs-up:before {
+    content: "\f164" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:373 */
+.fa-thumbs-down:before {
+    content: "\f165" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:374 */
+.fa-youtube-square:before {
+    content: "\f166" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:375 */
+.fa-youtube:before {
+    content: "\f167" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:376 */
+.fa-xing:before {
+    content: "\f168" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:377 */
+.fa-xing-square:before {
+    content: "\f169" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:378 */
+.fa-youtube-play:before {
+    content: "\f16a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:379 */
+.fa-dropbox:before {
+    content: "\f16b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:380 */
+.fa-stack-overflow:before {
+    content: "\f16c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:381 */
+.fa-instagram:before {
+    content: "\f16d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:382 */
+.fa-flickr:before {
+    content: "\f16e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:383 */
+.fa-adn:before {
+    content: "\f170" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:384 */
+.fa-bitbucket:before {
+    content: "\f171" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:385 */
+.fa-bitbucket-square:before {
+    content: "\f172" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:386 */
+.fa-tumblr:before {
+    content: "\f173" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:387 */
+.fa-tumblr-square:before {
+    content: "\f174" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:388 */
+.fa-long-arrow-down:before {
+    content: "\f175" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:389 */
+.fa-long-arrow-up:before {
+    content: "\f176" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:390 */
+.fa-long-arrow-left:before {
+    content: "\f177" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:391 */
+.fa-long-arrow-right:before {
+    content: "\f178" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:392 */
+.fa-apple:before {
+    content: "\f179" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:393 */
+.fa-windows:before {
+    content: "\f17a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:394 */
+.fa-android:before {
+    content: "\f17b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:395 */
+.fa-linux:before {
+    content: "\f17c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:396 */
+.fa-dribbble:before {
+    content: "\f17d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:397 */
+.fa-skype:before {
+    content: "\f17e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:398 */
+.fa-foursquare:before {
+    content: "\f180" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:399 */
+.fa-trello:before {
+    content: "\f181" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:400 */
+.fa-female:before {
+    content: "\f182" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:401 */
+.fa-male:before {
+    content: "\f183" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:402 */
+.fa-gittip:before,
+.fa-gratipay:before {
+    content: "\f184" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:404 */
+.fa-sun-o:before {
+    content: "\f185" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:405 */
+.fa-moon-o:before {
+    content: "\f186" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:406 */
+.fa-archive:before {
+    content: "\f187" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:407 */
+.fa-bug:before {
+    content: "\f188" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:408 */
+.fa-vk:before {
+    content: "\f189" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:409 */
+.fa-weibo:before {
+    content: "\f18a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:410 */
+.fa-renren:before {
+    content: "\f18b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:411 */
+.fa-pagelines:before {
+    content: "\f18c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:412 */
+.fa-stack-exchange:before {
+    content: "\f18d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:413 */
+.fa-arrow-circle-o-right:before {
+    content: "\f18e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:414 */
+.fa-arrow-circle-o-left:before {
+    content: "\f190" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:415 */
+.fa-toggle-left:before,
+.fa-caret-square-o-left:before {
+    content: "\f191" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:417 */
+.fa-dot-circle-o:before {
+    content: "\f192" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:418 */
+.fa-wheelchair:before {
+    content: "\f193" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:419 */
+.fa-vimeo-square:before {
+    content: "\f194" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:420 */
+.fa-turkish-lira:before,
+.fa-try:before {
+    content: "\f195" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:422 */
+.fa-plus-square-o:before {
+    content: "\f196" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:423 */
+.fa-space-shuttle:before {
+    content: "\f197" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:424 */
+.fa-slack:before {
+    content: "\f198" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:425 */
+.fa-envelope-square:before {
+    content: "\f199" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:426 */
+.fa-wordpress:before {
+    content: "\f19a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:427 */
+.fa-openid:before {
+    content: "\f19b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:428 */
+.fa-institution:before,
+.fa-bank:before,
+.fa-university:before {
+    content: "\f19c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:431 */
+.fa-mortar-board:before,
+.fa-graduation-cap:before {
+    content: "\f19d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:433 */
+.fa-yahoo:before {
+    content: "\f19e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:434 */
+.fa-google:before {
+    content: "\f1a0" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:435 */
+.fa-reddit:before {
+    content: "\f1a1" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:436 */
+.fa-reddit-square:before {
+    content: "\f1a2" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:437 */
+.fa-stumbleupon-circle:before {
+    content: "\f1a3" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:438 */
+.fa-stumbleupon:before {
+    content: "\f1a4" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:439 */
+.fa-delicious:before {
+    content: "\f1a5" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:440 */
+.fa-digg:before {
+    content: "\f1a6" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:441 */
+.fa-pied-piper:before {
+    content: "\f1a7" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:442 */
+.fa-pied-piper-alt:before {
+    content: "\f1a8" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:443 */
+.fa-drupal:before {
+    content: "\f1a9" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:444 */
+.fa-joomla:before {
+    content: "\f1aa" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:445 */
+.fa-language:before {
+    content: "\f1ab" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:446 */
+.fa-fax:before {
+    content: "\f1ac" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:447 */
+.fa-building:before {
+    content: "\f1ad" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:448 */
+.fa-child:before {
+    content: "\f1ae" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:449 */
+.fa-paw:before {
+    content: "\f1b0" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:450 */
+.fa-spoon:before {
+    content: "\f1b1" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:451 */
+.fa-cube:before {
+    content: "\f1b2" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:452 */
+.fa-cubes:before {
+    content: "\f1b3" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:453 */
+.fa-behance:before {
+    content: "\f1b4" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:454 */
+.fa-behance-square:before {
+    content: "\f1b5" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:455 */
+.fa-steam:before {
+    content: "\f1b6" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:456 */
+.fa-steam-square:before {
+    content: "\f1b7" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:457 */
+.fa-recycle:before {
+    content: "\f1b8" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:458 */
+.fa-automobile:before,
+.fa-car:before {
+    content: "\f1b9" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:460 */
+.fa-cab:before,
+.fa-taxi:before {
+    content: "\f1ba" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:462 */
+.fa-tree:before {
+    content: "\f1bb" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:463 */
+.fa-spotify:before {
+    content: "\f1bc" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:464 */
+.fa-deviantart:before {
+    content: "\f1bd" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:465 */
+.fa-soundcloud:before {
+    content: "\f1be" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:466 */
+.fa-database:before {
+    content: "\f1c0" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:467 */
+.fa-file-pdf-o:before {
+    content: "\f1c1" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:468 */
+.fa-file-word-o:before {
+    content: "\f1c2" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:469 */
+.fa-file-excel-o:before {
+    content: "\f1c3" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:470 */
+.fa-file-powerpoint-o:before {
+    content: "\f1c4" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:471 */
+.fa-file-photo-o:before,
+.fa-file-picture-o:before,
+.fa-file-image-o:before {
+    content: "\f1c5" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:474 */
+.fa-file-zip-o:before,
+.fa-file-archive-o:before {
+    content: "\f1c6" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:476 */
+.fa-file-sound-o:before,
+.fa-file-audio-o:before {
+    content: "\f1c7" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:478 */
+.fa-file-movie-o:before,
+.fa-file-video-o:before {
+    content: "\f1c8" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:480 */
+.fa-file-code-o:before {
+    content: "\f1c9" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:481 */
+.fa-vine:before {
+    content: "\f1ca" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:482 */
+.fa-codepen:before {
+    content: "\f1cb" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:483 */
+.fa-jsfiddle:before {
+    content: "\f1cc" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:484 */
+.fa-life-bouy:before,
+.fa-life-buoy:before,
+.fa-life-saver:before,
+.fa-support:before,
+.fa-life-ring:before {
+    content: "\f1cd" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:489 */
+.fa-circle-o-notch:before {
+    content: "\f1ce" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:490 */
+.fa-ra:before,
+.fa-rebel:before {
+    content: "\f1d0" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:492 */
+.fa-ge:before,
+.fa-empire:before {
+    content: "\f1d1" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:494 */
+.fa-git-square:before {
+    content: "\f1d2" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:495 */
+.fa-git:before {
+    content: "\f1d3" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:496 */
+.fa-y-combinator-square:before,
+.fa-yc-square:before,
+.fa-hacker-news:before {
+    content: "\f1d4" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:499 */
+.fa-tencent-weibo:before {
+    content: "\f1d5" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:500 */
+.fa-qq:before {
+    content: "\f1d6" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:501 */
+.fa-wechat:before,
+.fa-weixin:before {
+    content: "\f1d7" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:503 */
+.fa-send:before,
+.fa-paper-plane:before {
+    content: "\f1d8" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:505 */
+.fa-send-o:before,
+.fa-paper-plane-o:before {
+    content: "\f1d9" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:507 */
+.fa-history:before {
+    content: "\f1da" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:508 */
+.fa-circle-thin:before {
+    content: "\f1db" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:509 */
+.fa-header:before {
+    content: "\f1dc" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:510 */
+.fa-paragraph:before {
+    content: "\f1dd" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:511 */
+.fa-sliders:before {
+    content: "\f1de" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:512 */
+.fa-share-alt:before {
+    content: "\f1e0" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:513 */
+.fa-share-alt-square:before {
+    content: "\f1e1" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:514 */
+.fa-bomb:before {
+    content: "\f1e2" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:515 */
+.fa-soccer-ball-o:before,
+.fa-futbol-o:before {
+    content: "\f1e3" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:517 */
+.fa-tty:before {
+    content: "\f1e4" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:518 */
+.fa-binoculars:before {
+    content: "\f1e5" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:519 */
+.fa-plug:before {
+    content: "\f1e6" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:520 */
+.fa-slideshare:before {
+    content: "\f1e7" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:521 */
+.fa-twitch:before {
+    content: "\f1e8" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:522 */
+.fa-yelp:before {
+    content: "\f1e9" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:523 */
+.fa-newspaper-o:before {
+    content: "\f1ea" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:524 */
+.fa-wifi:before {
+    content: "\f1eb" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:525 */
+.fa-calculator:before {
+    content: "\f1ec" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:526 */
+.fa-paypal:before {
+    content: "\f1ed" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:527 */
+.fa-google-wallet:before {
+    content: "\f1ee" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:528 */
+.fa-cc-visa:before {
+    content: "\f1f0" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:529 */
+.fa-cc-mastercard:before {
+    content: "\f1f1" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:530 */
+.fa-cc-discover:before {
+    content: "\f1f2" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:531 */
+.fa-cc-amex:before {
+    content: "\f1f3" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:532 */
+.fa-cc-paypal:before {
+    content: "\f1f4" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:533 */
+.fa-cc-stripe:before {
+    content: "\f1f5" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:534 */
+.fa-bell-slash:before {
+    content: "\f1f6" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:535 */
+.fa-bell-slash-o:before {
+    content: "\f1f7" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:536 */
+.fa-trash:before {
+    content: "\f1f8" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:537 */
+.fa-copyright:before {
+    content: "\f1f9" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:538 */
+.fa-at:before {
+    content: "\f1fa" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:539 */
+.fa-eyedropper:before {
+    content: "\f1fb" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:540 */
+.fa-paint-brush:before {
+    content: "\f1fc" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:541 */
+.fa-birthday-cake:before {
+    content: "\f1fd" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:542 */
+.fa-area-chart:before {
+    content: "\f1fe" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:543 */
+.fa-pie-chart:before {
+    content: "\f200" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:544 */
+.fa-line-chart:before {
+    content: "\f201" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:545 */
+.fa-lastfm:before {
+    content: "\f202" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:546 */
+.fa-lastfm-square:before {
+    content: "\f203" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:547 */
+.fa-toggle-off:before {
+    content: "\f204" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:548 */
+.fa-toggle-on:before {
+    content: "\f205" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:549 */
+.fa-bicycle:before {
+    content: "\f206" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:550 */
+.fa-bus:before {
+    content: "\f207" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:551 */
+.fa-ioxhost:before {
+    content: "\f208" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:552 */
+.fa-angellist:before {
+    content: "\f209" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:553 */
+.fa-cc:before {
+    content: "\f20a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:554 */
+.fa-shekel:before,
+.fa-sheqel:before,
+.fa-ils:before {
+    content: "\f20b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:557 */
+.fa-meanpath:before {
+    content: "\f20c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:558 */
+.fa-buysellads:before {
+    content: "\f20d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:559 */
+.fa-connectdevelop:before {
+    content: "\f20e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:560 */
+.fa-dashcube:before {
+    content: "\f210" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:561 */
+.fa-forumbee:before {
+    content: "\f211" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:562 */
+.fa-leanpub:before {
+    content: "\f212" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:563 */
+.fa-sellsy:before {
+    content: "\f213" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:564 */
+.fa-shirtsinbulk:before {
+    content: "\f214" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:565 */
+.fa-simplybuilt:before {
+    content: "\f215" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:566 */
+.fa-skyatlas:before {
+    content: "\f216" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:567 */
+.fa-cart-plus:before {
+    content: "\f217" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:568 */
+.fa-cart-arrow-down:before {
+    content: "\f218" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:569 */
+.fa-diamond:before {
+    content: "\f219" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:570 */
+.fa-ship:before {
+    content: "\f21a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:571 */
+.fa-user-secret:before {
+    content: "\f21b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:572 */
+.fa-motorcycle:before {
+    content: "\f21c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:573 */
+.fa-street-view:before {
+    content: "\f21d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:574 */
+.fa-heartbeat:before {
+    content: "\f21e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:575 */
+.fa-venus:before {
+    content: "\f221" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:576 */
+.fa-mars:before {
+    content: "\f222" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:577 */
+.fa-mercury:before {
+    content: "\f223" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:578 */
+.fa-intersex:before,
+.fa-transgender:before {
+    content: "\f224" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:580 */
+.fa-transgender-alt:before {
+    content: "\f225" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:581 */
+.fa-venus-double:before {
+    content: "\f226" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:582 */
+.fa-mars-double:before {
+    content: "\f227" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:583 */
+.fa-venus-mars:before {
+    content: "\f228" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:584 */
+.fa-mars-stroke:before {
+    content: "\f229" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:585 */
+.fa-mars-stroke-v:before {
+    content: "\f22a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:586 */
+.fa-mars-stroke-h:before {
+    content: "\f22b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:587 */
+.fa-neuter:before {
+    content: "\f22c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:588 */
+.fa-genderless:before {
+    content: "\f22d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:589 */
+.fa-facebook-official:before {
+    content: "\f230" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:590 */
+.fa-pinterest-p:before {
+    content: "\f231" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:591 */
+.fa-whatsapp:before {
+    content: "\f232" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:592 */
+.fa-server:before {
+    content: "\f233" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:593 */
+.fa-user-plus:before {
+    content: "\f234" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:594 */
+.fa-user-times:before {
+    content: "\f235" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:595 */
+.fa-hotel:before,
+.fa-bed:before {
+    content: "\f236" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:597 */
+.fa-viacoin:before {
+    content: "\f237" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:598 */
+.fa-train:before {
+    content: "\f238" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:599 */
+.fa-subway:before {
+    content: "\f239" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:600 */
+.fa-medium:before {
+    content: "\f23a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:601 */
+.fa-yc:before,
+.fa-y-combinator:before {
+    content: "\f23b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:603 */
+.fa-optin-monster:before {
+    content: "\f23c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:604 */
+.fa-opencart:before {
+    content: "\f23d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:605 */
+.fa-expeditedssl:before {
+    content: "\f23e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:606 */
+.fa-battery-4:before,
+.fa-battery-full:before {
+    content: "\f240" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:608 */
+.fa-battery-3:before,
+.fa-battery-three-quarters:before {
+    content: "\f241" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:610 */
+.fa-battery-2:before,
+.fa-battery-half:before {
+    content: "\f242" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:612 */
+.fa-battery-1:before,
+.fa-battery-quarter:before {
+    content: "\f243" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:614 */
+.fa-battery-0:before,
+.fa-battery-empty:before {
+    content: "\f244" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:616 */
+.fa-mouse-pointer:before {
+    content: "\f245" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:617 */
+.fa-i-cursor:before {
+    content: "\f246" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:618 */
+.fa-object-group:before {
+    content: "\f247" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:619 */
+.fa-object-ungroup:before {
+    content: "\f248" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:620 */
+.fa-sticky-note:before {
+    content: "\f249" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:621 */
+.fa-sticky-note-o:before {
+    content: "\f24a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:622 */
+.fa-cc-jcb:before {
+    content: "\f24b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:623 */
+.fa-cc-diners-club:before {
+    content: "\f24c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:624 */
+.fa-clone:before {
+    content: "\f24d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:625 */
+.fa-balance-scale:before {
+    content: "\f24e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:626 */
+.fa-hourglass-o:before {
+    content: "\f250" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:627 */
+.fa-hourglass-1:before,
+.fa-hourglass-start:before {
+    content: "\f251" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:629 */
+.fa-hourglass-2:before,
+.fa-hourglass-half:before {
+    content: "\f252" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:631 */
+.fa-hourglass-3:before,
+.fa-hourglass-end:before {
+    content: "\f253" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:633 */
+.fa-hourglass:before {
+    content: "\f254" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:634 */
+.fa-hand-grab-o:before,
+.fa-hand-rock-o:before {
+    content: "\f255" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:636 */
+.fa-hand-stop-o:before,
+.fa-hand-paper-o:before {
+    content: "\f256" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:638 */
+.fa-hand-scissors-o:before {
+    content: "\f257" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:639 */
+.fa-hand-lizard-o:before {
+    content: "\f258" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:640 */
+.fa-hand-spock-o:before {
+    content: "\f259" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:641 */
+.fa-hand-pointer-o:before {
+    content: "\f25a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:642 */
+.fa-hand-peace-o:before {
+    content: "\f25b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:643 */
+.fa-trademark:before {
+    content: "\f25c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:644 */
+.fa-registered:before {
+    content: "\f25d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:645 */
+.fa-creative-commons:before {
+    content: "\f25e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:646 */
+.fa-gg:before {
+    content: "\f260" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:647 */
+.fa-gg-circle:before {
+    content: "\f261" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:648 */
+.fa-tripadvisor:before {
+    content: "\f262" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:649 */
+.fa-odnoklassniki:before {
+    content: "\f263" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:650 */
+.fa-odnoklassniki-square:before {
+    content: "\f264" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:651 */
+.fa-get-pocket:before {
+    content: "\f265" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:652 */
+.fa-wikipedia-w:before {
+    content: "\f266" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:653 */
+.fa-safari:before {
+    content: "\f267" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:654 */
+.fa-chrome:before {
+    content: "\f268" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:655 */
+.fa-firefox:before {
+    content: "\f269" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:656 */
+.fa-opera:before {
+    content: "\f26a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:657 */
+.fa-internet-explorer:before {
+    content: "\f26b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:658 */
+.fa-tv:before,
+.fa-television:before {
+    content: "\f26c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:660 */
+.fa-contao:before {
+    content: "\f26d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:661 */
+.fa-500px:before {
+    content: "\f26e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:662 */
+.fa-amazon:before {
+    content: "\f270" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:663 */
+.fa-calendar-plus-o:before {
+    content: "\f271" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:664 */
+.fa-calendar-minus-o:before {
+    content: "\f272" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:665 */
+.fa-calendar-times-o:before {
+    content: "\f273" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:666 */
+.fa-calendar-check-o:before {
+    content: "\f274" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:667 */
+.fa-industry:before {
+    content: "\f275" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:668 */
+.fa-map-pin:before {
+    content: "\f276" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:669 */
+.fa-map-signs:before {
+    content: "\f277" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:670 */
+.fa-map-o:before {
+    content: "\f278" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:671 */
+.fa-map:before {
+    content: "\f279" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:672 */
+.fa-commenting:before {
+    content: "\f27a" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:673 */
+.fa-commenting-o:before {
+    content: "\f27b" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:674 */
+.fa-houzz:before {
+    content: "\f27c" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:675 */
+.fa-vimeo:before {
+    content: "\f27d" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:676 */
+.fa-black-tie:before {
+    content: "\f27e" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/etc/_icons.scss:677 */
+.fa-fonticons:before {
+    content: "\f280" !important;
+}
+/* /home/dev/workspace/Bryntum/extjs-6.0.1/packages/font-awesome/sass/src/all.scss:20 */
+.x-fa:before {
+    font-family: FontAwesome !important;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-crisp/sass/src/Sch/mixin/AbstractTimelinePanel.scss:3 */
+.sch-timelinepanel-highlightweekends .sch-dayheadercell-nonworking,
+.sch-timelinepanel-highlightweekends .sch-dayheadercell-nonworking {
+    /* HEADER STYLING */
+    background-image: none;
+    background-color: #f9f9f9;
+    color: #aaa;
+}
+/* /home/dev/workspace/Bryntum/ExtScheduler5.x/scheduler-5.0.4/packages/bryntum-scheduler-theme-crisp/sass/src/Sch/mixin/TimelineView.scss:1 */
+.sch-timelineview .x-grid-item {
+    background-color: rgba(255, 255, 255, 0.25);
+}

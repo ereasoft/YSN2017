@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+
+
+
+
+
+    <!-- 기준정보 : 담당자 변경 - 정보 업데이트 /AdminUser/userChangeUpdate -->
+    <update id="userChangeUpdate" parameterClass="Hashtable">
+      
+      <isEqual property="tab_num" compareValue="1">
+        UPDATE T_SAMPLE SET
+        USER_CD = #user_cd2#
+        , DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = #user_cd2#)
+        , MOD_USR = #mod_usr#
+        , MOD_DT = GETDATE()
+        WHERE COMPANY_CD = #company_cd#
+        AND SMP_CD IN  
+       <iterate property="ids" open="(" close=")" conjunction=",">
+         #ids[]#
+       </iterate> 
+    </isEqual>
+      <isEqual property="tab_num" compareValue="2">
+        UPDATE T_OPPORTUNITY SET
+        USER_CD = #user_cd2#
+        , DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = #user_cd2#)
+        , MOD_USR = #mod_usr#
+        , MOD_DT = GETDATE()
+        WHERE COMPANY_CD = #company_cd#
+        AND OPPT_CD IN
+        <iterate property="ids" open="(" close=")" conjunction=",">
+          #ids[]#
+        </iterate>
+      </isEqual>
+      <isEqual property="tab_num" compareValue="3">
+        UPDATE T_SALES_ORDER SET
+        USER_CD = #user_cd2#
+        , DEPT_CD = (SELECT DEPT_CD FROM T_USER WHERE USER_CD = #user_cd2#)
+        , MOD_USR = #mod_usr#
+        , MOD_DT = GETDATE()
+        WHERE COMPANY_CD = #company_cd#
+        AND SO_CD IN 
+        <iterate property="ids" open="(" close=")" conjunction=",">
+        #ids[]#
+      </iterate>
+    </isEqual>
+    </update>
+    
+    
+
+
+
+
+
+
+
+  </statements>
+
+
+
+</sqlMap>

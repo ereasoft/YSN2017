@@ -1,0 +1,2086 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+<!-- 모니터링 샘플분석 -->
+  <statements>
+
+    <!-- 샘플분석 :  월별 누계     -->
+    <select id="sampleAnalysisMonth" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      MONTH_ID AS IDX,MONTH_NM AS COLTYPE,ITEM_TYPE_NM,SMSTAT_200,SMSTAT_400,SMSTAT_500,CURR_CNT,OVER_CNT,
+      CASE WHEN SMSTAT_500 = 0 THEN 0 ELSE ROUND(ISNULL(LEAD_DAY,0) / CONVERT(FLOAT,SMSTAT_500),2) END AS LEAD_TIME
+      FROM
+      (SELECT
+      MM.CODE_ID AS MONTH_ID, MM.CODE_NM AS MONTH_NM,
+      I.CODE_ID AS ITEM_TYPE, I.CODE_NM AS ITEM_TYPE_NM,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE
+      SUBSTRING(PRDT_RDATE,1,6) = #base_yy#+MM.CODE_ID AND
+      ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+      </isNotEmpty> 
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty> 
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty> 
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty> 
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS SMSTAT_200,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_ADATE,1,6) = #base_yy#+MM.CODE_ID AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS SMSTAT_400,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+MM.CODE_ID AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS SMSTAT_500,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+MM.CODE_ID
+      AND <![CDATA[DATEDIFF(DAY,PRDT_CDATE,CMPT_RDATE) >= 0 ]]> AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS CURR_CNT,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+MM.CODE_ID
+      AND <![CDATA[DATEDIFF(DAY,PRDT_CDATE,CMPT_RDATE) < 0 ]]> AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID) 
+       <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+      </isNotEmpty> 
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty> 
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty> 
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty> 
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+        ) AS OVER_CNT,
+        (SELECT SUM(DATEDIFF(DAY,PRDT_RDATE,PRDT_CDATE))  FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+MM.CODE_ID 
+        AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        <isNotEmpty property="user_cd">
+          AND USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+    ) AS LEAD_DAY
+    FROM
+    (SELECT CODE_ID, CODE_NM FROM T_CODE WHERE UP_CODE_ID = 'MONTH') MM
+    LEFT OUTER JOIN 
+    (SELECT 
+    CODE_ID, CODE_NM  
+    FROM T_CODE 
+    WHERE UP_CODE_ID = 'ITEM_TYPE' AND CODE_ID NOT IN ('1008253004','1008253005')) I  <!-- 통계에서 제외될 품목유형     -->
+    ON 1=1) AS TMP
+    </select>
+
+
+    <!-- 샘플분석 :  년간 누계     -->
+    <select id="sampleAnalysisYear" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      #base_yy# AS IDX,#base_yy# AS COLTYPE,ITEM_TYPE_NM,SMSTAT_200,SMSTAT_400,SMSTAT_500,CURR_CNT,OVER_CNT,
+      CASE WHEN SMSTAT_500 = 0 THEN 0 ELSE ROUND(ISNULL(LEAD_DAY,0) / CONVERT(FLOAT,SMSTAT_500),2) END AS LEAD_TIME
+      FROM
+      (SELECT
+      I.CODE_ID AS ITEM_TYPE, I.CODE_NM AS ITEM_TYPE_NM,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_RDATE,1,4) = #base_yy#
+      AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+      ) AS SMSTAT_200,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_ADATE,1,4) = #base_yy#
+      AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+    ) AS SMSTAT_400,
+    (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,4) = #base_yy#
+    AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID) 
+    <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+    ) AS SMSTAT_500,
+    (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,4) = #base_yy#
+    AND <![CDATA[DATEDIFF(DAY,PRDT_CDATE,CMPT_RDATE) >= 0]]>  AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+    <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+    ) AS CURR_CNT,
+    (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,4) = #base_yy#
+    AND <![CDATA[DATEDIFF(DAY,PRDT_CDATE,CMPT_RDATE) < 0]]> AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID) 
+    <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+    ) AS OVER_CNT,
+    (SELECT SUM(DATEDIFF(DAY,PRDT_RDATE,PRDT_CDATE))  FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,4) = #base_yy#
+    AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID) 
+    <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+    ) AS LEAD_DAY
+    FROM
+    (SELECT
+    CODE_ID, CODE_NM
+    FROM T_CODE
+    WHERE UP_CODE_ID = 'ITEM_TYPE' AND CODE_ID NOT IN ('1008253004','1008253005')) I) AS TMP
+  </select>
+
+    <!-- 샘플분석 :  제작담당자별 월별누계     -->
+    <select id="sampleAnalysisMuser" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      USER_NM AS IDX,USER_NM AS COLTYPE ,ITEM_TYPE,ITEM_TYPE_NM,SMSTAT_200,SMSTAT_400,SMSTAT_500,CURR_CNT,OVER_CNT,
+      CASE WHEN SMSTAT_500 = 0 THEN 0 ELSE ROUND(ISNULL(LEAD_DAY,0) / CONVERT(FLOAT,SMSTAT_500),2) END AS LEAD_TIME
+      FROM
+      (SELECT
+      MUSER.USER_CD AS USER_ID, MUSER.USER_NM AS USER_NM,
+      I.CODE_ID AS ITEM_TYPE, I.CODE_NM AS ITEM_TYPE_NM,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_RDATE,1,6) = #base_yy#+#base_mm#
+      AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID) AND MUSER_CD = MUSER.USER_CD
+      <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+      ) AS SMSTAT_200,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_ADATE,1,6) = #base_yy#+#base_mm# 
+      AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID) AND MUSER_CD = MUSER.USER_CD
+      <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+      ) AS SMSTAT_400,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm# 
+      AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID) AND MUSER_CD = MUSER.USER_CD 
+      <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+      ) AS SMSTAT_500,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm#
+      AND <![CDATA[DATEDIFF(DAY,PRDT_CDATE,CMPT_RDATE) >= 0]]>  AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND MUSER_CD = MUSER.USER_CD
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS CURR_CNT,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm#
+      AND <![CDATA[DATEDIFF(DAY,PRDT_CDATE,CMPT_RDATE) < 0]]> AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID) 
+      AND MUSER_CD = MUSER.USER_CD
+      <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+      ) AS OVER_CNT,
+      (SELECT SUM(DATEDIFF(DAY,PRDT_RDATE,PRDT_CDATE))  FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm# 
+      AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID) 
+      AND MUSER_CD = MUSER.USER_CD
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+        ) AS LEAD_DAY
+        FROM
+        (SELECT A.USER_CD, U.USER_NM FROM  T_AUTH_USER A
+        LEFT OUTER JOIN  T_USER U
+        ON  A.USER_CD = U.USER_CD
+        WHERE A.AUTH_ID = 'A011'
+        AND A.USE_YN = 'Y'
+        AND U.COMPANY_CD = #company_cd#) MUSER
+        LEFT OUTER JOIN
+        (SELECT
+        CODE_ID, CODE_NM
+        FROM T_CODE
+        WHERE UP_CODE_ID = 'ITEM_TYPE' AND CODE_ID NOT IN ('1008253004','1008253005')) I
+        ON 1=1 ) AS TMP
+        ORDER BY TMP.USER_NM ,TMP.ITEM_TYPE
+      </select>
+
+    <!-- 샘플분석 :  제작담당자별 일별누계     -->
+    <select id="sampleAnalysisMuser2" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      USER_NM AS IDX,USER_NM AS COLTYPE ,ITEM_TYPE,ITEM_TYPE_NM,SMSTAT_200,SMSTAT_400,SMSTAT_500,CURR_CNT,OVER_CNT,
+      CASE WHEN SMSTAT_500 = 0 THEN 0 ELSE ROUND(ISNULL(LEAD_DAY,0) / CONVERT(FLOAT,SMSTAT_500),2) END AS LEAD_TIME
+      FROM
+      (SELECT
+      MUSER.USER_CD AS USER_ID, MUSER.USER_NM AS USER_NM,
+      I.CODE_ID AS ITEM_TYPE, I.CODE_NM AS ITEM_TYPE_NM,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE PRDT_RDATE = #base_yy#+#base_mm#+#base_dd#
+      AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID) AND MUSER_CD = MUSER.USER_CD
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS SMSTAT_200,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE PRDT_ADATE = #base_yy#+#base_mm#+#base_dd#
+      AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID) AND MUSER_CD = MUSER.USER_CD
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS SMSTAT_400,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE PRDT_CDATE = #base_yy#+#base_mm#+#base_dd#
+      AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID) AND MUSER_CD = MUSER.USER_CD
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS SMSTAT_500,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE PRDT_CDATE = #base_yy#+#base_mm#+#base_dd#
+      AND <![CDATA[DATEDIFF(DAY,PRDT_CDATE,CMPT_RDATE) >= 0]]>  AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND MUSER_CD = MUSER.USER_CD
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS CURR_CNT,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE PRDT_CDATE = #base_yy#+#base_mm#+#base_dd#
+      AND <![CDATA[DATEDIFF(DAY,PRDT_CDATE,CMPT_RDATE) < 0]]> AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND MUSER_CD = MUSER.USER_CD
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS OVER_CNT,
+      (SELECT SUM(DATEDIFF(DAY,PRDT_RDATE,PRDT_CDATE))  FROM T_SAMPLE WHERE PRDT_CDATE = #base_yy#+#base_mm#+#base_dd#
+      AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND MUSER_CD = MUSER.USER_CD
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS LEAD_DAY
+      FROM
+      (SELECT A.USER_CD, U.USER_NM FROM  T_AUTH_USER A
+      LEFT OUTER JOIN  T_USER U
+      ON  A.USER_CD = U.USER_CD
+      WHERE A.AUTH_ID = 'A011'
+      AND A.USE_YN = 'Y'
+      AND U.COMPANY_CD = #company_cd#) MUSER
+      LEFT OUTER JOIN
+      (SELECT
+      CODE_ID, CODE_NM
+      FROM T_CODE
+      WHERE UP_CODE_ID = 'ITEM_TYPE' AND CODE_ID NOT IN ('1008253004','1008253005')) I
+      ON 1=1 ) AS TMP
+      ORDER BY TMP.USER_NM ,TMP.ITEM_TYPE
+    </select>
+
+
+    <!-- 샘플분석 : 지역별 월별 현황     -->
+    <select id="sampleAnalysisDept" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      1 AS IDX, '국내' AS COLTYPE,ITEM_TYPE,ITEM_TYPE_NM,SMSTAT_200,SMSTAT_400,SMSTAT_500,CURR_CNT,OVER_CNT,
+      CASE WHEN SMSTAT_500 = 0 THEN 0 ELSE ROUND(ISNULL(LEAD_DAY,0) / CONVERT(FLOAT,SMSTAT_500),2) END AS LEAD_TIME
+      FROM
+      (SELECT
+      I.CODE_ID AS ITEM_TYPE, I.CODE_NM AS ITEM_TYPE_NM,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_RDATE,1,6) = #base_yy#+#base_mm# AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = '3')
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS SMSTAT_200,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_ADATE,1,6) = #base_yy#+#base_mm# AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = '3')
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS SMSTAT_400,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm# AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID) AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = '3')
+      <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+    ) AS SMSTAT_500,
+    (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm#
+    AND <![CDATA[DATEDIFF(DAY,PRDT_CDATE,CMPT_RDATE) >= 0]]>  AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = '3')
+      <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+      ) AS CURR_CNT,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm#
+      AND <![CDATA[DATEDIFF(DAY,PRDT_CDATE,CMPT_RDATE) < 0]]> AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = '3')
+      <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+    ) AS OVER_CNT,
+    (SELECT SUM(DATEDIFF(DAY,PRDT_RDATE,PRDT_CDATE))  FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm# AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+    AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = '3')
+    <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+      ) AS LEAD_DAY
+      FROM
+      (SELECT
+      CODE_ID, CODE_NM
+      FROM T_CODE
+      WHERE UP_CODE_ID = 'ITEM_TYPE' AND CODE_ID NOT IN ('1008253004','1008253005')) I
+      ) AS TMP
+      UNION ALL
+      SELECT
+      2 AS IDX, '해외' AS COLTYPE ,ITEM_TYPE,ITEM_TYPE_NM,SMSTAT_200,SMSTAT_400,SMSTAT_500,CURR_CNT,OVER_CNT,
+      CASE WHEN SMSTAT_500 = 0 THEN 0 ELSE ROUND(ISNULL(LEAD_DAY,0) / CONVERT(FLOAT,SMSTAT_500),2) END AS LEAD_TIME
+      FROM
+      (SELECT
+      I.CODE_ID AS ITEM_TYPE, I.CODE_NM AS ITEM_TYPE_NM,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_RDATE,1,6) = #base_yy#+#base_mm# AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND (DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = '4') OR DEPT_CD = '241')
+      <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+    ) AS SMSTAT_200,
+    (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_ADATE,1,6) = #base_yy#+#base_mm# AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+    AND (DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = '4') OR DEPT_CD = '241')
+    <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+    ) AS SMSTAT_400,
+    (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm# AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+    AND (DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = '4') OR DEPT_CD = '241')
+    <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+    ) AS SMSTAT_500,
+    (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm#
+    AND <![CDATA[DATEDIFF(DAY,PRDT_CDATE,CMPT_RDATE) >= 0]]>  AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND (DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = '4') OR DEPT_CD = '241')
+      <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+    ) AS CURR_CNT,
+    (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm#
+    AND <![CDATA[DATEDIFF(DAY,PRDT_CDATE,CMPT_RDATE) < 0]]> AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND (DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = '4') OR DEPT_CD = '241')
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS OVER_CNT,
+      (SELECT SUM(DATEDIFF(DAY,PRDT_RDATE,PRDT_CDATE))  FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm# AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND (DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = '4') OR DEPT_CD = '241')
+      <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+      ) AS LEAD_DAY
+      FROM
+      (SELECT
+      CODE_ID, CODE_NM
+      FROM T_CODE
+      WHERE UP_CODE_ID = 'ITEM_TYPE' AND CODE_ID NOT IN ('1008253004','1008253005')) I
+      ) AS TMP
+      UNION ALL
+      SELECT
+      3 AS IDX, 'PM' AS COLTYPE ,ITEM_TYPE,ITEM_TYPE_NM,SMSTAT_200,SMSTAT_400,SMSTAT_500,CURR_CNT,OVER_CNT,
+      CASE WHEN SMSTAT_500 = 0 THEN 0 ELSE ROUND(ISNULL(LEAD_DAY,0) / CONVERT(FLOAT,SMSTAT_500),2) END AS LEAD_TIME
+      FROM
+      (SELECT
+      I.CODE_ID AS ITEM_TYPE, I.CODE_NM AS ITEM_TYPE_NM,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_RDATE,1,6) = #base_yy#+#base_mm# AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = '130')
+      <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+    ) AS SMSTAT_200,
+    (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_ADATE,1,6) = #base_yy#+#base_mm# AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+    AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = '130')
+    <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+    ) AS SMSTAT_400,
+    (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm# AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+    AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = '130')
+    <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+    ) AS SMSTAT_500,
+    (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm#
+    AND <![CDATA[DATEDIFF(DAY,PRDT_CDATE,CMPT_RDATE) >= 0]]>  AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = '130')
+      <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+    ) AS CURR_CNT,
+    (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm#
+    AND <![CDATA[DATEDIFF(DAY,PRDT_CDATE,CMPT_RDATE) < 0]]> AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = '130')
+      <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+    ) AS OVER_CNT,
+    (SELECT SUM(DATEDIFF(DAY,PRDT_RDATE,PRDT_CDATE))  FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm# AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+    AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = '130')
+    <isNotEmpty property="deptGroup">
+      AND DEPT_CD = #deptGroup#
+    </isNotEmpty>
+    <isNotEmpty property="bizGroup">
+      <isEmpty property="deptGroup">
+        AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+      </isEmpty>
+    </isNotEmpty>
+    <isNotEmpty property="dstr_type">
+      AND DSTR_TYPE = #dstr_type#
+    </isNotEmpty>
+    <isNotEmpty property="user_cd">
+      AND USER_CD = #user_cd#
+    </isNotEmpty>
+    <isNotEmpty property="biz_type">
+      AND BIZ_TYPE = #biz_type#
+    </isNotEmpty>
+      ) AS LEAD_DAY
+      FROM
+      (SELECT
+      CODE_ID, CODE_NM
+      FROM T_CODE
+      WHERE UP_CODE_ID = 'ITEM_TYPE' AND CODE_ID NOT IN ('1008253004','1008253005')) I
+      ) AS TMP
+      UNION ALL
+      SELECT
+      4 AS IDX, '기타' AS COLTYPE ,ITEM_TYPE,ITEM_TYPE_NM,SMSTAT_200,SMSTAT_400,SMSTAT_500,CURR_CNT,OVER_CNT,
+      CASE WHEN SMSTAT_500 = 0 THEN 0 ELSE ROUND(ISNULL(LEAD_DAY,0) / CONVERT(FLOAT,SMSTAT_500),2) END AS LEAD_TIME
+      FROM
+      (SELECT
+      I.CODE_ID AS ITEM_TYPE, I.CODE_NM AS ITEM_TYPE_NM,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_RDATE,1,6) = #base_yy#+#base_mm# AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND DEPT_CD NOT IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD IN ('130','4','3')) AND <![CDATA[DEPT_CD <> '241']]>
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS SMSTAT_200,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_ADATE,1,6) = #base_yy#+#base_mm# AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND DEPT_CD NOT IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD IN ('130','4','3')) AND <![CDATA[DEPT_CD <> '241']]>
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS SMSTAT_400,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm# AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND DEPT_CD NOT IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD IN ('130','4','3')) AND <![CDATA[DEPT_CD <> '241']]>
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS SMSTAT_500,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm#
+      AND <![CDATA[DATEDIFF(DAY,PRDT_CDATE,CMPT_RDATE) >= 0]]>  AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND DEPT_CD NOT IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD IN ('130','4','3')) AND <![CDATA[DEPT_CD <> '241']]>
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS CURR_CNT,
+      (SELECT COUNT(*) FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm#
+      AND <![CDATA[DATEDIFF(DAY,PRDT_CDATE,CMPT_RDATE) < 0]]> AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND DEPT_CD NOT IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD IN ('130','4','3')) AND <![CDATA[DEPT_CD <> '241']]>
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS OVER_CNT,
+      (SELECT SUM(DATEDIFF(DAY,PRDT_RDATE,PRDT_CDATE))  FROM T_SAMPLE WHERE SUBSTRING(PRDT_CDATE,1,6) = #base_yy#+#base_mm# AND ITEM_CD IN (SELECT ITEM_CD FROM  T_ITEM WHERE ITEM_TYPE = I.CODE_ID)
+      AND DEPT_CD NOT IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD IN ('130','4','3')) AND <![CDATA[DEPT_CD <> '241']]>
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS LEAD_DAY
+      FROM
+      (SELECT
+      CODE_ID, CODE_NM
+      FROM T_CODE
+      WHERE UP_CODE_ID = 'ITEM_TYPE' AND CODE_ID NOT IN ('1008253004','1008253005')) I
+      ) AS TMP
+      ORDER BY IDX,ITEM_TYPE
+
+    </select>
+    
+    
+    <!-- 샘플분석 :  샘플제작 현황1     -->
+    <select id="sampleAnalysisTable1_1" parameterClass="Hashtable" resultClass="Hashtable">
+      
+
+      SELECT
+      ISNULL(SUM(A.PRE_SMP_RDATE_QTY),0) AS PRE_1,
+      ISNULL(SUM(A.PRE_PRDT_RDATE_QTY),0) AS PRE_2,
+      ISNULL(SUM(A.PRE_PRDT_ADATE_QTY),0) AS PRE_3,
+      ISNULL(SUM(A.PRE_PRDT_CDATE_QTY),0) AS PRE_4,
+      ISNULL(SUM(A.PRE_SHIP_PDATE_QTY),0) AS PRE_5,
+      (
+      CASE WHEN ISNULL(SUM(A.PRE_PRDT_CDATE_QTY),0) != 0 AND ISNULL(SUM(A.PRE_L),0) != 0
+      THEN
+      ROUND(ISNULL(SUM(A.PRE_L),0) / CONVERT(FLOAT,ISNULL(SUM(A.PRE_PRDT_CDATE_QTY),0)),2)
+      ELSE
+      0
+      END
+      ) AS PRE_6,
+      (
+      CASE WHEN ISNULL(SUM(A.PRE_PRDT_CDATE_QTY),0) != 0 AND ISNULL(SUM(A.PRE_O),0) != 0
+      THEN
+      ROUND(ISNULL(SUM(A.PRE_O),0) / CONVERT(FLOAT,ISNULL(SUM(A.PRE_PRDT_CDATE_QTY),0)),2)
+      ELSE
+      0
+      END
+      ) AS PRE_6_1,
+      ISNULL(SUM(A.NOW_SMP_RDATE_QTY),0) AS NOW_1,
+      ISNULL(SUM(A.NOW_PRDT_RDATE_QTY),0) AS NOW_2,
+      ISNULL(SUM(A.NOW_PRDT_ADATE_QTY),0) AS NOW_3,
+      ISNULL(SUM(A.NOW_PRDT_CDATE_QTY),0) AS NOW_4,
+      ISNULL(SUM(A.NOW_SHIP_PDATE_QTY),0) AS NOW_5,
+      (
+      CASE WHEN ISNULL(SUM(A.NOW_PRDT_CDATE_QTY),0) != 0 AND ISNULL(SUM(A.NOW_L),0) != 0
+      THEN
+      ROUND(ISNULL(SUM(A.NOW_L),0) / CONVERT(FLOAT,ISNULL(SUM(A.NOW_PRDT_CDATE_QTY),0)),2)
+      ELSE
+      0
+      END
+      ) AS NOW_6,
+      (
+      CASE WHEN ISNULL(SUM(A.NOW_PRDT_CDATE_QTY),0) != 0 AND ISNULL(SUM(A.NOW_O),0) != 0
+      THEN
+      ROUND(ISNULL(SUM(A.NOW_O),0) / CONVERT(FLOAT,ISNULL(SUM(A.NOW_PRDT_CDATE_QTY),0)),2)
+      ELSE
+      0
+      END
+      ) AS NOW_6_1,
+
+      (ISNULL(SUM(A.PRE_SMP_RDATE_QTY),0) + ISNULL(SUM(A.NOW_SMP_RDATE_QTY),0))  AS HAP_1,
+      (ISNULL(SUM(A.PRE_PRDT_RDATE_QTY),0) + ISNULL(SUM(A.NOW_PRDT_RDATE_QTY),0)) AS HAP_2,
+      (ISNULL(SUM(A.PRE_PRDT_ADATE_QTY),0) + ISNULL(SUM(A.NOW_PRDT_ADATE_QTY),0)) AS HAP_3,
+      (ISNULL(SUM(A.PRE_PRDT_CDATE_QTY),0) + ISNULL(SUM(A.NOW_PRDT_CDATE_QTY),0)) AS HAP_4,
+      (ISNULL(SUM(A.PRE_SHIP_PDATE_QTY),0) + ISNULL(SUM(A.NOW_SHIP_PDATE_QTY),0)) AS HAP_5,
+      (
+      CASE WHEN (ISNULL(SUM(A.NOW_PRDT_CDATE_QTY),0) + ISNULL(SUM(A.PRE_PRDT_CDATE_QTY),0))  != 0 AND ISNULL(SUM(A.HAP_L),0) != 0
+      THEN
+      ROUND(CONVERT(FLOAT,ISNULL(SUM(A.HAP_L),0)) / (ISNULL(SUM(A.NOW_PRDT_CDATE_QTY),0) + ISNULL(SUM(A.PRE_PRDT_CDATE_QTY),0)),2)
+      ELSE
+      0
+      END
+      ) AS HAP_6,
+      (
+      CASE WHEN (ISNULL(SUM(A.NOW_PRDT_CDATE_QTY),0) + ISNULL(SUM(A.PRE_PRDT_CDATE_QTY),0)) != 0 AND ISNULL(SUM(A.HAP_O),0) != 0
+      THEN
+      ROUND(CONVERT(FLOAT,ISNULL(SUM(A.HAP_O),0)) / (ISNULL(SUM(A.NOW_PRDT_CDATE_QTY),0) + ISNULL(SUM(A.PRE_PRDT_CDATE_QTY),0)),2)
+      ELSE
+      0
+      END
+      ) AS HAP_6_1
+      FROM(
+
+      SELECT
+      SMP.COMPANY_CD,
+      SMP.SMP_CD,
+      SMP.SMP_CHASU,
+      <![CDATA[
+				(CASE 
+					WHEN SMP.PRDT_PDATE >= #startday# AND SMP.PRDT_PDATE < #endday# AND SMP.SMP_STATUS IN ('SMSTAT_100','SMSTAT_200','SMSTAT_400','SMSTAT_500','SMSTAT_600','SMSTAT_700','SMSTAT_900')
+					THEN 1
+					ELSE 0
+				END) AS PRE_SMP_RDATE_QTY,
+				(CASE 
+					WHEN SMP.PRDT_PDATE >= #startday# AND SMP.PRDT_PDATE < #endday# AND SMP.SMP_STATUS IN ('SMSTAT_200','SMSTAT_400','SMSTAT_500','SMSTAT_600','SMSTAT_700','SMSTAT_900')
+					THEN 1
+					ELSE 0
+				END) AS PRE_PRDT_RDATE_QTY,
+				(CASE 
+					WHEN SMP.PRDT_PDATE >= #startday# AND SMP.PRDT_PDATE < #endday# AND SMP.SMP_STATUS IN ('SMSTAT_400','SMSTAT_500','SMSTAT_600','SMSTAT_700','SMSTAT_900')
+					THEN 1
+					ELSE 0
+				END) AS PRE_PRDT_ADATE_QTY,
+				(CASE 
+					WHEN SMP.PRDT_PDATE >= #startday# AND SMP.PRDT_PDATE < #endday# AND SMP.SMP_STATUS IN ('SMSTAT_500','SMSTAT_600','SMSTAT_700','SMSTAT_900')
+					THEN 1
+					ELSE 0
+				END) AS PRE_PRDT_CDATE_QTY,	
+				(CASE 
+					WHEN SMP.PRDT_PDATE >= #startday# AND SMP.PRDT_PDATE < #endday# AND SMP.SMP_STATUS IN ('SMSTAT_600','SMSTAT_700','SMSTAT_900')
+					THEN 1
+					ELSE 0
+				END) AS PRE_SHIP_PDATE_QTY,
+				(CASE 
+					WHEN SMP.PRDT_PDATE >= #startday# AND SMP.PRDT_PDATE < #endday# AND SMP.SMP_STATUS IN ('SMSTAT_500','SMSTAT_600','SMSTAT_700','SMSTAT_900')
+					THEN 
+						(
+							CASE WHEN ISNULL(SMP.PRDT_CDATE,'') != '' AND ISNULL(SMP.PRDT_RDATE,'') != ''
+								THEN
+									DATEDIFF(DD,SMP.PRDT_CDATE,SMP.PRDT_RDATE) * -1
+								ELSE
+									0
+							END
+						)
+					ELSE 0
+				END) AS PRE_L,
+				(CASE 
+					WHEN SMP.PRDT_PDATE >= #startday# AND SMP.PRDT_PDATE < #endday# AND SMP.SMP_STATUS IN ('SMSTAT_500','SMSTAT_600','SMSTAT_700','SMSTAT_900')
+					THEN 
+						(
+							CASE WHEN ISNULL(SMP.PRDT_CDATE,'') != '' AND ISNULL(SMP.CMPT_RDATE,'') != ''
+								THEN
+									DATEDIFF(DD,SMP.PRDT_CDATE,SMP.CMPT_RDATE) * -1
+								ELSE
+									0
+							END
+						)
+					ELSE 0
+				END) AS PRE_O,
+				(CASE 
+					WHEN SMP.PRDT_PDATE >= #startday# AND SMP.PRDT_PDATE < CONVERT(VARCHAR,DATEADD(MM,1,#endday#),112) AND SMP_STATUS IN ('SMSTAT_500','SMSTAT_600','SMSTAT_700','SMSTAT_900')
+					THEN 
+						(
+							CASE WHEN ISNULL(SMP.PRDT_CDATE,'') != '' AND ISNULL(SMP.PRDT_RDATE,'') != ''
+								THEN
+									DATEDIFF(DD,SMP.PRDT_CDATE,SMP.PRDT_RDATE) * -1
+								ELSE
+									0
+							END
+						)
+					ELSE 0
+				END) AS HAP_L,
+				(CASE 
+					WHEN SMP.PRDT_PDATE >= #startday# AND SMP.PRDT_PDATE < CONVERT(VARCHAR,DATEADD(MM,1,#endday#),112) AND SMP_STATUS IN ('SMSTAT_500','SMSTAT_600','SMSTAT_700','SMSTAT_900')
+					THEN 
+						(
+							CASE WHEN ISNULL(SMP.PRDT_CDATE,'') != '' AND ISNULL(SMP.CMPT_RDATE,'') != ''
+								THEN
+									DATEDIFF(DD,SMP.PRDT_CDATE,SMP.CMPT_RDATE) * -1
+								ELSE
+									0
+							END
+						)
+					ELSE 0
+				END) AS HAP_O,		
+				]]>
+      (CASE
+      WHEN SUBSTRING(SMP.PRDT_PDATE,0,7) = #month# AND SMP.SMP_STATUS IN ('SMSTAT_100','SMSTAT_200','SMSTAT_400','SMSTAT_500','SMSTAT_600','SMSTAT_700','SMSTAT_900')
+      THEN 1
+      ELSE 0
+      END) AS NOW_SMP_RDATE_QTY,
+      (CASE
+      WHEN SUBSTRING(SMP.PRDT_PDATE,0,7) = #month# AND SMP.SMP_STATUS IN ('SMSTAT_200','SMSTAT_400','SMSTAT_500','SMSTAT_600','SMSTAT_700','SMSTAT_900')
+      THEN 1
+      ELSE 0
+      END) AS NOW_PRDT_RDATE_QTY,
+      (CASE
+      WHEN SUBSTRING(SMP.PRDT_PDATE,0,7) = #month# AND SMP.SMP_STATUS IN ('SMSTAT_400','SMSTAT_500','SMSTAT_600','SMSTAT_700','SMSTAT_900')
+      THEN 1
+      ELSE 0
+      END) AS NOW_PRDT_ADATE_QTY,
+      (CASE
+      WHEN SUBSTRING(SMP.PRDT_PDATE,0,7) = #month# AND SMP.SMP_STATUS IN ('SMSTAT_500','SMSTAT_600','SMSTAT_700','SMSTAT_900')
+      THEN 1
+      ELSE 0
+      END) AS NOW_PRDT_CDATE_QTY,
+      (CASE
+      WHEN SUBSTRING(SMP.PRDT_PDATE,0,7) = #month# AND SMP.SMP_STATUS IN ('SMSTAT_600','SMSTAT_700','SMSTAT_900')
+      THEN 1
+      ELSE 0
+      END) AS NOW_SHIP_PDATE_QTY,
+      (CASE
+      WHEN SUBSTRING(SMP.PRDT_PDATE,0,7) = #month# AND SMP_STATUS IN ('SMSTAT_500','SMSTAT_600','SMSTAT_700','SMSTAT_900')
+      THEN
+      (
+      CASE WHEN ISNULL(PRDT_CDATE,'') != '' AND ISNULL(PRDT_RDATE,'') != ''
+      THEN
+      DATEDIFF(DD,SMP.PRDT_CDATE,SMP.PRDT_RDATE) * -1
+      ELSE
+      0
+      END
+      )
+      ELSE 0
+      END) AS NOW_L,
+      (CASE
+      WHEN SUBSTRING(SMP.PRDT_PDATE,0,7) = #month# AND SMP_STATUS IN ('SMSTAT_500','SMSTAT_600','SMSTAT_700','SMSTAT_900')
+      THEN
+      (
+      CASE WHEN ISNULL(PRDT_CDATE,'') != '' AND ISNULL(CMPT_RDATE,'') != ''
+      THEN
+      DATEDIFF(DD,SMP.PRDT_CDATE,SMP.CMPT_RDATE) * -1
+      ELSE
+      0
+      END
+      )
+      ELSE 0
+      END) AS NOW_O
+
+      FROM
+      T_SAMPLE SMP
+      WHERE
+      SMP.USE_YN = 'Y' AND
+      (
+      <![CDATA[
+					((SMP.SMP_RDATE >= #startday# AND SMP_RDATE < #endday#) OR SMP.SMP_RDATE LIKE #month# + '%')
+					OR
+					((SMP.PRDT_RDATE >= #startday# AND SMP.PRDT_RDATE < #endday#) OR SMP.PRDT_RDATE LIKE #month# + '%')
+					OR
+					((SMP.PRDT_ADATE >= #startday# AND SMP.PRDT_ADATE < #endday#) OR SMP.PRDT_ADATE LIKE #month# + '%')
+					OR
+					((SMP.PRDT_CDATE >= #startday# AND SMP.PRDT_CDATE < #endday#) OR SMP.PRDT_CDATE LIKE #month# + '%')
+					OR
+					((SMP.SHIP_PDATE >= #startday# AND SMP.SHIP_PDATE < #endday#) OR SMP.SHIP_PDATE LIKE #month# + '%')
+					]]>
+      )
+
+      <isNotEmpty property="deptGroup">
+        AND SMP.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND SMP.DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="dstr_type">
+        AND SMP.DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND SMP.USER_CD = #user_cd#
+      </isNotEmpty>
+      
+      <isNotEmpty property="biz_type">
+        AND SMP.BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+ 
+      ) A
+
+    </select>
+
+
+
+    <!-- 샘플분석 :  샘플제작 현황2     -->
+    <select id="sampleAnalysisTable1_2" parameterClass="Hashtable" resultClass="Hashtable">
+      
+
+      SELECT
+      ISNULL(SUM(PRE_SHIP_PDATE_QTY),0) AS PRE_7,
+      ISNULL(SUM(PRE_SMP_DRDATE_QTY),0) AS PRE_8,
+      (
+      CASE WHEN ISNULL(SUM(PRE_SHIP_PDATE_QTY),0) != 0 AND ISNULL(SUM(PRE_SMP_DRDATE_QTY),0) != 0
+      THEN
+      ROUND((CONVERT(FLOAT,ISNULL(SUM(PRE_SMP_DRDATE_QTY),0)) / ISNULL(SUM(PRE_SHIP_PDATE_QTY),0)) * 100,2)
+      ELSE
+      0
+      END
+      ) AS PRE_9,
+      ISNULL(SUM(PRE_PRDT_DATE_QTY),0) AS PRE_10,
+      (
+      CASE WHEN ISNULL(SUM(PRE_PRDT_DATE_QTY),0) != 0 AND ISNULL(SUM(PRE_SHIP_PDATE_QTY),0) != 0
+      THEN
+      ROUND((CONVERT(FLOAT,ISNULL(SUM(PRE_PRDT_DATE_QTY),0)) / ISNULL(SUM(PRE_SHIP_PDATE_QTY),0)) *100,2)
+      ELSE
+      0
+      END
+      ) AS PRE_A,
+
+      ISNULL(SUM(NOW_SHIP_PDATE_QTY),0) AS NOW_7,
+      ISNULL(SUM(NOW_SMP_DRDATE_QTY),0) AS NOW_8,
+      (
+      CASE WHEN ISNULL(SUM(NOW_SHIP_PDATE_QTY),0) != 0 AND ISNULL(SUM(NOW_SMP_DRDATE_QTY),0) != 0
+      THEN
+      ROUND((CONVERT(FLOAT,ISNULL(SUM(NOW_SMP_DRDATE_QTY),0)) / ISNULL(SUM(NOW_SHIP_PDATE_QTY),0)) * 100,2)
+      ELSE
+      0
+      END
+      ) AS NOW_9,
+      ISNULL(SUM(NOW_PRDT_DATE_QTY),0) AS NOW_10,
+      (
+      CASE WHEN ISNULL(SUM(NOW_PRDT_DATE_QTY),0) != 0 AND ISNULL(SUM(NOW_SHIP_PDATE_QTY),0) != 0
+      THEN
+      ROUND((CONVERT(FLOAT,ISNULL(SUM(NOW_PRDT_DATE_QTY),0)) / ISNULL(SUM(NOW_SHIP_PDATE_QTY),0)) *100,2)
+      ELSE
+      0
+      END
+      ) AS NOW_B,
+
+      (ISNULL(SUM(PRE_SHIP_PDATE_QTY),0) + ISNULL(SUM(NOW_SHIP_PDATE_QTY),0)) AS HAP_7,
+      (ISNULL(SUM(PRE_SMP_DRDATE_QTY),0) + ISNULL(SUM(NOW_SMP_DRDATE_QTY),0)) AS HAP_8,
+      (
+      CASE WHEN (ISNULL(SUM(PRE_SHIP_PDATE_QTY),0) + ISNULL(SUM(NOW_SHIP_PDATE_QTY),0)) != 0 AND (ISNULL(SUM(PRE_SMP_DRDATE_QTY),0) + ISNULL(SUM(NOW_SMP_DRDATE_QTY),0)) !=0
+      THEN
+      ROUND((CONVERT(FLOAT,(ISNULL(SUM(PRE_SMP_DRDATE_QTY),0) + ISNULL(SUM(NOW_SMP_DRDATE_QTY),0))) / (ISNULL(SUM(PRE_SHIP_PDATE_QTY),0) + ISNULL(SUM(NOW_SHIP_PDATE_QTY),0))) * 100,2)
+      ELSE
+      0
+      END
+      ) AS HAP_9,
+      (ISNULL(SUM(PRE_PRDT_DATE_QTY),0) + ISNULL(SUM(NOW_PRDT_DATE_QTY),0)) AS HAP_10,
+      (
+      CASE WHEN (ISNULL(SUM(PRE_PRDT_DATE_QTY),0) + ISNULL(SUM(NOW_PRDT_DATE_QTY),0)) != 0 AND (ISNULL(SUM(PRE_SHIP_PDATE_QTY),0) + ISNULL(SUM(NOW_SHIP_PDATE_QTY),0)) != 0
+      THEN
+      ROUND((CONVERT(FLOAT,(ISNULL(SUM(PRE_PRDT_DATE_QTY),0) + ISNULL(SUM(NOW_PRDT_DATE_QTY),0))) / (ISNULL(SUM(PRE_SHIP_PDATE_QTY),0) + ISNULL(SUM(NOW_SHIP_PDATE_QTY),0))) * 100,2)
+      ELSE
+      0
+      END
+      ) AS HAP_C
+      FROM
+      (
+      SELECT
+      A.COMPANY_CD,
+      A.SMP_CD,
+      (
+      CASE WHEN SUM(A.PRE_SHIP_PDATE_QTY) > 0
+      THEN
+      1
+      ELSE
+      0
+      END
+      ) AS PRE_SHIP_PDATE_QTY,
+      (
+      CASE WHEN SUM(A.PRE_SMP_DRDATE_QTY) > 0
+      THEN
+      1
+      ELSE
+      0
+      END
+      ) AS PRE_SMP_DRDATE_QTY,
+      (
+      CASE WHEN SUM(A.PRE_PRDT_DATE_QTY) > 0
+      THEN
+      1
+      ELSE
+      0
+      END
+      ) AS PRE_PRDT_DATE_QTY,
+      (
+      CASE WHEN SUM(A.NOW_SHIP_PDATE_QTY) > 0
+      THEN
+      1
+      ELSE
+      0
+      END
+      ) AS NOW_SHIP_PDATE_QTY,
+      (
+      CASE WHEN SUM(A.NOW_SMP_DRDATE_QTY) > 0
+      THEN
+      1
+      ELSE
+      0
+      END
+      ) AS NOW_SMP_DRDATE_QTY,
+      (
+      CASE WHEN SUM(A.NOW_PRDT_DATE_QTY) > 0
+      THEN
+      1
+      ELSE
+      0
+      END
+      ) AS NOW_PRDT_DATE_QTY
+      FROM
+      (
+      SELECT
+      SMP.COMPANY_CD,
+      SMP.SMP_CD,
+      SMP.SMP_CHASU,
+      <![CDATA[
+					(CASE 
+						WHEN SMP.PRDT_PDATE >= #startday# AND SMP.PRDT_PDATE < #endday# AND SMP.SMP_STATUS IN ('SMSTAT_600','SMSTAT_700','SMSTAT_900')
+						THEN 1
+						ELSE 0
+					END) AS PRE_SHIP_PDATE_QTY,		
+					(CASE 
+						WHEN SMP.PRDT_PDATE >= #startday# AND SMP.PRDT_PDATE < #endday# AND SMP.DROP_YN = 'Y' AND SMP.SMP_STATUS IN ('SMSTAT_900')
+						THEN 1
+						ELSE 0
+					END) AS PRE_SMP_DRDATE_QTY,
+					(CASE 
+						WHEN SMP.PRDT_PDATE >= #startday# AND SMP.PRDT_PDATE < #endday# AND SMP.SMP_STATUS IN ('SMSTAT_700')
+						THEN 1
+						ELSE 0
+					END) AS PRE_PRDT_DATE_QTY,		
+					(CASE 
+						WHEN SUBSTRING(SMP.PRDT_PDATE,0,7) = #month# AND SMP.SMP_STATUS IN ('SMSTAT_600','SMSTAT_700','SMSTAT_900')
+						THEN 1
+						ELSE 0
+					END) AS NOW_SHIP_PDATE_QTY,				
+					(CASE 
+						WHEN SUBSTRING(SMP.PRDT_PDATE,0,7) = #month# AND SMP.DROP_YN = 'Y' AND SMP.SMP_STATUS IN ('SMSTAT_900')
+						THEN 1
+						ELSE 0
+					END) AS NOW_SMP_DRDATE_QTY,
+					(CASE 
+						WHEN SUBSTRING(SMP.PRDT_PDATE,0,7) = #month# AND SMP.SMP_STATUS IN ('SMSTAT_700')
+						THEN 1
+						ELSE 0
+					END) AS NOW_PRDT_DATE_QTY
+					]]>
+      FROM
+      T_SAMPLE SMP
+      LEFT OUTER JOIN
+      T_SMP_DROP D
+      ON
+      SMP.COMPANY_CD = D.COMPANY_CD AND
+      SMP.SMP_CD = D.SMP_CD AND
+      SMP.SMP_CHASU = D.SMP_CHASU
+      WHERE
+      SMP.USE_YN = 'Y' AND
+      (
+      <![CDATA[
+						((SMP.SHIP_PDATE >= #startday# AND SMP.SHIP_PDATE < #endday#) OR SMP.SHIP_PDATE LIKE #month# + '%')
+						OR
+						((SMP.PRDT_DATE >= #startday# AND SMP.PRDT_DATE < #endday#) OR SMP.PRDT_DATE LIKE #month# + '%')
+						OR 
+						SMP.DROP_YN = 'Y'
+						]]>
+      )
+
+      <isNotEmpty property="deptGroup">
+        AND SMP.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND SMP.DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="dstr_type">
+        AND SMP.DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND SMP.USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND SMP.BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      
+      ) A
+      GROUP BY
+      A.COMPANY_CD,
+      A.SMP_CD
+      ) A
+    </select>
+
+
+    
+    <!-- 샘플분석 :  품목유형별 현황1     -->
+    <select id="selectBizTypeAnalysis_1" parameterClass="Hashtable" resultClass="Hashtable" >
+
+
+      SELECT
+      ISNULL(SUM(A.A),0) AS A,
+      ISNULL(SUM(A.B),0) AS B,
+      ISNULL(SUM(A.C),0) AS C
+      FROM
+      (
+      SELECT
+      S.SMP_CD,
+      S.SMP_CHASU,
+      I.ITEM_TYPE,
+      (CASE WHEN I.ITEM_TYPE = #A# THEN 1 ELSE 0 END) AS A,
+      (CASE WHEN I.ITEM_TYPE = #B# THEN 1 ELSE 0 END) AS B,
+      (CASE WHEN I.ITEM_TYPE = #C# THEN 1 ELSE 0 END) AS C
+      FROM
+      T_SAMPLE S,
+      T_ITEM I
+      WHERE
+      S.COMPANY_CD = I.COMPANY_CD AND
+      S.ITEM_CD = I.ITEM_CD AND
+      S.USE_YN = 'Y'
+
+      <isNotEmpty property="deptGroup">
+        AND S.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND S.DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="dstr_type">
+        AND S.DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND S.USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND S.BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+
+
+        <isNotEmpty property="mode_type">
+          AND SMP_STATUS IN ('SMSTAT_500','SMSTAT_600','SMSTAT_700')
+
+          <isNotEmpty property="mode">
+            <isEqual property="mode" compareValue="toMonth">
+              AND S.PRDT_CDATE LIKE #month# + '%'
+            </isEqual>
+            <isNotEqual property="mode" compareValue="toMonth">
+              <![CDATA[
+								AND (S.PRDT_CDATE >= #startday# AND S.PRDT_CDATE <= #endday#) 
+								]]>
+            </isNotEqual>
+          </isNotEmpty>
+          
+        </isNotEmpty>
+     
+      
+        <isEmpty property="mode_type">
+          AND SMP_STATUS IN ('SMSTAT_200','SMSTAT_300','SMSTAT_400')
+
+          <isNotEmpty property="mode">
+            <isEqual property="mode" compareValue="toMonth">
+              AND S.PRDT_RDATE LIKE #month# + '%'
+              AND S.PRDT_RJDATE LIKE #month# + '%'
+              AND S.PRDT_ADATE LIKE #month# + '%'
+            </isEqual>
+            <isNotEqual property="mode" compareValue="toMonth">
+              <![CDATA[
+									AND 
+									(S.PRDT_RDATE >= #startday# AND S.PRDT_RDATE <= #endday# 
+										AND S.PRDT_RJDATE >= #startday# AND S.PRDT_RJDATE <= #endday#
+										AND S.PRDT_ADATE >= #startday# AND S.PRDT_ADATE <= #endday#
+									) 
+								]]>
+            </isNotEqual>
+          </isNotEmpty>
+          
+        </isEmpty>
+
+
+      ) AS A
+    </select>
+
+
+
+    <!-- 샘플분석 :  품목유형별 현황2     -->
+    <select id="selectBizTypeAnalysis_2" parameterClass="Hashtable" resultClass="Hashtable" >
+
+      SELECT
+      <isNotEmpty property="A1">
+        <isGreaterThan property="A1" compareValue="0">
+         ROUND(ISNULL(SUM(A.A),0) / CONVERT(FLOAT,#A1#),2) AS A,
+        </isGreaterThan>
+        <isLessEqual property="A1" compareValue="0">
+          0 AS A,
+        </isLessEqual>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="B1">
+        <isGreaterThan property="B1" compareValue="0">
+          ROUND(ISNULL(SUM(A.B),0) / CONVERT(FLOAT,#B1#),2) AS B,
+        </isGreaterThan>
+        <isLessEqual  property="B1" compareValue="0">
+          0 AS B,
+        </isLessEqual>
+      </isNotEmpty>
+
+      
+      <isNotEmpty property="C1">
+        <isGreaterThan property="C1" compareValue="0">
+          ROUND(ISNULL(SUM(A.C),0) / CONVERT(FLOAT,#C1#),2) AS C,
+        </isGreaterThan>
+        <isLessEqual property="C1" compareValue="0">
+          0 AS C,
+        </isLessEqual>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="A1">
+        <isNotEmpty property="B1">
+          <isNotEmpty property="C1">
+
+            ROUND((ISNULL(SUM(A.A),0) + ISNULL(SUM(A.B),0) + ISNULL(SUM(A.C),0))  / CONVERT(FLOAT,(#A1# + #B1# + #C1#)),2) AS D
+
+          </isNotEmpty>
+        </isNotEmpty>
+      </isNotEmpty>
+
+      <isEmpty property="A1">
+        <isEmpty property="B1">
+          <isEmpty property="C1">
+        0 AS D
+          </isEmpty>
+        </isEmpty> 
+      </isEmpty>
+
+      FROM
+      (
+      SELECT
+      S.SMP_CD,
+      S.SMP_CHASU,
+      I.ITEM_TYPE,
+      (CASE
+      WHEN I.ITEM_TYPE = #A#
+      THEN
+      (
+        <isNotEmpty property="mode_type">
+          CASE WHEN ISNULL(S.PRDT_CDATE,'') != '' AND ISNULL(S.PRDT_RDATE,'') != ''
+          THEN
+          DATEDIFF(DD,S.PRDT_CDATE,S.PRDT_RDATE) * -1
+          ELSE
+          0
+          END
+        </isNotEmpty>
+        <isEmpty property="mode_type">
+          CASE WHEN ISNULL(S.PRDT_CDATE,'') != '' AND ISNULL(S.CMPT_RDATE,'') != ''
+          THEN
+          DATEDIFF(DD,S.PRDT_CDATE,S.CMPT_RDATE) * -1
+          ELSE
+          0
+          END
+        </isEmpty>
+      )
+      ELSE 0
+      END) AS A,
+      (CASE
+      WHEN I.ITEM_TYPE = #B#
+      THEN
+      (
+        <isNotEmpty property="mode_type">
+          CASE WHEN ISNULL(S.PRDT_CDATE,'') != '' AND ISNULL(S.PRDT_RDATE,'') != ''
+          THEN
+          DATEDIFF(DD,S.PRDT_CDATE,S.PRDT_RDATE) * -1
+          ELSE
+          0
+          END
+        </isNotEmpty>
+        <isEmpty property="mode_type">
+          CASE WHEN ISNULL(S.PRDT_CDATE,'') != '' AND ISNULL(S.CMPT_RDATE,'') != ''
+          THEN
+          DATEDIFF(DD,S.PRDT_CDATE,S.CMPT_RDATE) * -1
+          ELSE
+          0
+          END
+        </isEmpty>
+      )
+      ELSE 0
+      END) AS B,
+      (CASE
+      WHEN I.ITEM_TYPE = #C#
+      THEN
+      (
+        <isNotEmpty property="mode_type">
+          CASE WHEN ISNULL(S.PRDT_CDATE,'') != '' AND ISNULL(S.PRDT_RDATE,'') != ''
+          THEN
+          DATEDIFF(DD,S.PRDT_CDATE,S.PRDT_RDATE) * -1
+          ELSE
+          0
+          END
+        </isNotEmpty>
+        <isEmpty property="mode_type">
+          CASE WHEN ISNULL(S.PRDT_CDATE,'') != '' AND ISNULL(S.CMPT_RDATE,'') != ''
+          THEN
+          DATEDIFF(DD,S.PRDT_CDATE,S.CMPT_RDATE) * -1
+          ELSE
+          0
+          END
+        </isEmpty>
+
+      )
+      ELSE 0
+      END) AS C
+      FROM
+      T_SAMPLE S,
+      T_ITEM I
+      WHERE
+      S.COMPANY_CD = I.COMPANY_CD AND
+      S.ITEM_CD = I.ITEM_CD AND
+      S.USE_YN = 'Y' AND
+      SMP_STATUS IN ('SMSTAT_500','SMSTAT_600','SMSTAT_700')
+
+      <isNotEmpty property="deptGroup">
+        AND S.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND S.DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="dstr_type">
+        AND S.DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND S.USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND S.BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      
+      
+      <isNotEmpty property="mode">
+        <isEqual property="mode" compareValue="toMonth">
+          AND S.PRDT_CDATE LIKE #month# + '%'
+        </isEqual>
+        <isNotEqual property="mode" compareValue="toMonth">
+          <![CDATA[
+						AND (S.PRDT_CDATE >= #startday# AND S.PRDT_CDATE <= #endday#) 
+						]]>
+        </isNotEqual>
+      </isNotEmpty>
+
+      ) AS A
+    </select>
+
+
+
+
+    <!-- 샘플분석 :  품목유형별 현황3     -->
+    <select id="selectBizTypeAnalysis_3" parameterClass="Hashtable" resultClass="Hashtable" >
+      
+
+      SELECT
+      ISNULL(SUM(A.A1),0) AS A1,
+      ISNULL(SUM(A.B1),0) AS B1,
+      ISNULL(SUM(A.C1),0) AS C1,
+      ISNULL(SUM(A.A2),0) AS A2,
+      ISNULL(SUM(A.B2),0) AS B2,
+      ISNULL(SUM(A.C2),0) AS C2,
+      ISNULL(SUM(A.A3),0) AS A3,
+      ISNULL(SUM(A.B3),0) AS B3,
+      ISNULL(SUM(A.C3),0) AS C3,
+      ISNULL(SUM(A.A4),0) AS A4,
+      ISNULL(SUM(A.B4),0) AS B4,
+      ISNULL(SUM(A.C4),0) AS C4
+      FROM
+      (
+      SELECT
+      S.SMP_CD,
+      S.SMP_CHASU,
+      (CASE WHEN I.ITEM_TYPE = #A# AND Q.SMP_QRTYPE = 'SMQRT_100' THEN 1 ELSE 0 END) AS A1,
+      (CASE WHEN I.ITEM_TYPE = #B# AND Q.SMP_QRTYPE = 'SMQRT_100' THEN 1 ELSE 0 END) AS B1,
+      (CASE WHEN I.ITEM_TYPE = #C# AND Q.SMP_QRTYPE = 'SMQRT_100' THEN 1 ELSE 0 END) AS C1,
+      (CASE WHEN I.ITEM_TYPE = #A# AND Q.SMP_QRTYPE = 'SMQRT_200' THEN 1 ELSE 0 END) AS A2,
+      (CASE WHEN I.ITEM_TYPE = #B# AND Q.SMP_QRTYPE = 'SMQRT_200' THEN 1 ELSE 0 END) AS B2,
+      (CASE WHEN I.ITEM_TYPE = #C# AND Q.SMP_QRTYPE = 'SMQRT_200' THEN 1 ELSE 0 END) AS C2,
+      (CASE WHEN I.ITEM_TYPE = #A# AND Q.SMP_QRTYPE = 'SMQRT_300' THEN 1 ELSE 0 END) AS A3,
+      (CASE WHEN I.ITEM_TYPE = #B# AND Q.SMP_QRTYPE = 'SMQRT_300' THEN 1 ELSE 0 END) AS B3,
+      (CASE WHEN I.ITEM_TYPE = #C# AND Q.SMP_QRTYPE = 'SMQRT_300' THEN 1 ELSE 0 END) AS C3,
+      (CASE WHEN I.ITEM_TYPE = #A# AND Q.SMP_QRTYPE = 'SMQRT_400' THEN 1 ELSE 0 END) AS A4,
+      (CASE WHEN I.ITEM_TYPE = #B# AND Q.SMP_QRTYPE = 'SMQRT_400' THEN 1 ELSE 0 END) AS B4,
+      (CASE WHEN I.ITEM_TYPE = #C# AND Q.SMP_QRTYPE = 'SMQRT_400' THEN 1 ELSE 0 END) AS C4
+      FROM
+      T_SAMPLE S,
+      T_SMP_QREPAIR Q,
+      T_ITEM I
+      WHERE
+      S.COMPANY_CD = Q.COMPANY_CD AND
+      S.SMP_CD = Q.SMP_CD AND
+      S.SMP_CHASU = Q.SMP_CHASU AND
+      S.COMPANY_CD = I.COMPANY_CD AND
+      S.ITEM_CD = I.ITEM_CD
+
+      <isNotEmpty property="deptGroup">
+        AND S.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND S.DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="dstr_type">
+        AND S.DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND S.USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND S.BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="mode">
+        <isEqual property="mode" compareValue="toMonth">
+          AND Q.SMP_QRDATE LIKE #month# + '%'
+        </isEqual>
+        <isNotEqual property="mode" compareValue="toMonth">
+          <![CDATA[
+						AND (Q.SMP_QRDATE >= #startday# AND Q.SMP_QRDATE <= #endday#) 
+						]]>
+        </isNotEqual>
+      </isNotEmpty>   
+      
+      
+      ) AS A
+    </select>
+
+
+
+    <!-- 샘플분석 :  품목유형별 현황4     -->
+    <select id="selectBizTypeAnalysis_4" parameterClass="Hashtable" resultClass="Hashtable" >
+      SELECT
+      ISNULL(SUM(S.PUMP_SEQ),0) AS A,
+      ISNULL(SUM(S.TUBU_SEQ),0) AS B,
+      ISNULL(SUM(S.COLOR_SEQ),0) AS C
+      FROM(
+      SELECT
+      (CASE WHEN A.PUMP_SMP_CD IS NOT NULL THEN 1 ELSE 0 END) AS PUMP_SEQ,
+      (CASE WHEN A.TUBU_SMP_CD IS NOT NULL THEN 1 ELSE 0 END) AS TUBU_SEQ,
+      (CASE WHEN A.COLOR_SMP_CD IS NOT NULL THEN 1 ELSE 0 END) AS COLOR_SEQ
+      FROM
+      (
+      SELECT
+      (CASE WHEN I.ITEM_TYPE = #A# THEN SMP_CD ELSE NULL END) PUMP_SMP_CD,
+      (CASE WHEN I.ITEM_TYPE = #B# THEN SMP_CD ELSE NULL END) TUBU_SMP_CD,
+      (CASE WHEN I.ITEM_TYPE = #C# THEN SMP_CD ELSE NULL END) COLOR_SMP_CD
+      FROM
+      T_SAMPLE AS S,
+      T_ITEM AS I
+      WHERE
+      S.COMPANY_CD = I.COMPANY_CD AND
+      S.ITEM_CD = I.ITEM_CD AND
+      S.USE_YN = 'Y' AND
+      S.PRDT_YN = 'Y' AND
+      I.ITEM_TYPE IN(#A#,#B#,#C#)
+
+      <isNotEmpty property="deptGroup">
+        AND S.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND S.DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="dstr_type">
+        AND S.DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND S.USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND S.BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+
+      <isNotEmpty property="mode">
+        <isEqual property="mode" compareValue="toMonth">
+          AND S.PRDT_CDATE LIKE #month# + '%'
+        </isEqual>
+        <isNotEqual property="mode" compareValue="toMonth">
+          <![CDATA[
+						AND (S.PRDT_CDATE >= #startday# AND S.PRDT_CDATE <= #endday#) 
+						]]>
+        </isNotEqual>
+      </isNotEmpty>
+
+      ) AS A
+      GROUP BY A.PUMP_SMP_CD,TUBU_SMP_CD,COLOR_SMP_CD
+      ) AS S
+    </select>
+
+
+
+    <!-- 샘플분석 : Pump / Tube / 색조   -->
+    <select id="selectItemTypeCode" parameterClass="Hashtable" resultClass="String">
+ 
+      SELECT CODE_ID FROM T_CODE WHERE UP_CODE_ID = #up_code_id# AND CODE_NM = #code_nm# AND USE_YN = 'Y'
+    </select>
+
+
+
+
+    <!-- 샘플분석 :  Drop 유형별 현황    -->
+    <select id="selectSmapleDropchartList" parameterClass="Hashtable" resultClass="Hashtable">
+
+
+      SELECT
+      CD.CODE_ID,
+      CD.CODE_NM AS NAME,
+      ISNULL(S.CNT,0) AS Y
+      FROM
+      T_CODE AS CD
+      LEFT OUTER JOIN
+      (
+      SELECT
+      SMP_DRTYPE,
+      COUNT(SMP_DRTYPE) AS CNT
+      FROM
+      T_SMP_DROP AS D,
+      T_SAMPLE AS SP
+      WHERE
+      D.COMPANY_CD = SP.COMPANY_CD AND
+      D.SMP_CD = SP.SMP_CD AND
+      D.SMP_CHASU = SP.SMP_CHASU AND
+      D.SMP_DRDATE LIKE #month# + '%'
+
+
+      <isNotEmpty property="deptGroup">
+        AND SP.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND SP.DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="dstr_type">
+        AND SP.DSTR_TYPE = #dstr_type#AS 
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND SP.USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND SP.BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      
+
+      GROUP BY
+      SMP_DRTYPE
+      ) AS S
+      ON
+      CD.CODE_ID = S.SMP_DRTYPE
+      WHERE
+      CD.UP_CODE_ID ='SMP_DRTYPE' AND
+      CD.USE_YN = 'Y'
+      ORDER BY
+      CD.CODE_ORDER ASC
+    </select>
+
+
+  </statements>
+
+
+
+</sqlMap>

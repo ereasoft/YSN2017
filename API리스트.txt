@@ -1,0 +1,3508 @@
+﻿## 테이블 컬럼 추가 된것 ##
+
+[dbo].[T_PRDT_INQRY]
+		inq_addr      :  문의 주소  nvarchar 500
+		inq_company   :  문의 회사  nvarchar 200
+
+
+[dbo].[T_SAMPLE]	
+	PRDT_PDATE2		: 완료예정일2    nvarchar 8
+	DELAY_COMMENT   : 지연사유       nvarchar 4000
+	DETAIL_COMMENT  : 상세 코멘트    nvarchar 4000
+
+
+
+[기본 코드]
+
+(구)연우 로그인 연동 : /Member/YSNSSO
+
+
+
+
+## 파일전송 관련
+
+ 파일 리스트 : /File/selectAttachFile
+   - 입력 파라미터 
+      biz_gubun   : 해당 프로그램 PK
+	  chasu		  : 차수
+	  doc_mgt     : 프로그램명 (선택)
+	  
+
+ 파일 임시파일 업로드 :  /File/TempFileUpload 
+    - 입력 파라미터 
+		file_name	: 파일명  (multipart 전송)
+
+ 파일 임시파일 삭제 :  /File/TempFileDelete
+    - 입력 파라미터 
+	    file_name	: 파일명  (multipart 전송)
+
+ 파일 실제 파일 업로드 :  /File/RealFileUpload
+     - 입력 파라미터 
+		file_name	: 파일명  (multipart 전송)
+
+
+## 파일전송 관련
+
+
+
+
+
+
+
+매출조직 : /CodeList/DePart3?company_cd=YONWOO
+
+
+매출조직 하위부서 : /CodeList/DePart4?company_cd=YONWOO&​up_dept_cd​=3
+​up_dept_cd​:부서코드
+
+
+매출조직 영업담당 : /CodeList/DePartUser?up_dept_cd=3&dept_cd=224
+up_dept_cd :상위부서코드
+dept_cd​:부서코드
+전체 하위부서 선택일경우 :/CodeList/DePartUser?company_cd=YONWOO&dept_cd=135,224  )
+
+
+공통코드 : ​/CodeList/TCode?up_code_id=DMOS_CD​
+( up_code_id = 국내/해외: DMOS_CD , 신용등급 : CUST_GRADE , 결재조건:TRMS_PAY , 활동여부:SA_YN
+  ,업무구분:KM_WORK, 권한정도:KM_POWER, 핵심/일반:KM_POSIT, 우호도: KM_FRIEND, 직급: USER_TITLE, 기준통화 : CRNY_TYPE 
+  ,활동유형:SA_TYPE, 접촉유형:SA_CNCT, 실행여부:SA_RESULT, 주요활동요소 :SA_TARGET, 문의경로:INQ_CHNL, 문의유형:INQ_TYPE, 진행사항:(up_code_id =INQ_STATUS, value_2=PA )
+  ,유통구조:DSTR_TYPE, 코멘트등록:REG_YN, 샘플유형:SMR_TYPE, 포장방법(PACKING_INFO) : PACKING_INFO, 프로젝트 가능성 : PROJECT_POSS
+  ,양산가능성:PRDT_PSBLT, 품목유형:ITEM_TYPE, 사업유형:BIZ_TYPE, Drop유형:SMP_DRTYPE, 기회유형:OPPT_TYPE, 진행상태:OPPT_STATUS
+  ,수주가능성:WSO_PSBLT, 확정여부:CNFM_YN, 수주구분:WSO_GUBUN, 의뢰반려유형:SMP_RTTYPE
+)
+
+
+Order구분 : /CodeList/TCode?up_code_id=ORDER_GB&value_1=대​
+			/CodeList/TCode?up_code_id=ORDER_GB&value_1=중
+			/CodeList/TCode?up_code_id=ORDER_GB&value_1=소
+
+
+품목분류 /CodeList/getItemSubLevel
+- 입력 파라미터
+	item_level1 : 아이템 레벨1
+	item_level2 : 아이템 레벨2
+
+
+
+
+
+거래처 찾기 팝업 : /Popup/popupCustList
+	cust_nm : 거래처명
+	user_nm : 영업담당 이름
+
+- 출력
+	CUST_CD			: 거래처명
+	CUST_NM			: 영업담당 이름
+	CUST_ENG_NM		: 거래처명 영문
+	USER_CD			: 영업담당 ID
+	CUST_GRADE		: 신용등급
+	CUST_GRADE_NM	: 신용등급
+	USER_NM			: 영업담당 이름
+	DEPT_CD			: 부서코드
+	DEPT_NM			: 부서명
+
+영업담당 찾기 팝업 : /Popup/popupCustUserList
+up_dept_cd : 상위부서코드
+dept_cd    : 부서코드
+user_nm    : 영업담당 이름
+user_cd    : 영업담당 ID
+
+
+키맨 찾기 팝업 : /Popup/popupkeymanList
+
+- 입력 파라미터
+    km_nm         : 키맨이름     ( 선택 )
+    dept_cd       :			    ( 선택 )
+    km_cds        :				( 선택 )
+    km_cd         :				( 선택 )
+    cust_cd       : 키맨 회사코드( 선택 )
+    bcust_cd      :				( 선택 )
+    cust_gubun    :				( 선택 )
+    sptnr_nm      :				( 선택 )
+	
+
+- 출력 데이터
+    KM_CD		: 키맨PK (T_KEYMAN )
+    KM_NM		: 키맨이름
+    SPTNR_CD	: -- 알수없음
+    SPTNR_NM	: -- 알수없음
+    KM_DEPT_NM	: 키맨부서명
+    O_PHONE		: 키맨 회사전화
+    M_PHONE		: 키맨 휴대폰
+    KM_EMAIL	: 키맨 이메일
+    CUST_CD		: 키맨 회사코드
+    CUST_NM		: 키맨 회사명
+    KM_TITLE	: 키맨 직급
+
+
+
+
+
+사용자(협업공유자)찾기 팝업 : /Popup/popupUserList 
+
+- 입력 파라미터
+	user_nm       : 사용자명
+	user_cd       : 사용자ID
+	up_dept_cd    : 상위부서코드
+	dept_cd       : 부서코드
+
+		
+
+- 출력 데이터
+    USER_CD		: 사용자ID
+    USER_NM		: 사용자명
+    DEPT_CD		: 부서코드
+    DEPT_NM		: 부서명
+    O_PHONE		: 회사번호
+    M_PHONE		: 휴대폰
+    EMAIL		: 이메일
+
+
+
+기준년도: /popup/base_crny
+
+- 입력 파라미터
+	base_yr  : 기준년도
+			
+
+- 출력 데이터
+    BASE_YR				: 기준년도
+    BASE_CRNY			: 기준통화  
+    EXCH_RATE			: 기준통화 단위
+
+
+
+
+
+Sample 제작관리 : 등록 - 샘플요청 팝업 : /popup/sampleRequestPopup
+
+	- 입력 파라미터
+		cust_cd  : 거래처 코드
+		cust_nm  : 거래처명    
+		item_nm  : 샘플품목명
+
+
+	- 출력 데이터	 
+		COMPANY_CD	  : 회사코드
+		SMR_CD		  : 샘플요청PK
+		SMR_CHASU	  : 샘플차수
+		ITEM_CD		  : 샘플품목
+		ITEM_NM		  : 샘플품목명
+		EUSER_CD	  : EUSER_CD
+		EUSER_NM	  : EUSER_NM
+		SMP_RQTY	  : 제작의뢰 수량 
+		PROJECT_POSS  : 프로젝트 가능성
+
+
+
+
+Sample제작 Drop팝업: /popup/popupSampleDrop
+
+- 입력 파라미터
+    smp_cd				:  샘플PK 
+    smp_chasu			:  샘플차수
+			
+
+- 출력 데이터
+	LOGIN_USER_NM		: Drop 담당 이름
+	LOGIN_DEPT_NM		: Drop 담당 부서명
+	DROP_DAY			: Drop 일자
+	SMP_DRTYPE			: Drop 유형
+	SMP_DRDESCRIPT		: Drop 상세내용
+	SMP_DROP			: Y
+
+
+
+사업기회 품목 찾기 : /popup/itemSampleList
+
+
+- 입력 파라미터
+	 user_cd       : 영업담당
+	 up_dept_cd    : 상위부서
+	 dept_cd       : 하위부서
+	 biz_type      : 사업유형
+	 prdt_psblt    : 양산가능성
+	 cust_nm       : 거래처명
+	 item_nm       : 품목명
+
+- 출력 데이터
+     SMP_CD		   : 샘플코드
+	 SMP_CHASU	   : 샘플차수
+     ITEM_CD	   : 품목코드
+     ITEM_NM	   : 품목명
+
+
+[기본 코드]
+
+
+
+
+
+[고객정보DB - 거래처]
+
+거래처 리스트 : /Customer/customerList
+deptGroup : 매출조직
+bizGroup  : 매출조직 하위부서
+user_cd   : 영업담당자ID
+user_nm   : 영업담당자명
+cust_type : ( 사용안함 )
+dmos_cd   : 국내/해외
+cust_cd   : 거래처PK
+cust_nm   : 거래처명
+nat_cd    : 국가정보
+cust_grade: 신용등급
+trms_pay  : 결제조건
+use_yn    : 활동여부
+
+
+거래처 상세 : /Customer/customerDetail?cust_cd=2781
+cust_cd : 거래처PK(필수)
+
+거래처 상세 하단 - 고객담당(Keyman) : /Customer/sectCustKeymanList?cust_cd=3432
+cust_cd : 거래처PK(필수)
+
+거래처 상세 하단 - 프로젝트 : /Customer/selectCustProjectList?cust_cd=3432
+cust_cd : 거래처PK(필수)
+
+거래처 상세 하단 -  E-mail송수신 : /Customer/selectCustEmailList?cust_cd=3432
+cust_cd : 거래처PK(필수)
+
+거래처 상세 하단 - 첨부파일  : /File/selectAttachFile?biz_gubun=SMR1500334&doc_mgt=sample
+biz_gubun(필수)
+doc_mgt
+chasu
+
+
+
+거래처 저장(수정) : /Customer/updateCustomer ( post 전송 )
+mod_usr    : 수정자ID
+user_cd    : 영업담당ID
+dept_cd    : 부서코드
+nat_cd     : 국가정보
+base_crncy : 기준통화
+cust_grade : 신용등급
+home_page  : 홈페이지
+trms_pay   : 결제조건
+use_yn     : 활동여부
+cust_cd    : 거래처PK
+
+[고객정보DB - 거래처]
+
+
+
+
+
+
+
+[고객정보DB - 고객담당(Keyman)]
+
+
+고객담당(Keyman) 리스트 : /KeyMan/keyManList
+cust_cd    : 거래처PK
+cust_nm    : 거래처명
+km_nm      : 고객담당
+km_user_nm : 영업담당
+use_yn     : 활동여부 (필수)
+bizGroup   : 매출조직
+deptGroup  : 매출조직 하위부서
+km_title   : 직급
+s_reg_date : 등록기간 시작
+e_reg_date : 등록기간 종료
+km_work    : 업무구분
+km_power   : 권한정도
+
+
+고객담당(Keyman) 상세 : /KeyMan/keyManDetail?km_cd=KM14100344
+km_cd    : 고객담당PK 
+
+
+고객담당(Keyman) 상세하단 - 활동현황 : /KeyMan/BottomKeymanPlayList?km_cd=KM14100030
+km_cd    : 고객담당PK 
+
+
+고객담당(Keyman) 상세하단 - E-mail송수신: /KeyMan/BottomKeymanEmailList?km_cd=KM14100030
+km_cd    : 고객담당PK 
+
+고객담당(Keyman) 상세하단 - E-mail송수신 팝업 : /Customer/getCustEmailContent
+email_cd    : 이메일PK 
+
+
+
+
+
+
+고객담당(Keyman) 상세 수정 : /KeyMan/keyManUpdate  ( post 전송 ) ( 전체 필수)
+
+km_work        : 업무구분
+km_dept_nm     : 부서명
+km_posit       : 핵심/일반
+km_title       : 직급
+km_rep_work    : 담당업무
+km_power       : 권한정도
+km_friend      : 우호도
+cust_gb        : --빈값 알수없음
+cust_cd        : 거래처PK 
+dom_ab         : --빈값 알수없음
+ab_nation      : 해외근무지
+ab_region      : 햬외근무지 상세
+km_email       : 회사메일
+o_phone        : 전화번호
+m_phone        : 핸드폰
+km_school      : 출신학교
+km_hobby       : 취미
+km_religion    : 종교
+km_address     : 집주소
+km_descript    : 비고
+km_o_email     : 외부메일
+b_mth          : 생일 월
+b_data         : 생일 일
+w_mth          : 결혼기념일 월 
+w_data         : 결혼기념일 일
+use_yn         : 활동여부
+user_cd        : 거래처PK
+km_cd          : 고객담당PK
+
+
+
+고객담당(Keyman) 이름 중복체크 : /KeyMan/keyManDupliChk?km_nm=홍지예
+km_nm    : 고객담당자 이름
+
+return = {CNT:0}  0이면 중복없음   / {CNT:1} 1이상이면 중복
+
+
+
+
+
+
+
+고객담당(Keyman)  신규등록: /KeyMan/keyManInsert  ( post 전송 ) ( 전체 필수)
+
+sptnr_cd      : --빈값 알수없음
+km_nm         : 고객담당자 이름
+km_work       : 업무구분
+km_dept_nm    : 부서명
+km_posit      : 핵심/일반
+km_title      : 직급
+km_rep_work   : 담당업무
+km_power      : 권한정도
+km_friend     : 우호도
+cust_gb       : --빈값 알수없음
+cust_cd       : 거래처PK 
+dom_ab        : --빈값 알수없음
+ab_nation     : 해외근무지
+ab_region     : 햬외근무지 상세
+km_email      : 회사메일
+o_phone       : 전화번호
+m_phone       : 핸드폰
+km_school     : 출신학교
+km_hobby      : 취미
+km_religion   : 종교
+km_address    : 집주소
+km_descript   : 비고
+km_o_email    : 외부메일
+b_mth         : 생일 월
+b_data        : 생일 일
+w_mth         : 결혼기념일 월 
+w_data        : 결혼기념일 일
+use_yn        : 활동여부
+
+
+
+[고객정보DB - 고객담당(Keyman)]
+
+
+
+
+
+
+
+
+[로그인]
+
+
+ 
+로그인 처리 : /Member/LoginCheck
+	user_cd : 회원(사원)ID
+	pass_wd : 패스워드
+	save_cd : id기억하기
+
+
+
+
+사용자정보  : /Member/UserInfo
+
+- 입력 파라미터
+	user_cd			: 사용자(사원)ID 
+
+- 출력 데이터
+	COMPANY_CD		: 회사코드
+	COMP_NM			: 회사명
+	COMP_ENG_NM		: 회사영문명
+	USER_CD			: 사용자(사원)ID
+	USER_NM			: 사용자명
+	USER_ENG_NM		: 사용자명 영문
+	DEPT_CD			: 부서코드
+	DEPT_NM			: 부서명
+	UP_DEPT_CD		: 상위부서코드
+	DEPT_LEVEL		: 부서 레벨(구조깊이)
+	USER_TITLE		: 직급(과장)
+	USER_POSIT		: 직책(팀장)
+	AUTH.AUTH_ID	: 권한ID
+	MULTI_LANG		: 기본언어
+	USER_IMG		: 사용자 이미지
+	LAST_LOGIN		: 마지막로그인 시간
+	M_PHONE			: 핸드폰
+	COMPANY_YN		: --알수없음
+	DSTR_CHN		: --알수없음
+
+
+[로그인]
+
+
+
+
+
+
+
+[영업활동 관리]
+
+
+1.영업활동 일정관리 : 거래처 셀렉트 박스   /SalesActivity/custList
+- 입력 파라미터
+	user_cd			: 사용자(사원)ID
+
+- 출력 데이터
+	CUST_CD			: 거래처PK ( T_CUSTOMER )
+	CUST_NM			: 거래처명
+
+
+
+
+2.영업활동 일정관리 : 거래처 리스트   /SalesActivity/getCustGrid
+- 입력 파라미터
+	user_cd			: 사용자(사원)ID  (필수)
+	cust_cd			: 거래처PK  -- 거래처 셀렉트 박스 선택시
+
+- 출력 데이터
+	CUST_CD			: 거래처PK ( T_CUSTOMER )
+	CUST_NM			: 거래처명
+	LAST_VISIT_DATE	: 최근방문일
+	BAD_AR_YN		: --알수없음 
+
+
+
+
+3.영업활동 일정관리 : 프로젝트 리스트   /SalesActivity/getProjectGrid
+- 입력 파라미터
+	user_cd			: 사용자(사원)ID  (필수)
+	cust_cd			: 거래처PK  -- 거래처 셀렉트 박스 선택시
+
+- 출력 데이터
+	PJT_CD			: 프로젝트PK ( T_PROJECT )
+	PJT_NM			: 거래처명
+	LAST_VISIT_DATE	: 최근방문일
+	BAD_AR_YN		: --알수없음 
+
+
+
+
+4.영업활동 일정관리 : 프로젝트 리스트   /SalesActivity/getMonthSalesActivityInfo
+- 입력 파라미터
+	user_cd			: 사용자(사원)ID  (필수)
+	search_ym		: 검색년월 ( 6자리 예:201602)
+
+- 출력 데이터
+	CNT_1			: 활동계획 건수
+	CNT_2			: 계획실적 건수
+	CNT_3			: 비계획 실적 건수
+	CNT_4			: 총 활동실적 건수
+
+
+
+
+
+5.영업활동 일정관리 : 캘린더 데이터   /SalesActivity/calCustDataList
+- 입력 파라미터
+	user_cd			: 사용자(사원)ID 
+	
+
+- 출력 데이터
+    START_DATE	: 시작일
+    END_DATE	: 종료일
+    SA_SUBJECT  : 제목
+    SA_CD		: 일정관리PK ( T_SALES_ACTIVITY )
+    SA_TYPE		: 활동유형 코드
+
+
+
+
+
+
+
+
+6.영업활동 일정관리 : 비계획실적/업무보고 등록버튼  팝업 구성  
+
+활동 유형 : ​/CodeList/TCode?up_code_id=SA_TYPE
+활동 담당 : /Member/UserInfo  ( 상단 사용자정보 참조 )
+접촉 유형 : /CodeList/TCode?up_code_id=SA_CNCT&value_5=Y 
+거래처 찾기 팝업: /Popup/popupCustList  ( 상단 거래처 찾기 팝업 참조 )
+키맨 찾기 팝업 : /Popup/popupkeymanList ( 상단 키맨 찾기 팝업  참조 )
+사용자(협업공유자)찾기 팝업 : /Popup/popupUserList ( 상단 키맨 찾기 팝업  참조 )
+key facter 주요활동요소 : /CodeList/TCode?up_code_id=SA_TARGET
+key facter 실행여부 : /CodeList/TCode?up_code_id=SA_RESULT
+
+popupUserList
+
+
+
+7.영업활동 일정관리 : 비계획실적/업무보고 상세내용 팝업   /SalesActivity/popupSalesActivityDetail
+- 입력 파라미터
+	sa_cd			: 일정관리PK
+	
+
+- 출력 데이터
+    SA_TYPE			  : 활동유형 코드
+    SA_TYPE_NM		  : 활동유형
+    SA_CD			  : 일정관리PK ( T_SALES_ACTIVITY )
+    USER_CD			  : 활동담당(사원)ID 
+    USER_NM			  : 활동담당 이름
+    DEPT_CD			  : 활동담당 부서 코드
+    DEPT_NM			  : 활동담당 부서
+    SA_SDATE		  : 활동 일자 시작
+    SA_EDATE		  : 활동 일자 종료
+    CUST_CD			  : 거래처 코드
+    CUST_NM			  : 거래처
+    SA_KEYMAN_CDS	  : 지원유형코드
+    SA_KEYMAN_NMS	  : 지원유형
+    SA_CNCT			  : 접촉유형코드
+    SA_CNCT_NM		  : 접촉유형
+    PJT_CD			  : 프로젝트
+    PJT_NM			  : 프로젝트
+    SA_SUBJECT		  : 활동제목
+    SA_BODY			  : 활동결과
+	SA_COMMENT		  : 코멘트 내용
+	EDIT_YN			  : 
+    NEXT_SA_SDATE	  : 
+    NEXT_SA_EDATE	  : 
+    NEXT_SA_TARGET	  : 
+    NEXT_SA_SUBJECT	  : 
+    SA_TARGETS		  : 
+    CMT_YN			  : 코멘트 대상여부
+    USER_CDS		  : 협업공유자ID
+    USER_NMS		  : 협업공유자
+    USER_NMS_VIEW	  : 
+
+
+
+
+
+영업활동 일정관리 : 비계획실적 등록/수정  /salesActivity/salesActivitySave
+- 입력 파라미터
+
+
+	sa_cd            : 일정관리PK ( T_SALES_ACTIVITY )
+	sa_type          : 활동유형 코드
+	sa_cnct          : 접촉유형
+	user_cd          : 활동담당(사원)ID
+	dept_cd          : 활동담당 부서
+	sa_sdate         : 활동일자 시작
+	sa_edate         : 활동일자 종료
+	cust_cd          : 거래처 코드
+	pjt_cd           : 프로젝트코드
+	sa_subject       : 활동제목
+	sa_body          : 활동 결과
+	next_sa_sdate    : 
+	next_sa_edate    : 
+	next_sa_target   : 
+	next_sa_subject  : 
+	use_yn           : 사용여부
+	plan_yn          : 계획여부
+	cmt_yn           : 코멘트 대상여부
+
+	sa_target		: Key Facter주요활동요소 (배열)
+
+
+
+
+영업활동 일정관리 : 업무보고 등록/수정  /salesActivity/salesActivityReportSave
+- 입력 파라미터
+
+
+	 sa_type          : 활동유형 코드
+	 user_cd          : 담당(사원)ID
+	 dept_cd          : 담당 부서
+	 sa_sdate         : 업무일자 시작
+	 sa_edate         : 업무일자 종료
+	 sa_subject       : 제목
+	 sa_body          : 업무내용
+
+
+
+
+
+
+## 영업활동 현황 : 검색 리스트   /SalesActivity/salesActivityStatusList
+- 입력 파라미터
+	dept_cd			: 매출조직
+	user_cd			: 영업담당ID
+	sa_type			: 활동유형
+	sa_edate		: 활동기간 시작
+	sa_sdate		: 활동기간 종료
+
+- 출력 데이터
+
+    SA_CD			: 일정관리PK ( T_SALES_ACTIVITY )
+    SA_SDATE		: 활동일자
+    SA_TYPE			: 활동유형 코드
+    SA_TYPE_NM		: 활동유형
+    DEPT_NM			: 활동조직
+    USER_NM			: 활동담당
+    SA_SUBJECT		: 거래처/활동제목
+    USER_CD			: 활동담당ID
+    DEPT_CD			: 활동조직 코드
+    KM_NMS			: 고객담당키맨
+    SA_CNCT_NM		: 접촉유형
+    SA_BODY			: 활동결과
+    CMT_YN			: 코멘트 대상여부
+    PJT_CD			: 프로젝트PK ( T_PROJECT )
+    SA_COMMENT		: 코멘트 내용
+
+
+
+
+## 영업활동 현황 : 상세화면
+
+    =>  비계획실적/업무보고 상세내용 팝업 과 동일함
+
+
+
+
+
+
+
+## 영업활동 현황 : 활동 미등록자 버튼 팝업   /salesActivity/popupNonActivityUser
+
+- 입력 파라미터
+	sa_edate		: 활동기간 시작
+	sa_sdate		: 활동기간 종료
+
+- 출력 데이터
+    UP_DEPT_NM	    : 활동팀
+    DEPT_NM		    : 활동파트
+    USER_NM		    : 활동담당자
+
+
+
+
+
+
+## 영업활동 코멘트 관리 : 리스트   /salesActivity/salesActivityCommentList
+
+- 입력 파라미터
+	sa_sdate	: 활동일자 시작
+	sa_edate	: 활동일자 종료
+
+	deptGroup	: 매출조직
+	bizGroup	: 매출조직 상위부서
+	user_cd		: 영업담당
+	cust_cd		: 거래처
+	sa_mgr		: 관리자
+	cmt_yn		: 코멘트 등록
+
+
+
+- 출력 데이터
+	SA_CD		: 영업활동 PK (T_SALES_ACTIVITY )
+	GB			: 하드코딩 데이터 1 
+	SA_SDATE	: 활동일자
+	DEPT_CD		: 활동조직
+	COL1		: 활동조직
+	CUST_CD		: 거래처 코드
+	COL2		: 거래처
+	COL3		: 활동결과
+	COL5		: 코멘트 내용
+	PJT_CD		: 프로젝트PK ( T_PROJECT )
+	SA_TYPE		: 활동유형 코드
+
+
+
+
+
+
+## 영업활동 모니터링 : 검색 리스트   /salesActivity/salesActiveMonitoringList
+
+- 입력 파라미터
+	sa_type			: 활동유형
+	deptGroup		: 매출조직
+	bizGroup		: 매출조직 상위부서
+	user_cd			: 영업담당ID
+	base_ym			: 활동년월(yyyymm)
+
+
+
+
+- 출력 데이터	   
+    COMPANY_CD		: 회사코드
+    UP_DEPT_NM		: 영업팀
+    DEPT_NM			: 영업파트
+    USER_NM			: 영업담당
+    SUM_1			: 활동계획
+    SUM_2			: 계획실적
+    SUM_3			: 계획활동율
+    SUM_4			: 비계획실적
+    SUM_5			: 총활동실적
+    SUM_6			: 총 키맨
+    SUM_7			: 핵심 키맨
+    SUM_8			: 면담 핵심키맨
+    SUM_9			: 면담율
+    SUM_10			: 총대상건수
+    SUM_11			: 코멘트건수
+    SUM_12			: 코멘트율
+
+   
+
+
+
+## 업무보고 현황 : 리스트   /salesActivity/salesActivityWorkList
+
+- 입력 파라미터
+	deptGroup		: 매출조직
+	bizGroup		: 매출조직 상위부서
+	user_cd			: 영업담당
+	sa_sdate		: 활동일자 시작
+	sa_edate		: 활동일자 종료
+
+
+
+- 출력 데이터	   
+    SA_SDATE		: 업무일자
+	SA_COMMENT		: 코멘트 내용
+	SA_CNCT_NM		: 접촉유형
+	SA_TYPE_NM		: 활동유형
+	SA_CD			: 일정관리PK ( T_SALES_ACTIVITY )
+	DEPT_CD			: 활동조직코드
+	DEPT_NM			: 활동조직
+	CMT_YN			: 코멘트 대상여부
+	PJT_CD			: 프로젝트PK ( T_PROJECT )
+	USER_NM			: 업무담당
+	SA_SUBJECT		: 업무매용
+
+
+
+
+## 영업활동 현황 : 상세화면
+
+    =>  비계획실적/업무보고 상세내용 팝업 과 동일함
+
+
+
+[영업활동 관리]
+
+
+
+
+
+
+
+[제품문의 사후조치]
+
+
+## 제품문의/사후조치
+
+
+
+## 제품문의/사후조치 : 리스트 /ProductInquiry/inquiryList
+
+- 입력 파라미터
+	inq_rsdate      : 접수일 시작  (필수: 2017-01-02)
+	inq_redate      : 접수일 종료  (필수: 2017-01-02)
+	user_cd         : 영업담당ID
+	inq_type        : 문의유형
+	inq_chnl        : 문의경로
+	inq_status      : 진행사항
+	dstr_type       : 유통구조
+	deptGroup       : 매출조직 부서
+	bizGroup        : 매출조직 상위부서
+	pi_state        : 제품문의/사후조취 구분 ( 사후조취 : acfterAction)
+
+- 출력 데이터	   
+    INQ_CD			 : 제품문의PK ( T_PRDT_INQRY )
+    INQ_RDATE		 : 접수일
+    INQ_CHNL		 : 문의경로
+    INQ_RUSER_CD	 : 접수담당자ID
+    INQ_RUSER_NM	 : 접수담당자 
+    USER_CD			 : 사후 조취자ID
+    USER_NM			 : 사후 조취자
+    INQ_STATUS		 : 진행사항
+    INQ_USER_NM		 : 문의자
+    INQ_TYPE		 : 문의유형
+    INQ_ITEM_NM		 : 문의제품
+    POST_ARNG		 : 조취내역
+    DSTR_TYPE		 : 유통구조
+
+
+
+
+## 제품문의/사후조치 : 리스트 상단 건수	/ProductInquiry/inquiryRegCnt
+
+- 입력 파라미터
+	inq_rsdate      : 접수일 시작  (필수: 2017-01-02)
+	inq_redate      : 접수일 종료  (필수: 2017-01-02)
+	user_cd         : 영업담당ID
+	inq_type        : 문의유형
+	inq_chnl        : 문의경로
+	inq_status      : 진행사항
+	dstr_type       : 유통구조
+	deptGroup       : 매출조직 부서
+	bizGroup        : 매출조직 상위부서
+
+- 출력 데이터	  
+	ENDS			: 회신 후 대기
+	WAITING			: 상담진행 
+	PROGRESS		: 상담종료 
+	DROPS			: Drop 
+
+
+
+
+
+
+## 제품문의/사후조치 : 상세내용 	/ProductInquiry/inquiryDetail
+
+- 입력 파라미터
+	inq_cd			: 문의제품 항목PK ( T_PRDT_INQRY )
+
+
+- 출력 데이터	  
+	INQ_CD				: 제품문의PK ( T_PRDT_INQRY )
+	INQ_CHNL			: 문의경로 코드
+	INQ_CHNL_NM			: 문의경로
+	INQ_TYPE			: 문의유형 코드
+	INQ_TYPE_NM			: 문의유형
+	INQ_RUSER_CD		: 접수담당자ID
+	INQ_RUSER_NM		: 접수담당자 
+	USER_CD				: 사후 조취자ID
+	USER_NM				: 사후 조취자
+	DEPT_CD				: 사후 조취자 부서 코드
+	DEPT_NM				: 사후 조취자 부서
+	INQ_RDATE			: 접수일
+	INQ_DDATE			: 전달일
+	DLV_USER_CD			: 전달받은자ID
+	DLV_USER_NM			: 전달받은자이름
+	DSTR_TYPE			: 유통구조 코드
+	DSTR_TYPE_NM		: 유통구조
+	INQ_STATUS			: 진행사항 코드
+	INQ_STATUS_NM		: 진행사항
+	INQ_USER_NM			: 문의자 이름
+	INQ_EMAIL			: 문의자 이메일
+	INQ_MPHONE			: 문의자 핸드폰
+	POST_ARNG			: 조취내역
+	INQ_CONTENTS		: 문의내용
+	NAT_CD				: 국가코드
+	USE_YN				: 사용유무
+
+
+
+
+
+
+## 제품문의/사후조치 : 상세내용 문의제품 항목	/ProductInquiry/inquiryItemList
+
+- 입력 파라미터
+	inq_cd			: 문의제품 항목PK ( T_PRDT_INQRY_ITEM )
+
+
+- 출력 데이터	  
+	INQ_CD			: 문의제품항목PK (T_PRDT_INQRY_ITEM)
+	SEQ_NO			: 순번
+	INQ_ITEM_NM		: 항목명
+
+
+
+
+
+## 제품문의 : 상세내용 문의제품 등록	/ProductInquiry/inquiryRegNew
+
+	- 입력 파라미터
+		inq_cd        :  제품문의PK ( T_PRDT_INQRY )
+		inq_status    :  진행사항
+		inq_chnl      :  문의경로 코드
+		inq_type      :  문의유형 코드
+		inq_ruser_cd  :  접수담당자ID
+		user_cd       :  사후 조취자ID- 출력 데이터	  
+		dept_cd       :  사후 조취자 부서 코드
+		dlv_user_cd   :  전달자ID
+		dstr_type     :  유통구조 코드
+		inq_user_nm   :  문의자 이름
+		inq_email     :  문의자 이메일
+		inq_mphone    :  문의자 핸드폰
+		post_arng     :  조취내역
+		inq_contents  :  문의내용
+		nat_cd        :  국가코드
+		inq_addr      :  문의 주소
+		inq_company   :  문의 회사
+
+
+
+
+
+## 제품문의 : 중문 엑셀등록 (csv업로드) : 	/ProductInquiry/csvUpload
+
+	- 입력 파라미터
+	  => 해당 파일양식 업로드  ( multipart/form-data 전송)
+
+
+## 제품문의 : 국문 엑셀등록 (xlsx업로드) : /ProductInquiry/xlsxUpload
+
+	- 입력 파라미터
+	  => 해당 파일양식 업로드  ( multipart/form-data 전송)
+
+
+
+
+
+
+
+[제품문의 사후조치]
+
+
+
+
+
+
+[Sample 요청 관리]
+
+
+## Sample 요청 : 리스트	/SampleRequest/sampleRequestList
+## Sample 접수 : 리스트	/SampleRequest/sampleReviewList
+## Sample 검토 : 리스트	/SampleRequest/sampleAcceptList
+- 입력 파라미터
+
+		mode         : 샘플단계 샘플 : 요청R/접수A/검토V 구분   ( 필수   )
+		sdate        : 샘플요청일 시작 ( 필수 )
+		edate        : 샘플요청일 종료 ( 필수 )
+		deptGroup    : 매출조직
+		bizGroup     : 매출조직 상위부서
+		cust_nm      : 거래처명
+		user_cd      : 거래처 코드 
+		item_nm      : 품목명
+		smp_status   : 진행상태
+		dstr_chn     : 유통구조
+		
+		user_nm      : - 사용안함
+		user_cd      : - 사용안함
+		srqdate      : - 사용안함
+		erqdate      : - 사용안함
+		srrdate      : - 사용안함
+		errdate      : - 사용안함
+		rruser_cd    : - 사용안함
+
+
+
+- 출력 데이터	  
+	SMR_FBDATE		: 요청반려일
+	QRUSER_NM		: 영업담당
+	QRUSER_CD		: 영업담당ID
+	SMR_PODATE		: 발주예정일
+	RRUSER_NM		: 접수담당
+	RRUSER_CD		: 접수담당ID
+	SMR_ORDERDATE   : 초도선적요청일
+	SMP_STATUS_NM   : 진행상태
+	RAUSER_NM		: 검토자
+	RAUSER			: 검토자ID
+	SMR_CD			: 샘플요청코드   
+	SMR_RADATE		: 검토승인일
+	SMP_STATUS		: 진행상태 
+
+	EUSER_NM		: 거래처
+	EUSER_CD		: 거래처 코드   
+	SMR_PRDATE		: 샘플수령일
+	PROJECT_POSS	: 프로젝트 가능성
+	SMR_RQDATE		: 요청일
+	ITEM_NM			: 샘플품목  
+	ITEM_CD			: 샘플품목 코드
+	SHIP_PDATE		: 배송[선적]일
+ 
+	PRDT_PDATE		: 완료예정일
+	SMR_BKDATE		: 요청철회일
+	SMR_CHASU		: 차수
+	SMR_RRDATE		: 접수일
+	COMPANY_CD		: 회사코드
+	QDEPT_NM		: 매출조직
+	QDEPT_CD		: 매출조직 코드
+
+	PRDT_PDATE2		: 완료예정일2
+	DELAY_COMMENT   : 지연사유
+	DETAIL_COMMENT  : 상세 코멘트
+
+
+
+
+
+## Sample 요청 : 상세	/SampleRequest/sampleRequestView
+- 입력 파라미터
+
+	smr_cd         : 샘플요청코드
+	smr_chasu      : 차수
+
+
+
+
+- 출력 데이터	  
+
+
+
+REQ_DETAIL:{
+
+	PURP_DECO		:샘플목적Deco
+	SMR_FBDATE		:요청반려일
+	QRUSER_NM		:영업담당
+	QRUSER_CD		:Sysadmin
+	REQ_REPAIR_YN	:N
+	PUR_OQTY		:수량
+	SMR_TYPE_NM		:샘플유형
+	SMR_TYPE		:샘플유형 코드
+	SMR_PODATE		:발주예정일
+	REMARK_CMT		:하단 특이사항
+	SHIP_TO_ADRS	:배송지
+	SMR_RFDATE		:
+	SMP_RQTY		:예상발주수량
+	ITEM_CD			:샘플품목 코드
+	SMR_RQUSER		:
+	SMR_RQUSER_NM	:
+
+	RRUSER_NM		:접수담당
+	SMR_RFUSER_NM	:
+	SMR_FBUSER_NM	:
+	SMR_FBUSER		:
+	SMR_ORDERDATE	:초도선적 요청일
+	PURP_COLOR		:샘플목적Color 
+	PURP_TEST		:샘플목적Y/N (Test)
+	SMP_STATUS_NM	:진행상태
+	TRACKING_NUM	:
+	SMR_PRUSER_NM	:
+	SMR_PRUSER		:
+	PACKING_INFO_NM	: PACKING_INFO
+	REQ_RETURN_YN	:N
+	REQ_REVIEW_YN	:N
+	SMR_CD			:샘플요청코드
+	SMR_CHASU		:차수
+	SMR_RADATE		:검토승인일
+	ARTWORK_NO		:인쇄필름번호
+	SMP_STATUS		:진행상태
+	PACKING_INFO	:PKGINFO_100
+	PRDT_YN			:N
+	EUSER_NM		:고객사명
+	EUSER_CD		:고객사ID
+	SMR_PRDATE		:샘플수령일
+	PROJECT_POSS	:프로젝트 가능성
+	SMR_RQDATE		:샘플요청일
+	SMR_RFUSER		:
+	ITEM_NM			:제품명
+	SHIP_PDATE		:배송[선적]일
+	RRUSER_CD		:접수담당ID
+	PRDT_PDATE		:완료예정일
+	SMR_CRDATE		:샘플완료요청일
+	SMR_BKDATE		:요청철회일
+	SMR_RRDATE		:접수일
+	SMR_BKUSER_NM	:
+	SMR_BKUSER		:
+	SMR_RRUSER_NM	:
+	SMR_RRUSER		:
+	DROP_YN			:N
+	COMPANY_CD		:회사코드
+	USE_YN			:Y
+	SMR_RAUSER_NM	:
+	SMR_RAUSER		:
+	QDEPT_NM		: 매출조직
+	QDEPT_CD		: 매출조직 코드
+}
+
+
+PRD_INFO:{
+
+	ARLS_COLOR		:
+	ARLS_SILICON	:
+	CAP_SAFETYSEAL	:
+	OFFSET_COATING	:
+	CAP_OUTERCOLOR	:
+	EXTR_MB			:
+	NECK_ORIFICE	:
+	HS_FILMNO		:
+	NECK_COLOR		:
+	EXTR_LENGTH		:
+	CAP_INNERCOLOR	:
+	EXTR_COLOR		:
+	EXTR_LAYER		:
+	OFFSET_PASS		:
+	HS_PASS			:
+	CAP_SPEC		:
+	CAP_ORIFICE		:
+	EXTR_DIAMETER	:
+	SS_FILMNO		:
+	OFFSET_FILMNO	:
+	CAP_SUPPLIER	:
+	CAP_DECO		:
+	SS_PASS			:
+	NECK_MOLD		:
+	NECK_MB			:
+	
+	
+}
+
+
+
+
+
+PUMP_PART_LIST
+CODE_ID     : SMRPN_110,  CODE_LANG     : 버튼, SMR_INJECT     : 1사출색상,  SMR_CODE     : 버튼1규격,  VALUE_1     : PUMP,  SMR_MATERIAL     : 버튼1사출재질,  SMR_MOLDNO     :   SMR_COAT     :     SMR_SS     :   SMR_HSTMPD     :   CODE_NM     : 버튼,  SMR_HSTMPC     :
+CODE_ID     : SMRPN_120,  CODE_LANG     : 버튼금속,  SMR_SS     :   SMR_HSTMPD     :   CODE_NM     : 버튼금속,  SMR_HSTMPC     : }
+CODE_ID     : SMRPN_130,  CODE_LANG     : 스템
+CODE_ID     : SMRPN_140,  CODE_LANG     : 노즐
+CODE_ID     : SMRPN_150,  CODE_LANG     : 실린더
+CODE_ID     : SMRPN_160,  CODE_LANG     : 실캡
+CODE_ID     : SMRPN_170,  CODE_LANG     : 하우징
+CODE_ID     : SMRPN_180,  CODE_LANG     : Pump Collar, SMR_INJECT     : Pump Collar1사출색상,  SMR_CODE     : Pump Collar1규격,  VALUE_1     : PUMP,  SMR_MATERIAL     : Pump Collar1사출재질,  SMR_MOLDNO     :   SMR_COAT     :   SMR_SS     :   SMR_HSTMPD     :   CODE_NM     : Pump Collar,  SMR_HSTMPC     :
+CODE_ID     : SMRPN_190,  CODE_LANG     : Pump Shoulder,SMR_INJECT     : Pump Shoulder1사출색상,  SMR_CODE     : Pump Shoulder1규격,  VALUE_1     : PUMP,  SMR_MATERIAL     : Pump Shoulder1사출재질,  SMR_MOLDNO     :   SMR_COAT     : Pump Shoulder1코팅,    SMR_SS     : Pump Shoulder1실크인쇄사양,  SMR_HSTMPD     :   CODE_NM     : Pump Shoulder,  SMR_HSTMPC     : Pump Shoulder1박인쇄
+CODE_ID     : SMRPN_200,  CODE_LANG     : Gasket
+CODE_ID     : SMRPN_210,  CODE_LANG     : 체크밸브
+CODE_ID     : SMRPN_220,  CODE_LANG     : Undercap
+CODE_ID     : SMRPN_230,  CODE_LANG     : 스프링
+
+
+PUMP_PKG
+CMT     :
+
+
+PUMP_REMARK_CMT
+CMT     : Pump 특이사항
+
+
+
+
+
+BOTTLE_PART_LIST
+CODE_ID     : SMRPN_310,  CODE_LANG     : Shoulder, SMR_INJECT     : Shoulder3사출색상,  SMR_CODE     : Shoulder1규격,  VALUE_1     : BOTTLE,  SMR_MATERIAL     : Shoulder2사출재질,  SMR_MOLDNO     :   SMR_COAT     : Shoulder4코팅,   SMR_SS     : Shoulder8실크인쇄사양,  SMR_HSTMPD     :   CODE_NM     : Shoulder,  SMR_HSTMPC     : Shoulder6박인쇄
+CODE_ID     : SMRPN_320,  CODE_LANG     : Outer,    SMR_INJECT     : Outer3사출색상,  SMR_CODE     : Outer규격,  VALUE_1     : BOTTLE,  SMR_MATERIAL     : Outer2사출재질,  SMR_MOLDNO     :   SMR_COAT     : Outer5코팅,   SMR_SS     : Outer9실크인쇄사양,  SMR_HSTMPD     :   CODE_NM     : Outer,  SMR_HSTMPC     : Outer7박인쇄
+CODE_ID     : SMRPN_330,  CODE_LANG     : Inner,    SMR_INJECT     : Inner3사출색상,  SMR_CODE     : Inner규격,  VALUE_1     : BOTTLE,  SMR_MATERIAL     : Inner3사출재질,  SMR_MOLDNO     :   SMR_COAT     : Inner5코팅,   SMR_SS     : Inner0실크인쇄사양,  SMR_HSTMPD     :   CODE_NM     : Inner,  SMR_HSTMPC     : Inner7박인쇄
+CODE_ID     : SMRPN_340,  CODE_LANG     : 피스톤
+CODE_ID     : SMRPN_350,  CODE_LANG     : Base,     SMR_INJECT     : Base9사출색상,  SMR_CODE     : Base9규격,  VALUE_1     : BOTTLE,  SMR_MATERIAL     : Base9사출재질,  SMR_MOLDNO     :   SMR_COAT     : Base9코팅,    SMR_SS     : Base9실크인쇄사양,  SMR_HSTMPD     :   CODE_NM     : Base,  SMR_HSTMPC     : Base9박인쇄
+CODE_ID     : SMRPN_360,  CODE_LANG     : Gasket
+
+
+BOTTLE_PKG
+CMT     :
+
+
+BOTTLE_REMARK_CMT
+CMT     : Botte특이사항
+
+
+
+
+
+
+OVERCAP_PART_LIST
+CODE_ID     : SMRPN_410,  CODE_LANG     : 캡장식/금속
+CODE_ID     : SMRPN_420,  CODE_LANG     : Over Cap  , SMR_INJECT     : Over Cap1사출색상,  SMR_CODE     : Over Cap1규격,  VALUE_1     : OVERCAP,  SMR_MATERIAL     : Over Cap1사출재질,  SMR_MOLDNO     :   SMR_COAT     : Over Cap1코팅,   SMR_SS     : Over Cap1실크인쇄사양,  SMR_HSTMPD     :   CODE_NM     : Over Cap,  SMR_HSTMPC     : Over Cap1박인쇄},
+CODE_ID     : SMRPN_430,  CODE_LANG     : Gasket
+
+
+OVERCAP_PKG
+CMT     :
+
+
+OVERCAP_REMARK_CMT
+CMT     : Over Cap특이사항
+
+
+
+
+품목찾기 팝업 - 대분류 항목명 : /Popup/product_item_level1_Grp
+
+- 입력 파라미터
+    없음
+
+- 출력 데이터	  
+    ITEM_LEVEL1  : 대분류 항목
+
+
+
+품목찾기 팝업 - 검색 : /popup/product_item
+
+- 입력 파라미터
+    item			: 품목코드/명
+	item_level1		: 품목대분류
+
+
+- 출력 데이터	  
+
+      ITEM_CD		: 품목코드
+      ITEM_NM		: 품목명
+      ITEM_LEVEL1	: 대분류
+      ITEM_LEVEL2	: 중분류
+      ITEM_LEVEL3	: 소분류
+
+
+
+
+
+## Sample 요청 : 신규등록 	/SampleRequest/sampleRequestNew
+	- 입력 파라미터
+	    
+		// 기본정보
+		smr_cd			: 샘플요청PK(T_SAMPLE_REQUEST)
+		smr_chasu		: 차수
+		smr_type		: 샘플유형 코드
+		qruser_cd		: 영업담당ID
+		qdept_cd		: 영업부서
+		euser_cd		: 고객사ID
+		euser_nm		: 고객사
+		item_cd			: 샘플품목 코드
+		item_nm			: 샘플품목
+		smp_rqty		: 예상발주수량
+		smp_status		: 진행상태
+		purp_color		: 샘플목적Color 
+		purp_deco		: 샘플목적Deco
+		purp_test		: 샘플목적Y/N (Test)
+		artwork_no		: 인쇄필름번호
+		packing_info	: Packing info
+		ship_to_adrs	: 배송지
+		remark_cmt		: 하단 특이사항
+		pur_oqty		: 수량
+		smr_crdate		: 샘플완료요청일
+		smr_podate		: 발주예정일
+		smr_orderdate	: 초도선적 요청일
+		project_poss	: 프로젝트 가능성
+
+
+		// 제품정보
+		extr_diameter	 : 압출  구경
+		extr_layer		 : 압출  겹수
+		extr_length		 : 압출  길이
+		extr_color		 : 압출  색상
+		extr_mb			 : 압출  M/B
+		neck_mold		 : 사출  금형                     
+		neck_orifice	 : 사출  유출구
+		neck_color		 : 사출  색상
+		neck_mb			 : 사출  M/B
+		arls_color		 : Airless  노출색상
+		arls_silicon	 : Airless  실리콘
+		offset_filmno	 : 옵셋  필름No
+		offset_pass		 : 옵셋  도수
+		offset_coating	 : 옵셋  코팅
+		ss_filmno		 : 실크  필름No
+		ss_pass			 : 실크  도수
+		hs_filmno		 : 박  필름No
+		hs_pass			 : 박  도수
+		cap_spec		 : 갭/조립  종류
+		cap_orifice		 : 갭/조립  유출구
+		cap_outercolor	 : 갭/조립  외캡색상
+		cap_innercolor	 : 갭/조립  내캡색상
+		cap_deco		 : 갭/조립  후가공
+		cap_supplier	 : 갭/조립  공급처
+		cap_safetyseal	 : 갭/조립  리드실
+
+
+
+		// 배열처리 상세상목 pump
+        pump_id			: 항목명ID ( 화면상에 세로항목 )
+		pump_code		: 규격	   
+		pump_material	: 사출재질
+		pump_inject		: 사출색상
+		pump_coat		: 코팅/증착사양
+		pump_hstmpc		: 박인쇄
+		pump_ss			: 실크인쇄사양
+		pump_moldno		: 설비번호
+		pump_pkg		: 포장방법/체결여부
+		pump_rmt		: 특이사항
+
+		// 배열처리 상세상목 pump
+        bottle_id		: 항목명ID ( 화면상에 세로항목 )
+		bottle_code		: 규격	   
+		bottle_material	: 사출재질
+		bottle_inject	: 사출색상
+		bottle_coat		: 코팅/증착사양
+		bottle_hstmpc	: 박인쇄
+		bottle_ss		: 실크인쇄사양
+		bottle_moldno	: 설비번호
+		bottle_pkg		: 포장방법/체결여부
+		bottle_rmt		: 특이사항
+		
+		// 배열처리 상세상목 overcap
+        overcap_id			: 항목명ID ( 화면상에 세로항목 )
+		overcap_code		: 규격	   
+		overcap_material	: 사출재질
+		overcap_inject		: 사출색상
+		overcap_coat		: 코팅/증착사양
+		overcap_hstmpc		: 박인쇄
+		overcap_ss			: 실크인쇄사양
+		overcap_moldno		: 설비번호
+		overcap_pkg			: 포장방법/체결여부
+		overcap_rmt			: 특이사항
+
+
+
+
+[Sample 요청 관리]
+
+
+
+
+
+
+
+[Sample 제작 관리]
+
+endUser 팝업 - 검색 : /popup/endUserList
+- 입력 파라미터
+	euser_nm         : endUser 명
+	euser_eng_nm     : endUser 영문명
+	euser_cd         : endUser ID
+
+
+
+- 출력 데이터	  
+	EUSER_NM		: endUser 명
+	EUSER_ENG_NM	: endUser 영문명
+	EUSER_CD		: endUser ID
+
+
+
+
+
+
+
+
+Sample 제작관리 : 의뢰/배송|승인|완료 - 리스트 /SampleManage/sampleManageList
+
+- 입력 파라미터
+
+	deptGroup    : 매출조직
+	bizGroup     : 매출조직 상위부서
+	dstr_type    : 유통구조
+	user_nm      : 영업담당
+	user_cd      : 영업담당ID
+	sdate        : 접수일 시작
+	edate        : 접수일 종료
+	s_prdt_rdate : 제작의뢰일
+	e_prdt_rdate : 제작의뢰일 
+	s_prdt_adate : 의뢰승인일
+	e_prdt_adate : 의뢰승인일
+	cust_nm      : 거래처명
+	user_cd      : 거래처 코드 
+	biz_type     : 사업유형
+	muser_nm     : 제작담당명
+	muser_cd     : 제작담당
+	smp_status   : 진행상태
+
+	prdt_psblt   : 양산가능성 
+	end_user_nm  : end_user명
+	end_user_cd  : end_user id
+	pjt_nm       : 프로젝트명
+	pjt_cd       : 프로젝트
+	item_type    : 품목유형
+	prdt_auser   : --알수없음
+	smp_state    : --알수없음
+
+
+
+
+- 출력 데이터	  
+
+    SMP_CD				: 샘플PK ( T_SAMPLE )
+    SMP_CHASU			: 샘플차수
+    ITEM_CD				: 샘플품목
+    ITEM_NM				: 샘플품목명
+    CUST_CD				: 거래처
+    CUST_NM				: 거래처명
+    EUSER_CD			: end_user id
+	EUSER_NM			: end_user명
+    DSTR_TYPE			: 유통구조
+    DSTR_TYPE_NM		: 유통구조명
+    DEPT_CD				: 매출조직
+    DEPT_NM				: 매출조직명
+    USER_CD				: 영업담당
+    USER_NM				: 영업담당자명
+    MUSER_CD			: 제작담당자
+    MUSER_NM			: 제작담당자명
+    BIZ_TYPE			: 사업유형
+    BIZ_TYPE_NM			: 사업유형명
+    SMP_STATUS			: 진행상태
+    SMP_STATUS_NM		: 진행상태명
+    PRDT_PSBLT			: 양산가능성
+    PRDT_PSBLT_NM		: 양산가능성명
+    SMP_RDATE			: 접수일
+    PRDT_RCDATE			: 제품런칭일
+    CMPT_RDATE			: 완료요청일
+    PRDT_RDATE			: 제작의뢰일
+    PRDT_ADATE			: 의뢰승인일
+    PRDT_PDATE			: 완료예정일
+    PRDT_CDATE			: 제작완료일
+    SHIP_PDATE			: 배송[선적]일
+    FILM_FDATE			: 필름전달예정일
+    FILM_RDATE			: 사양확정일
+    PJT_CD				: 프로젝트
+    PJT_NM				: 프로젝트명
+    ITEM_TYPE			: 품목유형
+    ITEM_TYPE_NM		: 품목유형명
+    BAD_AR_YN			: 악성업체유무
+	
+
+
+
+
+
+Sample 제작관리 : 의뢰/배송|승인|완료 - 상세  /SampleManage/selectSampleDetail
+- 입력 파라미터
+
+    smp_cd				:  샘플PK ( T_SAMPLE )
+    smp_chasu			:  샘플차수
+    
+
+
+- 출력 데이터	 
+
+	SMP_CD				: 샘플PK ( T_SAMPLE )
+    SMP_CHASU			: 샘플차수
+    ITEM_CD				: 샘플품목
+    ITEM_NM				: 샘플품목명
+    PJT_CD				: 프로젝트
+    PJT_NM				: 프로젝트명
+    CUST_CD				: 거래처
+    CUST_NM				: 거래처명
+    EUSER_CD			: end_user id
+    EUSER_NM			: end_user명
+    BIZ_TYPE			: 사업유형
+    BIZ_TYPE_NM			: 사업유형명
+    DSTR_TYPE			: 유통구조
+    DSTR_TYPE_NM		: 유통구조명
+    USER_CD				: 영업담당
+    USER_NM				: 영업담당자명
+    DEPT_CD				: 매출조직
+    DEPT_NM				: 매출조직명
+    CUST_SMP_CD			: 
+    MOLD_NO				: 
+    SMP_RQTY			: 제작의뢰 수량 
+    RUSER_NM			: 
+    MUSER_CD			: 제작담당자
+    MUSER_NM			: 제작담당자명
+    MDEPT_CD			: 
+    MDEPT_NM			: 
+    SMP_STATUS			: 진행상태
+    SMP_STATUS_NM		: 진행상태명
+    PRDT_PSBLT			: 양산가능성
+    PRDT_PSBLT_VALUE_NM	: 
+    PRDT_PSBLT_NM		: 양산가능성명
+    SMP_RDATE			: 접수일
+    PRDT_RCDATE			: 제품런칭일
+    CMPT_RDATE			: 완료요청일
+    PRDT_RDATE			: 제작의뢰일
+    PRDT_RUSER			: 제작의뢰 담당
+    PRDT_RUSER_NM		: 제작의뢰 담당자명
+    PRDT_ADATE			: 의뢰승인일
+    PRDT_AUSER			: -- 알수없음
+    PRDT_AUSER_NM		: -- 알수없음
+    PRDT_PDATE			: 완료예정일
+    PRDT_CDATE			: 제작완료일 
+    PRDT_CUSER			: -- 알수없음
+    PRDT_CUSER_NM		: -- 알수없음
+    SHIP_PDATE			: 배송[선적]일
+    SHIP_PUSER			: -- 알수없음
+    SHIP_PUSER_NM		: -- 알수없음
+    SMP_SUMRY			: 특이사항
+    BASE_CRNY			: 기준통화  
+    EXCH_RATE			: 기준통화 단위
+    BASE_YR				: 기준통화 기준연도
+    SMP_QTY				: 제작수량
+    SMP_TYPE			: 샘플유형
+    SMP_TYPE_NM			: 샘플유형명
+    PRDT_CMT			: 필름전달예정일
+    FILM_FDATE			: 필름전달예정일
+    FILM_RDATE			: 사양확정일
+    FILM_RUSER_NM		: -- 알수없음
+    DROP_BTN_YN			: -- 알수없음
+    SMP_RE_YN			: -- 알수없음
+    SMP_MY_RE_YN		: -- 알수없음
+    SMP_RT_YN			: -- 알수없음
+    SMR_CD				: 샘플요청PK
+    SMR_CHASU			: -- 알수없음
+
+
+
+
+
+
+Sample 제작관리 : 신규등록  /SampleManage/newSmpinsert
+- 입력 파라미터
+	
+	item_cd				: 샘플품목
+	pjt_cd				: 프로젝트
+	cust_cd				: 거래처
+	euser_cd			: end_user id
+	biz_type			: 사업유형
+	dstr_type			: 유통구조
+	user_cd				: 영업담당
+	dept_cd				: 매출조직
+	cust_smp_cd			: 
+	mold_no				: 
+	smp_rqty			: 제작의뢰 수량 
+	smp_type			: 샘플유형
+	smp_status			: 진행상태
+	prdt_psblt			: 양산가능성
+	smp_rdate			: 접수일
+	prdt_rcdate			: 제품런칭일
+	cmpt_rdate			: 제작의뢰일
+	smp_sumry			: 특이사항
+	base_crny			: 기준통화
+	exch_rate			: 기준통화 단위
+	base_yr				: 기준통화 기준연도
+	reg_usr				: 
+	film_fdate			: 필름전달예정일
+
+
+
+
+
+
+
+
+
+Sample Drop 현황 : 리스트 /SampleManage/selectDropList
+
+- 입력 파라미터
+
+	deptGroup		: 매출조직
+	bizGroup		: 매출조직 상위부서
+	dstr_type		: 유통구조
+	user_nm			: 영업담당
+	user_cd			: 영업담당ID
+	sdate			: Drop일 시작
+	edate			: Drop일 종료
+	cust_nm			: 거래처명
+	user_cd			: 거래처 코드 
+	biz_type		: 사업유형
+	item_type		: 품목유형
+	smp_drtype		: Drop유형
+
+
+
+- 출력 데이터	  
+
+     COMPANY_CD		 : 회사코드
+     SMP_CD			 : 샘플PK ( T_SAMPLE )
+     SMP_CHASU		 : 샘플차수
+     SMP_DRDATE		 : Drop 일자
+     ITEM_CD		 : 샘플품목
+     ITEM_NM		 : 샘플품목명
+     CUST_CD		 : 거래처
+     CUST_NM		 : 거래처명
+     EUSER_CD		 : end_user id
+     EUSER_NM		 : end_user명
+     DSTR_TYPE		 : 유통구조
+     DSTR_TYPE_NM	 : 유통구조명
+     USER_CD		 : 영업담당
+     USER_NM		 : 영업담당자명
+     DEPT_CD		 : 매출조직
+     DEPT_NM		 : 매출조직명
+     SMP_DRTYPE		 : Drop 유형
+     SMP_DRTYPE_NM	 : Drop 유형명
+     BIZ_TYPE		 : 사업유형
+     BIZ_TYPE_NM	 : 사업유형명
+     ITEM_TYPE		 : 품목유형
+     ITEM_TYPE_NM	 : 품목유형명
+     SMP_RDATE		 : 접수일
+     CMPT_RDATE		 : 완료요청일
+     PRDT_CDATE		 : 제작완료일
+     SHIP_PDATE		 : 배송[선적]일
+     BAD_AR_YN		 : 악성업체유무
+     SMP_DRDESCRIPT	 : 샘플 상세내용
+
+
+
+
+Sample 제작관리 : 제작담당 셀렉트박스 /SampleManage/selectSucUserList
+
+- 출력 데이터	 
+    USER_CD				: 제작담당
+    USER_NM				: 제작담당자명
+
+
+Sample 제작관리 : 승인담당 셀렉트박스 /SampleManage/selectSuc2UserList
+
+- 출력 데이터	 
+    USER_CD				: 승인담당
+    USER_NM				: 승인담당자명
+
+
+
+
+Sample Drop 현황 : 상세  /SampleManage/selectDropDetail
+
+- 입력 파라미터
+
+    smp_cd				:  샘플PK ( T_SAMPLE )
+    smp_chasu			:  샘플차수
+    
+
+
+- 출력 데이터	 
+
+	SMP_CD				: 샘플PK ( T_SAMPLE )
+    SMP_CHASU			: 샘플차수
+    ITEM_CD				: 샘플품목
+    ITEM_NM				: 샘플품목명
+    PJT_CD				: 프로젝트
+    PJT_NM				: 프로젝트명
+    CUST_CD				: 거래처
+    CUST_NM				: 거래처명
+    EUSER_CD			: end_user id
+    EUSER_NM			: end_user명
+    BIZ_TYPE			: 사업유형
+    BIZ_TYPE_NM			: 사업유형명
+    DSTR_TYPE			: 유통구조
+    DSTR_TYPE_NM		: 유통구조명
+    USER_CD				: 영업담당
+    USER_NM				: 영업담당자명
+    DEPT_CD				: 매출조직
+    DEPT_NM				: 매출조직명
+    CUST_SMP_CD			: 
+    MOLD_NO				: 
+    SMP_RQTY			: 제작의뢰 수량 
+    RUSER_NM			: 
+    MUSER_CD			: 제작담당자
+    MUSER_NM			: 제작담당자명
+    MDEPT_CD			: 
+    MDEPT_NM			: 
+    SMP_STATUS			: 진행상태
+    SMP_STATUS_NM		: 진행상태명
+    PRDT_PSBLT			: 양산가능성
+    PRDT_PSBLT_VALUE_NM	: 
+    PRDT_PSBLT_NM		: 양산가능성명
+    SMP_RDATE			: 접수일
+    PRDT_RCDATE			: 제품런칭일
+    CMPT_RDATE			: 완료요청일
+    PRDT_RDATE			: 제작의뢰일
+    PRDT_RUSER			: 제작의뢰 담당
+    PRDT_RUSER_NM		: 제작의뢰 담당자명
+    PRDT_ADATE			: 의뢰승인일
+    PRDT_AUSER			: -- 알수없음
+    PRDT_AUSER_NM		: -- 알수없음
+    PRDT_PDATE			: 완료예정일
+    PRDT_CDATE			: 제작완료일 
+    PRDT_CUSER			: -- 알수없음
+    PRDT_CUSER_NM		: -- 알수없음
+    SHIP_PDATE			: 배송[선적]일
+    SHIP_PUSER			: -- 알수없음
+    SHIP_PUSER_NM		: -- 알수없음
+    SMP_SUMRY			: 특이사항
+    BASE_CRNY			: 기준통화  
+    EXCH_RATE			: 기준통화 단위
+    BASE_YR				: 기준통화 기준연도
+    SMP_QTY				: 제작수량
+    SMP_TYPE			: 샘플유형
+    SMP_TYPE_NM			: 샘플유형명
+    PRDT_CMT			: 필름전달예정일
+    FILM_FDATE			: 필름전달예정일
+    FILM_RDATE			: 사양확정일
+    FILM_RUSER_NM		: -- 알수없음
+    DROP_BTN_YN			: -- 알수없음
+    SMP_RE_YN			: -- 알수없음
+    SMP_MY_RE_YN		: -- 알수없음
+    SMP_RT_YN			: -- 알수없음
+    SMR_CD				: 샘플요청PK
+    SMR_CHASU			: -- 알수없음
+
+
+
+
+
+
+
+
+Sample 제작관리 :  샘플드롭 실행 /SampleManage/sampleDrop
+
+	입력 파라미터 없음
+
+	출력 파라미터 없음 
+
+
+Sample 제작관리 :  샘플 재작업 등록 /SampleManage/sampleRepair
+
+	- 입력 파라미터 
+	 smp_cd				: 샘플PK
+	 smp_chasu			: 샘플차수
+
+
+
+Sample 제작관리 :  샘플 자체 재작업 등록  /SampleManage/sampleMyRepair
+
+	- 입력 파라미터 
+	 smp_cd				: 샘플PK
+	 smp_chasu			: 샘플차수
+	 smp_qrtype			: 재작업 타입
+     smp_qrdescript     : 재작업 내용
+
+
+[Sample 제작 관리]
+
+
+
+
+
+
+
+
+[기회 및 수주관리]
+
+## 사업기회 관리 : 리스트 /Opportunity/opportunityList
+
+- 입력 파라미터
+
+
+	deptGroup		: 매출조직
+	bizGroup		: 매출조직 상위부서
+	dstr_type		: 유통구조
+	user_cd			: 영업담당ID
+	sdate			: 수주예정일 시작
+	edate			: 수주예정일 종료
+	user_cd			: 거래처 코드 
+	biz_type		: 사업유형
+	oppt_type		: 기회유형
+	oppt_status		: 진행상태
+	end_user_cd		: 마지막사용자id
+	item_type		: 품목유형
+	wso_psblt		: 수주가능성
+	bcust_cd		: 매출처
+	pjt_cd			: 프로젝트
+
+
+
+
+- 출력 데이터	  
+
+    OPPT_CD			: 사업기회관리PK ( T_OPPORTUNITY )
+    OPPT_TYPE		: 기회유형
+    OPPT_TYPE_NM	: 기회유형명
+    ITEM_CD			: 기회품목
+    ITEM_NM			: 기회품목명
+    ITEM_CD2		: 
+    BIZ_TYPE		: 사업유형
+    BIZ_TYPE_NM		: 사업유형명
+    ITEM_TYPE_NM	: 품목유형명
+    CUST_CD			: 거래처
+    CUST_NM			: 거래처명
+    BAD_AR_YN		: 악성업체유무
+    USER_CD			: 영업담당
+    USER_NM			: 영업담당명
+    DEPT_CD			: 매출조직
+    DEPT_NM			: 매출조직명
+    EUSER_CD		: end_user id
+    EUSER_NM		: end_user명
+    DSTR_TYPE		: 유통구조
+    DSTR_TYPE_NM	: 유통구조명
+    OPPT_STATUS		: 진행상태
+    OPPT_STATUS_NM	: 진행상태명
+    WSO_PSBLT		: 수주가능성
+    WSO_PSBLT_NM	: 수주가능성 등급명
+    WSO_PSBLT_VALUE	: -- 알수없음
+    BASE_CRNY		: 통화
+    EXCH_RATE		: 기준통화 단위
+    OPPT_QTY		: 수량
+    OPPT_UNIT_PRC	: 단가
+    AMOUNT			: 수주예정금액
+    KRW_AMOUNT		: 수주예정금액(KRW)
+    PJT_CD			: 프로젝트
+    PJT_NM			: 프로젝트명
+    WSO_PDATE		: 수주예정일
+    OPPT_SUMRY		: 수주 내용
+
+
+
+
+
+## 사업기회 관리 : 상세 /Opportunity/opportunityDetail
+
+- 입력 파라미터
+
+	oppt_cd			: 기회관리PK ( T_OPPORTUNITY )
+
+
+
+
+- 출력 데이터	  LIST
+
+    OPPT_CD			: 기회관리PK ( T_OPPORTUNITY )
+    OPPT_TYPE		: 기회유형
+    OPPT_TYPE_NM	: 기회유형명
+    ITEM_CD			: 기회품목
+    ITEM_NM			: 기회품목명
+    ITEM_CD2		: 
+    BIZ_TYPE		: 사업유형
+    BIZ_TYPE_NM		: 사업유형명
+    ITEM_TYPE_NM	: 품목유형명
+    CUST_CD			: 거래처
+    CUST_NM			: 거래처명
+    BAD_AR_YN		: 악성업체유무
+    USER_CD			: 영업담당
+    USER_NM			: 영업담당명
+    DEPT_CD			: 매출조직
+    DEPT_NM			: 매출조직명
+    EUSER_CD		: end_user id
+    EUSER_NM		: end_user명
+    DSTR_TYPE		: 유통구조
+    DSTR_TYPE_NM	: 유통구조명
+    OPPT_STATUS		: 진행상태
+    OPPT_STATUS_NM	: 진행상태명
+    WSO_PSBLT		: 수주가능성
+    WSO_PSBLT_NM	: 수주가능성 등급명
+    WSO_PSBLT_VALUE	: -- 알수없음
+    BASE_CRNY		: 통화
+    EXCH_RATE		: 기준통화 단위
+    OPPT_QTY		: 수량
+    OPPT_UNIT_PRC	: 단가
+    AMOUNT			: 수주예정금액
+    KRW_AMOUNT		: 수주예정금액(KRW)
+    PJT_CD			: 프로젝트
+    PJT_NM			: 프로젝트명
+    WSO_PDATE		: 수주예정일
+    OPPT_SUMRY		: 수주 내용
+
+	-- 출력 데이터 ITEM_LIST (아이템) 
+
+    OPPT_CD			 : 기회관리PK ( T_OPPORTUNITY )
+    ITEM_CD			 : 기회품목 (T_OPPORTUNITY)
+    ITEM_CD2		 : 기회품목 (T_OPPT_ITEM )
+    ITEM_NM			 : 기회품목명
+    BASE_CRNY		 : 통화
+    EXCH_RATE		 : 기준통화 단위
+    OPPT_QTY		 : 수량
+    OPPT_UNIT_PRC	 : 단가
+    AMOUNT			 : 수주예정금액
+    KRW_AMOUNT		 : 수주예정금액(KRW)
+    SALES_DATE		 : 남품예정일
+
+
+
+## 기회 및 수주관리 : 사업기회 관리 - 저장/수정 /SampleManage/opportunitySave
+
+- 입력 파라미터
+	item_cd         : 아이템PK
+	oppt_item_cd    : 아이템 품목코드
+	oppt_status     : 진행상태
+	wso_pdate       : 로그인 사용자ID
+	wso_psblt       : 수주가능성
+	oppt_sales_date : 남품예정일
+	oppt_cd     : 사업기회관리PK ( T_OPPORTUNITY )
+	pjt_cd      : 프로젝트
+	oppt_type   : 기회유형
+	biz_type    : 사업유형
+	dstr_type   : 유통구조
+	cust_cd     : 거래처 코드
+	euser_cd    : 마지막사용자
+	user_cd     : 영업담당
+	dept_cd     : 매출조직
+	oppt_sumry  : 수주 내용
+	base_crny   : 통화
+	exch_rate   : 기준통화 단위
+	rfc_cd      :  -- DB빈값
+	rfc_chasu   : -- DB빈값
+
+
+
+## 기기회 및 수주관리 : 사업기회 관리 - 드롭 /SampleManage/opportunityDrop
+	- 입력 파라미터
+
+	oppt_cd          : 사업기회관리PK ( T_OPPORTUNITY )
+	user_cd          : 영업담당
+	oppt_drdate      : 드롭날짜
+	oppt_drtype      : 드롭타입
+	oppt_drdescript  : 드롭내용
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 기회 및 수주관리 : 사업전망 관리 - 리스트 /Forecast/forecastList
+
+- 입력 파라미터
+	deptGroup    : 매출조직
+	bizGroup     : 매출조직 상위부서
+	dstr_type    : 유통구조
+	user_cd      : 영업담당ID
+	sdate        : 수주예정일 시작
+	edate        : 수주예정일 종료
+	user_cd      : 거래처 코드 
+	biz_type     : 사업유형
+	oppt_type    : 기회유형
+	oppt_status  : 진행상태
+	euser_cd     : 마지막사용자id
+	item_type    : 품목유형
+	wso_psblt    : 수주가능성
+	bcust_cd     : 매출처
+	pjt_cd       : 프로젝트
+	cnfm_yn      : 확정여부
+
+
+
+
+- 출력 데이터	  
+
+    OPPT_CD			: 기회관리PK ( T_OPPORTUNITY )
+    OPPT_TYPE		: 기회유형
+    OPPT_TYPE_NM	: 기회유형명
+    ITEM_CD			: 기회품목
+    ITEM_NM			: 기회품목명
+    ITEM_CD2		: 
+    BIZ_TYPE		: 사업유형
+    BIZ_TYPE_NM		: 사업유형명
+    ITEM_TYPE_NM	: 품목유형명
+    CUST_CD			: 거래처
+    CUST_NM			: 거래처명
+    BAD_AR_YN		: 악성업체유무
+    USER_CD			: 영업담당
+    USER_NM			: 영업담당명
+    DEPT_CD			: 매출조직
+    DEPT_NM			: 매출조직명
+    EUSER_CD		: end_user id
+    EUSER_NM		: end_user명
+    DSTR_TYPE		: 유통구조
+    DSTR_TYPE_NM	: 유통구조명
+    OPPT_STATUS		: 진행상태
+    OPPT_STATUS_NM	: 진행상태명
+    WSO_PSBLT		: 수주가능성
+    WSO_PSBLT_NM	: 수주가능성 등급명
+    WSO_PSBLT_VALUE	: -- 알수없음
+    BASE_CRNY		: 통화
+    EXCH_RATE		: 기준통화 단위
+    OPPT_QTY		: 수량
+    OPPT_UNIT_PRC	: 단가
+    AMOUNT			: 수주예정금액
+    KRW_AMOUNT		: 수주예정금액(KRW)
+    PJT_CD			: 프로젝트
+    PJT_NM			: 프로젝트명
+    WSO_PDATE		: 수주예정일
+    OPPT_SUMRY		: 수주 내용
+    CNFM_YN			: 확정여부
+      
+
+
+
+
+
+
+## 기회 및 수주관리 : 사업전망 관리 - 상세 /Forecast/forecastDetail
+
+- 입력 파라미터
+	oppt_cd      : 사업기회관리PK ( T_OPPORTUNITY )
+	base_y       : 전망 년
+	base_m       : 전말 월
+	sdate        : 수주예정일 시작
+	edate        : 수주예정일 종료
+	cnfm_yn      : 확정여부
+
+
+- 출력 데이터	  
+
+    OPPT_CD			: 기회관리PK ( T_OPPORTUNITY )
+    OPPT_TYPE		: 기회유형
+    OPPT_TYPE_NM	: 기회유형명
+    ITEM_CD			: 기회품목
+    ITEM_NM			: 기회품목명
+    ITEM_CD2		: 
+    BIZ_TYPE		: 사업유형
+    BIZ_TYPE_NM		: 사업유형명
+    ITEM_TYPE_NM	: 품목유형명
+    CUST_CD			: 거래처
+    CUST_NM			: 거래처명
+    BAD_AR_YN		: 악성업체유무
+    USER_CD			: 영업담당
+    USER_NM			: 영업담당명
+    DEPT_CD			: 매출조직
+    DEPT_NM			: 매출조직명
+    EUSER_CD		: end_user id
+    EUSER_NM		: end_user명
+    DSTR_TYPE		: 유통구조
+    DSTR_TYPE_NM	: 유통구조명
+    OPPT_STATUS		: 진행상태
+    OPPT_STATUS_NM	: 진행상태명
+    WSO_PSBLT		: 수주가능성
+    WSO_PSBLT_NM	: 수주가능성 등급명
+    WSO_PSBLT_VALUE	: -- 알수없음
+    BASE_CRNY		: 통화
+    EXCH_RATE		: 기준통화 단위
+    OPPT_QTY		: 수량
+    OPPT_UNIT_PRC	: 단가
+    AMOUNT			: 수주예정금액
+    KRW_AMOUNT		: 수주예정금액(KRW)
+    PJT_CD			: 프로젝트
+    PJT_NM			: 프로젝트명
+    WSO_PDATE		: 수주예정일
+    OPPT_SUMRY		: 수주 내용
+    CNFM_YN			: 확정여부
+      
+
+
+
+## 사업전망 관리 - 전망확정 /Forecast/forecastSave
+	- 입력 파라미터
+
+		oppt_cd       : 사업기회관리PK ( T_OPPORTUNITY )
+		oppt_status   : 진행상태
+		wso_pdate     : 수주예정일
+		wso_psblt     : 수주가능성
+		base_ym       : 기준년월
+
+
+
+
+
+## 기회 및 수주관리 : 수주대장 관리 - 리스트 /SalesOrder/salesOrderList
+
+  품목분류, Order구분  상단 20~30라인 참조
+
+
+- 입력 파라미터
+
+	year			: 기준 년
+	month			: 기준 월
+	salesBdate		: 납품현황
+	cnfm_yn			: --알수없음
+	wso_gubun		: 수주구분
+	so_cd			: 수주번호
+	so_seq			: --알수없음
+	lot_no			: 주문번호
+	deptGroup		: 매출조직
+	bizGroup		: 매출조직 상위부서
+	user_cd			: 영업담당ID
+	dstr_type		: 유통구조
+	cust_nm			: 거래처명 
+	user_cd			: 거래처 코드 
+	biz_type		: 사업유형
+	euser_nm		: 마지막사용자
+	euser_cd		: 마지막사용자id
+	item_type		: 품목유형
+	oppt_status		: 진행상태
+	bcust_nm		: 매출처명
+	bcust_cd		: 매출처
+	pjt_cd			: 프로젝트
+	ctlg_cd			: 카다로그
+	item_nm			: 품목유형/명
+	po_cd			: PO 번호
+	item_level1		: 품목분류1
+	item_level2		: 품목분류2
+	item_level3		: 품목분류3
+	ord_gb_l		: Order(대)
+	ord_gb_m		: Order(중)
+	ord_gb_s		: Order(소)
+	ord_cdate		: 접수일
+
+
+
+- 출력 데이터	  
+
+    SO_CD			: 수주번호
+    SO_SEQ			:--알수없음 
+    SO_SERL			: 
+    ORD_CDATE		: 접수일
+    LOT_NO			: 주문번호
+    ITEM_CD			: 기회품목
+    ITEM_CD2		: 
+    ITEM_NM			: 기회품목명
+    CUST_NM			: 거래처명
+    EUSER_CD		: end_user id
+    EUSER_NM		: end_user명
+    DEPT_CD			: 매출조직
+    DEPT_NM			: 매출조직명
+    USER_CD			: 영업담당ID
+    USER_NM			: 영업담당자명
+    ITEM_LEVEL1		: 품목분류1
+    ITEM_LEVEL2		: 품목분류2
+    ITEM_LEVEL3		: 품목분류3
+    DSTR_TYPE		: 유통구조
+    DSTR_TYPE_NM	: 유통구조명
+    BIZ_TYPE		: 사업유형
+    BIZ_TYPE_NM		: 사업유형명
+    ITEM_TYPE		: 품목유형
+    ITEM_TYPE_NM	: 품목유형명
+    SALES_PDATE		: 납기일
+    SALES_DDATE		: 확정납기일
+    SALES_ODATE		: 최종출고일
+    SO_STATUS		: 진행상태
+    SO_STATUS_NM	: 진행상태명
+    BASE_CRNY		: 통화
+    EXCH_RATE		: 기준통화 단위
+    CUST_SP_QTY		: 여유분
+    UNIT_PRICE		: 단가
+    QTY				: 계약현황 수량
+    AMOUNT			: 계약현황 계약금액
+    KRW_AMOUNT		: 계약현황 원화
+    SALES_WDATE		: 
+    WSO_QTY			: 수주현황 수량
+    WSO_AMOUNT		: 수주현황 계약금액
+    WSO_KRW_AMOUNT	: 수주현황 원화
+    OWH_QTY			: 납품현황 수량
+    OWH_AMOUNT		: 납품현황 계약금액
+    OWH_KRW_AMOUNT	: 납품현황 원화
+    PO_CD			: PO 번호
+    ORD_GB_L		: Order(대)
+    ORD_GB_L_NM		: Order(대)명
+    ORD_GB_M		: Order(중)
+    ORD_GB_M_NM		: Order(중)명
+    ORD_GB_S		: Order(소)
+    ORD_GB_S_NM		: Order(소)명
+    CTLG_CD			: 카다로그
+    PJT_CD			: 프로젝트
+    PJT_NM			: 프로젝트명
+    CLOSE_YN		: 강제마감 여부
+
+
+
+
+
+## 기회 및 수주관리 : 수주대장 관리 - 상세(기본정보 수주 계약 정보) /SalesOrder/salesOrderDetail
+
+- 입력 파라미터
+	so_cd			:  수주번호
+	so_seq			:  
+	lot_no			:  주문번호
+
+
+- 출력 데이터	  LIST  
+
+    SO_CD			: 수주번호
+    SO_SEQ			:--알수없음 
+    SO_SERL			: 
+    ORD_CDATE		: 접수일
+    LOT_NO			: 주문번호
+    ITEM_CD			: 기회품목
+    ITEM_CD2		: 
+    ITEM_NM			: 기회품목명
+    CUST_NM			: 거래처명
+    EUSER_CD		: end_user id
+    EUSER_NM		: end_user명
+    DEPT_CD			: 매출조직
+    DEPT_NM			: 매출조직명
+    USER_CD			: 영업담당ID
+    USER_NM			: 영업담당자명
+    ITEM_LEVEL1		: 품목분류1
+    ITEM_LEVEL2		: 품목분류2
+    ITEM_LEVEL3		: 품목분류3
+    DSTR_TYPE		: 유통구조
+    DSTR_TYPE_NM	: 유통구조명
+    BIZ_TYPE		: 사업유형
+    BIZ_TYPE_NM		: 사업유형명
+    ITEM_TYPE		: 품목유형
+    ITEM_TYPE_NM	: 품목유형명
+    SALES_PDATE		: 납기일
+    SALES_DDATE		: 확정납기일
+    SALES_ODATE		: 최종출고일
+    SO_STATUS		: 진행상태
+    SO_STATUS_NM	: 진행상태명
+    BASE_CRNY		: 통화
+    EXCH_RATE		: 기준통화 단위
+    CUST_SP_QTY		: 여유분
+    UNIT_PRICE		: 단가
+    QTY				: 계약현황 수량
+    AMOUNT			: 계약현황 계약금액
+    KRW_AMOUNT		: 계약현황 원화
+    SALES_WDATE		: 
+    WSO_QTY			: 수주현황 수량
+    WSO_AMOUNT		: 수주현황 계약금액
+    WSO_KRW_AMOUNT	: 수주현황 원화
+    OWH_QTY			: 납품현황 수량
+    OWH_AMOUNT		: 납품현황 계약금액
+    OWH_KRW_AMOUNT	: 납품현황 원화
+    PO_CD			: PO 번호
+    ORD_GB_L		: Order(대)
+    ORD_GB_L_NM		: Order(대)명
+    ORD_GB_M		: Order(중)
+    ORD_GB_M_NM		: Order(중)명
+    ORD_GB_S		: Order(소)
+    ORD_GB_S_NM		: Order(소)명
+    CTLG_CD			: 카다로그
+    PJT_CD			: 프로젝트
+    PJT_NM			: 프로젝트명
+    CLOSE_YN		: 강제마감 여부
+
+
+	
+## 기회 및 수주관리 : 수주대장 관리 - 상세 (납품 정보) /SalesOrder/salesOrderItemDetail
+
+	- 입력 파라미터
+		so_cd			:  수주번호
+		so_seq			:  
+		lot_no			:  주문번호
+
+	- 출력 데이터	 LIST
+
+		ROWNUM			   : 일련번호
+		SO_CD			   : 수주번호
+		SO_SEQ			   : 
+		SO_SERL			   : 
+		INV_SEQ			   : 
+		INV_SERL		   : 
+		LOT_NO			   : 주문번호
+		OWH_NO			   : 
+		ITEM_CD			   : 품목코드
+		ITEM_CD2		   : 품목코드
+		ITEM_NM			   : 품목코드명
+		BASE_CRNY		   : 통화
+		EXCH_RATE		   : 기준통화 단위
+		OWH_QTY			   : 납품현황 수량
+		OWH_UNIT_PRICE	   : 단가
+		OWH_AMOUNT		   : 납품현황 계약금액
+		OWH_KRW_AMOUNT	   : 납품현황 원화
+		SALES_ODATE		   : 최종출고일
+
+
+	
+## 기회 및 수주관리 : 수주대장 관리 - 상세 (청구 정보) /SalesOrder/salesOrderBillDetail
+
+	- 입력 파라미터
+		so_cd			:  수주번호
+		so_seq			:  
+		lot_no			:  주문번호
+
+	- 출력 데이터	 LIST
+		ROWNUM			   : 일련번호
+		ITEM_CD			   : 품목코드
+		ITEM_CD2		   : 품목코드
+		ITEM_NM			   : 품목코드명
+		BASE_CRNY		   : 통화
+		EXCH_RATE		   : 기준통화 단위
+		BILL_QTY		   : 납품현황 수량
+		BILL_UNIT_PRICE	   : 단가
+		BILL_AMOUNT		   : 납품현황 계약금액
+		BILL_KRW_AMOUNT	   : 납품현황 원화
+		SALES_BDATE		   : 청구일
+
+
+
+
+
+
+	[수주대장관리 상세 추가 ]
+
+
+
+## 기회 및 수주관리 : 수주대장 관리 - 저장 /SalesOrder/salesOrderSave
+
+- 입력 파라미터
+
+	pjt_cd       : 프로젝트
+	so_cd        : 수주번호PK ( SALES_ORDER )
+	close_yn     : 강제마감 여부
+	so_seq       :  
+	so_serl      :  
+
+
+[기회 및 수주관리]
+
+
+
+
+[메인]
+
+
+ ## 메인 : 왼쪽 메뉴 권한   /Main/leftMenuAuth
+ 	- 입력 파라미터
+		없음
+
+	- 출력 데이터	
+		  MENU_ID		: 메뉴ID
+		  MENU_NM		: 메뉴명
+		  USE_SCOPE		: 사용범위
+		  DEPT_YN		: 조직권한
+		  ODEPT_SCOPE	: 조직범위
+		  IDEPT_SCOPE	: ???
+
+
+
+ ## 매출분석   /Main/getT1_info
+
+	- 입력 파라미터
+
+		bizGroup    : 상위 매출조직
+		deptGroup   : 매출조직
+		user_cd     : 영업담당ID
+		dstr_type   : 유통구조
+		sales_base   : 매출기준
+		year        : 기준년 
+		month       : 기준월
+	
+
+	- 출력 데이터	 
+
+	 T1_1_1	  : 2016매출실적  3월누계
+	 T1_1_2	  : 매출정보 목표 3월누계
+	 T1_1_3	  : 매출정보 실적 3월누계
+	 T1_2_1	  : 2016매출실적  4월실적 
+	 T1_2_2	  : 매출정보 목표 4월실적 
+	 T1_2_3	  : 매출정보 실적 4월실적 
+	 T1_3_1	  : 2016매출실적  4월누계
+	 T1_3_2	  : 매출정보 목표 4월누계
+	 T1_3_3	  : 매출정보 실적 4월누계
+
+	 나머지 전년 대비 데이터는 /WebContent/view/common/main/commonBody.jsp  157 라인 참조
+
+
+	 
+
+
+## 활동현황   /Main/getT2_info
+
+	- 입력 파라미터
+
+		t2button     : 기준일  ( yesterday / today / tomorrow )
+	
+
+	- 출력 데이터	 
+
+		SA_SUBJECT	 : 거래처
+		USER_NM		 : 담당자
+		PJT_NM		 : 프로젝트
+		SALE_YN		 : 실적여부
+
+
+
+## Sample 진행상황   /Main/getT3_info
+
+	- 입력 파라미터
+		없음
+	
+
+	- 출력 데이터	 
+
+		ITEM_NM			: Sample 품목
+		SMP_STATUS_NM	: 진행상태
+		CMPT_RDATE		: 완료요청일
+		PRDT_PDATE		: 완료예정일
+
+
+
+
+## 매출현황 - 월별 > 목표   /Main/getMonthChart1
+
+	- 입력 파라미터
+		
+		year        : 기준년 
+		bizGroup    : 상위 매출조직
+		deptGroup   : 매출조직
+		user_cd     : 영업담당ID
+		dstr_type   : 유통구조
+		
+	
+
+	- 출력 데이터	 
+
+		KRW_AMOUNT	: 목표 금액
+		SALES_YM	: 목표 월
+
+
+
+
+## 매출현황 - 월별 > 실적   /Main/getMonthChart2
+
+	- 입력 파라미터
+		
+		year        : 기준년 
+		sales_base  : 매출기준
+		bizGroup    : 상위 매출조직
+		deptGroup   : 매출조직
+		user_cd     : 영업담당ID
+		dstr_type   : 유통구조
+		
+
+
+	- 출력 데이터	 
+
+		KRW_AMOUNT	: 실적 금액
+		SALES_YM	: 실적 월
+
+
+
+
+
+
+[메인]
+
+
+
+[게시판]
+
+## 게시판 :  리스트/상세 /Board/boardList
+
+	- 입력파라미터
+		menuId        : 메뉴ID
+		bbs_cd        : 게시판 코드
+		user_cd       : 글쓴이
+		bbs_subject   : 제목
+		sdate         : 등록일 시작
+		edate         : 등록일 종료
+
+
+	- 출력 데이터	 
+        COMPANY_CD	    : 회사코드
+        COMP_NM		    : 회사명
+        BBS_CD		    : 게시판 코드
+        USER_CD		    : 등록자 사번
+        USER_NM		    : 등록자
+        USER_NM_STR	    : 등록자[회사명]
+        BBS_RDATE	    : 등록일
+        BBS_SUBJECT	    : 제목
+        BBS_CONTENTS    : 내용
+        MENU_ID		    : 메뉴 ID
+        USE_YN		    : 사용여부
+        CMT_CNT		    : 댓글수
+
+
+## 게시판 :  상세 /Board/boardDetail
+
+	- 입력파라미터
+		menuId        : 메뉴ID
+		bbs_cd        : 게시판 코드
+
+	- 출력 데이터	 DETAIL
+        COMPANY_CD	    : 회사코드
+        COMP_NM		    : 회사명
+        BBS_CD		    : 게시글 PK
+        USER_CD		    : 등록자 사번
+        USER_NM		    : 등록자
+        USER_NM_STR	    : 등록자[회사명]
+        BBS_RDATE	    : 등록일
+        BBS_SUBJECT	    : 제목
+        BBS_CONTENTS    : 내용
+        MENU_ID		    : 메뉴 ID
+        USE_YN		    : 사용여부
+        CMT_CNT		    : 댓글수
+
+	- 출력 데이터	 CMD_LIST
+		COMPANY_CD		: 회사코드
+		BBS_CD			: 게시글 PK
+		BBD_CD			: 댓글 순번
+		USER_CD			: 등록자 사번
+		USER_NM			: 등록자
+		COMP_NM			: 회사명
+		BBD_CMT			: 댓글 내용
+		USE_YN			: 사용여부
+		REG_DT			: 등록일
+
+
+	- 파일 리스트  ( 아래 파라미터 외에 샘플요청 파일 리스트 동일 )
+		biz_gubun = bbs_cd (게시글 PK)
+		doc_mgt = "file"
+		chasu   = "1"
+
+
+
+
+## 게시판 :  글 저장/수정  /Board/boardSave
+
+	- 입력파라미터
+		bbs_subject      : 제목
+		bbs_contents     : 내용
+		bbs_cd           : 진행상태
+		menuId           : 게시판 코드
+
+
+	- 파일 저장   ( 아래 파라미터 외에  샘플요청 파일저장과 동일 )
+		biz_gubun = bbs_cd (게시글 PK)
+		doc_mgt = "file"
+		chasu   = "1"
+
+
+
+
+
+
+## 게시판 : 글 삭제 /Board/boardDelete
+
+	- 입력파라미터
+		bbs_cd           : 게시글 pk
+
+
+
+## 게시판 : 댓글 저장/수정  /Board/boardCmtSave
+
+	- 입력파라미터
+		 bbs_cd           : 게시글pk
+		 bbd_cd           : 댓글pk
+		 bbd_cmt          : 댓글내용
+
+
+## 게시판 : 댓글 삭제 /Board/boardCmtDelete
+
+	- 입력파라미터
+		bbs_cd           : 게시글 pk
+		bbd_cd           : 댓글 pk
+
+[게시판] 
+
+
+
+=====================================================================
+
+
+
+[기준정보]
+
+## 수주목표조회 /BaseInfo/orderTargetList 
+
+	- 입력파라미터
+		unit         : 금액 단위
+		base_yy      : 기준년도
+		bizGroup     : 매출조직 상위
+		deptGroup    : 매출조직
+		dstr_type    : 유통구조
+		user_cd      : 영업담당
+		biz_type     : 사업유형
+		item_type    : 품목유형
+		cust_cd      : 거래처id
+		cust_nm      : 거래처명
+		enduser_nm   : End User
+		enduser_cd   : End User
+		bcust_nm     : 매출처명
+		bcust_cd     : 매출처
+
+
+	- 출력 데이터	
+
+		UP_DEPT_CD	 : 영업팀
+		UP_DEPT_NM	 : 영업팀명
+		DEPT_CD		 : 엽업파트
+		DEPT_NM		 : 엽업파트명
+		USER_CD		 : 담당자
+		USER_NM		 : 담당자명
+		DSTR_TYPE	 : 유통구조
+		BIZ_TYPE	 : 사업유형
+		CUST_CD		 : 고객사
+		CUST_NM		 : 고객사명
+		EUSER_CD	 : EUSER
+		EUSER_NM	 : EUSER
+		ITEM_TYPE	 : 품목유형
+		M01			 : 1월
+		M02			 : 2월
+		M03			 : 3월
+		M04			 : 4월
+		M05			 : 5월
+		M06			 : 6월
+		M07			 : 7월
+		M08			 : 8월
+		M09			 : 9월
+		M10			 : 10월
+		M11			 : 11월
+		M12			 : 12월
+		TOTAL		 : 합계
+
+
+
+
+## 매출목표조회 /BaseInfo/salesTargetList
+
+	- 입력파라미터
+		unit         : 금액 단위
+		base_yy      : 기준년도
+		bizGroup     : 매출조직 상위
+		deptGroup    : 매출조직
+		dstr_type    : 유통구조
+		user_cd      : 영업담당
+		biz_type     : 사업유형
+		item_type    : 품목유형
+		cust_cd      : 거래처id
+		cust_nm      : 거래처명
+		enduser_nm   : End User
+		enduser_cd   : End User
+		bcust_nm     : 매출처명
+		bcust_cd     : 매출처
+
+
+	- 출력 데이터	
+
+		UP_DEPT_CD	 : 영업팀
+		UP_DEPT_NM	 : 영업팀명
+		DEPT_CD		 : 엽업파트
+		DEPT_NM		 : 엽업파트명
+		USER_CD		 : 담당자
+		USER_NM		 : 담당자명
+		DSTR_TYPE	 : 유통구조
+		BIZ_TYPE	 : 사업유형
+		CUST_CD		 : 고객사
+		CUST_NM		 : 고객사명
+		EUSER_CD	 : EUSER
+		EUSER_NM	 : EUSER
+		ITEM_TYPE	 : 품목유형
+		M01			 : 1월
+		M02			 : 2월
+		M03			 : 3월
+		M04			 : 4월
+		M05			 : 5월
+		M06			 : 6월
+		M07			 : 7월
+		M08			 : 8월
+		M09			 : 9월
+		M10			 : 10월
+		M11			 : 11월
+		M12			 : 12월
+		TOTAL		 : 합계
+
+
+
+
+
+##	국가정보 관리 - 국가정보 리스트 /BaseInfo/nationInfoList
+
+	- 입력파라미터
+		nat_cd			: 국가코드
+		nat_nm			: 국가명
+		nat_eng_nm		: 국가영문명
+		use_yn			: 사용여부
+
+	- 출력 데이터	
+
+		NAT_CD		   : 국가코드 
+		NAT_NM		   : 국가명 
+		NAT_ENG_NM	   : 국가영문명 
+		NAT_ORDER	   : 순서
+		USE_YN		   : 사용여부
+
+
+
+##	국가정보 관리 - 정보 업데이트 /BaseInfo/nationInfoUpdate
+
+	- 입력파라미터
+		nat_cd			: 국가코드
+		use_yn			: 사용여부
+
+
+
+
+##	환율정보 관리 - 환율정보 리스트 /BaseInfo/baseCrnyInfoList
+
+	- 입력파라미터
+		nat_cd			: 국가코드
+		nat_nm			: 국가명
+		nat_eng_nm		: 국가영문명
+		use_yn			: 사용여부
+
+	- 출력 데이터	
+
+		base_yr       : 기준년도
+		base_crny     : 통화코드
+		base_rate     : 환율
+		crny_order    : 순서
+		use_yn        : 사용여부
+
+		
+
+##	환율정보 관리 - 정보 업데이트 /BaseInfo/baseCrnyInfoUpdate
+
+	- 입력파라미터
+		base_yr       : 기준년도
+		base_crny     : 통화코드
+		base_rate     : 환율
+		crny_order    : 순서
+		use_yn        : 사용여부
+
+
+
+
+## 담당자 변경 리스트는 아래 정보로 처리
+	샘플 변경 - 리스트 /sampleManage/sampleManageList
+	기회 변경 - 리스트 /opportunity/opportunityList
+	수주 변경 - 리스트 /salesOrder/salesOrderList
+
+
+
+
+## 기준정보 : 담당자 변경 - 정보 업데이트 /AdminUser/userChangeUpdate
+
+
+
+[기준정보]
+
+
+
+
+[샘플 추가 ]
+
+## Sample 재작업 팝업 : /popup/popupSmrRepair
+
+	- 입력파라미터
+		smr_cd       : 샘플요청PK
+		smr_chasu    : 차수
+
+		
+	- 출력 데이터	 INFO
+
+		COMPANY_CD	  : 회사코드
+		SMR_CD		  : 샘플요청PK
+		SMR_CHASU	  : 샘플차수
+		ITEM_CD		  : 샘플품목
+		ITEM_NM		  : 샘플품목명
+		EUSER_CD	  : EUSER_CD
+		EUSER_NM	  : EUSER_NM
+		SMP_RQTY	  : 제작의뢰 수량 
+		PROJECT_POSS  : 프로젝트 가능성
+		SMR_TYPE_NM		:샘플유형
+		SMR_TYPE		:샘플유형 코드
+		QRUSER_NM		: 영업담당
+		QRUSER_CD		: 영업담당ID
+		QDEPT_NM		: 매출조직
+		QDEPT_CD		: 매출조직 코드
+		RRUSER_NM		: 접수담당
+		RRUSER_CD		: 접수담당ID
+		SMP_STATUS_NM   : 진행상태
+		PURP_COLOR		:샘플목적Color 
+		PURP_TEST		:샘플목적Y/N (Test)
+		SMR_RQDATE		:샘플요청일
+		SMR_BKDATE		:요청철회일
+		SMR_RRDATE		:접수일
+		SMR_PRDATE		:샘플수령일
+		SMR_CRDATE		:샘플완료요청일
+		SMR_RADATE		:검토승인일
+		PRDT_PDATE		:완료예정일
+		SHIP_PDATE		:배송[선적]일
+		RRUSER_CD		:접수담당ID		
+		SMR_FBDATE		: 요청반려일
+		SMR_RFDATE
+		SMR_RQUSER
+		SMR_RQUSER_NM
+		SMR_BKUSER
+		SMR_BKUSER_NM
+		SMR_FBUSER
+		SMR_FBUSER_NM
+		SMR_RAUSER
+		SMR_RAUSER_NM
+		SMR_RFUSER
+		SMR_RFUSER_NM
+		SMR_PRUSER
+		SMR_PRUSER_NM
+		ARTWORK_NO		:인쇄필름번호
+		PACKING_INFO_NM	: PACKING_INFO
+		SHIP_TO_ADRS	:배송지
+		REMARK_CMT		:하단 특이사항
+		PRDT_YN
+		DROP_YN	: 드롭여부
+		USE_YN	: 사용여부
+		REQ_RETURN_YN
+		REQ_REVIEW_YN
+		REQ_REPAIR_YN
+		PUR_OQTY		:수량
+		SMR_PODATE		: 발주예정일
+		TRACKING_NUM : 트래킹 번호
+		SMR_ORDERDATE
+		SMR_ORDERDATE   : 초도선적요청일
+
+
+	- 출력 데이터	 REPAIR
+	
+		COMPANY_CD		: 회사코드
+		SMR_CD			: 샘플요청PK
+		SMR_CHASU		: 샘플차수
+		USER_CD			: 영업담당 ID
+		USER_NM			: 영업담당 
+		DEPT_NM			: 영업부서
+		SMR_CRDATE		: 샘플완료요청일
+		SMR_CRTYPE		: 검토반려 유형
+		SMR_CRDESCRIPT	: 검토반려 사유
+
+
+
+##  Sample 드롭 팝업 : /popup/popupSmrDrop
+
+	- 입력파라미터
+		smr_cd       : 샘플요청PK
+		smr_chasu    : 차수
+
+		
+	- 출력 데이터	 INFO
+
+		COMPANY_CD	  : 회사코드
+		SMR_CD		  : 샘플요청PK
+		SMR_CHASU	  : 샘플차수
+		ITEM_CD		  : 샘플품목
+		ITEM_NM		  : 샘플품목명
+		EUSER_CD	  : EUSER_CD
+		EUSER_NM	  : EUSER_NM
+		SMP_RQTY	  : 제작의뢰 수량 
+		PROJECT_POSS  : 프로젝트 가능성
+		SMR_TYPE_NM		:샘플유형
+		SMR_TYPE		:샘플유형 코드
+		QRUSER_NM		: 영업담당
+		QRUSER_CD		: 영업담당ID
+		QDEPT_NM		: 매출조직
+		QDEPT_CD		: 매출조직 코드
+		RRUSER_NM		: 접수담당
+		RRUSER_CD		: 접수담당ID
+		SMP_STATUS_NM   : 진행상태
+		PURP_COLOR		:샘플목적Color 
+		PURP_TEST		:샘플목적Y/N (Test)
+		SMR_RQDATE		:샘플요청일
+		SMR_BKDATE		:요청철회일
+		SMR_RRDATE		:접수일
+		SMR_PRDATE		:샘플수령일
+		SMR_CRDATE		:샘플완료요청일
+		SMR_RADATE		:검토승인일
+		PRDT_PDATE		:완료예정일
+		SHIP_PDATE		:배송[선적]일
+		RRUSER_CD		:접수담당ID		
+		SMR_FBDATE		: 요청반려일
+		SMR_RFDATE
+		SMR_RQUSER
+		SMR_RQUSER_NM
+		SMR_BKUSER
+		SMR_BKUSER_NM
+		SMR_FBUSER
+		SMR_FBUSER_NM
+		SMR_RAUSER
+		SMR_RAUSER_NM
+		SMR_RFUSER
+		SMR_RFUSER_NM
+		SMR_PRUSER
+		SMR_PRUSER_NM
+		ARTWORK_NO		:인쇄필름번호
+		PACKING_INFO_NM	: PACKING_INFO
+		SHIP_TO_ADRS	:배송지
+		REMARK_CMT		:하단 특이사항
+		PRDT_YN
+		DROP_YN	: 드롭여부
+		USE_YN	: 사용여부
+		REQ_RETURN_YN
+		REQ_REVIEW_YN
+		REQ_REPAIR_YN
+		PUR_OQTY		:수량
+		SMR_PODATE		: 발주예정일
+		TRACKING_NUM : 트래킹 번호
+		SMR_ORDERDATE
+		SMR_ORDERDATE   : 초도선적요청일
+
+
+
+## Sample 검토반려 팝업 : /popup/popupSmrCheckReturn
+
+	- 입력파라미터
+		smr_cd       : 샘플요청PK
+		smr_chasu    : 차수
+
+		
+	- 출력 데이터	 INFO
+
+		COMPANY_CD	  : 회사코드
+		SMR_CD		  : 샘플요청PK
+		SMR_CHASU	  : 샘플차수
+		ITEM_CD		  : 샘플품목
+		ITEM_NM		  : 샘플품목명
+		EUSER_CD	  : EUSER_CD
+		EUSER_NM	  : EUSER_NM
+		SMP_RQTY	  : 제작의뢰 수량 
+		PROJECT_POSS  : 프로젝트 가능성
+		SMR_TYPE_NM		:샘플유형
+		SMR_TYPE		:샘플유형 코드
+		QRUSER_NM		: 영업담당
+		QRUSER_CD		: 영업담당ID
+		QDEPT_NM		: 매출조직
+		QDEPT_CD		: 매출조직 코드
+		RRUSER_NM		: 접수담당
+		RRUSER_CD		: 접수담당ID
+		SMP_STATUS_NM   : 진행상태
+		PURP_COLOR		:샘플목적Color 
+		PURP_TEST		:샘플목적Y/N (Test)
+		SMR_RQDATE		:샘플요청일
+		SMR_BKDATE		:요청철회일
+		SMR_RRDATE		:접수일
+		SMR_PRDATE		:샘플수령일
+		SMR_CRDATE		:샘플완료요청일
+		SMR_RADATE		:검토승인일
+		PRDT_PDATE		:완료예정일
+		SHIP_PDATE		:배송[선적]일
+		RRUSER_CD		:접수담당ID		
+		SMR_FBDATE		: 요청반려일
+		SMR_RFDATE
+		SMR_RQUSER
+		SMR_RQUSER_NM
+		SMR_BKUSER
+		SMR_BKUSER_NM
+		SMR_FBUSER
+		SMR_FBUSER_NM
+		SMR_RAUSER
+		SMR_RAUSER_NM
+		SMR_RFUSER
+		SMR_RFUSER_NM
+		SMR_PRUSER
+		SMR_PRUSER_NM
+		ARTWORK_NO		:인쇄필름번호
+		PACKING_INFO_NM	: PACKING_INFO
+		SHIP_TO_ADRS	:배송지
+		REMARK_CMT		:하단 특이사항
+		PRDT_YN
+		DROP_YN	: 드롭여부
+		USE_YN	: 사용여부
+		REQ_RETURN_YN
+		REQ_REVIEW_YN
+		REQ_REPAIR_YN
+		PUR_OQTY		:수량
+		SMR_PODATE		: 발주예정일
+		TRACKING_NUM : 트래킹 번호
+		SMR_ORDERDATE
+		SMR_ORDERDATE   : 초도선적요청일
+
+
+
+##  샘플 요청 : 샘플 재작업 실행
+	- 입력파라미터
+		smr_cd				: 샘플요청PK
+		smr_chasu			: 차수
+		smr_crtype			: 재작업 유형
+		smr_crdescript      : 재작업 사유
+
+
+
+## 샘플 요청 : 샘플 드롭 실행
+
+	- 입력파라미터
+		smr_cd				: 샘플요청PK
+		smr_chasu			: 차수
+		smr_drtype          : 드롭 유형
+		smr_drdescript      : 드롭 사유
+
+
+## 샘플 요청 : 검토반려 실행
+
+	- 입력파라미터
+		smr_cd				: 샘플요청PK
+		smr_chasu			: 차수
+		smr_rvtype          : 검토반려 유형
+		smr_rvdescript      : 검토반려 사유
+
+[샘플 추가 ]
+
+
+
+
+[Report]  
+
+## 수주목표 VS 실적 분석 - 리스트 /Report/orderTargetSalesAnalysisList
+
+	- 입력파라미터
+
+		deptGroup   : 매출조직
+		bizGroup    : 매출조직 상위부서
+		cust_nm     : 거래처명
+		user_cd     : 거래처 코드 
+		user_cd     : 영업담당ID
+	
+		unit        : 원단위
+		order_type  : 수주가능성
+		dstr_type   : 유통구조
+		biz_type    : 사업유형
+		item_type   : 품목유형
+		enduser_cd  : enduser
+		enduser_nm  : enduser
+		bcust_cd    : 매출처ID
+		bcust_nm    : 매출처
+	
+	
+		base_yy       : 기준년
+		base_mm1      : 기준월 시작
+		base_mm2      : 기준월 종료
+		order_type    : 수주가능성 
+
+
+	- 출력 데이터	
+
+		UP_DEPT_CD		: 매출조직 상위
+		UP_DEPT_NM		: 매출조직명 상위
+		DEPT_CD			: 매출조직 
+		DEPT_NM			: 매출조직명
+		USER_CD			: 영업담당
+		USER_NM			: 영업담당자명
+		DSTR_TYPE		: 유통구조
+		BIZ_TYPE		: 사업유형
+		ITEM_TYPE		: 품목유형
+		CUST_CD			: 거래처
+		CUST_NM			: 거래처명
+		EUSER_CD		: enduser
+		EUSER_NM		: enduser
+		AMOUNT1			: 전년 실적
+		AMOUNT2			: 목표
+		AMOUNT3			: 실적
+		AMOUNT4			: 목표대비 증감내역
+		ARCHIVE_RATE5	: 목표대비 달성율
+		AMOUNT6			: 전년대비 증감내역
+		ELONG_RATE7		: 전년대비 신장율
+		AMOUNT11		: 전년 실적
+		AMOUNT12		: 년간목표
+		AMOUNT13		: 실적+추정
+		AMOUNT14		: 목표대비 증감내역
+		ARCHIVE_RATE15	: 목표대비 달성율
+		AMOUNT16		: 전년대비 증감내역
+		ELONG_RATE17	: 전년대비 신장율
+		MM1				:  1월 
+		MM2				:  2월 
+		MM3				:  3월 
+		MM4				:  4월 
+		MM5				:  5월 
+		MM6				:  6월 
+		MM7				:  7월 
+		MM8				:  8월 
+		MM9				:  9월 
+		MM10			: 10월 
+		MM11			: 11월 
+		MM12			: 12월 
+
+
+## 수주목표 VS 실적 분석 - 합계 /Report/orderTargetSalesAnalysisSumFooter
+
+	- 입력파라미터
+
+		deptGroup   : 매출조직
+		bizGroup    : 매출조직 상위부서
+		cust_nm     : 거래처명
+		user_cd     : 거래처 코드 
+		user_cd     : 영업담당ID
+	
+		unit        : 원단위
+		order_type  : 수주가능성
+		dstr_type   : 유통구조
+		biz_type    : 사업유형
+		item_type   : 품목유형
+		enduser_cd  : enduser
+		enduser_nm  : enduser
+		bcust_cd    : 매출처ID
+		bcust_nm    : 매출처
+	
+	
+		base_yy       : 기준년
+		base_mm1      : 기준월 시작
+		base_mm2      : 기준월 종료
+		order_type    : 수주가능성 
+
+
+	- 출력 데이터	
+
+		TOT_AMOUNT1		: 전년 실적
+		TOT_AMOUNT2		: 목표
+		TOT_AMOUNT3		: 실적
+		TOT_AMOUNT4		: 목표대비 증감내역
+		TOT_AMOUNT6		: 전년대비 증감내역
+		TOT_AMOUNT11	: 전년 실적	
+		TOT_AMOUNT12	: 년간목표
+		TOT_AMOUNT13	: 실적+추정
+		TOT_AMOUNT14	: 목표대비 증감내역
+		TOT_AMOUNT16	: 전년대비 증감내역
+		TOT_MM1			:  1월
+		TOT_MM2			:  2월
+		TOT_MM3			:  3월
+		TOT_MM4			:  4월
+		TOT_MM5			:  5월
+		TOT_MM6			:  6월
+		TOT_MM7			:  7월
+		TOT_MM8			:  8월
+		TOT_MM9			:  9월
+		TOT_MM10		: 10월
+		TOT_MM11		: 11월
+		TOT_MM12		: 12월
+
+
+
+## 수주 실적 분석 - 월별 수주실적 /Report/selectOrderResutAnalysisList
+
+	- 입력파라미터
+
+		deptGroup   : 매출조직
+		bizGroup    : 매출조직 상위부서
+		cust_nm     : 거래처명
+		user_cd     : 거래처 코드 
+		user_cd     : 영업담당ID
+	
+		unit        : 원단위
+		order_type  : 수주가능성
+		dstr_type   : 유통구조
+		biz_type    : 사업유형
+		item_type   : 품목유형
+		enduser_cd  : enduser
+		enduser_nm  : enduser
+		bcust_cd    : 매출처ID
+		bcust_nm    : 매출처
+	
+		base_yy       : 기준년
+		base_mm1      : 기준월 시작
+		base_mm2      : 기준월 종료
+		order_type    : 수주가능성 
+		sales_base    : 매출기준 
+
+
+	- 출력 데이터	
+
+		UP_DEPT_CD		: 매출조직 상위
+		UP_DEPT_NM		: 매출조직명 상위
+		DEPT_CD			: 매출조직 
+		DEPT_NM			: 매출조직명
+		USER_CD			: 영업담당
+		USER_NM			: 영업담당자명
+		DSTR_TYPE		: 유통구조
+		BIZ_TYPE		: 사업유형
+		ITEM_TYPE		: 품목유형
+		CUST_CD			: 거래처
+		CUST_NM			: 거래처명
+		EUSER_CD		: enduser
+		EUSER_NM		: enduser
+		AMOUNT1			: 전년실적
+		AMOUNT2			: 해당년
+		AMOUNT3			: 증감내역
+		RATE4			: 신장율
+		MM1				:  1월
+		MM2				:  2월
+		MM3				:  3월
+		MM4				:  4월
+		MM5				:  5월
+		MM6				:  6월
+		MM7				:  7월
+		MM8				:  8월
+		MM9				:  9월
+		MM10			: 10월
+		MM11			: 11월
+		MM12			: 12월
+
+
+
+## 수주 실적 분석 - 분기별 수주실적 /Report/selectDivOrderResutAnalysisList
+
+	- 입력파라미터
+
+		deptGroup   : 매출조직
+		bizGroup    : 매출조직 상위부서
+		cust_nm     : 거래처명
+		user_cd     : 거래처 코드 
+		user_cd     : 영업담당ID
+	
+		unit        : 원단위
+		order_type  : 수주가능성
+		dstr_type   : 유통구조
+		biz_type    : 사업유형
+		item_type   : 품목유형
+		enduser_cd  : enduser
+		enduser_nm  : enduser
+		bcust_cd    : 매출처ID
+		bcust_nm    : 매출처
+	
+	
+		base_yy       : 기준년
+		base_mm1      : 기준월 시작
+		base_mm2      : 기준월 종료
+		order_type    : 수주가능성 
+		sales_base    : 매출기준 
+
+
+	- 출력 데이터	
+
+		UP_DEPT_CD		: 매출조직 상위
+		UP_DEPT_NM		: 매출조직명 상위
+		DEPT_CD			: 매출조직 
+		DEPT_NM			: 매출조직명
+		USER_CD			: 영업담당
+		USER_NM			: 영업담당자명
+		DSTR_TYPE		: 유통구조
+		BIZ_TYPE		: 사업유형
+		ITEM_TYPE		: 품목유형
+		CUST_CD			: 거래처
+		CUST_NM			: 거래처명
+		EUSER_CD		: enduser
+		EUSER_NM		: enduser
+		AMOUNT1			: 전년실적
+		AMOUNT2			: 해당년
+		AMOUNT3			: 증감내역
+		RATE4			: 신장율
+		MM1				: 1분기 
+		MM2				: 2분기 
+		MM3				: 3분기 
+		MM4				: 4분기 
+
+
+
+
+## 매출목표 VS 실적 분석 - 리스트 /Report/salesTargetSalesAnalysisList
+
+	- 입력파라미터
+
+		deptGroup   : 매출조직
+		bizGroup    : 매출조직 상위부서
+		cust_nm     : 거래처명
+		user_cd     : 거래처 코드 
+		user_cd     : 영업담당ID
+	
+		unit        : 원단위
+		order_type  : 수주가능성
+		dstr_type   : 유통구조
+		biz_type    : 사업유형
+		item_type   : 품목유형
+		enduser_cd  : enduser
+		enduser_nm  : enduser
+		bcust_cd    : 매출처ID
+		bcust_nm    : 매출처
+	
+		base_yy       : 기준년
+		base_mm1      : 기준월 시작
+		base_mm2      : 기준월 종료
+		order_type    : 수주가능성 
+		sales_base    : 매출기준 
+
+	
+	- 출력 데이터	
+
+		UP_DEPT_CD		: 매출조직 상위
+		UP_DEPT_NM		: 매출조직명 상위
+		DEPT_CD			: 매출조직 
+		DEPT_NM			: 매출조직명
+		USER_CD			: 영업담당
+		USER_NM			: 영업담당자명
+		DSTR_TYPE		: 유통구조
+		BIZ_TYPE		: 사업유형
+		ITEM_TYPE		: 품목유형
+		CUST_CD			: 거래처
+		CUST_NM			: 거래처명
+		EUSER_CD		: enduser
+		EUSER_NM		: enduser
+		AMOUNT1			: 전년 실적
+		AMOUNT2			: 목표
+		AMOUNT3			: 실적
+		AMOUNT4			: 목표대비 증감내역
+		ARCHIVE_RATE5	: 목표대비 달성율
+		AMOUNT6			: 전년대비 증감내역
+		ELONG_RATE7		: 전년대비 신장율
+		AMOUNT11		: 전년 실적
+		AMOUNT12		: 년간목표
+		AMOUNT13		: 실적+추정
+		AMOUNT14		: 목표대비 증감내역
+		ARCHIVE_RATE15	: 목표대비 달성율
+		AMOUNT16		: 전년대비 증감내역
+		ELONG_RATE17	: 전년대비 신장율
+		MM1				:  1월 
+		MM2				:  2월 
+		MM3				:  3월 
+		MM4				:  4월 
+		MM5				:  5월 
+		MM6				:  6월 
+		MM7				:  7월 
+		MM8				:  8월 
+		MM9				:  9월 
+		MM10			: 10월 
+		MM11			: 11월 
+		MM12			: 12월 
+
+
+
+
+## 매출목표 VS 실적 분석 - 합계 /Report/salesTargetSalesAnalyFooterSum
+
+	- 입력파라미터
+
+		deptGroup   : 매출조직
+		bizGroup    : 매출조직 상위부서
+		cust_nm     : 거래처명
+		user_cd     : 거래처 코드 
+		user_cd     : 영업담당ID
+	
+		unit        : 원단위
+		order_type  : 수주가능성
+		dstr_type   : 유통구조
+		biz_type    : 사업유형
+		item_type   : 품목유형
+		enduser_cd  : enduser
+		enduser_nm  : enduser
+		bcust_cd    : 매출처ID
+		bcust_nm    : 매출처
+	
+	
+		base_yy       : 기준년
+		base_mm1      : 기준월 시작
+		base_mm2      : 기준월 종료
+		order_type    : 수주가능성 
+		sales_base    : 매출기준 
+
+
+	- 출력 데이터	
+
+		TOT_AMOUNT1		: 전년 실적
+		TOT_AMOUNT2		: 목표
+		TOT_AMOUNT3		: 실적
+		TOT_AMOUNT4		: 목표대비 증감내역
+		TOT_AMOUNT6		: 전년대비 증감내역
+		TOT_AMOUNT11	: 전년 실적	
+		TOT_AMOUNT12	: 년간목표
+		TOT_AMOUNT13	: 실적+추정
+		TOT_AMOUNT14	: 목표대비 증감내역
+		TOT_AMOUNT16	: 전년대비 증감내역
+		TOT_MM1			:  1월
+		TOT_MM2			:  2월
+		TOT_MM3			:  3월
+		TOT_MM4			:  4월
+		TOT_MM5			:  5월
+		TOT_MM6			:  6월
+		TOT_MM7			:  7월
+		TOT_MM8			:  8월
+		TOT_MM9			:  9월
+		TOT_MM10		: 10월
+		TOT_MM11		: 11월
+		TOT_MM12		: 12월
+
+
+
+## 매출 실적 분석 - 월별 매출실적 /Report/selectSalesResutAnalysisList
+
+	- 입력파라미터
+
+		deptGroup   : 매출조직
+		bizGroup    : 매출조직 상위부서
+		cust_nm     : 거래처명
+		user_cd     : 거래처 코드 
+		user_cd     : 영업담당ID
+	
+		unit        : 원단위
+		order_type  : 수주가능성
+		dstr_type   : 유통구조
+		biz_type    : 사업유형
+		item_type   : 품목유형
+		enduser_cd  : enduser
+		enduser_nm  : enduser
+		bcust_cd    : 매출처ID
+		bcust_nm    : 매출처
+	
+	
+		base_yy       : 기준년
+		base_mm1      : 기준월 시작
+		base_mm2      : 기준월 종료
+		order_type    : 수주가능성 
+		sales_base    : 매출기준 
+
+
+	- 출력 데이터	
+
+		UP_DEPT_CD		: 매출조직 상위
+		UP_DEPT_NM		: 매출조직명 상위
+		DEPT_CD			: 매출조직 
+		DEPT_NM			: 매출조직명
+		USER_CD			: 영업담당
+		USER_NM			: 영업담당자명
+		DSTR_TYPE		: 유통구조
+		BIZ_TYPE		: 사업유형
+		ITEM_TYPE		: 품목유형
+		CUST_CD			: 거래처
+		CUST_NM			: 거래처명
+		EUSER_CD		: enduser
+		EUSER_NM		: enduser
+		AMOUNT1			: 전년실적
+		AMOUNT2			: 해당년
+		AMOUNT3			: 증감내역
+		RATE4			: 신장율
+		MM1				:  1월
+		MM2				:  2월
+		MM3				:  3월
+		MM4				:  4월
+		MM5				:  5월
+		MM6				:  6월
+		MM7				:  7월
+		MM8				:  8월
+		MM9				:  9월
+		MM10			: 10월
+		MM11			: 11월
+		MM12			: 12월
+
+
+
+## 매출 실적 분석 - 분기별 매출실적 /Report/selectDivSalesResutAnalysisList
+
+	- 입력파라미터
+		deptGroup   : 매출조직
+		bizGroup    : 매출조직 상위부서
+		cust_nm     : 거래처명
+		user_cd     : 거래처 코드 
+		user_cd     : 영업담당ID
+	
+		unit        : 원단위
+		order_type  : 수주가능성
+		dstr_type   : 유통구조
+		biz_type    : 사업유형
+		item_type   : 품목유형
+		enduser_cd  : enduser
+		enduser_nm  : enduser
+		bcust_cd    : 매출처ID
+		bcust_nm    : 매출처
+	
+		base_yy     : 기준년
+		base_mm1    : 기준월 시작
+		base_mm2    : 기준월 종료
+		order_type  : 수주가능성 
+		sales_base  : 매출기준 
+
+
+	- 출력 데이터	
+
+		UP_DEPT_CD		: 매출조직 상위
+		UP_DEPT_NM		: 매출조직명 상위
+		DEPT_CD			: 매출조직 
+		DEPT_NM			: 매출조직명
+		USER_CD			: 영업담당
+		USER_NM			: 영업담당자명
+		DSTR_TYPE		: 유통구조
+		BIZ_TYPE		: 사업유형
+		ITEM_TYPE		: 품목유형
+		CUST_CD			: 거래처
+		CUST_NM			: 거래처명
+		EUSER_CD		: enduser
+		EUSER_NM		: enduser
+		AMOUNT1			: 전년실적
+		AMOUNT2			: 해당년
+		AMOUNT3			: 증감내역
+		RATE4			: 신장율
+		MM1				: 1분기 
+		MM2				: 2분기 
+		MM3				: 3분기 
+		MM4				: 4분기 
+
+
+
+## 미수채권 현황 /Report/deferredBoundsList
+
+	- 입력파라미터
+
+		 deptGroup    : 매출조직
+		 bizGroup     : 매출조직 상위부서
+		 cust_nm      : 거래처명
+		 user_cd      : 거래처 코드 
+		 user_cd      : 영업담당ID
+	
+		 money_unit   : 원단위 
+		 base_date    : 기준일자 
+		 bad_ar_yn    : 악성채권 여부 
+
+
+	- 출력 데이터	
+
+		  UP_DEPT_NM	: 매출조직명 상위
+		  DEPT_NM		: 매출조직명 
+		  USER_NM		: 영업담당자명
+		  CUST_NM		: 거래처명
+		  AMOUNT_1		: 미수총액
+		  AMOUNT_2		: 1일~30일
+		  AMOUNT_3		: 31일~60일
+		  AMOUNT_4		: 61일~90일
+		  AMOUNT_5		: 91일~120일
+		  AMOUNT_6		: 121일~150일
+		  AMOUNT_7		: 151일~180일
+		  AMOUNT_8		: 180이상 
+		  BAD_AR_YN		: 악성채권여부
+		  TRMS_PAY_NM	: 결재조건
+
+[Report]  

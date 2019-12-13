@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+
+
+
+
+
+
+
+<div class="row">
+    <div class="col-md-4">
+        AuthTest :[ @User.Identity.Name.Split('|')[0] ] [ @User.IsInRole("Admin") ]<br />
+
+            <a href="/Test/Login">[Login]</a>
+        <a href="/Test/LogOut">[LoOut]</a>
+        <a href="/Test/Auth">[Auth]</a>
+
+    </div>
+</div>

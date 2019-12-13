@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+<!-- 모니터링  -->
+  <statements>
+
+    <!-- 담당자별 매출분석    -->
+    <select id="salesUserReportList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      <isEqual property="sales_type" compareValue="당월">
+        SELECT
+        USER_CD
+        , USER_NM
+        , ISNULL(CONVERT(NUMERIC(18,1), (AMOUNT2/AMOUNT1)*100), 0) AS AMOUNT
+        FROM
+        (
+        SELECT
+        USER_CD
+        , DBO.FN_GET_USER_NM(USER_CD) AS USER_NM
+        , (SELECT SUM(KRW_AMOUNT) FROM dbo.T_SALES_MRF_SUMRY WHERE SALES_GUBUN = '목표' AND USER_CD = A.USER_CD AND SALES_YM = #yyyymm#) AS AMOUNT1
+        , (SELECT SUM(KRW_AMOUNT) FROM dbo.T_SALES_MRF_SUMRY WHERE SALES_GUBUN = #sales_base# AND USER_CD = A.USER_CD AND SALES_YM = #yyyymm#) AS AMOUNT2
+        FROM T_USER A
+        WHERE COMPANY_CD = #company_cd#
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>      
+
+        AND MBO_YN = 'Y'
+        AND USE_YN = 'Y'
+        GROUP BY USER_CD, DEPT_CD
+        ) Z
+        ORDER BY AMOUNT DESC
+      </isEqual>
+      
+      <isEqual property="sales_type" compareValue="누계">
+        SELECT
+        USER_CD
+        , USER_NM
+        , ISNULL(CONVERT(NUMERIC(18,1), (AMOUNT2/AMOUNT1)*100), 0) AS AMOUNT
+        FROM
+        (
+        SELECT
+        USER_CD
+        , DBO.FN_GET_USER_NM(USER_CD) AS USER_NM
+        , (SELECT SUM(KRW_AMOUNT) FROM dbo.T_SALES_MRF_SUMRY WHERE SALES_GUBUN = '목표' AND USER_CD = A.USER_CD AND SALES_YM BETWEEN #yyyy01# AND #yyyymm#) AS AMOUNT1
+        , (SELECT SUM(KRW_AMOUNT) FROM dbo.T_SALES_MRF_SUMRY WHERE SALES_GUBUN = #sales_base# AND USER_CD = A.USER_CD AND SALES_YM BETWEEN #yyyy01# AND #yyyymm#) AS AMOUNT2
+        FROM T_USER A
+        WHERE COMPANY_CD = #company_cd#
+        <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+        AND MBO_YN = 'Y'
+        AND USE_YN = 'Y'
+        GROUP BY USER_CD, DEPT_CD
+        ) Z
+        ORDER BY AMOUNT DESC
+      </isEqual>
+      
+    </select>
+
+
+  </statements>
+
+
+
+</sqlMap>

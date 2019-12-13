@@ -1,0 +1,2187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+
+
+    <!-- Report :  매출목표 VS 실적 분석 -->
+    <select id="salesTargetSalesAnalysisList" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      D.UP_DEPT_CD,
+      D2.DEPT_NM AS UP_DEPT_NM,
+      B.DEPT_CD,
+      D.DEPT_NM,
+      B.USER_CD,
+      U.USER_NM,
+      B.DSTR_TYPE,
+      CD1.CODE_KOR AS DSTR_TYPE_NM,
+      B.BIZ_TYPE,
+      CD2.CODE_KOR AS BIZ_TYPE_NM,
+      B.ITEM_TYPE,
+      CD3.CODE_KOR AS ITEM_TYPE_NM,
+      B.CUST_CD,
+      CS1.CUST_NM,
+      B.EUSER_CD,
+      CS2.CUST_NM AS EUSER_NM,
+      ROUND(ISNULL(C.AMOUNT1,0) / #unit#,0) AMOUNT1,
+      ROUND(ISNULL(B.TARGET_AMOUNT1,0) / #unit#,0) AMOUNT2,
+      ROUND(ISNULL(B.SALES_AMOUNT1,0) / #unit#,0) AMOUNT3,
+      ROUND((ISNULL(B.SALES_AMOUNT1,0) - ISNULL(B.TARGET_AMOUNT1,0)) / #unit#,0) AMOUNT4,
+      (CASE WHEN ISNULL(B.SALES_AMOUNT1,0) = 0 OR ISNULL(B.TARGET_AMOUNT1,0) = 0 THEN 0 ELSE (B.SALES_AMOUNT1 / B.TARGET_AMOUNT1) * 100 END) ARCHIVE_RATE5,
+      ROUND((ISNULL(B.SALES_AMOUNT1,0) - ISNULL(C.AMOUNT1,0)) / #unit#,0) AMOUNT6,
+      (
+      CASE WHEN B.SALES_AMOUNT1 - ISNULL(C.AMOUNT1,0) = 0 OR ISNULL(C.AMOUNT1,0) = 0
+      THEN
+      0
+      ELSE
+      ((B.SALES_AMOUNT1 - C.AMOUNT1) / C.AMOUNT1) * 100
+      END
+      ) ELONG_RATE7,
+      ROUND(ISNULL(C.AMOUNT2,0) / #unit#,0) AMOUNT11,
+      ROUND(ISNULL(TARGET_AMOUNT2,0) / #unit#,0) AMOUNT12,
+      ROUND((ISNULL(SALES_AMOUNT1,0) + ISNULL(ESTIMATEION_AMOUNT,0)) / #unit#,0) AMOUNT13,
+      ROUND(((ISNULL(SALES_AMOUNT1,0) + ISNULL(ESTIMATEION_AMOUNT,0)) - TARGET_AMOUNT2) / #unit#,0) AMOUNT14,
+      (
+      CASE WHEN ISNULL(SALES_AMOUNT1,0) + ISNULL(ESTIMATEION_AMOUNT,0) = 0 OR TARGET_AMOUNT2 = 0
+      THEN
+      0
+      ELSE
+      ((SALES_AMOUNT1 + ESTIMATEION_AMOUNT) / TARGET_AMOUNT2) * 100
+      END
+      ) ARCHIVE_RATE15,
+      ROUND(((ISNULL(SALES_AMOUNT1,0) + ISNULL(ESTIMATEION_AMOUNT,0)) - ISNULL(C.AMOUNT2,0)) / #unit#,0) AMOUNT16,
+      (
+      CASE WHEN (ISNULL(SALES_AMOUNT1,0) + ISNULL(ESTIMATEION_AMOUNT,0)) - ISNULL(C.AMOUNT2,0) = 0 OR ISNULL(C.AMOUNT2,0) = 0
+      THEN
+      0
+      ELSE
+      (((ISNULL(SALES_AMOUNT1,0) + ISNULL(ESTIMATEION_AMOUNT,0)) - ISNULL(C.AMOUNT2,0)) / ISNULL(C.AMOUNT2,0)) * 100
+      END
+      ) ELONG_RATE17,
+      ROUND(ISNULL(MM1,0) / #unit#,0) MM1,
+      ROUND(ISNULL(MM2,0) / #unit#,0) MM2,
+      ROUND(ISNULL(MM3,0) / #unit#,0) MM3,
+      ROUND(ISNULL(MM4,0) / #unit#,0) MM4,
+      ROUND(ISNULL(MM5,0) / #unit#,0) MM5,
+      ROUND(ISNULL(MM6,0) / #unit#,0) MM6,
+      ROUND(ISNULL(MM7,0) / #unit#,0) MM7,
+      ROUND(ISNULL(MM8,0) / #unit#,0) MM8,
+      ROUND(ISNULL(MM9,0) / #unit#,0) MM9,
+      ROUND(ISNULL(MM10,0) / #unit#,0) MM10,
+      ROUND(ISNULL(MM11,0) / #unit#,0) MM11,
+      ROUND(ISNULL(MM12,0) / #unit#,0) MM12
+      FROM(
+      SELECT
+      DEPT_CD,
+      USER_CD,
+      DSTR_TYPE,
+      BIZ_TYPE,
+      ITEM_TYPE,
+      CUST_CD,
+      EUSER_CD,
+      SUM(TARGET_AMOUNT1) AS TARGET_AMOUNT1,
+      SUM(TARGET_AMOUNT2) AS TARGET_AMOUNT2,
+      (SUM(SALES_AMOUNT1) + SUM(SALES_AMOUNT1_2)) AS SALES_AMOUNT1,
+      (SUM(SALES_AMOUNT2) + SUM(SALES_AMOUNT1_2)) AS SALES_AMOUNT2,
+      SUM(ESTIMATION_AMOUNT) AS ESTIMATEION_AMOUNT,
+      SUM(MM1) AS MM1,
+      SUM(MM2) AS MM2,
+      SUM(MM3) AS MM3,
+      SUM(MM4) AS MM4,
+      SUM(MM5) AS MM5,
+      SUM(MM6) AS MM6,
+      SUM(MM7) AS MM7,
+      SUM(MM8) AS MM8,
+      SUM(MM9) AS MM9,
+      SUM(MM10) AS MM10,
+      SUM(MM11) AS MM11,
+      SUM(MM12) AS MM12
+      FROM(
+      SELECT
+      DEPT_CD,
+      USER_CD,
+      DSTR_TYPE,
+      BIZ_TYPE,
+      ITEM_TYPE,
+      CUST_CD,
+      EUSER_CD,
+      (CASE WHEN SALES_YM BETWEEN #styyyymm# AND #edyyyymm# AND SALES_GUBUN = '목표'
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS TARGET_AMOUNT1,
+      (CASE WHEN SALES_GUBUN = '목표'
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS TARGET_AMOUNT2,
+      (CASE WHEN SALES_YM BETWEEN #styyyymm# AND #edyyyymm_m# AND SALES_GUBUN = '세금계산서'
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS SALES_AMOUNT1,
+      (CASE WHEN SALES_YM = #edyyyymm# AND SALES_GUBUN = #sales_base#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS SALES_AMOUNT1_2,
+      (CASE WHEN SALES_YM BETWEEN #yyyy# + '01' AND #edyyyymm_m# AND SALES_GUBUN = '세금계산서'
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS SALES_AMOUNT2,
+      (CASE WHEN BASE_YM = #edyyyymm# AND SALES_YM BETWEEN #edyyyymm_p# AND #yyyy# + '12' AND SALES_GUBUN = #sales_base2#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS ESTIMATION_AMOUNT,
+      (
+      <isEqual property="mm1" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm1# AND SALES_YM = #yyyy# + '01'
+      </isEqual>
+      <isEqual property="mm1" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm1# AND SALES_YM = #yyyy# + '01'
+      </isEqual>
+
+      <isNotEqual property="mm1" compareValue="추정_미청구" >
+        <isNotEqual property="mm1" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '01' AND SALES_GUBUN = #mm1#
+        </isNotEqual>
+      </isNotEqual>
+      <!--<isNotEqual property="mm1" compareValue="추정_미출고" >
+        <isNotEqual property="mm1" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '01' AND SALES_GUBUN = #mm1#
+        </isNotEqual>
+      </isNotEqual>-->
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM1,
+      (
+      <isEqual property="mm2" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm2# AND SALES_YM = #yyyy# + '02'
+      </isEqual>
+      <isEqual property="mm2" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm2# AND SALES_YM = #yyyy# + '02'
+      </isEqual>
+
+      <isNotEqual property="mm2" compareValue="추정_미청구" >
+        <isNotEqual property="mm2" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '02' AND SALES_GUBUN = #mm2#
+        </isNotEqual>
+      </isNotEqual>
+      <!--isNotEqual property="mm2" compareValue="추정_미출고" >
+        <isNotEqual property="mm2" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '02' AND SALES_GUBUN = #mm2#
+        </isNotEqual>
+      </isNotEqual-->
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM2,
+      (
+      <isEqual property="mm3" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm3# AND SALES_YM = #yyyy# + '03'
+      </isEqual>
+      <isEqual property="mm3" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm3# AND SALES_YM = #yyyy# + '03'
+      </isEqual>
+
+      <isNotEqual property="mm3" compareValue="추정_미청구" >
+        <isNotEqual property="mm3" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '03' AND SALES_GUBUN = #mm3#
+        </isNotEqual>
+      </isNotEqual>
+      <!--isNotEqual property="mm3" compareValue="추정_미출고" >
+        <isNotEqual property="mm3" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '03' AND SALES_GUBUN = #mm3#
+        </isNotEqual>
+      </isNotEqual-->
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM3,
+      (
+      <isEqual property="mm4" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm4# AND SALES_YM = #yyyy# + '04'
+      </isEqual>
+      <isEqual property="mm4" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm4# AND SALES_YM = #yyyy# + '04'
+      </isEqual>
+
+      <isNotEqual property="mm4" compareValue="추정_미청구" >
+        <isNotEqual property="mm4" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '04' AND SALES_GUBUN = #mm4#
+        </isNotEqual>
+      </isNotEqual>
+      <!--isNotEqual property="mm4" compareValue="추정_미출고" >
+        <isNotEqual property="mm4" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '04' AND SALES_GUBUN = #mm4#
+        </isNotEqual>
+      </isNotEqual-->
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM4,
+      (
+      <isEqual property="mm5" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm5# AND SALES_YM = #yyyy# + '05'
+      </isEqual>
+      <isEqual property="mm5" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm5# AND SALES_YM = #yyyy# + '05'
+      </isEqual>
+
+      <isNotEqual property="mm5" compareValue="추정_미청구" >
+        <isNotEqual property="mm5" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '05' AND SALES_GUBUN = #mm5#
+        </isNotEqual>
+      </isNotEqual>
+      <!--isNotEqual property="mm5" compareValue="추정_미출고" >
+        <isNotEqual property="mm5" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '05' AND SALES_GUBUN = #mm5#
+        </isNotEqual>
+      </isNotEqua-->
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM5,
+      (
+      <isEqual property="mm6" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm6# AND SALES_YM = #yyyy# + '06'
+      </isEqual>
+      <isEqual property="mm6" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm6# AND SALES_YM = #yyyy# + '06'
+      </isEqual>
+
+      <isNotEqual property="mm6" compareValue="추정_미청구" >
+        <isNotEqual property="mm6" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '06' AND SALES_GUBUN = #mm6#
+        </isNotEqual>
+      </isNotEqual>
+      <!--isNotEqual property="mm6" compareValue="추정_미출고" >
+        <isNotEqual property="mm6" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '06' AND SALES_GUBUN = #mm6#
+        </isNotEqual>
+      </isNotEqual-->
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM6,
+      (
+      <isEqual property="mm7" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm7# AND SALES_YM = #yyyy# + '07'
+      </isEqual>
+      <isEqual property="mm7" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm7# AND SALES_YM = #yyyy# + '07'
+      </isEqual>
+
+      <isNotEqual property="mm7" compareValue="추정_미청구" >
+        <isNotEqual property="mm7" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '07' AND SALES_GUBUN = #mm7#
+        </isNotEqual>
+      </isNotEqual>
+      <!--isNotEqual property="mm7" compareValue="추정_미출고" >
+        <isNotEqual property="mm7" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '07' AND SALES_GUBUN = #mm7#
+        </isNotEqual>
+      </isNotEqual-->
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM7,
+      (
+      <isEqual property="mm8" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm8# AND SALES_YM = #yyyy# + '08'
+      </isEqual>
+      <isEqual property="mm8" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm8# AND SALES_YM = #yyyy# + '08'
+      </isEqual>
+
+      <isNotEqual property="mm8" compareValue="추정_미청구" >
+        <isNotEqual property="mm8" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '08' AND SALES_GUBUN = #mm8#
+        </isNotEqual>
+      </isNotEqual>
+      <!--isNotEqual property="mm8" compareValue="추정_미출고" >
+        <isNotEqual property="mm8" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '08' AND SALES_GUBUN = #mm8#
+        </isNotEqual>
+      </isNotEqual-->
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM8,
+      (
+      <isEqual property="mm9" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm9# AND SALES_YM = #yyyy# + '09'
+      </isEqual>
+      <isEqual property="mm9" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm9# AND SALES_YM = #yyyy# + '09'
+      </isEqual>
+
+      <isNotEqual property="mm9" compareValue="추정_미청구" >
+        <isNotEqual property="mm9" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '09' AND SALES_GUBUN = #mm9#
+        </isNotEqual>
+      </isNotEqual>
+      <!--isNotEqual property="mm9" compareValue="추정_미출고" >
+        <isNotEqual property="mm9" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '09' AND SALES_GUBUN = #mm9#
+        </isNotEqual>
+      </isNotEqual-->
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM9,
+      (
+      <isEqual property="mm10" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm10# AND SALES_YM = #yyyy# + '10'
+      </isEqual>
+      <isEqual property="mm10" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm10# AND SALES_YM = #yyyy# + '10'
+      </isEqual>
+
+      <isNotEqual property="mm10" compareValue="추정_미청구" >
+        <isNotEqual property="mm10" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '10' AND SALES_GUBUN = #mm10#
+        </isNotEqual>
+      </isNotEqual>
+      <!--isNotEqual property="mm10" compareValue="추정_미출고" >
+        <isNotEqual property="mm10" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '10' AND SALES_GUBUN = #mm10#
+        </isNotEqual>
+      </isNotEqual-->
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM10,
+      (
+      <isEqual property="mm11" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm11# AND SALES_YM = #yyyy# + '11'
+      </isEqual>
+      <isEqual property="mm11" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm11# AND SALES_YM = #yyyy# + '11'
+      </isEqual>
+
+      <isNotEqual property="mm11" compareValue="추정_미청구" >
+        <isNotEqual property="mm11" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '11' AND SALES_GUBUN = #mm11#
+        </isNotEqual>
+      </isNotEqual>
+      <!--isNotEqual property="mm11" compareValue="추정_미출고" >
+        <isNotEqual property="mm11" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '11' AND SALES_GUBUN = #mm11#
+        </isNotEqual>
+      </isNotEqual-->
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM11,
+      (
+      <isEqual property="mm12" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm12# AND SALES_YM = #yyyy# + '12'
+      </isEqual>
+      <isEqual property="mm12" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm12# AND SALES_YM = #yyyy# + '12'
+      </isEqual>
+
+      <isNotEqual property="mm12" compareValue="추정_미청구" >
+        <isNotEqual property="mm12" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '12' AND SALES_GUBUN = #mm12#
+        </isNotEqual>
+      </isNotEqual>
+      <!--isNotEqual property="mm12" compareValue="추정_미출고" >
+        <isNotEqual property="mm12" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '12' AND SALES_GUBUN = #mm12#
+        </isNotEqual>
+      </isNotEqual-->
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM12
+      FROM
+      T_SALES_MRF_SUMRY
+      WHERE
+      COMPANY_CD = #company_cd# AND (
+      SALES_YM LIKE #yyyy# + '%' OR
+      BASE_YM LIKE #yyyy# + '%'
+      )
+      ) A
+      GROUP BY
+      DEPT_CD,
+      USER_CD,
+      DSTR_TYPE,
+      BIZ_TYPE,
+      ITEM_TYPE,
+      CUST_CD,
+      EUSER_CD
+      ) B
+      LEFT OUTER JOIN
+      (
+      SELECT
+      DEPT_CD,
+      USER_CD,
+      DSTR_TYPE,
+      BIZ_TYPE,
+      ITEM_TYPE,
+      CUST_CD,
+      EUSER_CD,
+      SUM(AMOUNT1) AMOUNT1,
+      SUM(AMOUNT2) AMOUNT2
+      FROM(
+      SELECT
+      DEPT_CD,
+      USER_CD,
+      DSTR_TYPE,
+      BIZ_TYPE,
+      ITEM_TYPE,
+      CUST_CD,
+      EUSER_CD,
+      SALES_YM,
+      (CASE WHEN SALES_YM BETWEEN #re_styyyymm# AND #re_edyyyymm#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS AMOUNT1,
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT AS AMOUNT2
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT AS AMOUNT2
+      </isNotEqual>
+      FROM
+      T_SALES_MRF_SUMRY
+      WHERE
+      COMPANY_CD = #company_cd# AND
+      SALES_YM LIKE #re_yyyy# + '%' AND
+      SALES_GUBUN = '세금계산서'
+      ) A
+      GROUP BY
+      DEPT_CD,
+      USER_CD,
+      DSTR_TYPE,
+      BIZ_TYPE,
+      ITEM_TYPE,
+      CUST_CD,
+      EUSER_CD
+      ) C
+      ON
+      B.DEPT_CD = C.DEPT_CD AND
+      B.USER_CD = C.USER_CD AND
+      B.DSTR_TYPE = C.DSTR_TYPE AND
+      B.BIZ_TYPE = C.BIZ_TYPE AND
+      B.ITEM_TYPE = C.ITEM_TYPE AND
+      B.CUST_CD = C.CUST_CD AND
+      B.EUSER_CD = C.EUSER_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT D
+      ON
+      B.DEPT_CD = D.DEPT_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT D2
+      ON
+      D.COMPANY_CD = D2.COMPANY_CD AND
+      D.UP_DEPT_CD = D2.DEPT_CD
+      LEFT OUTER JOIN
+      T_USER U
+      ON
+      B.USER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER CS1
+      ON
+      B.CUST_CD = CS1.CUST_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER CS2
+      ON
+      B.EUSER_CD = CS2.CUST_CD
+      LEFT OUTER JOIN
+      (SELECT CODE_ID,CODE_KOR FROM T_CODE WHERE UP_CODE_ID = 'DSTR_TYPE') AS CD1
+      ON
+      B.DSTR_TYPE = CD1.CODE_ID
+      LEFT OUTER JOIN
+      (SELECT CODE_ID,CODE_KOR FROM T_CODE WHERE UP_CODE_ID = 'BIZ_TYPE') AS CD2
+      ON
+      B.BIZ_TYPE = CD2.CODE_ID
+      LEFT OUTER JOIN
+      (SELECT CODE_ID,CODE_KOR FROM T_CODE WHERE UP_CODE_ID = 'ITEM_TYPE') AS CD3
+      ON
+      B.ITEM_TYPE = CD3.CODE_ID
+      WHERE
+      1=1
+
+      <isNotEmpty property="deptGroup">
+        AND B.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND B.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="dstr_type">
+        AND B.DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND B.USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND B.BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="cust_nm">
+        <isNotEmpty property="cust_cd">
+          AND B.CUST_CD = #cust_cd#
+        </isNotEmpty>
+        <isEmpty property="cust_cd">
+          AND CS1.CUST_NM LIKE '%' + #cust_nm# + '%'
+          AND B.CUST_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="enduser_nm">
+        <isNotEmpty property="enduser_cd">
+          AND B.EUSER_CD = #enduser_cd#
+        </isNotEmpty>
+        <isEmpty property="enduser_cd">
+          AND CS2.CUST_NM LIKE '%' + #enduser_nm# + '%'
+          AND B.EUSER_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="bcust_nm">
+        <isNotEmpty property="bcust_cd">
+          AND CS1.BCUST_CD = #bcust_cd#
+        </isNotEmpty>
+        <isEmpty property="bcust_cd">
+          AND CS1.BCUST_CD IN (SELECT CUST_CD FROM T_CUSTOMER WHERE CUST_NM LIKE '%' + #bcust_nm# + '%')
+        </isEmpty>
+        AND B.CUST_CD IS NOT NULL
+      </isNotEmpty>
+
+      <isNotEmpty property="item_type">
+        AND B.ITEM_TYPE = #item_type#
+      </isNotEmpty>
+      
+      
+    </select>
+    
+    
+
+
+    <!-- Report :  매출목표 VS 실적 분석 합계 -->
+    <select id="salesTargetSalesAnalyFooterSum" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      SUM(SAM.AMOUNT1) AS TOT_AMOUNT1,
+      SUM(SAM.AMOUNT2) AS TOT_AMOUNT2,
+      SUM(SAM.AMOUNT3) AS TOT_AMOUNT3,
+      SUM(SAM.AMOUNT4) AS TOT_AMOUNT4,
+      SUM(SAM.AMOUNT6) AS TOT_AMOUNT6,
+      SUM(SAM.AMOUNT11) AS TOT_AMOUNT11,
+      SUM(SAM.AMOUNT12) AS TOT_AMOUNT12,
+      SUM(SAM.AMOUNT13) AS TOT_AMOUNT13,
+      SUM(SAM.AMOUNT14) AS TOT_AMOUNT14,
+      SUM(SAM.AMOUNT16) AS TOT_AMOUNT16,
+      SUM(SAM.MM1) AS TOT_MM1,
+      SUM(SAM.MM2) AS TOT_MM2,
+      SUM(SAM.MM3) AS TOT_MM3,
+      SUM(SAM.MM4) AS TOT_MM4,
+      SUM(SAM.MM5) AS TOT_MM5,
+      SUM(SAM.MM6) AS TOT_MM6,
+      SUM(SAM.MM7) AS TOT_MM7,
+      SUM(SAM.MM8) AS TOT_MM8,
+      SUM(SAM.MM9) AS TOT_MM9,
+      SUM(SAM.MM10) AS TOT_MM10,
+      SUM(SAM.MM11) AS TOT_MM11,
+      SUM(SAM.MM12) AS TOT_MM12
+      FROM(
+      SELECT
+      ROUND(ISNULL(C.AMOUNT1,0) / 1,0) AMOUNT1,
+      ROUND(ISNULL(B.TARGET_AMOUNT1,0) / 1,0) AMOUNT2,
+      ROUND(ISNULL(B.SALES_AMOUNT1,0) / 1,0) AMOUNT3,
+      ROUND((ISNULL(B.SALES_AMOUNT1,0) - ISNULL(B.TARGET_AMOUNT1,0)) / 1,0) AMOUNT4,
+      (CASE WHEN ISNULL(B.SALES_AMOUNT1,0) = 0 OR ISNULL(B.TARGET_AMOUNT1,0) = 0 THEN 0 ELSE (B.SALES_AMOUNT1 / B.TARGET_AMOUNT1) * 100 END) ARCHIVE_RATE5,
+      ROUND((ISNULL(B.SALES_AMOUNT1,0) - ISNULL(C.AMOUNT1,0)) / 1,0) AMOUNT6,
+      (
+      CASE WHEN B.SALES_AMOUNT1 - ISNULL(C.AMOUNT1,0) = 0 OR ISNULL(C.AMOUNT1,0) = 0
+      THEN
+      0
+      ELSE
+      ((B.SALES_AMOUNT1 - C.AMOUNT1) / C.AMOUNT1) * 100
+      END
+      ) ELONG_RATE7,
+      ROUND(ISNULL(C.AMOUNT2,0) / 1,0) AMOUNT11,
+      ROUND(ISNULL(TARGET_AMOUNT2,0) / 1,0) AMOUNT12,
+      ROUND((ISNULL(SALES_AMOUNT1,0) + ISNULL(ESTIMATEION_AMOUNT,0)) / 1,0) AMOUNT13,
+      ROUND(((ISNULL(SALES_AMOUNT1,0) + ISNULL(ESTIMATEION_AMOUNT,0)) - TARGET_AMOUNT2) / 1,0) AMOUNT14,
+      (
+      CASE WHEN ISNULL(SALES_AMOUNT1,0) + ISNULL(ESTIMATEION_AMOUNT,0) = 0 OR TARGET_AMOUNT2 = 0
+      THEN
+      0
+      ELSE
+      ((SALES_AMOUNT1 + ESTIMATEION_AMOUNT) / TARGET_AMOUNT2) * 100
+      END
+      ) ARCHIVE_RATE15,
+      ROUND(((ISNULL(SALES_AMOUNT1,0) + ISNULL(ESTIMATEION_AMOUNT,0)) - ISNULL(C.AMOUNT2,0)) / 1,0) AMOUNT16,
+      (
+      CASE WHEN (ISNULL(SALES_AMOUNT1,0) + ISNULL(ESTIMATEION_AMOUNT,0)) - ISNULL(C.AMOUNT2,0) = 0 OR ISNULL(C.AMOUNT2,0) = 0
+      THEN
+      0
+      ELSE
+      (((ISNULL(SALES_AMOUNT1,0) + ISNULL(ESTIMATEION_AMOUNT,0)) - ISNULL(C.AMOUNT2,0)) / ISNULL(C.AMOUNT2,0)) * 100
+      END
+      ) ELONG_RATE17,
+      ROUND(ISNULL(MM1,0) / 1,0) MM1,
+      ROUND(ISNULL(MM2,0) / 1,0) MM2,
+      ROUND(ISNULL(MM3,0) / 1,0) MM3,
+      ROUND(ISNULL(MM4,0) / 1,0) MM4,
+      ROUND(ISNULL(MM5,0) / 1,0) MM5,
+      ROUND(ISNULL(MM6,0) / 1,0) MM6,
+      ROUND(ISNULL(MM7,0) / 1,0) MM7,
+      ROUND(ISNULL(MM8,0) / 1,0) MM8,
+      ROUND(ISNULL(MM9,0) / 1,0) MM9,
+      ROUND(ISNULL(MM10,0) / 1,0) MM10,
+      ROUND(ISNULL(MM11,0) / 1,0) MM11,
+      ROUND(ISNULL(MM12,0) / 1,0) MM12
+      FROM(
+      SELECT
+      DEPT_CD,
+      USER_CD,
+      DSTR_TYPE,
+      BIZ_TYPE,
+      ITEM_TYPE,
+      CUST_CD,
+      EUSER_CD,
+      SUM(TARGET_AMOUNT1) AS TARGET_AMOUNT1,
+      SUM(TARGET_AMOUNT2) AS TARGET_AMOUNT2,
+      (SUM(SALES_AMOUNT1) + SUM(SALES_AMOUNT1_2)) AS SALES_AMOUNT1,
+      (SUM(SALES_AMOUNT2) + SUM(SALES_AMOUNT1_2)) AS SALES_AMOUNT2,
+      SUM(ESTIMATION_AMOUNT) AS ESTIMATEION_AMOUNT,
+      SUM(MM1) AS MM1,
+      SUM(MM2) AS MM2,
+      SUM(MM3) AS MM3,
+      SUM(MM4) AS MM4,
+      SUM(MM5) AS MM5,
+      SUM(MM6) AS MM6,
+      SUM(MM7) AS MM7,
+      SUM(MM8) AS MM8,
+      SUM(MM9) AS MM9,
+      SUM(MM10) AS MM10,
+      SUM(MM11) AS MM11,
+      SUM(MM12) AS MM12
+      FROM(
+      SELECT
+      DEPT_CD,
+      USER_CD,
+      DSTR_TYPE,
+      BIZ_TYPE,
+      ITEM_TYPE,
+      CUST_CD,
+      EUSER_CD,
+      (CASE WHEN SALES_YM BETWEEN #styyyymm# AND #edyyyymm# AND SALES_GUBUN = '목표'
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS TARGET_AMOUNT1,
+      (CASE WHEN SALES_GUBUN = '목표'
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS TARGET_AMOUNT2,
+      (CASE WHEN SALES_YM BETWEEN #styyyymm# AND #edyyyymm_m# AND SALES_GUBUN = '세금계산서'
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS SALES_AMOUNT1,
+      (CASE WHEN SALES_YM = #edyyyymm# AND SALES_GUBUN = #sales_base#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS SALES_AMOUNT1_2,
+      (CASE WHEN SALES_YM BETWEEN #yyyy# + '01' AND #edyyyymm_m# AND SALES_GUBUN = '세금계산서'
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS SALES_AMOUNT2,
+      (CASE WHEN BASE_YM = #edyyyymm# AND SALES_YM BETWEEN #edyyyymm_p# AND #yyyy# + '12' AND SALES_GUBUN = #sales_base2#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS ESTIMATION_AMOUNT,
+      (
+      <isEqual property="mm1" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm1# AND SALES_YM = #yyyy# + '01'
+      </isEqual>
+      <isEqual property="mm1" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm1# AND SALES_YM = #yyyy# + '01'
+      </isEqual>
+      
+      <isNotEqual property="mm1" compareValue="추정_미청구" >
+        <isNotEqual property="mm1" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '01' AND SALES_GUBUN = #mm1#
+        </isNotEqual>
+      </isNotEqual>
+      <isNotEqual property="mm1" compareValue="추정_미출고" >
+        <isNotEqual property="mm1" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '01' AND SALES_GUBUN = #mm1#
+        </isNotEqual>
+      </isNotEqual>
+
+
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM1,
+      (
+      <isEqual property="mm2" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm2# AND SALES_YM = #yyyy# + '02'
+      </isEqual>
+      <isEqual property="mm2" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm2# AND SALES_YM = #yyyy# + '02'
+      </isEqual>
+
+      <isNotEqual property="mm2" compareValue="추정_미청구" >
+        <isNotEqual property="mm2" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '02' AND SALES_GUBUN = #mm2#
+        </isNotEqual>
+      </isNotEqual>
+      <isNotEqual property="mm2" compareValue="추정_미출고" >
+        <isNotEqual property="mm2" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '02' AND SALES_GUBUN = #mm2#
+        </isNotEqual>
+      </isNotEqual>
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM2,
+      (
+      <isEqual property="mm3" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm3# AND SALES_YM = #yyyy# + '03'
+      </isEqual>
+      <isEqual property="mm3" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm3# AND SALES_YM = #yyyy# + '03'
+      </isEqual>
+
+      <isNotEqual property="mm3" compareValue="추정_미청구" >
+        <isNotEqual property="mm3" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '03' AND SALES_GUBUN = #mm3#
+        </isNotEqual>
+      </isNotEqual>
+      <isNotEqual property="mm3" compareValue="추정_미출고" >
+        <isNotEqual property="mm3" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '03' AND SALES_GUBUN = #mm3#
+        </isNotEqual>
+      </isNotEqual>
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM3,
+      (
+      <isEqual property="mm4" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm4# AND SALES_YM = #yyyy# + '04'
+      </isEqual>
+      <isEqual property="mm4" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm4# AND SALES_YM = #yyyy# + '04'
+      </isEqual>
+
+      <isNotEqual property="mm4" compareValue="추정_미청구" >
+        <isNotEqual property="mm4" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '04' AND SALES_GUBUN = #mm4#
+        </isNotEqual>
+      </isNotEqual>
+      <isNotEqual property="mm4" compareValue="추정_미출고" >
+        <isNotEqual property="mm4" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '04' AND SALES_GUBUN = #mm4#
+        </isNotEqual>
+      </isNotEqual>
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM4,
+      (
+      <isEqual property="mm5" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm5# AND SALES_YM = #yyyy# + '05'
+      </isEqual>
+      <isEqual property="mm5" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm5# AND SALES_YM = #yyyy# + '05'
+      </isEqual>
+
+      <isNotEqual property="mm5" compareValue="추정_미청구" >
+        <isNotEqual property="mm5" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '05' AND SALES_GUBUN = #mm5#
+        </isNotEqual>
+      </isNotEqual>
+      <isNotEqual property="mm5" compareValue="추정_미출고" >
+        <isNotEqual property="mm5" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '05' AND SALES_GUBUN = #mm5#
+        </isNotEqual>
+      </isNotEqual>
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM5,
+      (
+      <isEqual property="mm6" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm6# AND SALES_YM = #yyyy# + '06'
+      </isEqual>
+      <isEqual property="mm6" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm6# AND SALES_YM = #yyyy# + '06'
+      </isEqual>
+
+      <isNotEqual property="mm6" compareValue="추정_미청구" >
+        <isNotEqual property="mm6" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '06' AND SALES_GUBUN = #mm6#
+        </isNotEqual>
+      </isNotEqual>
+      <isNotEqual property="mm6" compareValue="추정_미출고" >
+        <isNotEqual property="mm6" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '06' AND SALES_GUBUN = #mm6#
+        </isNotEqual>
+      </isNotEqual>
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM6,
+      (
+      <isEqual property="mm7" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm7# AND SALES_YM = #yyyy# + '07'
+      </isEqual>
+      <isEqual property="mm7" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm7# AND SALES_YM = #yyyy# + '07'
+      </isEqual>
+
+      <isNotEqual property="mm7" compareValue="추정_미청구" >
+        <isNotEqual property="mm7" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '07' AND SALES_GUBUN = #mm7#
+        </isNotEqual>
+      </isNotEqual>
+      <isNotEqual property="mm7" compareValue="추정_미출고" >
+        <isNotEqual property="mm7" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '07' AND SALES_GUBUN = #mm7#
+        </isNotEqual>
+      </isNotEqual>
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM7,
+      (
+      <isEqual property="mm8" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm8# AND SALES_YM = #yyyy# + '08'
+      </isEqual>
+      <isEqual property="mm8" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm8# AND SALES_YM = #yyyy# + '08'
+      </isEqual>
+
+      <isNotEqual property="mm8" compareValue="추정_미청구" >
+        <isNotEqual property="mm8" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '08' AND SALES_GUBUN = #mm8#
+        </isNotEqual>
+      </isNotEqual>
+      <isNotEqual property="mm8" compareValue="추정_미출고" >
+        <isNotEqual property="mm8" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '08' AND SALES_GUBUN = #mm8#
+        </isNotEqual>
+      </isNotEqual>
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM8,
+      (
+      <isEqual property="mm9" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm9# AND SALES_YM = #yyyy# + '09'
+      </isEqual>
+      <isEqual property="mm9" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm9# AND SALES_YM = #yyyy# + '09'
+      </isEqual>
+
+      <isNotEqual property="mm9" compareValue="추정_미청구" >
+        <isNotEqual property="mm9" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '09' AND SALES_GUBUN = #mm9#
+        </isNotEqual>
+      </isNotEqual>
+      <isNotEqual property="mm9" compareValue="추정_미출고" >
+        <isNotEqual property="mm9" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '09' AND SALES_GUBUN = #mm9#
+        </isNotEqual>
+      </isNotEqual>
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM9,
+      (
+      <isEqual property="mm10" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm10# AND SALES_YM = #yyyy# + '10'
+      </isEqual>
+      <isEqual property="mm10" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm10# AND SALES_YM = #yyyy# + '10'
+      </isEqual>
+
+      <isNotEqual property="mm10" compareValue="추정_미청구" >
+        <isNotEqual property="mm10" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '10' AND SALES_GUBUN = #mm10#
+        </isNotEqual>
+      </isNotEqual>
+      <isNotEqual property="mm10" compareValue="추정_미출고" >
+        <isNotEqual property="mm10" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '10' AND SALES_GUBUN = #mm10#
+        </isNotEqual>
+      </isNotEqual>
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM10,
+      (
+      <isEqual property="mm11" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm11# AND SALES_YM = #yyyy# + '11'
+      </isEqual>
+      <isEqual property="mm11" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm11# AND SALES_YM = #yyyy# + '11'
+      </isEqual>
+
+      <isNotEqual property="mm11" compareValue="추정_미청구" >
+        <isNotEqual property="mm11" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '11' AND SALES_GUBUN = #mm11#
+        </isNotEqual>
+      </isNotEqual>
+      <isNotEqual property="mm11" compareValue="추정_미출고" >
+        <isNotEqual property="mm11" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '11' AND SALES_GUBUN = #mm11#
+        </isNotEqual>
+      </isNotEqual>
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM11,
+      (
+      <isEqual property="mm12" compareValue="추정_미청구">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm12# AND SALES_YM = #yyyy# + '12'
+      </isEqual>
+      <isEqual property="mm12" compareValue="추정_미출고">
+        CASE WHEN BASE_YM = #edyyyymm# AND SALES_GUBUN = #mm12# AND SALES_YM = #yyyy# + '12'
+      </isEqual>
+
+      <isNotEqual property="mm12" compareValue="추정_미청구" >
+        <isNotEqual property="mm12" compareValue="추정_미출고">
+          CASE WHEN SALES_YM =  #yyyy# + '12' AND SALES_GUBUN = #mm12#
+        </isNotEqual>
+      </isNotEqual>
+      <isNotEqual property="mm12" compareValue="추정_미출고" >
+        <isNotEqual property="mm12" compareValue="추정_미청구">
+          CASE WHEN SALES_YM =  #yyyy# + '12' AND SALES_GUBUN = #mm12#
+        </isNotEqual>
+      </isNotEqual>
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS MM12
+      FROM
+      T_SALES_MRF_SUMRY
+      WHERE
+      COMPANY_CD = #company_cd# AND (
+      SALES_YM LIKE #yyyy# + '%' OR
+      BASE_YM LIKE #yyyy# + '%'
+      )
+      ) A
+      GROUP BY
+      DEPT_CD,
+      USER_CD,
+      DSTR_TYPE,
+      BIZ_TYPE,
+      ITEM_TYPE,
+      CUST_CD,
+      EUSER_CD
+      ) B
+      LEFT OUTER JOIN
+      (
+      SELECT
+      DEPT_CD,
+      USER_CD,
+      DSTR_TYPE,
+      BIZ_TYPE,
+      ITEM_TYPE,
+      CUST_CD,
+      EUSER_CD,
+      SUM(AMOUNT1) AMOUNT1,
+      SUM(AMOUNT2) AMOUNT2
+      FROM(
+      SELECT
+      DEPT_CD,
+      USER_CD,
+      DSTR_TYPE,
+      BIZ_TYPE,
+      ITEM_TYPE,
+      CUST_CD,
+      EUSER_CD,
+      SALES_YM,
+      (CASE WHEN SALES_YM BETWEEN #re_styyyymm# AND #re_edyyyymm#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+      ELSE
+      0
+      END
+      ) AS AMOUNT1,
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT AS AMOUNT2
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT AS AMOUNT2
+      </isNotEqual>
+      FROM
+      T_SALES_MRF_SUMRY
+      WHERE
+      COMPANY_CD = #company_cd# AND
+      SALES_YM LIKE #re_yyyy# + '%' AND
+      SALES_GUBUN = '세금계산서'
+      ) A
+      GROUP BY
+      DEPT_CD,
+      USER_CD,
+      DSTR_TYPE,
+      BIZ_TYPE,
+      ITEM_TYPE,
+      CUST_CD,
+      EUSER_CD
+      ) C
+      ON
+      B.DEPT_CD = C.DEPT_CD AND
+      B.USER_CD = C.USER_CD AND
+      B.DSTR_TYPE = C.DSTR_TYPE AND
+      B.BIZ_TYPE = C.BIZ_TYPE AND
+      B.ITEM_TYPE = C.ITEM_TYPE AND
+      B.CUST_CD = C.CUST_CD AND
+      B.EUSER_CD = C.EUSER_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT D
+      ON
+      B.DEPT_CD = D.DEPT_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT D2
+      ON
+      D.COMPANY_CD = D2.COMPANY_CD AND
+      D.UP_DEPT_CD = D2.DEPT_CD
+      LEFT OUTER JOIN
+      T_USER U
+      ON
+      B.USER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER CS1
+      ON
+      B.CUST_CD = CS1.CUST_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER CS2
+      ON
+      B.EUSER_CD = CS2.CUST_CD
+      WHERE
+      1=1
+
+      <isNotEmpty property="deptGroup">
+        AND B.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND B.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="dstr_type">
+        AND B.DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND B.USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND B.BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="cust_nm">
+        <isNotEmpty property="cust_cd">
+          AND B.CUST_CD = #cust_cd#
+        </isNotEmpty>
+        <isEmpty property="cust_cd">
+          AND CS1.CUST_NM LIKE '%' + #cust_nm# + '%'
+          AND B.CUST_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="enduser_nm">
+        <isNotEmpty property="enduser_cd">
+          AND B.EUSER_CD = #enduser_cd#
+        </isNotEmpty>
+        <isEmpty property="enduser_cd">
+          AND CS2.CUST_NM LIKE '%' + #enduser_nm# + '%'
+          AND B.EUSER_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="bcust_nm">
+        <isNotEmpty property="bcust_cd">
+          AND CS1.BCUST_CD = #bcust_cd#
+        </isNotEmpty>
+        <isEmpty property="bcust_cd">
+          AND CS1.BCUST_CD IN (SELECT CUST_CD FROM T_CUSTOMER WHERE CUST_NM LIKE '%' + #bcust_nm# + '%')
+        </isEmpty>
+        AND B.CUST_CD IS NOT NULL
+      </isNotEmpty>
+
+      <isNotEmpty property="item_type">
+        AND B.ITEM_TYPE = #item_type#
+      </isNotEmpty>
+
+      ) AS SAM
+    </select>
+
+
+
+
+
+    <!-- Report :  매출 실적 분석 - 월별 매출실적 -->
+    <select id="selectSalesResultAnalysisList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      D.UP_DEPT_CD,
+      D2.DEPT_NM AS UP_DEPT_NM,
+      A.DEPT_CD,
+      D.DEPT_NM,
+      A.USER_CD,
+      U.USER_NM,
+      A.DSTR_TYPE,
+      CD1.CODE_KOR AS DSTR_TYPE_NM,
+      A.BIZ_TYPE,
+      CD2.CODE_KOR AS BIZ_TYPE_NM,
+      A.ITEM_TYPE,
+      CD3.CODE_KOR AS ITEM_TYPE_NM,
+      A.CUST_CD,
+      C.CUST_NM,
+      A.EUSER_CD,
+      C2.CUST_NM AS EUSER_NM,
+      ROUND(ISNULL(B.RE_KRW_AMOUNT,0) / #unit#,0) AMOUNT1,
+      ROUND(ISNULL(A.SEARCH_AMOUNT,0) / #unit#,0) AS AMOUNT2,
+      ROUND((ISNULL(A.SEARCH_AMOUNT,0) - ISNULL(B.RE_KRW_AMOUNT,0)) / #unit#,0) AS AMOUNT3,
+      (
+      CASE WHEN ISNULL(B.RE_KRW_AMOUNT,0) != 0
+      THEN
+      ((ISNULL(A.SEARCH_AMOUNT,0) - ISNULL(B.RE_KRW_AMOUNT,0) )/ ISNULL(B.RE_KRW_AMOUNT,0)) * 100
+      ELSE
+      0
+      END
+      ) AS RATE4,
+      ROUND(ISNULL(A.MM1,0) / #unit#,0) MM1,
+      ROUND(ISNULL(A.MM2,0) / #unit#,0) MM2,
+      ROUND(ISNULL(A.MM3,0) / #unit#,0) MM3,
+      ROUND(ISNULL(A.MM4,0) / #unit#,0) MM4,
+      ROUND(ISNULL(A.MM5,0) / #unit#,0) MM5,
+      ROUND(ISNULL(A.MM6,0) / #unit#,0) MM6,
+      ROUND(ISNULL(A.MM7,0) / #unit#,0) MM7,
+      ROUND(ISNULL(A.MM8,0) / #unit#,0) MM8,
+      ROUND(ISNULL(A.MM9,0) / #unit#,0) MM9,
+      ROUND(ISNULL(A.MM10,0) / #unit#,0) MM10,
+      ROUND(ISNULL(A.MM11,0) / #unit#,0) MM11,
+      ROUND(ISNULL(A.MM12,0) / #unit#,0) MM12
+      FROM
+      (
+      SELECT
+      COMPANY_CD,
+      DEPT_CD,
+      DSTR_TYPE,
+      USER_CD,
+      CUST_CD,
+      EUSER_CD,
+      ITEM_TYPE,
+      BIZ_TYPE,
+      (SUM(SEARCH_AMOUNT) + SUM(SEARCH_AMOUNT_2)) SEARCH_AMOUNT,
+      SUM(MM1) AS MM1,
+      SUM(MM2) AS MM2,
+      SUM(MM3) AS MM3,
+      SUM(MM4) AS MM4,
+      SUM(MM5) AS MM5,
+      SUM(MM6) AS MM6,
+      SUM(MM7) AS MM7,
+      SUM(MM8) AS MM8,
+      SUM(MM9) AS MM9,
+      SUM(MM10) AS MM10,
+      SUM(MM11) AS MM11,
+      SUM(MM12) AS MM12
+      FROM (
+      SELECT
+      COMPANY_CD,
+      DEPT_CD,
+      DSTR_TYPE,
+      USER_CD,
+      CUST_CD,
+      EUSER_CD,
+      ITEM_TYPE,
+      BIZ_TYPE,
+      SALES_YM,
+      KRW_AMOUNT,
+      (
+      CASE WHEN (SALES_YM BETWEEN #start_yymm# AND #end_yymm_m#) AND SALES_GUBUN = '세금계산서'
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE 0
+      END
+      ) AS SEARCH_AMOUNT,
+      (
+      CASE WHEN SALES_YM = #end_yymm# AND SALES_GUBUN = #sales_base#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE 0
+      END
+      ) AS SEARCH_AMOUNT_2,
+      (CASE WHEN SALES_YM =  #base_yy# + '01' AND SALES_GUBUN = #mm1#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE
+      0
+      END
+      ) AS MM1,
+      (CASE WHEN SALES_YM = #base_yy# + '02' AND SALES_GUBUN = #mm2#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE
+      0
+      END
+      ) AS MM2,
+      (CASE WHEN SALES_YM = #base_yy# + '03' AND SALES_GUBUN = #mm3#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE
+      0
+      END
+      ) AS MM3,
+      (CASE WHEN SALES_YM = #base_yy# + '04' AND SALES_GUBUN = #mm4#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE
+      0
+      END
+      ) AS MM4,
+      (CASE WHEN SALES_YM = #base_yy# + '05' AND SALES_GUBUN = #mm5#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE
+      0
+      END
+      ) AS MM5,
+      (CASE WHEN SALES_YM = #base_yy# + '06' AND SALES_GUBUN = #mm6#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE
+      0
+      END
+      ) AS MM6,
+      (CASE WHEN SALES_YM = #base_yy# + '07' AND SALES_GUBUN = #mm7#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE
+      0
+      END
+      ) AS MM7,
+      (CASE WHEN SALES_YM = #base_yy# + '08' AND SALES_GUBUN = #mm8#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE
+      0
+      END
+      ) AS MM8,
+      (CASE WHEN SALES_YM = #base_yy# + '09' AND SALES_GUBUN = #mm9#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE
+      0
+      END
+      ) AS MM9,
+      (CASE WHEN SALES_YM = #base_yy# + '10' AND SALES_GUBUN = #mm10#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE
+      0
+      END
+      ) AS MM10,
+      (CASE WHEN SALES_YM = #base_yy# + '11' AND SALES_GUBUN = #mm11#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE
+      0
+      END
+      ) AS MM11,
+      (CASE WHEN SALES_YM = #base_yy# + '12' AND SALES_GUBUN = #mm12#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE
+      0
+      END
+      ) AS MM12
+      FROM
+      T_SALES_MRF_SUMRY
+      WHERE
+      COMPANY_CD = #company_cd# AND
+      (SALES_GUBUN = '세금계산서' OR SALES_GUBUN = '거래명세표') AND
+      SALES_YM LIKE #base_yy# + '%'
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      ) AS A
+      GROUP BY
+      COMPANY_CD,
+      DEPT_CD,
+      DSTR_TYPE,
+      USER_CD,
+      CUST_CD,
+      EUSER_CD,
+      ITEM_TYPE,
+      BIZ_TYPE
+      ) AS A
+      LEFT OUTER JOIN
+      (
+      SELECT
+      COMPANY_CD,
+      DEPT_CD,
+      DSTR_TYPE,
+      USER_CD,
+      CUST_CD,
+      EUSER_CD,
+      ITEM_TYPE,
+      BIZ_TYPE,
+
+      <isEqual property="order_type" compareValue="N">
+        SUM(KRW_AMOUNT) AS RE_KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        SUM(PSBLT_KRW_AMOUNT) AS RE_KRW_AMOUNT
+      </isNotEqual>
+
+      FROM
+      T_SALES_MRF_SUMRY
+      WHERE
+      COMPANY_CD = #company_cd# AND
+      SALES_GUBUN = '세금계산서' AND
+      SALES_YM BETWEEN #re_start_yymm# AND #re_end_yymm#
+
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      GROUP
+      BY
+      COMPANY_CD,
+      DEPT_CD,
+      DSTR_TYPE,
+      USER_CD,
+      CUST_CD,
+      EUSER_CD,
+      ITEM_TYPE,
+      BIZ_TYPE
+      ) AS B
+      ON
+      A.DEPT_CD = B.DEPT_CD AND
+      A.DSTR_TYPE = B.DSTR_TYPE AND
+      A.USER_CD = B.USER_CD AND
+      A.CUST_CD = B.CUST_CD AND
+      A.EUSER_CD = B.EUSER_CD AND
+      A.ITEM_TYPE = B.ITEM_TYPE AND
+      A.BIZ_TYPE = B.BIZ_TYPE
+      LEFT OUTER JOIN
+      T_DEPARTMENT AS D
+      ON
+      A.COMPANY_CD = D.COMPANY_CD AND
+      A.DEPT_CD = D.DEPT_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT AS D2
+      ON
+      D.COMPANY_CD = D2.COMPANY_CD AND
+      D.UP_DEPT_CD = D2.DEPT_CD
+      LEFT OUTER JOIN
+      T_USER AS U
+      ON
+      A.COMPANY_CD = U.COMPANY_CD AND
+      A.USER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER C
+      ON
+      A.COMPANY_CD = C.COMPANY_CD AND
+      A.CUST_CD = C.CUST_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER C2
+      ON
+      A.COMPANY_CD = C2.COMPANY_CD AND
+      A.EUSER_CD = C2.CUST_CD
+      LEFT OUTER JOIN
+      (SELECT CODE_ID,CODE_KOR FROM T_CODE WHERE UP_CODE_ID = 'DSTR_TYPE') AS CD1
+      ON
+      A.DSTR_TYPE = CD1.CODE_ID
+      LEFT OUTER JOIN
+      (SELECT CODE_ID,CODE_KOR FROM T_CODE WHERE UP_CODE_ID = 'BIZ_TYPE') AS CD2
+      ON
+      A.BIZ_TYPE = CD2.CODE_ID
+      LEFT OUTER JOIN
+      (SELECT CODE_ID,CODE_KOR FROM T_CODE WHERE UP_CODE_ID = 'ITEM_TYPE') AS CD3
+      ON
+      A.ITEM_TYPE = CD3.CODE_ID
+      WHERE
+      1=1
+
+      <isNotEmpty property="deptGroup">
+        AND A.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND A.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="cust_nm">
+        <isNotEmpty property="cust_cd">
+          AND A.CUST_CD = #cust_cd#
+        </isNotEmpty>
+        <isEmpty property="cust_cd">
+          AND C.CUST_NM LIKE '%' + #cust_nm# + '%'
+          AND A.CUST_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="dstr_type">
+        AND B.DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND B.USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND B.BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="enduser_nm">
+        <isNotEmpty property="enduser_cd">
+          AND A.EUSER_CD = #enduser_cd#
+        </isNotEmpty>
+        <isEmpty property="enduser_cd">
+          AND C2.CUST_NM LIKE '%' + #enduser_nm# + '%'
+          AND A.EUSER_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="bcust_nm">
+        <isNotEmpty property="bcust_cd">
+          AND C.BCUST_CD = #bcust_cd#
+        </isNotEmpty>
+        <isEmpty property="bcust_cd">
+          AND C.BCUST_CD IN (SELECT CUST_CD FROM T_CUSTOMER WHERE CUST_NM LIKE '%' + #bcust_nm# + '%')
+        </isEmpty>
+        AND A.CUST_CD IS NOT NULL
+      </isNotEmpty>
+
+      <isNotEmpty property="item_type">
+        AND A.ITEM_TYPE = #item_type#
+      </isNotEmpty>
+
+
+    </select>
+
+
+
+
+
+    <!-- Report :  매출 실적 분석 - 분기별 매출실적 -->
+    <select id="selectDivSalesResultAnalysisList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      D.UP_DEPT_CD,
+      D2.DEPT_NM AS UP_DEPT_NM,
+      A.DEPT_CD,
+      D.DEPT_NM,
+      A.USER_CD,
+      U.USER_NM,
+      A.DSTR_TYPE,
+      CD1.CODE_KOR AS DSTR_TYPE_NM,
+      A.BIZ_TYPE,
+      CD2.CODE_KOR AS BIZ_TYPE_NM,
+      A.ITEM_TYPE,
+      CD3.CODE_KOR AS ITEM_TYPE_NM,
+      A.CUST_CD,
+      C.CUST_NM,
+      A.EUSER_CD,
+      C2.CUST_NM AS EUSER_NM,
+      ROUND(ISNULL(B.RE_KRW_AMOUNT,0) / #unit#,0) AMOUNT1,
+      ROUND(ISNULL(A.SEARCH_AMOUNT,0) / #unit#,0) AS AMOUNT2,
+      ROUND((ISNULL(A.SEARCH_AMOUNT,0) - ISNULL(B.RE_KRW_AMOUNT,0)) / #unit#,0) AS AMOUNT3,
+      (
+      CASE WHEN ISNULL(B.RE_KRW_AMOUNT,0) != 0
+      THEN
+      ((A.SEARCH_AMOUNT - ISNULL(B.RE_KRW_AMOUNT,0) )/ ISNULL(B.RE_KRW_AMOUNT,0)) * 100
+      ELSE
+      0
+      END
+      ) AS RATE4,
+      ROUND(ISNULL(A.MM1,0) / #unit#,0) MM1,
+      ROUND(ISNULL(A.MM2,0) / #unit#,0) MM2,
+      ROUND(ISNULL(A.MM3,0) / #unit#,0) MM3,
+      ROUND(ISNULL(A.MM4,0) / #unit#,0) MM4
+      FROM
+      (
+      SELECT
+      COMPANY_CD,
+      DEPT_CD,
+      DSTR_TYPE,
+      USER_CD,
+      CUST_CD,
+      EUSER_CD,
+      ITEM_TYPE,
+      BIZ_TYPE,
+      (SUM(SEARCH_AMOUNT) + SUM(SEARCH_AMOUNT_2)) SEARCH_AMOUNT,
+      SUM(MM1) AS MM1,
+      SUM(MM2) AS MM2,
+      SUM(MM3) AS MM3,
+      SUM(MM4) AS MM4
+      FROM (
+      SELECT
+      COMPANY_CD,
+      DEPT_CD,
+      DSTR_TYPE,
+      USER_CD,
+      CUST_CD,
+      EUSER_CD,
+      ITEM_TYPE,
+      BIZ_TYPE,
+      SALES_YM,
+      KRW_AMOUNT,
+      (
+      CASE WHEN (SALES_YM BETWEEN #start_yymm# AND #end_yymm_m#) AND SALES_GUBUN = '세금계산서'
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE 0
+      END
+      ) AS SEARCH_AMOUNT,
+      (
+      CASE WHEN SALES_YM = #end_yymm# AND SALES_GUBUN = #sales_base#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE 0
+      END
+      ) AS SEARCH_AMOUNT_2,
+      (CASE WHEN (SALES_YM BETWEEN #base_yy# + '01' AND #base_yy# + '03') AND SALES_GUBUN = #mm1#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE
+      0
+      END
+      ) AS MM1,
+      (CASE WHEN (SALES_YM BETWEEN #base_yy# + '04' AND #base_yy# + '06') AND SALES_GUBUN = #mm2#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE
+      0
+      END
+      ) AS MM2,
+      (CASE WHEN (SALES_YM BETWEEN #base_yy# + '07' AND #base_yy# + '09') AND SALES_GUBUN = #mm3#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE
+      0
+      END
+      ) AS MM3,
+      (CASE WHEN (SALES_YM BETWEEN #base_yy# + '10' AND #base_yy# + '12') AND SALES_GUBUN = #mm4#
+      THEN
+      <isEqual property="order_type" compareValue="N">
+        KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        PSBLT_KRW_AMOUNT
+      </isNotEqual>
+
+      ELSE
+      0
+      END
+      ) AS MM4
+      FROM
+      T_SALES_MRF_SUMRY
+      WHERE
+      COMPANY_CD = #company_cd# AND
+      (SALES_GUBUN = '세금계산서' OR SALES_GUBUN = '거래명세표') AND
+      SALES_YM LIKE #base_yy# + '%'
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+      ) AS A
+      GROUP BY
+      COMPANY_CD,
+      DEPT_CD,
+      DSTR_TYPE,
+      USER_CD,
+      CUST_CD,
+      EUSER_CD,
+      ITEM_TYPE,
+      BIZ_TYPE
+      ) AS A
+      LEFT OUTER JOIN
+      (
+      SELECT
+      COMPANY_CD,
+      DEPT_CD,
+      DSTR_TYPE,
+      USER_CD,
+      CUST_CD,
+      EUSER_CD,
+      ITEM_TYPE,
+      BIZ_TYPE,
+      <isEqual property="order_type" compareValue="N">
+        SUM(KRW_AMOUNT) AS RE_KRW_AMOUNT
+      </isEqual>
+      <isNotEqual property="order_type" compareValue="N">
+        SUM(PSBLT_KRW_AMOUNT) AS RE_KRW_AMOUNT
+      </isNotEqual>
+      FROM
+      T_SALES_MRF_SUMRY
+      WHERE
+      COMPANY_CD = #company_cd# AND
+      SALES_GUBUN = '세금계산서' AND
+      SALES_YM BETWEEN #re_start_yymm# AND #re_end_yymm#
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+      GROUP
+      BY
+      COMPANY_CD,
+      DEPT_CD,
+      DSTR_TYPE,
+      USER_CD,
+      CUST_CD,
+      EUSER_CD,
+      ITEM_TYPE,
+      BIZ_TYPE
+      ) AS B
+      ON
+      A.DEPT_CD = B.DEPT_CD AND
+      A.DSTR_TYPE = B.DSTR_TYPE AND
+      A.USER_CD = B.USER_CD AND
+      A.CUST_CD = B.CUST_CD AND
+      A.EUSER_CD = B.EUSER_CD AND
+      A.ITEM_TYPE = B.ITEM_TYPE AND
+      A.BIZ_TYPE = B.BIZ_TYPE
+      LEFT OUTER JOIN
+      T_DEPARTMENT AS D
+      ON
+      A.COMPANY_CD = D.COMPANY_CD AND
+      A.DEPT_CD = D.DEPT_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT AS D2
+      ON
+      D.COMPANY_CD = D2.COMPANY_CD AND
+      D.UP_DEPT_CD = D2.DEPT_CD
+      LEFT OUTER JOIN
+      T_USER AS U
+      ON
+      A.COMPANY_CD = U.COMPANY_CD AND
+      A.USER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER C
+      ON
+      A.COMPANY_CD = C.COMPANY_CD AND
+      A.CUST_CD = C.CUST_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER C2
+      ON
+      A.COMPANY_CD = C2.COMPANY_CD AND
+      A.EUSER_CD = C2.CUST_CD
+      LEFT OUTER JOIN
+      (SELECT CODE_ID,CODE_KOR FROM T_CODE WHERE UP_CODE_ID = 'DSTR_TYPE') AS CD1
+      ON
+      A.DSTR_TYPE = CD1.CODE_ID
+      LEFT OUTER JOIN
+      (SELECT CODE_ID,CODE_KOR FROM T_CODE WHERE UP_CODE_ID = 'BIZ_TYPE') AS CD2
+      ON
+      A.BIZ_TYPE = CD2.CODE_ID
+      LEFT OUTER JOIN
+      (SELECT CODE_ID,CODE_KOR FROM T_CODE WHERE UP_CODE_ID = 'ITEM_TYPE') AS CD3
+      ON
+      A.ITEM_TYPE = CD3.CODE_ID
+
+      WHERE
+      1=1
+
+      <isNotEmpty property="deptGroup">
+        AND A.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND A.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="cust_nm">
+        <isNotEmpty property="cust_cd">
+          AND A.CUST_CD = #cust_cd#
+        </isNotEmpty>
+        <isEmpty property="cust_cd">
+          AND C.CUST_NM LIKE '%' + #cust_nm# + '%'
+          AND A.CUST_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="enduser_nm">
+        <isNotEmpty property="enduser_cd">
+          AND A.EUSER_CD = #enduser_cd#
+        </isNotEmpty>
+        <isEmpty property="enduser_cd">
+          AND C2.CUST_NM LIKE '%' + #enduser_nm# + '%'
+          AND A.EUSER_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="bcust_nm">
+        <isNotEmpty property="bcust_cd">
+          AND C.BCUST_CD = #bcust_cd#
+        </isNotEmpty>
+        <isEmpty property="bcust_cd">
+          AND C.BCUST_CD IN (SELECT CUST_CD FROM T_CUSTOMER WHERE CUST_NM LIKE '%' + #bcust_nm# + '%')
+        </isEmpty>
+        AND A.CUST_CD IS NOT NULL
+      </isNotEmpty>
+
+      <isNotEmpty property="item_type">
+        AND A.ITEM_TYPE = #item_type#
+      </isNotEmpty>
+
+
+    </select>
+
+
+
+
+
+
+
+  </statements>
+
+
+
+</sqlMap>

@@ -1,0 +1,1599 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+
+
+
+    <!-- 메인 : 왼쪽메뉴 권한 리스트 -->
+    <select id="leftMenuAuth" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      (SELECT COUNT(*) FROM T_MENU WHERE UP_MENU_ID = MENU.MENU_ID) AS CHILD_CNT
+      ,MENU.MENU_ID AS MENU_ID
+      ,ISNULL((SELECT  (CASE WHEN #language# = 'KOR' THEN TARGET_KOR
+      WHEN #language# = 'ENG' THEN TARGET_ENG
+      ELSE TARGET_KOR
+      END)
+      FROM T_LANGUAGE
+      WHERE BASE_ITEM = M.MENU_NM),M.MENU_NM) AS MENU_NM
+      ,M.MENU_URL2 AS MENU_URL
+      ,MENU.USE_SCOPE AS USE_SCOPE
+      ,MENU.DEPT_YN AS DEPT_YN
+      ,MENU.ODEPT_SCOPE AS ODEPT_SCOPE
+      ,MENU.IDEPT_SCOPE AS IDEPT_SCOPE
+      FROM
+      T_AUTHORITY AUTH
+      ,T_AUTH_MENU MENU
+      ,T_MENU M
+      WHERE AUTH.AUTH_ID = MENU.AUTH_ID
+      AND MENU.MENU_ID = M.MENU_ID
+      AND M.USE_YN = 'Y'
+      AND AUTH.USE_YN = 'Y'
+      AND MENU.USE_YN = 'Y'
+      AND MENU.MENU_ID like 'M%'
+      AND substring(MENU.MENU_ID,0,3) not in('M1','M9')
+      AND M.UP_MENU_ID = #up_menu_id#
+      AND AUTH.AUTH_ID = #auth_id#
+      order by MENU.MENU_ID
+
+    </select>
+
+
+    <!-- 메인 : 매출분석 -->
+    <select id="getT1_info" parameterClass="Hashtable" resultClass="Hashtable">
+      <isEqual property="t1button" compareValue="sales">
+
+        SELECT
+        ROUND(T1_1_1, 0) AS T1_1_1
+        , ROUND(T1_1_2, 0) AS T1_1_2
+        , ROUND(T1_1_3, 0) AS T1_1_3
+        , ROUND(T1_2_1, 0) AS T1_2_1
+        , ROUND(T1_2_2, 0) AS T1_2_2
+        , ROUND(T1_2_3, 0) AS T1_2_3
+        , ROUND((T1_1_1+T1_2_1), 0) AS T1_3_1
+        , ROUND((T1_1_2+T1_2_2), 0) AS T1_3_2
+        , ROUND((T1_1_3+T1_2_3), 0) AS T1_3_3
+     
+
+        FROM
+        (
+        SELECT
+        (
+        SELECT ISNULL(SUM(A.KRW_AMOUNT), 0) AS T1_1_1
+        FROM T_SALES_MRF_SUMRY AS A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.SALES_GUBUN = '세금계산서'
+        AND A.SALES_YM BETWEEN #pre_yyyy01# AND #pre_yyyypre_mm#
+
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+
+
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        ) AS T1_1_1
+        , (
+        SELECT ISNULL(SUM(A.KRW_AMOUNT), 0) AS T1_1_2
+        FROM T_SALES_MRF_SUMRY AS A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.SALES_GUBUN = '목표'
+        AND A.SALES_YM BETWEEN #yyyy01# AND #yyyypre_mm#
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        ) AS T1_1_2
+        , (
+        SELECT ISNULL(SUM(A.KRW_AMOUNT), 0) AS T1_1_3
+        FROM T_SALES_MRF_SUMRY AS A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.SALES_GUBUN = #sales_base#
+        AND A.SALES_YM BETWEEN #yyyy01# AND #yyyypre_mm#
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        ) AS T1_1_3
+        , (
+        SELECT ISNULL(SUM(A.KRW_AMOUNT), 0) AS T1_2_1
+        FROM T_SALES_MRF_SUMRY AS A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.SALES_GUBUN = '세금계산서'
+        AND A.SALES_YM = #pre_yyyymm#
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        ) AS T1_2_1
+        , (
+        SELECT ISNULL(SUM(A.KRW_AMOUNT), 0) AS T1_2_2
+        FROM T_SALES_MRF_SUMRY AS A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.SALES_GUBUN = '목표'
+        AND A.SALES_YM = #yyyymm#
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        ) AS T1_2_2
+        , (
+        SELECT ISNULL(SUM(A.KRW_AMOUNT), 0) AS T1_2_3
+        FROM T_SALES_MRF_SUMRY AS A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.SALES_GUBUN = #sales_base#
+        AND A.SALES_YM = #yyyymm#
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        ) AS T1_2_3
+        ) A
+      </isEqual>
+
+      <isEqual property="t1button" compareValue="order">
+
+        SELECT
+        ROUND(T1_1_1, 0) AS T1_1_11111
+        , ROUND(T1_1_2, 0) AS T1_1_2
+        , ROUND(T1_1_3, 0) AS T1_1_3
+        , ROUND(T1_2_1, 0) AS T1_2_1
+        , ROUND(T1_2_2, 0) AS T1_2_2
+        , ROUND(T1_2_3, 0) AS T1_2_3
+        , ROUND((T1_1_1+T1_2_1), 0) AS T1_3_1
+        , ROUND((T1_1_2+T1_2_2), 0) AS T1_3_2
+        , ROUND((T1_1_3+T1_2_3), 0) AS T1_3_3
+        FROM
+        (
+        SELECT
+        (
+        SELECT ISNULL(SUM(A.KRW_AMOUNT), 0) AS T1_1_1
+        FROM T_ORDER_MRF_SUMRY AS A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.ORDER_GUBUN = '실적'
+        AND A.ORDER_YM BETWEEN #pre_yyyy01# AND #pre_yyyypre_mm#
+
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+
+        ) AS T1_1_1
+        , (
+        SELECT ISNULL(SUM(A.KRW_AMOUNT), 0) AS T1_1_2
+        FROM T_ORDER_MRF_SUMRY AS A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.ORDER_GUBUN = '목표'
+        AND A.ORDER_YM BETWEEN #yyyy01# AND #yyyypre_mm#
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        ) AS T1_1_2
+        , (
+        SELECT ISNULL(SUM(A.KRW_AMOUNT), 0) AS T1_1_3
+        FROM T_ORDER_MRF_SUMRY AS A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.ORDER_GUBUN = '실적'
+        AND A.ORDER_YM BETWEEN #yyyy01# AND #yyyypre_mm#
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        ) AS T1_1_3
+        , (
+        SELECT ISNULL(SUM(A.KRW_AMOUNT), 0) AS T1_2_1
+        FROM T_ORDER_MRF_SUMRY AS A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.ORDER_GUBUN = '실적'
+        AND A.ORDER_YM = #pre_yyyymm#
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        ) AS T1_2_1
+        , (
+        SELECT ISNULL(SUM(A.KRW_AMOUNT), 0) AS T1_2_2
+        FROM T_ORDER_MRF_SUMRY AS A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.ORDER_GUBUN = '목표'
+        AND A.ORDER_YM = #yyyymm#
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        ) AS T1_2_2
+        , (
+        SELECT ISNULL(SUM(A.KRW_AMOUNT), 0) AS T1_2_3
+        FROM T_ORDER_MRF_SUMRY AS A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.ORDER_GUBUN = '실적'
+        AND A.ORDER_YM = #yyyymm#
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        ) AS T1_2_3
+        ) A
+      </isEqual>
+
+    </select>
+
+
+
+    <!-- 메인 : 활동현황 -->
+    <select id="getT2_info" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      SA_CD
+      , SA_SUBJECT
+      , DBO.FN_GET_USER_NM(A.USER_CD) AS USER_NM
+      , dbo.FN_GET_CODE_NM(#language#, 'SA_TYPE', A.SA_TYPE) AS SA_TYPE_NM 
+      FROM T_SALES_ACTIVITY A
+      WHERE A.COMPANY_CD = #company_cd#
+      <isEqual property="t2button" compareValue="yesterday">
+        <![CDATA[AND SA_SDATE <= CONVERT(NVARCHAR, DATEADD(D, -1, GETDATE()), 112) AND SA_EDATE >= CONVERT(NVARCHAR, DATEADD(D, -1, GETDATE()), 112)]]>
+      </isEqual>
+      <isEqual property="t2button" compareValue="today">  
+        <![CDATA[AND SA_SDATE <= CONVERT(NVARCHAR, GETDATE(), 112) AND SA_EDATE >= CONVERT(NVARCHAR, GETDATE(), 112)]]>
+      </isEqual>
+      <isEqual property="t2button" compareValue="tomorrow">    
+        <![CDATA[AND SA_SDATE <= CONVERT(NVARCHAR, DATEADD(D, 1, GETDATE()), 112) AND SA_EDATE >= CONVERT(NVARCHAR, DATEADD(D, 1, GETDATE()), 112)]]>
+      </isEqual>
+      AND USER_CD = #user_cd#
+    </select>
+    
+    
+    
+   
+    <!-- 메인 : 월별 Sample 진행중, 진행완료건  제작의뢰일 기준  -->
+    <select id="getT3_info" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      FF.MONTH, FF.SMSTAT_400,FF.SMSTAT_500
+      FROM (
+      SELECT
+      SUBSTRING(A.PRDT_RDATE,5,2) AS MONTH,
+      SUM(CASE WHEN SMP_STATUS = 'SMSTAT_400' THEN 1 ELSE 0 END) AS SMSTAT_400,
+      SUM(CASE WHEN SMP_STATUS = 'SMSTAT_500' THEN 1 ELSE 0 END) AS SMSTAT_500
+      FROM T_SAMPLE A
+      LEFT OUTER JOIN T_DEPARTMENT AS D
+      ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+      WHERE A.COMPANY_CD = #company_cd#
+      AND SMP_STATUS IN ('SMSTAT_400','SMSTAT_500')
+      <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+      <isNotEmpty property="year">
+        AND SUBSTRING(A.PRDT_RDATE,1,4) = #year#
+      </isNotEmpty>
+      GROUP BY SUBSTRING(A.PRDT_RDATE,5,2)
+      ) FF
+      ORDER BY FF.MONTH
+    </select>
+
+    <!-- 메인 : Sample 진행상황 -->
+    <select id="getT3_info_bak" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      DBO.FN_GET_ITEM_NM(A.ITEM_CD) AS ITEM_NM
+      , dbo.FN_GET_CODE_NM(#language#, 'SMP_STATUS', A.SMP_STATUS) AS SMP_STATUS_NM
+      , CMPT_RDATE
+      , PRDT_PDATE
+      FROM T_SAMPLE A
+      LEFT OUTER JOIN T_DEPARTMENT AS D
+      ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+      WHERE A.COMPANY_CD = #company_cd#
+      AND SMP_STATUS IN ('SMSTAT_200','SMSTAT_300','SMSTAT_400')
+      <isNotEmpty property="deptGroup">
+        AND A.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND A.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND A.USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="dstr_type">
+        AND A.DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      
+    </select>
+
+
+
+
+
+
+    <!-- 메인 : 사업전망관리 수주예정현황 -->
+      <select id="getT4_info" parameterClass="Hashtable" resultClass="Hashtable">
+        SELECT
+        VALUE_1 AS DEPT_TYPE,
+        CASE
+        WHEN #LANGUAGE# = 'ENG' THEN CODE_KOR
+        WHEN #LANGUAGE# = 'KOR' THEN CODE_ENG
+        ELSE CODE_NM
+        END AS DSTR_NM,
+        ISNULL((SELECT SUM(D.KRW_AMOUNT)
+        FROM T_OPPORTUNITY B,
+        T_OPPT_FCST C,
+        T_OPPT_ITEM D,
+        T_DEPARTMENT E
+        WHERE
+        B.DSTR_TYPE = A.CODE_ID
+        AND
+        B.OPPT_CD = C.OPPT_CD
+        AND
+        B.OPPT_CD = D.OPPT_CD
+        AND
+        C.USE_YN = 'Y'
+        AND
+        B.COMPANY_CD = E.COMPANY_CD
+        AND B.DEPT_CD = E.DEPT_CD
+        <isNotEmpty property="deptGroup">
+        AND B.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND E.UP_DEPT_CD = #bizGroup#
+          AND B.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND B.USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="yyyymm">
+        AND SUBSTRING(B.WSO_PDATE,1,6) = #yyyymm#
+      </isNotEmpty>
+        ),0) AS KRW_AMOUNT1, 
+        ISNULL((SELECT SUM(D.KRW_AMOUNT)
+        FROM T_OPPORTUNITY B,
+        T_OPPT_FCST C,
+        T_OPPT_ITEM D,
+        T_DEPARTMENT E
+        WHERE
+        B.DSTR_TYPE = A.CODE_ID
+        AND
+        B.OPPT_CD = C.OPPT_CD
+        AND
+        B.OPPT_CD = D.OPPT_CD
+        AND
+        C.USE_YN = 'Y'
+        AND
+        B.COMPANY_CD = E.COMPANY_CD
+        AND B.DEPT_CD = E.DEPT_CD
+        <isNotEmpty property="deptGroup">
+          AND B.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND E.UP_DEPT_CD = #bizGroup#
+            AND B.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+        <isNotEmpty property="user_cd">
+          AND B.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="yyyymm">
+          AND SUBSTRING(B.WSO_PDATE,1,6) = #yyyynext_mm#
+        </isNotEmpty>
+        ),0) AS KRW_AMOUNT2
+        FROM T_CODE A
+        WHERE
+        A.UP_CODE_ID = 'DSTR_TYPE'
+        AND ISNULL(A.USE_YN,'N') = 'Y'
+        <isNotEmpty property="dstr_type">
+          AND A.CODE_ID = #dstr_type#
+        </isNotEmpty>
+        <isNotEmpty property="dept_type">
+          AND A.VALUE_1 = #dept_type#
+        </isNotEmpty>
+        ORDER BY A.VALUE_1, A.CODE_ORDER
+      </select>
+
+
+
+    <!--  메인 : 매출현황 - 월별 > 목표 -->
+    <select id="getMonthChart1" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT MONTH, KRW_AMOUNT FROM (
+      <isEqual property="t1button" compareValue="sales">
+        SELECT
+        SUBSTRING(A.SALES_YM, 5, 2) AS MONTH
+        , SUM(A.KRW_AMOUNT)/1000000 AS KRW_AMOUNT
+        FROM T_SALES_MRF_SUMRY A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.SALES_GUBUN = '목표'
+        AND A.SALES_YM LIKE #year#+'%'
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        GROUP BY A.SALES_YM
+      </isEqual>
+      
+      <isEqual property="t1button" compareValue="order">
+        SELECT
+        SUBSTRING(A.ORDER_YM, 5, 2) AS MONTH
+        , SUM(A.KRW_AMOUNT)/1000000 AS KRW_AMOUNT
+        FROM T_ORDER_MRF_SUMRY A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.ORDER_GUBUN = '목표'
+        AND A.ORDER_YM LIKE #year#+'%'
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        GROUP BY A.ORDER_YM
+      </isEqual>
+      )T ORDER BY MONTH
+	</select>
+
+
+
+
+    <!--  메인 : 매출현황 - 월별 > 실적 -->
+	  <select id="getMonthChart2" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT MONTH,KRW_AMOUNT FROM (
+      <isEqual property="t1button" compareValue="sales">
+
+        SELECT
+        SUBSTRING(A.SALES_YM, 5, 2) AS MONTH
+        , SUM(A.KRW_AMOUNT)/1000000 AS KRW_AMOUNT
+        FROM T_SALES_MRF_SUMRY A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.SALES_GUBUN = '세금계산서'
+        AND A.SALES_YM LIKE #year#+'%'
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        GROUP BY A.SALES_YM
+        UNION ALL
+        SELECT
+        SUBSTRING(A.SALES_YM, 5, 2) AS MONTH
+        , SUM(A.KRW_AMOUNT)/1000000 AS KRW_AMOUNT
+        FROM T_SALES_MRF_SUMRY A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.SALES_GUBUN = #sales_base#
+        AND A.SALES_YM LIKE #year#+'%'
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        GROUP BY A.SALES_YM
+      </isEqual>
+      
+      
+      
+        <isEqual property="t1button" compareValue="order">
+          SELECT
+          SUBSTRING(A.ORDER_YM, 5, 2) AS MONTH
+          , SUM(A.KRW_AMOUNT)/1000000 AS KRW_AMOUNT
+          FROM T_ORDER_MRF_SUMRY A
+          LEFT OUTER JOIN T_DEPARTMENT AS D
+          ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+          WHERE A.COMPANY_CD = #company_cd#
+          AND A.ORDER_GUBUN = '실적'
+          AND A.ORDER_YM LIKE '#year#%'
+          <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty> 
+				GROUP BY A.ORDER_YM
+			</isEqual>
+      )T ORDER BY MONTH
+    </select>
+
+
+
+
+    <!--  메인 : 매출현황 - 월별 > 통합 -->
+    <select id="getMonthChartTOT" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT AA.MONTH,AA.KRW_AMOUNT1,BB.KRW_AMOUNT2
+      FROM
+      (
+      <isEqual property="t1button" compareValue="sales">
+        SELECT
+        SUBSTRING(A.SALES_YM, 5, 2) AS MONTH,
+        SUM(A.KRW_AMOUNT)/1000000 AS KRW_AMOUNT1
+        FROM T_SALES_MRF_SUMRY A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.SALES_GUBUN = '목표'
+        AND A.SALES_YM LIKE #year#+'%'
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        GROUP BY A.SALES_YM
+      </isEqual>
+      
+      <isEqual property="t1button" compareValue="order">
+        SELECT
+        SUBSTRING(A.ORDER_YM, 5, 2) AS MONTH
+        , SUM(A.KRW_AMOUNT)/1000000 AS KRW_AMOUNT1
+        FROM T_ORDER_MRF_SUMRY A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.ORDER_GUBUN = '목표'
+        AND A.ORDER_YM LIKE #year#+'%'
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        GROUP BY A.ORDER_YM
+      </isEqual>
+      ) AA,
+      (
+      <isEqual property="t1button" compareValue="sales">
+
+        SELECT
+        SUBSTRING(A.SALES_YM, 5, 2) AS MONTH
+        , SUM(A.KRW_AMOUNT)/1000000 AS KRW_AMOUNT2
+        FROM T_SALES_MRF_SUMRY A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.SALES_GUBUN = '세금계산서'
+        AND A.SALES_YM LIKE #year#+'%'
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        GROUP BY A.SALES_YM
+        UNION ALL
+        SELECT
+        SUBSTRING(A.SALES_YM, 5, 2) AS MONTH
+        , SUM(A.KRW_AMOUNT)/1000000 AS KRW_AMOUNT2
+        FROM T_SALES_MRF_SUMRY A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.SALES_GUBUN = #sales_base#
+        AND A.SALES_YM LIKE #year#+'%'
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        GROUP BY A.SALES_YM
+      </isEqual> 
+      
+      <isEqual property="t1button" compareValue="order">
+        SELECT
+        SUBSTRING(A.ORDER_YM, 5, 2) AS MONTH
+        , SUM(A.KRW_AMOUNT)/1000000 AS KRW_AMOUNT2
+        FROM T_ORDER_MRF_SUMRY A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.ORDER_GUBUN = '실적'
+        AND A.ORDER_YM LIKE '#year#%'
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        GROUP BY A.ORDER_YM
+      </isEqual>
+      ) BB
+      WHERE AA.MONTH = BB.MONTH
+    </select>  
+
+
+    <!-- 메인 : 매출현황 - 누계 > 실적 -->
+    <select id="getNomonthChart1" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT MONTH,SUM(KRW_AMOUNT) as KRW_AMOUNT  FROM (
+      <isEqual property="t1button" compareValue="sales">
+            SELECT
+            SUBSTRING(WORK_YM, 5, 2) AS MONTH
+            , (
+            SELECT ISNULL(CASE WHEN '#wso_psblt#' = '적용' then SUM(A.PSBLT_KRW_AMOUNT) ELSE SUM(A.KRW_AMOUNT)/1000000 END, 0)
+            FROM T_SALES_MRF_SUMRY A
+            LEFT OUTER JOIN T_DEPARTMENT AS D
+            ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+            WHERE A.COMPANY_CD = #company_cd#
+            AND A.SALES_GUBUN = '세금계산서'
+            AND A.SALES_YM BETWEEN #yyyy01# AND #yyyypre_mm#
+            AND A.SALES_YM <![CDATA[<]]> B.WORK_YM
+            <isNotEmpty property="deptGroup">
+                    AND A.DEPT_CD = #deptGroup#
+                  </isNotEmpty>
+
+                  <isNotEmpty property="bizGroup">
+                    <isEmpty property="deptGroup">
+                      AND D.UP_DEPT_CD = #bizGroup#
+                      AND A.DEPT_CD IS NOT NULL
+                    </isEmpty>
+                  </isNotEmpty>
+                  <isNotEmpty property="user_cd">
+                    AND A.USER_CD = #user_cd#
+                  </isNotEmpty>
+                  <isNotEmpty property="dstr_type">
+                    AND A.DSTR_TYPE = #dstr_type#
+                  </isNotEmpty>
+            )+(
+            SELECT ISNULL(CASE WHEN '#wso_psblt#' = '적용' then SUM(A.PSBLT_KRW_AMOUNT) ELSE SUM(A.KRW_AMOUNT)/1000000 END, 0)
+            FROM T_SALES_MRF_SUMRY A
+            LEFT OUTER JOIN T_DEPARTMENT AS D
+            ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+            WHERE A.COMPANY_CD = #company_cd#
+            AND A.SALES_GUBUN = CASE WHEN B.WORK_YM = #yyyymm# THEN #sales_base# ELSE '세금계산서' END
+            AND A.SALES_YM = B.WORK_YM
+            <isNotEmpty property="deptGroup">
+                    AND A.DEPT_CD = #deptGroup#
+                  </isNotEmpty>
+
+                  <isNotEmpty property="bizGroup">
+                    <isEmpty property="deptGroup">
+                      AND D.UP_DEPT_CD = #bizGroup#
+                      AND A.DEPT_CD IS NOT NULL
+                    </isEmpty>
+                  </isNotEmpty>
+                  <isNotEmpty property="user_cd">
+                    AND A.USER_CD = #user_cd#
+                  </isNotEmpty>
+                  <isNotEmpty property="dstr_type">
+                    AND A.DSTR_TYPE = #dstr_type#
+                  </isNotEmpty>
+                  ) AS KRW_AMOUNT
+            FROM (
+              SELECT WORK_YM
+              FROM T_WORK_MCALENDAR
+              WHERE WORK_YM LIKE #year#+'%'
+              ) B
+            WHERE WORK_YM <![CDATA[<=]]> #yyyymm#
+        </isEqual>
+
+        <isEqual property="t1button" compareValue="order">
+          SELECT
+          SUBSTRING(WORK_YM, 5, 2) AS MONTH
+          , (
+          SELECT ISNULL(SUM(A.KRW_AMOUNT)/1000000, 0)
+          FROM T_ORDER_MRF_SUMRY A
+          LEFT OUTER JOIN T_DEPARTMENT AS D
+          ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+          WHERE A.COMPANY_CD = #company_cd#
+          AND A.ORDER_GUBUN = '실적'
+          AND A.ORDER_YM BETWEEN #yyyy01# AND B.WORK_YM
+          <isNotEmpty property="deptGroup">
+                AND A.DEPT_CD = #deptGroup#
+              </isNotEmpty>
+
+              <isNotEmpty property="bizGroup">
+                <isEmpty property="deptGroup">
+                  AND D.UP_DEPT_CD = #bizGroup#
+                  AND A.DEPT_CD IS NOT NULL
+                </isEmpty>
+              </isNotEmpty>
+                <isNotEmpty property="user_cd">
+                  AND A.USER_CD = #user_cd#
+                </isNotEmpty>
+                <isNotEmpty property="dstr_type">
+                  AND A.DSTR_TYPE = #dstr_type#
+                </isNotEmpty>
+                ) AS KRW_AMOUNT
+            FROM
+              (
+              SELECT WORK_YM
+              FROM T_WORK_MCALENDAR
+              WHERE WORK_YM LIKE #year#+'%'
+              ) B
+            WHERE WORK_YM <![CDATA[<=]]> #yyyymm#
+        </isEqual>
+      )T GROUP BY MONTH  
+    </select>
+
+    
+    
+    
+
+
+    <!-- 메인 : 매출현황 - 누계 > 추정 -->
+    <select id="getNomonthChart2" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT MONTH,SUM(KRW_AMOUNT) as KRW_AMOUNT FROM (
+      <isEqual property="t1button" compareValue="sales">
+        SELECT
+        SUBSTRING(WORK_YM, 5, 2) AS MONTH
+        , (
+        SELECT ISNULL(CASE WHEN '#wso_psblt#' = '적용' then SUM(A.PSBLT_KRW_AMOUNT) ELSE SUM(A.KRW_AMOUNT)/1000000 END, 0)
+        FROM T_SALES_MRF_SUMRY A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.SALES_GUBUN = '세금계산서'
+        AND A.SALES_YM LIKE '#year#%'
+        AND A.SALES_YM <![CDATA[<]]> CASE WHEN B.WORK_YM <![CDATA[<=]]> '#yyyymm#' THEN B.WORK_YM ELSE '#yyyymm#' END
+
+            <isNotEmpty property="deptGroup">
+              AND A.DEPT_CD = #deptGroup#
+            </isNotEmpty>
+
+            <isNotEmpty property="bizGroup">
+              <isEmpty property="deptGroup">
+                AND D.UP_DEPT_CD = #bizGroup#
+                AND A.DEPT_CD IS NOT NULL
+              </isEmpty>
+            </isNotEmpty>
+              <isNotEmpty property="user_cd">
+                AND A.USER_CD = #user_cd#
+              </isNotEmpty>
+              <isNotEmpty property="dstr_type">
+                AND A.DSTR_TYPE = #dstr_type#
+              </isNotEmpty>
+              <isNotEmpty property="item_type">
+                AND A.ITEM_TYPE = #item_type#
+              </isNotEmpty>
+
+        )+(
+        SELECT ISNULL(CASE WHEN '#wso_psblt#' = '적용' then SUM(A.PSBLT_KRW_AMOUNT) ELSE SUM(A.KRW_AMOUNT)/1000000 END, 0)
+        FROM T_SALES_MRF_SUMRY A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.SALES_GUBUN = CASE WHEN B.WORK_YM <![CDATA[<]]> #yyyymm# THEN '세금계산서' ELSE #sales_base# END
+        AND A.SALES_YM <![CDATA[=]]> CASE WHEN B.WORK_YM <![CDATA[<=]]> '#yyyymm#' THEN B.WORK_YM ELSE '#yyyymm#' END
+            <isNotEmpty property="deptGroup">
+              AND A.DEPT_CD = #deptGroup#
+            </isNotEmpty>
+
+            <isNotEmpty property="bizGroup">
+              <isEmpty property="deptGroup">
+                AND D.UP_DEPT_CD = #bizGroup#
+                AND A.DEPT_CD IS NOT NULL
+              </isEmpty>
+            </isNotEmpty>
+            <isNotEmpty property="user_cd">
+              AND A.USER_CD = #user_cd#
+            </isNotEmpty>
+            <isNotEmpty property="dstr_type">
+              AND A.DSTR_TYPE = #dstr_type#
+            </isNotEmpty>
+        )+(
+        SELECT ISNULL(CASE WHEN '#wso_psblt#' = '적용' then SUM(A.PSBLT_KRW_AMOUNT) ELSE SUM(A.KRW_AMOUNT)/1000000 END, 0)
+        FROM T_SALES_MRF_SUMRY A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        <isEqual property="sales_base" compareValue="거래명세표">
+          AND (A.SALES_GUBUN = '추정_기회' OR A.SALES_GUBUN = '추정_미출고')
+        </isEqual>
+              <isEqual property="sales_base" compareValue="세금계산서">
+                AND (A.SALES_GUBUN = '추정_기회' OR A.SALES_GUBUN = '추정_미청구')
+              </isEqual>
+        AND A.BASE_YM = #yyyymm#
+        AND A.SALES_YM BETWEEN #yyyynext_mm# AND B.WORK_YM
+        <isNotEmpty property="deptGroup">
+              AND A.DEPT_CD = #deptGroup#
+            </isNotEmpty>
+
+            <isNotEmpty property="bizGroup">
+              <isEmpty property="deptGroup">
+                AND D.UP_DEPT_CD = #bizGroup#
+                AND A.DEPT_CD IS NOT NULL
+              </isEmpty>
+            </isNotEmpty>
+              <isNotEmpty property="user_cd">
+                AND A.USER_CD = #user_cd#
+              </isNotEmpty>
+              <isNotEmpty property="dstr_type">
+                AND A.DSTR_TYPE = #dstr_type#
+              </isNotEmpty>
+          ) AS KRW_AMOUNT
+          FROM
+              (
+              SELECT WORK_YM
+              FROM T_WORK_MCALENDAR
+              WHERE WORK_YM LIKE #year#+'%'
+              ) B 
+      </isEqual>
+
+      
+      <isEqual property="t1button" compareValue="order">
+        SELECT
+        SUBSTRING(B.WORK_YM, 5, 2) AS MONTH
+        , (
+        SELECT ISNULL(SUM(A.KRW_AMOUNT)/1000000, 0)
+        FROM T_ORDER_MRF_SUMRY A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.ORDER_GUBUN = '실적'
+        AND A.ORDER_YM BETWEEN #yyyy01# AND B.WORK_YM
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+          <isNotEmpty property="user_cd">
+            AND A.USER_CD = #user_cd#
+          </isNotEmpty>
+          <isNotEmpty property="dstr_type">
+            AND A.DSTR_TYPE = #dstr_type#
+          </isNotEmpty>
+        )+(
+        SELECT ISNULL(SUM(A.KRW_AMOUNT)/1000000, 0)
+        FROM T_ORDER_MRF_SUMRY A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.ORDER_GUBUN = '추정'
+        AND A.BASE_YM = #yyyymm#
+        AND A.ORDER_YM BETWEEN #yyyymm# AND  B.WORK_YM
+        <isNotEmpty property="deptGroup">
+            AND A.DEPT_CD = #deptGroup#
+          </isNotEmpty>
+
+          <isNotEmpty property="bizGroup">
+            <isEmpty property="deptGroup">
+              AND D.UP_DEPT_CD = #bizGroup#
+              AND A.DEPT_CD IS NOT NULL
+            </isEmpty>
+          </isNotEmpty>
+            <isNotEmpty property="user_cd">
+              AND A.USER_CD = #user_cd#
+            </isNotEmpty>
+            <isNotEmpty property="dstr_type">
+              AND A.DSTR_TYPE = #dstr_type#
+            </isNotEmpty>
+          ) AS KRW_AMOUNT
+          FROM
+          (
+            SELECT WORK_YM
+            FROM T_WORK_MCALENDAR
+            WHERE WORK_YM LIKE #year#+'%'
+          ) B
+      </isEqual>
+      )T GROUP BY MONTH  
+    </select>
+    
+    
+    
+
+
+    <!-- 메인 : 매출현황 - 누계 > 목표 -->
+    <select id="getNomonthChart3" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT MONTH,SUM(KRW_AMOUNT) as KRW_AMOUNT FROM (
+      <isEqual property="t1button" compareValue="sales">
+
+        SELECT
+        SUBSTRING(WORK_YM, 5, 2) AS MONTH
+        , (
+        SELECT ISNULL(CASE WHEN '#wso_psblt#' = '적용' then SUM(A.PSBLT_KRW_AMOUNT) ELSE SUM(A.KRW_AMOUNT)/1000000 END, 0)
+        FROM T_SALES_MRF_SUMRY A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.SALES_GUBUN = '목표'
+        AND A.SALES_YM BETWEEN #yyyy01# AND #yyyy12#
+        AND A.SALES_YM <![CDATA[<=]]> B.WORK_YM
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        ) AS KRW_AMOUNT
+        FROM
+        (
+        SELECT WORK_YM
+        FROM T_WORK_MCALENDAR
+        WHERE WORK_YM LIKE #year#+'%'
+        ) B
+      </isEqual>
+
+      <isEqual property="t1button" compareValue="order">
+        SELECT
+        SUBSTRING(WORK_YM, 5, 2) AS MONTH
+        , (
+        SELECT ISNULL(SUM(KRW_AMOUNT)/1000000, 0)
+        FROM T_ORDER_MRF_SUMRY A
+        LEFT OUTER JOIN T_DEPARTMENT AS D
+        ON A.COMPANY_CD = D.COMPANY_CD   AND A.DEPT_CD = D.DEPT_CD
+        WHERE A.COMPANY_CD = #company_cd#
+        AND A.ORDER_GUBUN = '목표'
+        AND A.ORDER_YM BETWEEN #yyyy01# AND #yyyy12#
+        AND A.ORDER_YM <![CDATA[<=]]> B.WORK_YM
+        <isNotEmpty property="deptGroup">
+          AND A.DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND A.DEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+        <isNotEmpty property="user_cd">
+          AND A.USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="dstr_type">
+          AND A.DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        ) AS KRW_AMOUNT
+        FROM
+        (
+        SELECT WORK_YM
+        FROM T_WORK_MCALENDAR
+        WHERE WORK_YM LIKE #year#+'%'
+        ) B
+      </isEqual>
+      )T  GROUP BY MONTH   
+    </select>
+
+    
+    
+    
+
+    <!-- 메인 : 공지팝업 - 장기 미수채권 업체 -->
+    <select id="getUserBadCustList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT CUST_CD,CUST_NM FROM T_CUSTOMER 
+      WHERE COMPANY_CD = #company_cd# AND USER_CD = #user_cd# AND BAD_AR_YN = 'Y'
+    </select>
+
+    
+    
+    
+    <!-- 메인 : 공지팝업 - 제품문의 사후관리 -->
+    <select id="getUserBadInqList" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      A.INQ_STATUS,
+      CD1.CODE_KOR AS INQ_STATUS_NM,
+      CONVERT(NVARCHAR(10),CONVERT(DATETIME,A.INQ_SDATE,85),23) AS INQ_SDATE,
+      A.INQ_RUSER_CD,
+      U.USER_NM AS INQ_RUSER_NM,
+      A.INQ_TYPE,
+      CD2.CODE_KOR AS INQ_TYPE_NM
+      FROM(
+      SELECT
+      INQ_STATUS,
+      (CASE WHEN INQ_STATUS = 'INQSTAT_200' THEN INQ_DDATE ELSE INQ_WDATE END) AS INQ_SDATE,
+      INQ_RUSER_CD,
+      (
+      CASE WHEN INQ_STATUS = 'INQSTAT_200'
+      THEN
+      CASE WHEN DATEDIFF(DD,CONVERT(DATETIME,INQ_DDATE,85),GETDATE()) > 2 THEN 'Y' ELSE 'N' END
+      ELSE
+      CASE WHEN DATEDIFF(DD,CONVERT(DATETIME,ISNULL(INQ_WDATE,CONVERT(NVARCHAR,GETDATE(),112)),85),GETDATE()) > 30 THEN 'Y' ELSE 'N' END
+      END
+      ) AS INQ_YN,
+      INQ_TYPE
+      FROM
+      T_PRDT_INQRY
+      WHERE
+      COMPANY_CD = #company_cd# AND
+      USER_CD = #user_cd# AND
+      (INQ_STATUS = 'INQSTAT_200' OR INQ_STATUS = 'INQSTAT_400')
+      ) AS A
+      LEFT OUTER JOIN
+      T_USER AS U
+      ON
+      A.INQ_RUSER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      (SELECT CODE_ID,CODE_KOR FROM T_CODE WHERE UP_CODE_ID = 'INQ_STATUS') AS CD1
+      ON
+      A.INQ_STATUS = CD1.CODE_ID
+      LEFT OUTER JOIN
+      (SELECT CODE_ID,CODE_KOR FROM T_CODE WHERE UP_CODE_ID = 'INQ_TYPE') AS CD2
+      ON
+      A.INQ_TYPE = CD2.CODE_ID
+      WHERE
+      A.INQ_YN = 'Y'
+      ORDER BY
+      INQ_SDATE DESC
+    </select>
+
+    
+    
+    <!-- 메인 : 공지팝업 - 샘플요청 관리 -->
+    <select id="getSmrRequestList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      SMR_CD,
+      SMR_CHASU,
+      EUSER_NM, 
+      SMR_RQDATE
+      FROM
+      T_SAMPLE_REQUEST
+      WHERE
+      SMP_STATUS = 'SMSTAT_020' AND
+      SMR_RQUSER IN (SELECT USER_CD FROM T_USER WHERE DSTR_CHN = #dstr_chn#)
+      ORDER BY
+      SMR_RRDATE DESC
+
+    </select>
+
+
+
+
+    <!-- 메인 : 파트너사1 -->
+    <select id="mainSampleInfo" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      ISNULL(SUM(SR.A11),0) AS SMSTAT_ALL
+      ,ISNULL(SUM(SR.A12),0) AS SMSTAT_N010
+      ,ISNULL(SUM(SR.A13),0) AS SMSTAT_060
+      ,ISNULL(SUM(SR.A14),0) AS SMSTAT_050
+      ,ISNULL(SUM(SR.A15),0) AS SMSTAT_080
+      ,ISNULL(SUM(SR.A16),0) AS SMSTAT_070
+      ,ISNULL(SUM(SR.A17),0) AS SMSTAT_400
+      ,ISNULL(SUM(SR.A18),0) AS SMSTAT_600
+      ,ISNULL(SUM(SR.A19),0) AS SMSTAT_650
+      ,ISNULL(SUM(SR.A20),0) AS SMSTAT_900
+      ,ISNULL(SUM(SR.A21),0) AS SMSTAT_700
+      ,(
+      CASE
+      WHEN (ISNULL(SUM(SR.A20),0) + ISNULL(SUM(SR.A21),0)) > 0
+      THEN CONVERT(NUMERIC(18, 2), ((ISNULL(SUM(SR.A21),0) / ((ISNULL(SUM(SR.A20),0) + ISNULL(SUM(SR.A21),0)))) * 100))
+      ELSE 0
+      END
+      ) AS SMSTAT_RUAL
+      FROM(
+      SELECT
+      1 AS A11,
+      (CASE WHEN S.SMP_STATUS != 'SMSTAT_010' THEN 1 ELSE 0 END) A12,
+      (CASE WHEN S.SMP_STATUS = 'SMSTAT_060' THEN 1 ELSE 0 END) A13,
+      (CASE WHEN S.SMP_STATUS = 'SMSTAT_050' THEN 1 ELSE 0 END) A14,
+      (CASE WHEN S.SMP_STATUS = 'SMSTAT_080' THEN 1 ELSE 0 END) A15,
+      (CASE WHEN S.SMP_STATUS = 'SMSTAT_070' THEN 1 ELSE 0 END) A16,
+      (CASE WHEN S.SMP_STATUS = 'SMSTAT_400' THEN 1 ELSE 0 END) A17,
+      (CASE WHEN S.SMP_STATUS = 'SMSTAT_600' THEN 1 ELSE 0 END) A18,
+      (CASE WHEN S.SMP_STATUS = 'SMSTAT_650' THEN 1 ELSE 0 END) A19,
+      (CASE WHEN S.SMP_STATUS = 'SMSTAT_900' THEN 1 ELSE 0 END) A20,
+      (CASE WHEN S.SMP_STATUS = 'SMSTAT_700' THEN 1 ELSE 0 END) A21
+      FROM
+      T_SAMPLE_REQUEST S
+      LEFT OUTER JOIN
+      (SELECT COMPANY_CD,DEPT_CD,DEPT_NM,UP_DEPT_CD FROM T_DEPARTMENT WHERE COMPANY_CD = #company_cd#) D
+      ON
+      S.COMPANY_CD = D.COMPANY_CD AND
+      S.QDEPT_CD = D.DEPT_CD
+
+      WHERE
+      S.COMPANY_CD = #company_cd#
+      AND S.USE_YN = 'Y'
+      
+      <isNotEmpty property="mode">
+        <isEqual property="mode" compareValue="toMonth">
+          AND S.SMR_RRDATE LIKE #toMonth# + '%'
+        </isEqual>
+
+        <isEqual property="mode" compareValue="all">
+          <![CDATA[  
+          AND (S.SMR_RRDATE >= #startDay# AND S.SMR_RRDATE <= #endDay#)
+          ]]>
+        </isEqual>
+      </isNotEmpty>
+
+      <isNotEmpty property="selfMode">
+        <isNotEmpty property="deptGroup">
+          AND S.QDEPT_CD = #deptGroup#
+        </isNotEmpty>
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND S.QDEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="user_cd">
+          AND S.QRUSER_CD = #user_cd#
+        </isNotEmpty>
+      </isNotEmpty>
+      ) AS SR
+
+    </select>
+
+
+
+    <!-- 메인 : 파트너사2 -->
+    <select id="mainSampleGrefInfo_old" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      ISNULL(SUM(MM1),0) AS MM1,
+      ISNULL(SUM(MM2),0) AS MM2,
+      ISNULL(SUM(MM3),0) AS MM3,
+      ISNULL(SUM(MM4),0) AS MM4,
+      ISNULL(SUM(MM5),0) AS MM5,
+      ISNULL(SUM(MM6),0) AS MM6,
+      ISNULL(SUM(MM7),0) AS MM7,
+      ISNULL(SUM(MM8),0) AS MM8,
+      ISNULL(SUM(MM9),0) AS MM9,
+      ISNULL(SUM(MM10),0) AS MM10,
+      ISNULL(SUM(MM11),0) AS MM11,
+      ISNULL(SUM(MM12),0) AS MM12
+      FROM(
+      SELECT
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '01%' THEN 1 ELSE 0 END) AS MM1,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '02%' THEN 1 ELSE 0 END) AS MM2,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '03%' THEN 1 ELSE 0 END) AS MM3,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '04%' THEN 1 ELSE 0 END) AS MM4,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '05%' THEN 1 ELSE 0 END) AS MM5,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '06%' THEN 1 ELSE 0 END) AS MM6,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '07%' THEN 1 ELSE 0 END) AS MM7,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '08%' THEN 1 ELSE 0 END) AS MM8,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '09%' THEN 1 ELSE 0 END) AS MM9,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '10%' THEN 1 ELSE 0 END) AS MM10,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '11%' THEN 1 ELSE 0 END) AS MM11,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '12%' THEN 1 ELSE 0 END) AS MM12
+      FROM
+      T_SAMPLE_REQUEST S
+      LEFT OUTER JOIN
+      (SELECT COMPANY_CD,DEPT_CD,DEPT_NM,UP_DEPT_CD FROM T_DEPARTMENT WHERE COMPANY_CD = #company_cd#) D
+      ON
+      S.COMPANY_CD = D.COMPANY_CD AND
+      S.QDEPT_CD = D.DEPT_CD
+      WHERE
+      S.COMPANY_CD = #company_cd# AND
+      S.USE_YN = 'Y' AND
+      S.SMP_STATUS = 'SMSTAT_700' AND
+      <![CDATA[
+			S.SMR_RRDATE <= #endDay#
+			]]>
+
+
+      <isNotEmpty property="selfMode">
+        <isNotEmpty property="deptGroup">
+          AND S.QDEPT_CD = #deptGroup#
+        </isNotEmpty>
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND S.QDEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="user_cd">
+          AND S.QRUSER_CD = #user_cd#
+        </isNotEmpty>
+      </isNotEmpty>
+      
+      ) AS SR
+    </select>
+
+
+    <select id="mainSampleGrefInfo" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      ISNULL(SUM(MM1),0) AS MM1,
+      ISNULL(SUM(MM2),0) AS MM2,
+      ISNULL(SUM(MM3),0) AS MM3,
+      ISNULL(SUM(MM4),0) AS MM4,
+      ISNULL(SUM(MM5),0) AS MM5,
+      ISNULL(SUM(MM6),0) AS MM6,
+      ISNULL(SUM(MM7),0) AS MM7,
+      ISNULL(SUM(MM8),0) AS MM8,
+      ISNULL(SUM(MM9),0) AS MM9,
+      ISNULL(SUM(MM10),0) AS MM10,
+      ISNULL(SUM(MM11),0) AS MM11,
+      ISNULL(SUM(MM12),0) AS MM12
+      FROM(
+      SELECT
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '01%' THEN 1 ELSE 0 END) AS MM1,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '02%' THEN 1 ELSE 0 END) AS MM2,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '03%' THEN 1 ELSE 0 END) AS MM3,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '04%' THEN 1 ELSE 0 END) AS MM4,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '05%' THEN 1 ELSE 0 END) AS MM5,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '06%' THEN 1 ELSE 0 END) AS MM6,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '07%' THEN 1 ELSE 0 END) AS MM7,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '08%' THEN 1 ELSE 0 END) AS MM8,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '09%' THEN 1 ELSE 0 END) AS MM9,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '10%' THEN 1 ELSE 0 END) AS MM10,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '11%' THEN 1 ELSE 0 END) AS MM11,
+      (CASE WHEN S.SMR_RRDATE LIKE #base_yy# + '12%' THEN 1 ELSE 0 END) AS MM12
+      FROM
+      T_SAMPLE_REQUEST S
+      LEFT OUTER JOIN
+      (SELECT COMPANY_CD,DEPT_CD,DEPT_NM,UP_DEPT_CD FROM T_DEPARTMENT WHERE COMPANY_CD = #company_cd#) D
+      ON
+      S.COMPANY_CD = D.COMPANY_CD AND
+      S.QDEPT_CD = D.DEPT_CD
+      WHERE
+      S.COMPANY_CD = #company_cd# AND
+      S.USE_YN = 'Y' 
+      <isNotEmpty property="smp_status">
+        AND S.SMP_STATUS = #smp_status#
+      </isNotEmpty>
+     
+ 
+ 
+         
+
+      ) AS SR
+    </select>
+
+
+
+    <!-- 메인 : 파트너사3 -->
+    <select id="mainSampleGrefInfo2" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      dbo.FN_GET_CODE_NM(#language#, 'SMP_STATUS',#smp_status#) AS NAME, 
+      COUNT(*) AS Y
+      FROM
+      T_SAMPLE_REQUEST S
+      LEFT OUTER JOIN
+      (SELECT COMPANY_CD,DEPT_CD,DEPT_NM,UP_DEPT_CD FROM T_DEPARTMENT WHERE COMPANY_CD = #company_cd#) D
+      ON
+      S.COMPANY_CD = D.COMPANY_CD AND
+      S.QDEPT_CD = D.DEPT_CD
+      WHERE
+      S.COMPANY_CD = #company_cd# AND
+      S.USE_YN = 'Y' AND
+      S.SMP_STATUS = #smp_status#
+
+      <isNotEmpty property="mode">
+        <isEqual property="mode" compareValue="toMonth">
+          AND S.SMR_RRDATE LIKE #toMonth# + '%'
+        </isEqual>
+
+        <isEqual property="mode" compareValue="all">
+          <![CDATA[  
+          AND (S.SMR_RRDATE >= #startDay# AND S.SMR_RRDATE <= #endDay#)
+          ]]>
+        </isEqual>
+      </isNotEmpty>
+
+      <isNotEmpty property="selfMode">
+        <isNotEmpty property="deptGroup">
+          AND S.QDEPT_CD = #deptGroup#
+        </isNotEmpty>
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND D.UP_DEPT_CD = #bizGroup#
+            AND S.QDEPT_CD IS NOT NULL
+          </isEmpty>
+        </isNotEmpty>
+
+        <isNotEmpty property="user_cd">
+          AND S.QRUSER_CD = #user_cd#
+        </isNotEmpty>
+      </isNotEmpty>
+      
+    </select>
+    
+    
+
+  </statements>
+
+
+
+</sqlMap>

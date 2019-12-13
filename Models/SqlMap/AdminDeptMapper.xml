@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+
+
+
+
+
+    <!-- 조직관리 : 조직정보 리스트 -->
+    <select id="deptList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      'S' AS MODE
+      ,DEPT.COMPANY_CD
+      ,COM.COMP_NM AS COMPANY_NM
+      ,DEPT.DEPT_CD
+      ,DEPT.DEPT_CD AS PREID
+      ,DEPT.DEPT_NM
+      ,DEPT.DEPT_ENG_NM
+      ,DEPT.DEPT_LEVEL
+      ,DEPT.UP_DEPT_CD
+      ,DEPT.DEPT_MGR
+      ,USR.USER_NM AS DEPT_MGR_NM
+      ,DEPT_SDATE
+      ,DEPT_EDATE
+      ,DEPT.CCTR
+      ,DEPT.PRCTR
+      ,ISNULL(DEPT.SADEPT_YN,'N') AS SADEPT_YN
+      ,ISNULL(DEPT.USE_YN,'N') AS USE_YN
+      ,DEPT.REG_DT
+      ,DEPT.REG_USR
+      ,DEPT.MOD_DT
+      ,DEPT.MOD_USR
+      ,(SELECT COUNT(*) FROM T_DEPARTMENT WHERE UP_DEPT_CD = DEPT.DEPT_CD) AS CHILD_CNT
+      FROM T_DEPARTMENT DEPT
+      LEFT JOIN
+      T_USER USR
+      ON DEPT.DEPT_MGR = USR.USER_CD
+      LEFT JOIN
+      T_COMPANY COM
+      ON
+      DEPT.COMPANY_CD = COM.COMPANY_CD
+      WHERE 1=1
+      <!-- AND DEPT.COMPANY_CD = #company_cd#  -->
+      <isNotEmpty property="searchDeptId">
+         AND DEPT.DEPT_CD LIKE '%' + #searchDeptId# + '%'
+      </isNotEmpty>
+      <isNotEmpty property="searchDeptNm">
+        AND DEPT.DEPT_NM LIKE '%' + #searchDeptNm# + '%'
+      </isNotEmpty>
+      <isNotEmpty property="searchLevel">
+        AND DEPT.DEPT_LEVEL = #searchLevel#
+      </isNotEmpty>
+      <isNotEmpty property="updeptId">
+        AND DEPT.UP_DEPT_CD = #updeptId#
+      </isNotEmpty>
+      <isNotEmpty property="deptId">
+        AND DEPT.DEPT_CD = #deptId#
+      </isNotEmpty>
+      <isNotEmpty property="preDeptId">
+        AND DEPT.DEPT_CD != #preDeptId#
+      </isNotEmpty>
+      <isNotEmpty property="searchUseYn">
+        AND DEPT.USE_YN = #searchUseYn#
+      </isNotEmpty>
+      <isNotEmpty property="sadeptYn">
+        AND DEPT.SADEPT_YN = #sadeptYn#
+      </isNotEmpty>
+      ORDER BY DEPT.DEPT_CD ASC
+    </select>
+
+
+
+    <!-- 조직관리 : 조직정보 등록 -->
+    <insert id="deptReg" parameterClass="Hashtable"> 
+      INSERT INTO T_DEPARTMENT
+      (
+      COMPANY_CD
+      , DEPT_CD
+      , DEPT_NM
+      , DEPT_ENG_NM
+      , DEPT_LEVEL
+      , UP_DEPT_CD
+      , DEPT_MGR
+      , DEPT_SDATE
+      , DEPT_EDATE
+      , CCTR
+      , PRCTR
+      , SADEPT_YN
+      , USE_YN
+      , REG_DT
+      , REG_USR
+      , MOD_DT
+      , MOD_USR
+      )
+      VALUES
+      (
+      #companyCd#
+      , #deptId#
+      , #deptName#
+      , #engName#
+      , #level#
+      , #upDeptCd#
+      , #mgrCd#
+      , #startDate#
+      , #endDate#
+      , #cctr#
+      , #prctr#
+      , #sadeptYn#
+      , #useYn#
+      , GETDATE()
+      , #userCd#
+      , GETDATE()
+      , #userCd#
+      ) 
+    </insert>
+
+    <!-- 조직관리 : 조직정보 수정 -->
+    <update id="deptModify" parameterClass="Hashtable"> 
+      UPDATE T_DEPARTMENT SET
+      DEPT_CD = #deptId#
+      ,DEPT_NM = #deptName#
+      ,DEPT_ENG_NM = #engName#
+      ,DEPT_LEVEL = #level#
+      ,UP_DEPT_CD = #upDeptCd#
+      ,DEPT_MGR = #mgrCd#
+      ,DEPT_SDATE = #startDate#
+      ,DEPT_EDATE = #endDate#
+      ,CCTR       = #cctr#
+      ,PRCTR      = #prctr#
+      ,SADEPT_YN  = #sadeptYn#
+      ,USE_YN     = #useYn#
+      ,MOD_DT     = GETDATE()
+      ,MOD_USR    = #userCd#
+      WHERE COMPANY_CD = #companyCd#
+      AND DEPT_CD = #preId#
+    </update>
+    
+
+    <!-- 조직관리 : 조직정보 삭제 -->
+    <delete id="deptDelete" parameterClass="Hashtable">
+      DELETE FROM
+      T_DEPARTMENT
+      WHERE COMPANY_CD = #companyCd#
+      AND DEPT_CD = #deptCd#
+    </delete>
+
+
+
+    
+    <!-- 조직관리 : 팝업 매니저 -->
+    <select id="popupMgrList" parameterClass="Hashtable" resultClass="Hashtable">
+
+      SELECT
+      USR.COMPANY_CD,
+      USR.USER_CD AS USER_CD
+      , USR.USER_NM AS USER_NM
+      , DEP.DEPT_NM AS DEPT_NM
+      , USR.USER_TITLE AS USER_TITLE
+      , USR.USER_POSIT AS USER_POSIT
+      , USR.EMAIL AS EMAIL
+      , USR.REG_DT
+      , USR.REG_USR
+      , USR.MOD_DT
+      , USR.MOD_USR
+      FROM T_USER USR
+      ,T_DEPARTMENT DEP
+      WHERE 1=1
+      AND USR.DEPT_CD = DEP.DEPT_CD
+      <isNotEmpty property="searchUserNm">
+        AND USR.USER_NM LIKE '%' + #searchUserNm# + '%'
+      </isNotEmpty>
+      <isNotEmpty property="selPart3">
+        AND USR.DEPT_CD = #selPart3#
+      </isNotEmpty>
+      <isEmpty property="selPart3">
+        <isNotEmpty property="selPart2">
+          AND (DEP.UP_DEPT_CD = #selPart2#
+          OR USR.DEPT_CD = #selPart2#)
+        </isNotEmpty>
+        <isEmpty property="selPart2">
+          <isNotEmpty property="selPart1">
+            AND (DEP.UP_DEPT_CD in (SELECT DEPT_CD FROM T_DEPARTMENT WHERE DEPT_CD = #selPart1#)
+            OR USR.DEPT_CD = #selPart1#)
+          </isNotEmpty>
+          <isEmpty property="selCompany">
+            AND USR.COMPANY_CD = #company_cd#
+          </isEmpty>
+        </isEmpty>
+      </isEmpty>
+
+
+      ORDER BY USER_NM
+    </select>
+
+
+
+
+  </statements>
+
+
+
+</sqlMap>

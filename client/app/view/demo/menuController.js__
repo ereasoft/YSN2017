@@ -1,0 +1,5 @@
+Ext.define('Ysn.view.demo.menuController', {
+    extend: 'Ext.app.ViewController',
+    alias: 'controller.demo-menu'
+    
+});

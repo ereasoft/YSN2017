@@ -1,0 +1,725 @@
+Ext.define('Ysn.view.main.mainViewsearch',{
+    extend: 'Ext.panel.Panel',
+	xtype: 'mainView-search',
+
+    requires: [
+        'Ysn.view.main.mainViewsearchController', 
+	    'Ysn.store.*'
+    ],
+
+    controller: 'mainView-search',
+    viewModel: {
+        type: 'mainView-search'
+    },
+
+    frame: true,
+    //resizable: true,
+    width: 800,
+    minWidth: 700,
+    minHeight: 55,
+    frameBorder:10,
+    layout: {
+        type: 'table', 
+        tableAttrs: {
+            style: {
+                //width: '100%'
+            }
+        }
+		
+    },
+    id: 'mainView-search',
+    defaults: {
+        layout: 'form',
+        xtype: 'container',
+        defaultType: 'textfield' 
+    },
+
+    items: [{
+        items: [
+				  {
+					xtype: 'fieldcontainer',
+					fieldLabel: Locale.getMsg('매출조직'),
+					labelAlign: 'right',
+					combineErrors: true,
+					msgTarget : 'side',
+					layout: 'hbox',
+					defaults: {
+						//flex: 1,
+						hideLabel: true 
+					},
+					items: [{
+						xtype: 'combobox',
+						reference: 'bizGroup',
+						itemId: 'bizGroup',
+						name: 'bizGroup',
+						publishes: 'value', 
+						displayField: 'DEPT_NM',
+						valueField: 'DEPT_CD',
+						margin: '0 5 0 0',
+						store: {
+							type: 'bizgroup'
+						},
+						minChars: 0,
+						width: 120,
+						queryMode: 'local', 
+						listeners: {
+							change : 'onChangeBiz' 
+						}
+					}, {
+						xtype: 'combobox',
+						reference: 'deptGroup',
+						itemId:'deptGroup',
+						name: 'deptGroup',
+						publishes: 'value', 
+						displayField: 'DEPT_NM',
+						valueField: 'DEPT_CD', 
+						store: {
+							type: 'deptgroup',
+							listeners: { load: function (store, records, successful, operation) {
+            if(!Ysn.Util.OnsessOut(operation._response.responseText)) return false; 
+												store.insert(0, {DEPT_CD: '',DEPT_NM: Locale.getMsg('전체')});
+												var bizCd = Ext.getCmp('mainView-search').down('#bizGroup');
+												if(store.data.items.length < 2){
+													Ext.getCmp('mainView-search').down('#user_cd').store.load({params:{dept_cd:bizCd.getValue(),up_dept_cd:''}});
+												}else{
+													Ext.getCmp('mainView-search').down('#user_cd').store.load({params:{dept_cd:'',up_dept_cd:bizCd.getValue()}});
+												}
+									   }}
+						},
+						minChars: 0,
+						width: 150,
+						maskOnDisable: true,
+						queryMode: 'local', 
+						listeners: {
+							change : 'onChangeDept' 
+						}
+					}]
+				  }
+				  
+        ]
+    },{
+        items: [
+				  {
+					xtype: 'combobox',
+					reference: 'userGroup',
+					publishes: 'value',
+					fieldLabel: Locale.getMsg('영업담당'),
+					labelAlign: 'right',
+					displayField: 'USER_NM',
+					valueField: 'USER_CD',
+					name: 'user_cd',
+					itemId : 'user_cd',
+					maskOnDisable: true,
+					anchor: '-15',
+					store: {
+						type: 'usercd'
+					},
+					minChars: 0,
+					width: 160,
+					queryMode: 'local'
+				  } 
+        ]
+    }, {
+        items: [
+				{
+			        xtype: 'combobox',
+					reference: 'dstr_type',
+					itemId: 'dstr_type',
+					publishes: 'value',
+					fieldLabel: Locale.getMsg('유통구조'),
+					labelAlign: 'right',
+					displayField: 'CODE_NM',
+					valueField: 'CODE_ID',
+					name: 'dstr_type',
+					anchor: '-15',
+					store: {
+						type: 'TcodeAll'
+					},
+					minChars: 0,
+					width: 160,
+					queryMode: 'local' 
+		   } 
+        ]
+    }, {
+        items: [
+            {
+			    xtype: 'fieldcontainer', 
+				combineErrors: true, 
+				layout: 'hbox',
+				defaults: {
+					//flex: 1,
+					//hideLabel: true, 
+				},
+					items: [{
+			        xtype: 'fieldcontainer', 
+				combineErrors: true, 
+				layout: 'hbox',
+				defaults: {
+					//flex: 1,
+					//hideLabel: true,
+					margin: '0 5 0 0' 
+				},
+					items: [{
+						xtype: 'combobox',
+						reference: 'base_y',
+						publishes: 'value',
+						fieldLabel: Locale.getMsg('기준년월'),
+						width: 200,
+						labelAlign: 'right',
+						displayField: 'YEAR',
+						valueField: 'VAL',
+						name: 'base_y',
+						itemId : 'base_y',
+						maskOnDisable: true,
+						anchor: '-15',
+						store: {
+							type: 'year'
+						},
+						minChars: 0,
+						queryMode: 'local',
+						margin: '0 5 0 0' 
+					},{
+						xtype: 'combobox',
+						reference: 'base_m',
+						publishes: 'value', 
+						labelAlign: 'right',
+						width: 70,
+						displayField: 'MONTH',
+						valueField: 'VAL',
+						name: 'base_m',
+						itemId : 'base_m',
+						maskOnDisable: true,
+						anchor: '-15',
+						store: {
+							type: 'month'
+						},
+						minChars: 0,
+						queryMode: 'local',
+						margin: '0 10 0 0' 
+					} ]
+		   } ]
+		   } 
+        ]
+    }/*,{
+        items: [
+            { 
+					xtype: 'button',
+					text: Locale.getMsg('검색'),
+					height: 30,
+				    width: 60,
+					listeners: {
+							click : 'onSubmitClick' 
+					}
+		    }
+        ]
+    }*/ ] 
+});
+
+Ext.define('Ysn.view.main.mainViewsearchController', {
+    extend: 'Ext.app.ViewController',
+    alias: 'controller.mainView-search',
+	init: function() {
+	 var Today = new Date(); 
+	 this.lookupReference('bizGroup').store.load();  
+     this.lookupReference('bizGroup').setValue(''); 
+	 this.lookupReference('dstr_type').store.load({params:{up_code_id:'DSTR_TYPE'}});   
+	 this.lookupReference('dstr_type').setValue('');
+     this.lookupReference('base_y').store.load();  
+     this.lookupReference('base_y').setValue(Today.getFullYear()); 
+	 this.lookupReference('base_m').store.load();  
+     this.lookupReference('base_m').setValue('0'+(Today.getMonth()+1));  	 
+	}, 
+	onChangeBiz: function(el,newVal,oldVal,e){
+		var deptCombo = this.lookupReference('deptGroup'); 
+		var userCombo = this.lookupReference('userGroup');
+		if(oldVal != null){
+				deptCombo.store.load({params:{up_dept_cd:newVal}}); 
+				 
+		}else{
+				deptCombo.store.insert(0, {DEPT_CD: '',DEPT_NM: Locale.getMsg('전체')}); 
+				userCombo.store.insert(0, {USER_CD: '',USER_NM: Locale.getMsg('전체')}); 				
+		}
+		deptCombo.setValue('');
+		deptCombo.doQuery();
+		userCombo.setValue('');
+		userCombo.doQuery(); 
+		el.focus();
+
+	},
+	onChangeDept: function(el,newVal,oldVal,e){
+		var userCombo = this.lookupReference('userGroup');
+		if(oldVal != null){
+		userCombo.store.load({params:{dept_cd:newVal,up_dept_cd:this.lookupReference('bizGroup').getValue()}});
+		}
+		userCombo.setValue('');
+		userCombo.doQuery(); 
+		el.focus();
+		//userCombo.focus();
+
+	},
+	onSubmitClick: function() {
+		    var deptGrp = this.lookupReference('deptGroup');
+			var bizGrp = this.lookupReference('bizGroup'); 
+			var deptCode = this.lookupReference('deptGroup').getValue();
+			var bizCode = this.lookupReference('bizGroup').getValue();
+			if (deptGrp.getStore().data.items.length < 2 )
+			{
+				deptCode = bizCode;
+				bizCode = '';
+			}
+
+			Ext.getCmp('mainmainView').down('#mainViewList').store.load(
+					{params: {  deptGroup : deptCode,
+								bizGroup  : bizCode,
+								user_cd   : this.lookupReference('userGroup').getValue(''), 
+								sa_type   : this.lookupReference('sa_type').getValue('')   
+		            }}
+		);
+	}
+
+
+});
+
+Ext.define('Ysn.view.main.mainView',{
+    extend: 'Ext.panel.Panel',
+    xtype: 'main-mainView',
+    requires: [
+        'Ysn.view.main.mainViewController'  
+    ],
+
+    controller: 'main-mainView', 
+    reference: 'mainmainView',
+	id:'mainmainView', 
+    style:{width:'100%'},
+    height: 400,
+    overflow:'hidden',
+	scrollable:false,
+    header: false,
+    bodyBorder: true, 
+	dockedItems: [
+	               {
+		            header: false,
+					xtype: 'mainView-search',
+					reference: 'mainViewSearch',
+					collapsible: true,
+					floatable: true,
+					split: true,
+					dock: 'top',
+					height: 40
+				   }
+	], 
+    layout: {
+        type: 'table',
+        columns: 2,
+        tdAttrs: { style: 'padding: 10px;width:50%' }
+    },
+    items: [
+             {	
+		        title: '매출분석',
+				glyph: 'xf275@FontAwesome',
+				tools: [ 
+					{ type: 'refresh'} 
+				],
+		        xtype: 'panel',
+				reference : 'T1_info',
+		        frameBorder: true,
+				height:300,
+		        layout: {
+					type: 'table',
+					columns: 7,
+					tableAttrs: {
+						style: {
+							width: '100%',
+							height: '100%',
+							backgroundColor:'#BBBBBB', 
+							'border-spacing': '1px'
+						}
+					},
+					tdAttrs :{
+						style: {
+							'vertical-align': 'middle',
+							'text-align': 'center',
+							'padding': '2px  !important',
+							backgroundColor:'#FFFFFF',
+							'word-wrap': 'break-word'
+					   }
+					}
+				},
+				defaults: {
+					xtype: 'label', 
+				}, 
+				tbar: { 
+					defaultButtonUI: 'default',
+					overflowHandler: 'menu', 
+					items: [
+						{
+							xtype: 'button',
+							iconCls: 'x-fa fa-industry',
+							text: '매출분석', 
+							handler: 'onkkk'
+						} 
+							 , '->', 
+						{
+							xtype: 'segmentedbutton',
+							items: [{ text: '거래명세표기준', pressed: true }, 
+									{ text: '세금계산서기준'}
+							]
+						}, '->',
+						{
+							xtype: 'label', 
+							text: '(단위:백만원)' 
+						} 
+					]
+				},
+				items:[
+					{ text: Locale.getMsg('구분'), rowspan:2, tdAttrs:{style:{'font-weight': 'bold',backgroundColor:'#EFEFEF'}}},
+					{ text: '2015년매출실적', rowspan:2, itemId: 'preYeartot',  tdAttrs:{style:{'font-weight': 'bold',backgroundColor:'#EFEFEF'}}},
+					{ text: '2016년매출정보', colspan:3, itemId: 'thisYeartot',  tdAttrs:{style:{'font-weight': 'bold',backgroundColor:'#EFEFEF'}}},					
+					{ text: '2015년대비', colspan:2, itemId: 'preYearvs', tdAttrs:{style:{'font-weight': 'bold',backgroundColor:'#EFEFEF'}}},
+					{ text: '목표', tdAttrs:{style:{'font-weight': 'bold',backgroundColor:'#EFEFEF'}}},
+					{ text: '실적', tdAttrs:{style:{'font-weight': 'bold',backgroundColor:'#EFEFEF'}}},
+					{ text: '달성율', tdAttrs:{style:{'font-weight': 'bold',backgroundColor:'#EFEFEF'}}},
+					{ text: '신장금액', tdAttrs:{style:{'font-weight': 'bold',backgroundColor:'#EFEFEF'}}},
+					{ text: '신장율', tdAttrs:{style:{'font-weight': 'bold',backgroundColor:'#EFEFEF'}}}, 
+					{ text: '11월누계', itemId: 'preMontot', tdAttrs:{style:{'font-weight': 'bold',backgroundColor:'#EFEFEF'}}},
+					{ text: '0', itemId: 'T1_1_1'},{ text: '1', itemId: 'T1_1_2'},{ text: '2', itemId: 'T1_1_3'},
+					{ text: '4', itemId: 'T1_1_4'},{ text: '5', itemId: 'T1_1_5'},{ text: '6', itemId: 'T1_1_6'},
+					{ text: '12월실적', itemId: 'thisMonper', tdAttrs:{style:{'font-weight': 'bold',backgroundColor:'#EFEFEF'}}},
+					{ text: '0', itemId: 'T1_2_1'},{ text: '1', itemId: 'T1_2_2'},{ text: '2', itemId: 'T1_2_3'},
+					{ text: '4', itemId: 'T1_2_4'},{ text: '5', itemId: 'T1_2_5'},{ text: '6', itemId: 'T1_2_6'},
+					{ text: '12월누계', itemId: 'thisMontot', tdAttrs:{style:{'font-weight': 'bold',backgroundColor:'#EFEFEF'}}},
+					{ text: '0', itemId: 'T1_3_1'},{ text: '1', itemId: 'T1_3_2'},{ text: '2', itemId: 'T1_3_3'},
+					{ text: '4', itemId: 'T1_3_4'},{ text: '5', itemId: 'T1_3_5'},{ text: '6', itemId: 'T1_3_6'}
+				]
+			},
+			{	title: Locale.getMsg('활동현황'),  			
+				glyph: 'xf03a@FontAwesome',
+				tools: [ 
+					{ type: 'refresh'} 
+				],
+				xtype: 'grid',
+				reference : 'T2_info' ,
+				tbar: { 
+					defaultButtonUI: 'default',
+					overflowHandler: 'menu', 
+					items: [
+						{
+							xtype: 'button',
+							iconCls: 'x-fa fa-list',
+							text: Locale.getMsg('활동현황')/*, 
+							handler: 'getT1_info'*/
+						} 
+							 , '->', 
+						{
+							xtype: 'segmentedbutton',
+							items: [{ text: 'Yesterday'}, 
+									{ text: 'Today', pressed: true },
+							        { text: 'Tomorrow'}
+							]
+						} 
+					]
+				},
+				store: {
+					fields: [
+						{name: 'SA_CD', type: 'string'},
+						{name: 'SA_SUBJECT', type: 'string'},
+						{name: 'USER_NM', type: 'string'},
+						{name: 'SA_TYPE_NM', type: 'string'}
+					],
+
+					proxy: {
+						method: "POST",
+						type: 'ajax',
+						url: '/Main/getT2_info',									
+						reader: {
+							type: 'json',
+							rootProperty: '' 
+						}
+					},
+					autoLoad: false,
+					autoDestroy: true
+				}, 
+				style: {'borderBottom':'1px solid gray'},
+				columnLines: true, 
+				columns: [
+						{text: "활동코드", dataIndex: 'SA_CD', sortable: true, hidden: true },
+						{text: "활동제목", flex:1, dataIndex: 'SA_SUBJECT', sortable: true},
+						{text: Locale.getMsg('담당자'), width:100, dataIndex: 'USER_NM', sortable: true},
+						{text: "활동유형", width:200, dataIndex: 'SA_TYPE_NM', sortable: true}
+					],
+			   scrollable: true, 
+			   height: 300,
+			   width: 500,
+			   syncRowHeight: false 
+		},
+		{
+			title: '매출현황', 
+			glyph: 'xf080@FontAwesome',
+			tools: [ 
+				{ type: 'refresh'} 
+			],
+			xtype: 'cartesian',
+			reference:  'chart',
+            tbar: { 
+					defaultButtonUI: 'default',
+					overflowHandler: 'menu', 
+					items: [
+						{
+							xtype: 'button',
+							iconCls: 'x-fa  fa-bar-chart',
+							text: '월별매출현황'/*, 
+							handler: 'getT1_info'*/
+						} 
+							 
+					]
+			},
+			width: '100%',
+			height: 460,
+
+			store: {
+					fields: [ 'MONTH', 'KRW_AMOUNT1', 'KRW_AMOUNT2' ],
+					proxy: {
+						method: "POST",
+						type: 'ajax',
+						url: '/Main/getMonthChartTot',									
+						reader: {
+							type: 'json',
+							rootProperty: 'LIST' 
+						}
+					},
+					autoLoad: false,
+					autoDestroy: true
+			}, 
+			legend: {
+				type: 'sprite',
+				docked: 'bottom'
+			},
+			interactions: {
+				type: 'itemedit',
+				tooltip: {
+					renderer: 'onEditTipRender'
+				}
+			},
+			insetPadding: {
+				top: 40,
+				left: 40,
+				right: 40,
+				bottom: 40
+			}, 
+			axes: [{
+				type: 'numeric',
+				position: 'left',
+				adjustByMajorUnit: true,
+				grid: true,
+				fields: ['KRW_AMOUNT1'],
+				renderer: 'onAxisLabelRender',
+				minimum: 0
+			}, {
+				type: 'category',
+				position: 'bottom',
+				grid: true,
+				fields: ['MONTH'], 
+			}],
+			series: [{
+				type: 'bar',
+				title: [ '목표', '실적'],
+				xField: 'MONTH',
+				yField: [ 'KRW_AMOUNT1', 'KRW_AMOUNT2'],
+				stacked: false,
+				style: {
+					opacity: 0.80
+				},
+				highlight: {
+					fillStyle: 'yellow'
+				},
+				tooltip: {
+					renderer: 'onBarTipRender'
+				}
+			}]
+		},
+		{
+			title: '매출누계', 
+			glyph: 'xf201@FontAwesome',
+			tools: [ 
+				{ type: 'refresh'} 
+			],
+			frameBorder: true,
+			xtype: 'cartesian',
+			reference:  'chart2',
+            tbar: { 
+					defaultButtonUI: 'default',
+					overflowHandler: 'menu', 
+					items: [
+						{
+							xtype: 'button',
+							iconCls: 'x-fa  fa-bar-chart',
+							text: '매출누계'/*, 
+							handler: 'getT1_info'*/
+						} 
+							 
+					]
+			},
+			width: '100%',
+			height: 460,
+
+			store: {
+					fields: [ 'MONTH', 'KRW_AMOUNT1', 'KRW_AMOUNT2' ],
+					proxy: {
+						method: "POST",
+						type: 'ajax',
+						url: '/Main/getMonthChartTot',									
+						reader: {
+							type: 'json',
+							rootProperty: 'LIST' 
+						}
+					},
+					autoLoad: false,
+					autoDestroy: true
+			}, 
+			legend: {
+				type: 'sprite',
+				docked: 'bottom'
+			},
+			interactions: {
+				type: 'itemedit',
+				tooltip: {
+					renderer: 'onEditTipRender'
+				}
+			},
+			insetPadding: {
+				top: 40,
+				left: 40,
+				right: 40,
+				bottom: 40
+			}, 
+			axes: [{
+				type: 'numeric',
+				position: 'left',
+				adjustByMajorUnit: true,
+				grid: true,
+				fields: ['KRW_AMOUNT1'],
+				renderer: 'onAxisLabelRender',
+				minimum: 0
+			}, {
+				type: 'category',
+				position: 'bottom',
+				grid: true,
+				fields: ['MONTH'], 
+			}],
+			series: [{
+				type: 'bar',
+				title: [ '목표', '실적'],
+				xField: 'MONTH',
+				yField: [ 'KRW_AMOUNT1', 'KRW_AMOUNT2'],
+				stacked: false,
+				style: {
+					opacity: 0.80
+				},
+				highlight: {
+					fillStyle: 'yellow'
+				},
+				tooltip: {
+					renderer: 'onBarTipRender'
+				}
+			}]
+		}
+		
+
+					
+    ]
+	
+});
+
+Ext.define('Ysn.view.main.mainViewController', {
+    extend: 'Ext.app.ViewController',
+    alias: 'controller.main-mainView',
+	requires: [  
+    ],
+    init: function() { 
+		
+	},
+	onkkk: function(){
+		var dstr_type = this.lookupReference('mainViewSearch').down('#dstr_type').getValue();
+		var bizGroup = this.lookupReference('mainViewSearch').down('#bizGroup').getValue();
+		var deptGroup = this.lookupReference('mainViewSearch').down('#deptGroup').getValue();
+		var user_cd = this.lookupReference('mainViewSearch').down('#user_cd').getValue();
+		var year = this.lookupReference('mainViewSearch').down('#base_y').getValue();
+		var month = this.lookupReference('mainViewSearch').down('#base_m').getValue();
+		 this.lookupReference('chart').store.load({
+			params:{dstr_type:dstr_type,bizGroup:bizGroup,deptGroup:deptGroup,user_cd:user_cd,year:year,month:month }
+			});  
+	},
+	onPreview: function() {
+        if (Ext.isIE8) {
+            Ext.Msg.alert('Unsupported Operation', 'This operation requires a newer version of Internet Explorer.');
+            return;
+        }
+        var chart = this.lookupReference('chart');
+
+        chart.preview();
+    },
+
+    onThemeSwitch: function () {
+        var chart = this.lookupReference('chart'),
+            currentThemeClass = Ext.getClassName(chart.getTheme()),
+            themes = Ext.chart.theme,
+            themeNames = [],
+            currentIndex = 0,
+            name;
+
+        for (name in themes) {
+            if (Ext.getClassName(themes[name]) === currentThemeClass) {
+                currentIndex = themeNames.length;
+            }
+            if (name !== 'Base' && name.indexOf('Gradients') < 0) {
+                themeNames.push(name);
+            }
+        }
+        chart.setTheme(themes[themeNames[++currentIndex % themeNames.length]]);
+    },
+
+    onStackGroupToggle: function (segmentedButton, button, pressed) {
+        var chart = this.lookupReference('chart'),
+            series = chart.getSeries()[0],
+            value = segmentedButton.getValue();
+
+        series.setStacked(value === 0);
+        chart.redraw();
+    },
+
+    // The 'target' here is an object that contains information
+    // about the target value when the drag operation on the column ends.
+    onEditTipRender: function (tooltip, item, target, e) {
+        var fieldIndex = Ext.Array.indexOf(item.series.getYField(), target.yField),
+            browser = item.series.getTitle()[fieldIndex];
+
+        tooltip.setHtml(
+            item.record.get('MONTH')+'월 ' + browser +': ' +
+            target.yValue.toFixed(1)  );
+    },
+
+    onBarTipRender: function (tooltip, record, item) {
+        var fieldIndex = Ext.Array.indexOf(item.series.getYField(), item.field),
+            browser = item.series.getTitle()[fieldIndex];
+
+        tooltip.setHtml( record.get('MONTH')+'월 ' + browser + ': ' +
+            record.get(item.field).toFixed(1) );
+    },
+
+    onGridMonthRender: function (value) {
+        return value;
+    },
+
+    onGridValueRender: function (value) {
+        return value ;
+    },
+
+    onAxisLabelRender: function (axis, label, layoutContext) {
+        return label.toFixed(label < 10 ? 1: 0)  ;
+    }
+});
+
+
+
+
+

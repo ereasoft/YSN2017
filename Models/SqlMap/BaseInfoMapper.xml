@@ -1,0 +1,1342 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<sqlMap namespace="YSN2017" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ibatis.apache.org/mapping">
+
+
+
+  <statements>
+
+    <!-- 기준정보 : 수주목표조회 /BaseInfo/orderTargetList -->
+    <select id="orderTargetList" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      #base_yy# AS BASE_YY,
+      D2.DEPT_CD AS UP_DEPT_CD,
+      D2.DEPT_NM AS UP_DEPT_NM,
+      A.DEPT_CD,
+      D.DEPT_NM,
+      A.USER_CD,
+      U.USER_NM,
+      A.DSTR_TYPE,
+      dbo.FN_GET_CODE_NM(#language#, 'DSTR_TYPE',A.DSTR_TYPE) AS DSTR_TYPE_NM,
+      A.BIZ_TYPE,
+      dbo.FN_GET_CODE_NM(#language#, 'BIZ_TYPE',A.BIZ_TYPE) AS BIZ_TYPE_NM,
+      A.CUST_CD,
+      C.CUST_NM,
+      A.EUSER_CD,
+      C2.CUST_NM AS EUSER_NM,
+      A.ITEM_TYPE,
+      dbo.FN_GET_CODE_NM(#language#, 'ITEM_TYPE', A.ITEM_TYPE) AS ITEM_TYPE_NM,
+      A.M01,
+      A.M02,
+      A.M03,
+      A.M04,
+      A.M05,
+      A.M06,
+      A.M07,
+      A.M08,
+      A.M09,
+      A.M10,
+      A.M11,
+      A.M12,
+      A.TOTAL
+      FROM
+      (
+      SELECT
+      T.COMPANY_CD,
+      T.DEPT_CD,
+      T.USER_CD,
+      T.DSTR_TYPE,
+      T.BIZ_TYPE,
+      T.CUST_CD,
+      T.EUSER_CD,
+      T.ITEM_TYPE,
+      ROUND(ISNULL(SUM(M01),0) / #unit#,0) AS M01,
+      ROUND(ISNULL(SUM(M02),0) / #unit#,0) AS M02,
+      ROUND(ISNULL(SUM(M03),0) / #unit#,0) AS M03,
+      ROUND(ISNULL(SUM(M04),0) / #unit#,0) AS M04,
+      ROUND(ISNULL(SUM(M05),0) / #unit#,0) AS M05,
+      ROUND(ISNULL(SUM(M06),0) / #unit#,0) AS M06,
+      ROUND(ISNULL(SUM(M07),0) / #unit#,0) AS M07,
+      ROUND(ISNULL(SUM(M08),0) / #unit#,0) AS M08,
+      ROUND(ISNULL(SUM(M09),0) / #unit#,0) AS M09,
+      ROUND(ISNULL(SUM(M10),0) / #unit#,0) AS M10,
+      ROUND(ISNULL(SUM(M11),0) / #unit#,0) AS M11,
+      ROUND(ISNULL(SUM(M12),0) / #unit#,0) AS M12,
+      ROUND((
+      ISNULL(SUM(M01),0) +
+      ISNULL(SUM(M02),0) +
+      ISNULL(SUM(M03),0) +
+      ISNULL(SUM(M04),0) +
+      ISNULL(SUM(M05),0) +
+      ISNULL(SUM(M06),0) +
+      ISNULL(SUM(M07),0) +
+      ISNULL(SUM(M08),0) +
+      ISNULL(SUM(M09),0) +
+      ISNULL(SUM(M10),0) +
+      ISNULL(SUM(M11),0) +
+      ISNULL(SUM(M12),0)
+      ) / #unit#,0) AS TOTAL
+      FROM(
+      SELECT
+      COMPANY_CD,
+      DEPT_CD,
+      USER_CD,
+      DSTR_TYPE,
+      BIZ_TYPE,
+      CUST_CD,
+      EUSER_CD,
+      ITEM_TYPE,
+      (CASE WHEN ORDER_YM = #base_yy# + '01' THEN KRW_AMOUNT ELSE 0 END) AS M01,
+      (CASE WHEN ORDER_YM = #base_yy# + '02' THEN KRW_AMOUNT ELSE 0 END) AS M02,
+      (CASE WHEN ORDER_YM = #base_yy# + '03' THEN KRW_AMOUNT ELSE 0 END) AS M03,
+      (CASE WHEN ORDER_YM = #base_yy# + '04' THEN KRW_AMOUNT ELSE 0 END) AS M04,
+      (CASE WHEN ORDER_YM = #base_yy# + '05' THEN KRW_AMOUNT ELSE 0 END) AS M05,
+      (CASE WHEN ORDER_YM = #base_yy# + '06' THEN KRW_AMOUNT ELSE 0 END) AS M06,
+      (CASE WHEN ORDER_YM = #base_yy# + '07' THEN KRW_AMOUNT ELSE 0 END) AS M07,
+      (CASE WHEN ORDER_YM = #base_yy# + '08' THEN KRW_AMOUNT ELSE 0 END) AS M08,
+      (CASE WHEN ORDER_YM = #base_yy# + '09' THEN KRW_AMOUNT ELSE 0 END) AS M09,
+      (CASE WHEN ORDER_YM = #base_yy# + '10' THEN KRW_AMOUNT ELSE 0 END) AS M10,
+      (CASE WHEN ORDER_YM = #base_yy# + '11' THEN KRW_AMOUNT ELSE 0 END) AS M11,
+      (CASE WHEN ORDER_YM = #base_yy# + '12' THEN KRW_AMOUNT ELSE 0 END) AS M12
+      FROM
+      T_ORDER_MRF_SUMRY
+      WHERE
+      COMPANY_CD = #company_cd# AND
+      ORDER_YM LIKE #base_yy# + '%' AND
+      ORDER_GUBUN = '목표'
+
+      <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+      
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      <isNotEmpty property="item_type">
+        AND ITEM_TYPE = #item_type#
+      </isNotEmpty>
+      ) T
+      GROUP BY
+      T.COMPANY_CD,
+      T.DEPT_CD,
+      T.USER_CD,
+      T.DSTR_TYPE,
+      T.BIZ_TYPE,
+      T.CUST_CD,
+      T.EUSER_CD,
+      T.ITEM_TYPE
+      ) AS A
+      LEFT OUTER JOIN
+      T_USER U
+      ON
+      A.COMPANY_CD = U.COMPANY_CD AND
+      A.USER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT D
+      ON
+      A.COMPANY_CD = D.COMPANY_CD AND
+      A.DEPT_CD = D.DEPT_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT D2
+      ON
+      D.COMPANY_CD = D2.COMPANY_CD AND
+      D.UP_DEPT_CD = D2.DEPT_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER C
+      ON
+      A.COMPANY_CD = C.COMPANY_CD AND
+      A.CUST_CD = C.CUST_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER C2
+      ON
+      A.COMPANY_CD = C2.COMPANY_CD AND
+      A.EUSER_CD = C2.CUST_CD
+
+      WHERE 1=1
+      <isNotEmpty property="cust_nm">
+          <isNotEmpty property="cust_cd">
+            AND A.CUST_CD = #cust_cd#
+          </isNotEmpty>
+          <isEmpty property="cust_cd">
+            AND C.CUST_NM LIKE '%' + #cust_nm# + '%'
+            AND A.CUST_CD IS NOT NULL
+          </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="enduser_nm">
+          <isNotEmpty property="enduser_cd">
+            AND A.EUSER_CD = #enduser_cd#
+          </isNotEmpty>
+          <isEmpty property="enduser_cd">
+            AND C2.CUST_NM LIKE '%' + #enduser_nm# + '%'
+            AND A.EUSER_CD IS NOT NULL
+          </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="bcust_nm">
+        <isNotEmpty property="bcust_cd">
+            AND C.BCUST_CD = #bcust_cd#
+          </isNotEmpty>
+          <isEmpty property="bcust_cd">
+            AND C.BCUST_CD IN (SELECT CUST_CD FROM T_CUSTOMER WHERE CUST_NM LIKE '%' + #bcust_nm# + '%')
+          </isEmpty>
+        AND B.CUST_CD IS NOT NULL
+      </isNotEmpty>
+
+    </select>
+
+
+
+
+    <!-- 기준정보 : 매출목표조회 /BaseInfo/salesTargetList -->
+    <select id="salesTargetList" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT 
+      #base_yy# AS BASE_YY,
+      D2.DEPT_CD AS UP_DEPT_CD,
+      D2.DEPT_NM AS UP_DEPT_NM,
+      A.DEPT_CD,
+      D.DEPT_NM,
+      A.USER_CD,
+      U.USER_NM,
+      A.DSTR_TYPE,
+      dbo.FN_GET_CODE_NM(#language#, 'DSTR_TYPE',A.DSTR_TYPE) AS DSTR_TYPE_NM,
+      A.BIZ_TYPE,
+      dbo.FN_GET_CODE_NM(#language#, 'BIZ_TYPE',A.BIZ_TYPE) AS BIZ_TYPE_NM,
+      A.CUST_CD,
+      C.CUST_NM,
+      A.EUSER_CD,
+      C2.CUST_NM AS EUSER_NM,
+      A.ITEM_TYPE,
+      dbo.FN_GET_CODE_NM(#language#, 'ITEM_TYPE',A.ITEM_TYPE) AS ITEM_TYPE_NM,
+      A.M01,
+      A.M02,
+      A.M03,
+      A.M04,
+      A.M05,
+      A.M06,
+      A.M07,
+      A.M08,
+      A.M09,
+      A.M10,
+      A.M11,
+      A.M12,
+      A.TOTAL
+      FROM
+      (
+      SELECT
+      T.COMPANY_CD,
+      T.DEPT_CD,
+      T.USER_CD,
+      T.DSTR_TYPE,
+      T.BIZ_TYPE,
+      T.CUST_CD,
+      T.EUSER_CD,
+      T.ITEM_TYPE,
+      ROUND(ISNULL(SUM(M01),0) / #unit#,0) AS M01,
+      ROUND(ISNULL(SUM(M02),0) / #unit#,0) AS M02,
+      ROUND(ISNULL(SUM(M03),0) / #unit#,0) AS M03,
+      ROUND(ISNULL(SUM(M04),0) / #unit#,0) AS M04,
+      ROUND(ISNULL(SUM(M05),0) / #unit#,0) AS M05,
+      ROUND(ISNULL(SUM(M06),0) / #unit#,0) AS M06,
+      ROUND(ISNULL(SUM(M07),0) / #unit#,0) AS M07,
+      ROUND(ISNULL(SUM(M08),0) / #unit#,0) AS M08,
+      ROUND(ISNULL(SUM(M09),0) / #unit#,0) AS M09,
+      ROUND(ISNULL(SUM(M10),0) / #unit#,0) AS M10,
+      ROUND(ISNULL(SUM(M11),0) / #unit#,0) AS M11,
+      ROUND(ISNULL(SUM(M12),0) / #unit#,0) AS M12,
+      ROUND((
+      ISNULL(SUM(M01),0) +
+      ISNULL(SUM(M02),0) +
+      ISNULL(SUM(M03),0) +
+      ISNULL(SUM(M04),0) +
+      ISNULL(SUM(M05),0) +
+      ISNULL(SUM(M06),0) +
+      ISNULL(SUM(M07),0) +
+      ISNULL(SUM(M08),0) +
+      ISNULL(SUM(M09),0) +
+      ISNULL(SUM(M10),0) +
+      ISNULL(SUM(M11),0) +
+      ISNULL(SUM(M12),0)
+      ) / #unit#,0) AS TOTAL
+      FROM(
+      SELECT
+      COMPANY_CD,
+      DEPT_CD,
+      USER_CD,
+      DSTR_TYPE,
+      BIZ_TYPE,
+      CUST_CD,
+      EUSER_CD,
+      ITEM_TYPE,
+      (CASE WHEN SALES_YM = #base_yy# + '01' THEN KRW_AMOUNT ELSE 0 END) AS M01,
+      (CASE WHEN SALES_YM = #base_yy# + '02' THEN KRW_AMOUNT ELSE 0 END) AS M02,
+      (CASE WHEN SALES_YM = #base_yy# + '03' THEN KRW_AMOUNT ELSE 0 END) AS M03,
+      (CASE WHEN SALES_YM = #base_yy# + '04' THEN KRW_AMOUNT ELSE 0 END) AS M04,
+      (CASE WHEN SALES_YM = #base_yy# + '05' THEN KRW_AMOUNT ELSE 0 END) AS M05,
+      (CASE WHEN SALES_YM = #base_yy# + '06' THEN KRW_AMOUNT ELSE 0 END) AS M06,
+      (CASE WHEN SALES_YM = #base_yy# + '07' THEN KRW_AMOUNT ELSE 0 END) AS M07,
+      (CASE WHEN SALES_YM = #base_yy# + '08' THEN KRW_AMOUNT ELSE 0 END) AS M08,
+      (CASE WHEN SALES_YM = #base_yy# + '09' THEN KRW_AMOUNT ELSE 0 END) AS M09,
+      (CASE WHEN SALES_YM = #base_yy# + '10' THEN KRW_AMOUNT ELSE 0 END) AS M10,
+      (CASE WHEN SALES_YM = #base_yy# + '11' THEN KRW_AMOUNT ELSE 0 END) AS M11,
+      (CASE WHEN SALES_YM = #base_yy# + '12' THEN KRW_AMOUNT ELSE 0 END) AS M12
+      FROM
+      T_SALES_MRF_SUMRY
+      WHERE
+      COMPANY_CD = #company_cd# AND
+      SALES_YM LIKE #base_yy# + '%' AND
+      SALES_GUBUN = '목표'
+
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+
+      ) T
+      GROUP BY
+      T.COMPANY_CD,
+      T.DEPT_CD,
+      T.USER_CD,
+      T.DSTR_TYPE,
+      T.BIZ_TYPE,
+      T.CUST_CD,
+      T.EUSER_CD,
+      T.ITEM_TYPE
+      ) AS A
+      LEFT OUTER JOIN
+      T_USER U
+      ON
+      A.COMPANY_CD = U.COMPANY_CD AND
+      A.USER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT D
+      ON
+      A.COMPANY_CD = D.COMPANY_CD AND
+      A.DEPT_CD = D.DEPT_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT D2
+      ON
+      D.COMPANY_CD = D2.COMPANY_CD AND
+      D.UP_DEPT_CD = D2.DEPT_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER C
+      ON
+      A.COMPANY_CD = C.COMPANY_CD AND
+      A.CUST_CD = C.CUST_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER C2
+      ON
+      A.COMPANY_CD = C2.COMPANY_CD AND
+      A.EUSER_CD = C2.CUST_CD
+
+      WHERE 1=1
+
+      <isNotEmpty property="cust_nm">
+        <isNotEmpty property="cust_cd">
+          AND A.CUST_CD = #cust_cd#
+        </isNotEmpty>
+        <isEmpty property="cust_cd">
+          AND C.CUST_NM LIKE '%' + #cust_nm# + '%'
+          AND A.CUST_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="enduser_nm">
+        <isNotEmpty property="enduser_cd">
+          AND A.EUSER_CD = #enduser_cd#
+        </isNotEmpty>
+        <isEmpty property="enduser_cd">
+          AND C2.CUST_NM LIKE '%' + #enduser_nm# + '%'
+          AND A.EUSER_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="bcust_nm">
+        <isNotEmpty property="bcust_cd">
+          AND C.BCUST_CD = #bcust_cd#
+        </isNotEmpty>
+        <isEmpty property="bcust_cd">
+          AND C.BCUST_CD IN (SELECT CUST_CD FROM T_CUSTOMER WHERE CUST_NM LIKE '%' + #bcust_nm# + '%')
+        </isEmpty>
+        AND B.CUST_CD IS NOT NULL
+      </isNotEmpty>      
+      
+ 
+    </select>
+
+
+    
+    
+    <!-- 기준정보 : 국가정보 관리 - 국가정보 리스트 /BaseInfo/nationInfoList -->
+    <select id="nationInfoList" parameterClass="Hashtable" resultClass="Hashtable" >
+      SELECT
+      NAT_CD
+      , NAT_NM
+      , NAT_ENG_NM
+      , NAT_ORDER
+      , USE_YN
+      FROM T_NATION
+      WHERE 1=1
+      <isNotEmpty property="nat_cd">
+        AND NAT_CD = #nat_cd#
+      </isNotEmpty>
+      <isNotEmpty property="nat_nm">
+        AND NAT_NM LIKE '%'+ #nat_nm# +'%'
+      </isNotEmpty>
+      <isNotEmpty property="nat_eng_nm">
+        AND NAT_ENG_NM LIKE '%'+ #nat_eng_nm#+'%'
+      </isNotEmpty>
+      <isNotEmpty property="use_yn">
+        AND USE_YN = #use_yn#
+      </isNotEmpty>
+      ORDER BY NAT_ORDER ASC
+    </select>
+
+
+    
+        
+    
+    <!-- 기준정보 : 국가정보 관리 - 정보 업데이트 /BaseInfo/nationInfoUpdate -->
+    <update id="nationInfoUpdate" parameterClass="Hashtable">
+      
+      UPDATE T_NATION SET
+      USE_YN = #use_yn#
+      ,NAT_NM = #nat_nm#
+      ,NAT_ENG_NM = #nat_eng_nm#
+      ,NAT_ORDER = #nat_order#
+      , MOD_DT = GETDATE()
+      , MOD_USR = #mod_usr#
+      WHERE NAT_CD = #nat_cd#
+    </update>
+
+
+
+
+    <!-- 기준정보 : 환율정보 관리 - 환율정보 리스트 /BaseInfo/baseCrnyInfoList -->
+    <select id="baseCrnyInfoList" parameterClass="Hashtable" resultClass="Hashtable" >
+
+      SELECT
+      BASE_YR
+      , BASE_CRNY
+      , EXCH_RATE
+      , CRNY_ORDER
+      , USE_YN
+      FROM T_BASE_CRNY
+      WHERE 1=1
+
+      <isNotEmpty property="base_yr">
+        AND BASE_YR = #base_yr#
+      </isNotEmpty>
+      <isNotEmpty property="base_crny">
+        AND BASE_CRNY = #base_crny#
+      </isNotEmpty>
+      <isNotEmpty property="base_rate">
+        AND EXCH_RATE = #base_rate#
+      </isNotEmpty>
+      <isNotEmpty property="crny_order">
+        AND CRNY_ORDER = #crny_order#
+      </isNotEmpty>
+      <isNotEmpty property="use_yn">
+        AND USE_YN = #use_yn#
+      </isNotEmpty>
+
+      ORDER BY CRNY_ORDER ASC
+    </select>
+
+
+
+    <!-- 기준정보 : 환율정보 관리 - 정보 업데이트 /BaseInfo/baseCrnyInfoUpdate -->
+    <update id="baseCrnyInfoUpdate" parameterClass="Hashtable" >
+      
+      IF NOT EXISTS
+      (
+      SELECT * FROM T_BASE_CRNY
+      WHERE BASE_YR = #base_yr#
+      AND BASE_CRNY = #base_crny#
+      AND USE_YN = 'Y'
+      )
+      INSERT INTO T_BASE_CRNY
+      (
+      COMPANY_CD
+      , BASE_YR
+      , BASE_CRNY
+      , EXCH_RATE
+      , CRNY_ORDER
+      , USE_YN
+      , REG_DT
+      , REG_USR
+      )
+      VALUES
+      (
+      #company_cd#
+      , #base_yr#
+      , #base_crny#
+      , #exch_rate#
+      , #crny_order#
+      , #use_yn#
+      , GETDATE()
+      , #reg_usr#
+      )
+      ELSE
+      UPDATE T_BASE_CRNY SET
+      EXCH_RATE = #exch_rate#
+      , CRNY_ORDER = #crny_order#
+      , USE_YN = #use_yn#
+      , MOD_DT = GETDATE()
+      , MOD_USR = #mod_usr#
+      WHERE BASE_YR = #base_yr#
+      AND BASE_CRNY = #base_crny#
+    </update>
+
+
+
+
+    <!-- 기준정보 :  수주 목표 엑셀 - 등록 /BaseInfo/xlsxBaseOrderUpload -->
+    <insert id="xlsxBaseOrderUpload" parameterClass="Hashtable" >
+
+      INSERT INTO T_ORDER_MRF_SUMRY
+      (COMPANY_CD
+      ,ORDER_GUBUN
+      ,DEPT_CD
+      ,USER_CD
+      ,DSTR_TYPE
+      ,BIZ_TYPE
+      ,ITEM_TYPE
+      ,CUST_CD
+      ,EUSER_CD
+      ,BCUST_CD
+      ,BASE_YM
+      ,ORDER_YM
+      ,KRW_AMOUNT
+      ,PSBLT_KRW_AMOUNT
+      ,REG_DT
+      ,XLSX_PK)
+      VALUES(
+      #company_cd#
+      ,#order_gubun#
+      ,#dept_cd#
+      ,#user_cd#
+      ,#dstr_type#
+      ,#biz_type#
+      ,#item_type#
+      ,#cust_cd#
+      ,#euser_cd#
+      ,#bcust_cd#
+      ,#base_ym#
+      ,#order_ym#
+      ,#krw_amount#
+      ,#psblt_krw_amount#
+      ,GETDATE()
+      ,( SELECT isnull(max(convert(numeric,xlsx_pk)),0)+1 as XLSX_PK FROM T_ORDER_MRF_SUMRY)
+      )
+    </insert>
+
+
+    
+    <!-- 기준정보 :  매출 목표 엑셀 - 등록 /BaseInfo/xlsxBaseSalesUpload -->
+    <insert id="xlsxBaseSalesUpload" parameterClass="Hashtable" >
+
+      INSERT INTO T_SALES_MRF_SUMRY
+      (COMPANY_CD
+      ,SALES_GUBUN
+      ,DEPT_CD
+      ,USER_CD
+      ,DSTR_TYPE
+      ,BIZ_TYPE
+      ,ITEM_TYPE
+      ,CUST_CD
+      ,EUSER_CD
+      ,BCUST_CD
+      ,BASE_YM
+      ,SALES_YM
+      ,KRW_AMOUNT
+      ,PSBLT_KRW_AMOUNT
+      ,REG_DT
+      ,XLSX_PK)
+      VALUES(
+      #company_cd#
+      ,#sales_gubun#
+      ,#dept_cd#
+      ,#user_cd#
+      ,#dstr_type#
+      ,#biz_type#
+      ,#item_type#
+      ,#cust_cd#
+      ,#euser_cd#
+      ,#bcust_cd#
+      ,#base_ym#
+      ,#sales_ym#
+      ,#krw_amount#
+      ,#psblt_krw_amount#
+      ,GETDATE()
+      ,( SELECT isnull(max(convert(numeric,xlsx_pk)),0)+1 as XLSX_PK FROM T_SALES_MRF_SUMRY)
+      )
+    </insert>
+
+
+    <!-- 기준정보 :  수주 목표 엑셀 - 수정 /BaseInfo/xlsxBaseSalesUpload -->
+    <update id="xlsxBaseOrderUpdate" parameterClass="Hashtable" >
+
+
+      UPDATE T_ORDER_MRF_SUMRY
+      SET
+      KRW_AMOUNT = #krw_amount#
+      ,PSBLT_KRW_AMOUNT = #psblt_krw_amount#
+      WHERE
+      COMPANY_CD = #company_cd#
+      AND ORDER_GUBUN = #order_gubun#
+      AND DEPT_CD = #dept_cd#
+      AND USER_CD = #user_cd#
+      AND DSTR_TYPE = #dstr_type#
+      AND BIZ_TYPE = #biz_type#
+      AND ITEM_TYPE = #item_type#
+      AND CUST_CD = #cust_cd#
+      AND EUSER_CD = #euser_cd#
+      AND BCUST_CD = #bcust_cd#
+      AND BASE_YM = #base_ym#
+      AND ORDER_YM = #order_ym# 
+    </update>
+
+
+    <!-- 기준정보 :  수주 목표 엑셀 - 수정 /BaseInfo/xlsxBaseSalesUpload -->
+    <update id="xlsxBaseOrderUpdate_bak" parameterClass="Hashtable" >
+
+
+      UPDATE T_ORDER_MRF_SUMRY
+      SET
+      COMPANY_CD = #company_cd#
+      <isNotEmpty property="order_gubun">
+      ,ORDER_GUBUN = #order_gubun#
+      </isNotEmpty>
+      
+      <isNotEmpty property="dept_cd">
+        ,DEPT_CD = #dept_cd#
+      </isNotEmpty>
+      
+      <isNotEmpty property="user_cd">
+        ,USER_CD = #user_cd#
+      </isNotEmpty>
+      
+      <isNotEmpty property="dstr_type">
+        ,DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        ,BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+      
+      <isNotEmpty property="item_type">
+        ,ITEM_TYPE = #item_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="cust_cd">
+        ,CUST_CD = #cust_cd#
+      </isNotEmpty>
+      
+      <isNotEmpty property="euser_cd">
+        ,EUSER_CD = #euser_cd#
+      </isNotEmpty>
+      <isNotEmpty property="bcust_cd">
+        ,BCUST_CD = #bcust_cd#
+      </isNotEmpty>
+      <isNotEmpty property="base_ym">
+        ,BASE_YM = #base_ym#
+      </isNotEmpty>
+      
+      <isNotEmpty property="order_ym">
+        ,ORDER_YM = #order_ym#
+      </isNotEmpty>
+      
+      <isNotEmpty property="krw_amount">
+        ,KRW_AMOUNT = #krw_amount#
+      </isNotEmpty>
+      
+      <isNotEmpty property="psblt_krw_amount">
+        ,PSBLT_KRW_AMOUNT = #psblt_krw_amount#
+      </isNotEmpty>
+      
+      WHERE XLSX_PK = #xlsx_pk#
+    </update>
+
+
+    <!-- 기준정보 :  매출 목표 엑셀 - 수정 /BaseInfo/xlsxBaseSalesUpdate -->
+    <update id="xlsxBaseSalesUpdate" parameterClass="Hashtable" >
+
+
+      UPDATE T_SALES_MRF_SUMRY
+      SET
+      KRW_AMOUNT = #krw_amount#
+      ,PSBLT_KRW_AMOUNT = #psblt_krw_amount#
+      WHERE
+      COMPANY_CD = #company_cd#
+      AND SALES_GUBUN = #sales_gubun#
+      AND DEPT_CD = #dept_cd#
+      AND USER_CD = #user_cd#
+      AND DSTR_TYPE = #dstr_type#
+      AND BIZ_TYPE = #biz_type#
+      AND ITEM_TYPE = #item_type#
+      AND CUST_CD = #cust_cd#
+      AND EUSER_CD = #euser_cd#
+      AND BCUST_CD = #bcust_cd#
+      AND BASE_YM = #base_ym#
+      AND SALES_YM = #sales_ym#
+    </update>
+    
+
+    <!-- 기준정보 :  매출 목표 엑셀 - 수정 /BaseInfo/xlsxBaseSalesUpdate -->
+    <update id="xlsxBaseSalesUpdate_BAK" parameterClass="Hashtable" >
+
+      UPDATE T_SALES_MRF_SUMRY
+      SET
+      COMPANY_CD = #company_cd#
+      <isNotEmpty property="sales_gubun">
+        ,SALES_GUBUN = #sales_gubun#
+      </isNotEmpty>
+
+      <isNotEmpty property="dept_cd">
+        ,DEPT_CD = #dept_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        ,USER_CD = #user_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="dstr_type">
+        ,DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        ,BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="item_type">
+        ,ITEM_TYPE = #item_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="cust_cd">
+        ,CUST_CD = #cust_cd#
+      </isNotEmpty>
+
+      <isNotEmpty property="euser_cd">
+        ,EUSER_CD = #euser_cd#
+      </isNotEmpty>
+      <isNotEmpty property="bcust_cd">
+        ,BCUST_CD = #bcust_cd#
+      </isNotEmpty>
+      <isNotEmpty property="base_ym">
+        ,BASE_YM = #base_ym#
+      </isNotEmpty>
+
+      <isNotEmpty property="sales_ym">
+        ,SALES_YM = #sales_ym#
+      </isNotEmpty>
+
+      <isNotEmpty property="krw_amount">
+        ,KRW_AMOUNT = #krw_amount#
+      </isNotEmpty>
+
+      <isNotEmpty property="psblt_krw_amount">
+        ,PSBLT_KRW_AMOUNT = #psblt_krw_amount#
+      </isNotEmpty>
+
+      WHERE XLSX_PK = #xlsx_pk#
+    </update>
+
+
+    
+
+
+
+    <!-- 기준정보 : 수주 목표 엑셀 - 리스트 /BaseInfo/xlsxBaseOrderList -->
+    <select id="xlsxBaseOrderList" parameterClass="Hashtable" resultClass="Hashtable" >
+
+
+      SELECT
+      D2.DEPT_CD AS UP_DEPT_CD,
+      D2.DEPT_NM AS UP_DEPT_NM,
+      A.DEPT_CD,
+      D.DEPT_NM,
+      A.USER_CD,
+      U.USER_NM,
+      A.DSTR_TYPE,
+      dbo.FN_GET_CODE_NM(#language#, 'DSTR_TYPE',A.DSTR_TYPE) AS DSTR_TYPE_NM,
+      A.BIZ_TYPE,
+      dbo.FN_GET_CODE_NM(#language#, 'BIZ_TYPE',A.BIZ_TYPE) AS BIZ_TYPE_NM,
+      A.CUST_CD,
+      C.CUST_NM,
+      A.EUSER_CD,
+      C2.CUST_NM AS EUSER_NM,
+      A.ITEM_TYPE,
+      dbo.FN_GET_CODE_NM(#language#, 'ITEM_TYPE', A.ITEM_TYPE) AS ITEM_TYPE_NM,
+      KRW_AMOUNT
+      ,PSBLT_KRW_AMOUNT
+      FROM(
+      SELECT
+      COMPANY_CD,
+      DEPT_CD,
+      USER_CD,
+      DSTR_TYPE,
+      BIZ_TYPE,
+      CUST_CD,
+      EUSER_CD,
+      ITEM_TYPE,
+      KRW_AMOUNT,
+      PSBLT_KRW_AMOUNT
+      FROM
+      T_ORDER_MRF_SUMRY
+      WHERE
+      COMPANY_CD = #company_cd# AND
+      ORDER_YM LIKE #base_yy# + '%' AND
+      ORDER_GUBUN = '목표'
+      AND XLSX_PK <![CDATA[!=]]> ''
+      <isNotEmpty property="deptGroup">
+          AND DEPT_CD = #deptGroup#
+        </isNotEmpty>
+
+        <isNotEmpty property="bizGroup">
+          <isEmpty property="deptGroup">
+            AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+          </isEmpty>
+        </isNotEmpty>
+
+
+        <isNotEmpty property="dstr_type">
+          AND DSTR_TYPE = #dstr_type#
+        </isNotEmpty>
+        <isNotEmpty property="user_cd">
+          AND USER_CD = #user_cd#
+        </isNotEmpty>
+        <isNotEmpty property="biz_type">
+          AND BIZ_TYPE = #biz_type#
+        </isNotEmpty>
+        <isNotEmpty property="item_type">
+          AND ITEM_TYPE = #item_type#
+        </isNotEmpty>
+      ) AS A
+      LEFT OUTER JOIN
+      T_USER U
+      ON
+      A.COMPANY_CD = U.COMPANY_CD AND
+      A.USER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT D
+      ON
+      A.COMPANY_CD = D.COMPANY_CD AND
+      A.DEPT_CD = D.DEPT_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT D2
+      ON
+      D.COMPANY_CD = D2.COMPANY_CD AND
+      D.UP_DEPT_CD = D2.DEPT_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER C
+      ON
+      A.COMPANY_CD = C.COMPANY_CD AND
+      A.CUST_CD = C.CUST_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER C2
+      ON
+      A.COMPANY_CD = C2.COMPANY_CD AND
+      A.EUSER_CD = C2.CUST_CD
+
+      WHERE 1=1
+      <isNotEmpty property="cust_nm">
+        <isNotEmpty property="cust_cd">
+          AND A.CUST_CD = #cust_cd#
+        </isNotEmpty>
+        <isEmpty property="cust_cd">
+          AND C.CUST_NM LIKE '%' + #cust_nm# + '%'
+          AND A.CUST_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="enduser_nm">
+        <isNotEmpty property="enduser_cd">
+          AND A.EUSER_CD = #enduser_cd#
+        </isNotEmpty>
+        <isEmpty property="enduser_cd">
+          AND C2.CUST_NM LIKE '%' + #enduser_nm# + '%'
+          AND A.EUSER_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="bcust_nm">
+        <isNotEmpty property="bcust_cd">
+          AND C.BCUST_CD = #bcust_cd#
+        </isNotEmpty>
+        <isEmpty property="bcust_cd">
+          AND C.BCUST_CD IN (SELECT CUST_CD FROM T_CUSTOMER WHERE CUST_NM LIKE '%' + #bcust_nm# + '%')
+        </isEmpty>
+        AND B.CUST_CD IS NOT NULL
+      </isNotEmpty>
+
+
+
+    </select>
+
+
+    
+    
+
+    <!-- 기준정보 : 매출 목표 엑셀 - 리스트 /BaseInfo/xlsxBaseSalesList -->
+    <select id="xlsxBaseSalesList" parameterClass="Hashtable" resultClass="Hashtable" >
+
+
+      SELECT
+      D2.DEPT_CD AS UP_DEPT_CD,
+      D2.DEPT_NM AS UP_DEPT_NM,
+      A.DEPT_CD,
+      D.DEPT_NM,
+      A.USER_CD,
+      U.USER_NM,
+      A.DSTR_TYPE,
+      dbo.FN_GET_CODE_NM(#language#, 'DSTR_TYPE',A.DSTR_TYPE) AS DSTR_TYPE_NM,
+      A.BIZ_TYPE,
+      dbo.FN_GET_CODE_NM(#language#, 'BIZ_TYPE',A.BIZ_TYPE) AS BIZ_TYPE_NM,
+      A.CUST_CD,
+      C.CUST_NM,
+      A.EUSER_CD,
+      C2.CUST_NM AS EUSER_NM,
+      A.ITEM_TYPE,
+      dbo.FN_GET_CODE_NM(#language#, 'ITEM_TYPE',A.ITEM_TYPE) AS ITEM_TYPE_NM,
+      KRW_AMOUNT,
+      PSBLT_KRW_AMOUNT
+      FROM(
+      SELECT
+      COMPANY_CD,
+      DEPT_CD,
+      USER_CD,
+      DSTR_TYPE,
+      BIZ_TYPE,
+      CUST_CD,
+      EUSER_CD,
+      ITEM_TYPE,
+      KRW_AMOUNT,
+      PSBLT_KRW_AMOUNT
+      FROM
+      T_SALES_MRF_SUMRY
+      WHERE
+      COMPANY_CD = #company_cd# AND
+      SALES_YM LIKE #base_yy# + '%' AND
+      SALES_GUBUN = '목표'
+      AND XLSX_PK <![CDATA[!=]]> ''
+      <isNotEmpty property="deptGroup">
+        AND DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND DEPT_CD IN (SELECT DEPT_CD FROM T_DEPARTMENT WHERE UP_DEPT_CD = #bizGroup#)
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="dstr_type">
+        AND DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="user_cd">
+        AND USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="biz_type">
+        AND BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+
+      ) AS A
+      LEFT OUTER JOIN
+      T_USER U
+      ON
+      A.COMPANY_CD = U.COMPANY_CD AND
+      A.USER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT D
+      ON
+      A.COMPANY_CD = D.COMPANY_CD AND
+      A.DEPT_CD = D.DEPT_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT D2
+      ON
+      D.COMPANY_CD = D2.COMPANY_CD AND
+      D.UP_DEPT_CD = D2.DEPT_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER C
+      ON
+      A.COMPANY_CD = C.COMPANY_CD AND
+      A.CUST_CD = C.CUST_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER C2
+      ON
+      A.COMPANY_CD = C2.COMPANY_CD AND
+      A.EUSER_CD = C2.CUST_CD
+
+      WHERE 1=1
+
+      <isNotEmpty property="cust_nm">
+        <isNotEmpty property="cust_cd">
+          AND A.CUST_CD = #cust_cd#
+        </isNotEmpty>
+        <isEmpty property="cust_cd">
+          AND C.CUST_NM LIKE '%' + #cust_nm# + '%'
+          AND A.CUST_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="enduser_nm">
+        <isNotEmpty property="enduser_cd">
+          AND A.EUSER_CD = #enduser_cd#
+        </isNotEmpty>
+        <isEmpty property="enduser_cd">
+          AND C2.CUST_NM LIKE '%' + #enduser_nm# + '%'
+          AND A.EUSER_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+
+      <isNotEmpty property="bcust_nm">
+        <isNotEmpty property="bcust_cd">
+          AND C.BCUST_CD = #bcust_cd#
+        </isNotEmpty>
+        <isEmpty property="bcust_cd">
+          AND C.BCUST_CD IN (SELECT CUST_CD FROM T_CUSTOMER WHERE CUST_NM LIKE '%' + #bcust_nm# + '%')
+        </isEmpty>
+        AND B.CUST_CD IS NOT NULL
+      </isNotEmpty>
+
+
+
+    </select>
+
+    <select id="projectMngList" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      P.PJT_CD,
+      P.PJT_NM,
+      P.SMP_CD,
+      P.SMP_CHASU,
+      P.CUST_CD,
+      C.CUST_NM,
+      P.USER_CD,
+      U.USER_NM,
+      P.DEPT_CD,
+      D.DEPT_NM,
+      P.BIZ_TYPE,
+      dbo.FN_GET_CODE_NM(#language#, 'BIZ_TYPE',P.BIZ_TYPE) AS BIZ_TYPE_NM,
+      P.DSTR_TYPE,
+      dbo.FN_GET_CODE_NM(#language#, 'DSTR_TYPE',P.DSTR_TYPE) AS DSTR_TYPE_NM,
+      P.EUSR_CD,
+      C2.CUST_NM AS EUSR_NM,
+      (
+      CASE WHEN ISNULL(P.PJT_SDATE,'') != '' OR ISNULL(P.PJT_EDATE,'') != ''
+      THEN
+      CONVERT(NVARCHAR(10),CONVERT(DATETIME,PJT_SDATE),23) + ' ~ ' + CONVERT(NVARCHAR(10),CONVERT(DATETIME,PJT_EDATE),23)
+      ELSE
+      NULL
+      END
+      ) AS PJT_DATE,
+      P.END_YN,
+      P.USE_YN
+      FROM
+      T_PROJECT AS P
+      LEFT OUTER JOIN
+      T_CUSTOMER AS C
+      ON
+      P.COMPANY_CD = C.COMPANY_CD AND
+      P.CUST_CD = C.CUST_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER AS C2
+      ON
+      P.COMPANY_CD = C2.COMPANY_CD AND
+      P.EUSR_CD = C2.CUST_CD
+      LEFT OUTER JOIN
+      T_USER AS U
+      ON
+      P.COMPANY_CD = U.COMPANY_CD AND
+      P.USER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT AS D
+      ON
+      P.COMPANY_CD = D.COMPANY_CD AND
+      P.DEPT_CD = D.DEPT_CD
+      WHERE
+      P.COMPANY_CD = #company_cd#
+
+      <isNotEmpty property="deptGroup">
+        AND P.DEPT_CD = #deptGroup#
+      </isNotEmpty>
+
+      <isNotEmpty property="bizGroup">
+        <isEmpty property="deptGroup">
+          AND D.UP_DEPT_CD = #bizGroup#
+          AND P.DEPT_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="user_cd">
+        AND P.USER_CD = #user_cd#
+      </isNotEmpty> 
+ 
+        <isNotEmpty property="s_reg_date">
+          <![CDATA[
+					AND P.PJT_SDATE >= #s_reg_date#
+				]]>
+        </isNotEmpty>
+      <isNotEmpty property="e_reg_date">
+        <![CDATA[
+					AND P.PJT_EDATE <= #e_reg_date#
+				]]>
+      </isNotEmpty>
+
+      <isNotEmpty property="pjt_nm">
+        <isNotEmpty property="pjt_cd">
+          AND P.PJT_CD = #pjt_cd#
+        </isNotEmpty>
+        <isEmpty property="pjt_cd">
+          AND P.PJT_NM LIKE '%' + #pjt_nm# + '%'
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="biz_type">
+        AND P.BIZ_TYPE = #biz_type#
+      </isNotEmpty>
+
+      <isNotEmpty property="end_yn">
+        AND P.END_YN = #end_yn#
+      </isNotEmpty>
+
+      <isNotEmpty property="cust_nm">
+        <isNotEmpty property="cust_cd">
+          AND P.CUST_CD = #cust_cd#
+        </isNotEmpty>
+        <isEmpty property="pjt_cd">
+          AND C.CUST_NM LIKE '%' + #cust_nm# + '%'
+          AND P.CUST_CD IS NOT NULL
+        </isEmpty>
+      </isNotEmpty>
+
+      <isNotEmpty property="smp_cd">
+        AND P.SMP_CD = #smp_cd#
+      </isNotEmpty>
+      
+      <isNotEmpty property="dstr_type">
+        AND P.DSTR_TYPE = #dstr_type#
+      </isNotEmpty>
+      
+      <isNotEmpty property="use_yn">
+        AND P.USE_YN = #use_yn#
+      </isNotEmpty>
+
+      <isNotEmpty property="end_user">
+        AND C2.CUST_NM LIKE '%' + #end_user# + '%'
+        AND P.EUSR_CD IS NOT NULL
+      </isNotEmpty> 
+      
+    </select>
+
+    <select id="projectDetail" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT COMPANY_CD
+      ,PJT_CD
+      ,PJT_NM
+      ,CUST_CD
+      ,dbo.FN_GET_CUST_NM(CUST_CD) AS CUST_NM
+      ,SMP_CD
+      ,SMP_CHASU
+      ,EUSR_CD
+      ,dbo.FN_GET_CUST_NM(EUSR_CD) AS EUSR_NM
+      ,USER_CD
+      ,dbo.FN_GET_USER_NM(USER_CD) AS USER_NM
+      ,DEPT_CD
+      ,dbo.FN_GET_DEPT_NM(DEPT_CD) AS DEPT_NM
+      ,BIZ_TYPE
+      ,dbo.FN_GET_CODE_NM(#language#, 'BIZ_TYPE',BIZ_TYPE) AS BIZ_TYPE_NM
+      ,DSTR_TYPE
+      ,dbo.FN_GET_CODE_NM(#language#, 'DSTR_TYPE',DSTR_TYPE) AS DSTR_TYPE_NM
+      ,PJT_SDATE
+      ,PJT_EDATE
+      ,BASE_CRNY
+      ,END_YN
+      ,dbo.FN_GET_CODE_NM(#language#, 'END_YN',END_YN) AS END_YN_NM
+      ,USE_YN
+      ,dbo.FN_GET_CODE_NM(#language#, 'USE_YN',USE_YN) AS USE_YN_NM
+      FROM
+      T_PROJECT
+      WHERE
+      COMPANY_CD = #company_cd#
+      AND PJT_CD = #pjt_cd#
+    </select>
+
+    <insert id="insertProject" parameterClass="Hashtable" >
+      <selectKey resultType="String" property="pjt_cd" type="pre">
+        SELECT ('PJT' + SUBSTRING(CONVERT(VARCHAR(12),GETDATE(),112),3,2) +
+        dbo.FN_LPAD(
+        CONVERT(VARCHAR(5),
+        CONVERT(INTEGER,(
+        CASE WHEN MAX(PJT_CD) IS NULL THEN '0'
+        ELSE SUBSTRING(MAX(PJT_CD), 6,5)
+        END
+        )
+        )+1),5,'0')
+        ) AS PJT_CD
+        FROM T_PROJECT
+        WHERE PJT_CD LIKE 'PJT%'
+      </selectKey>
+
+      INSERT INTO T_PROJECT
+      (COMPANY_CD
+      ,PJT_CD
+      ,PJT_NM
+      ,SMP_CD
+      ,SMP_CHASU
+      ,CUST_CD
+      ,EUSR_CD
+      ,USER_CD
+      ,DEPT_CD
+      ,BIZ_TYPE
+      ,DSTR_TYPE
+      ,PJT_SDATE
+      ,PJT_EDATE
+      ,BASE_CRNY
+      ,END_YN
+      ,USE_YN
+      ,REG_DT
+      ,REG_USR
+      )VALUES(
+      #company_cd#
+      ,#pjt_cd#
+      ,#pjt_nm#
+      ,#smp_cd#
+      ,#smp_chasu#
+      ,#cust_cd#
+      ,#eusr_cd#
+      ,#user_cd#
+      ,#dept_cd#
+      ,#biz_type#
+      ,#dstr_type#
+      ,replace(#pjt_sdate#,'-','')
+      ,replace(#pjt_edate#,'-','')
+      ,#base_crny#
+      ,#end_yn#
+      ,#use_yn#
+      ,GETDATE()
+      ,#reg_usr#
+      )
+    </insert>
+
+    <update id="updateProject" parameterClass="Hashtable">
+      UPDATE T_PROJECT
+      SET
+      PJT_NM = #pjt_nm#
+      ,CUST_CD = #cust_cd#
+      ,EUSR_CD = #eusr_cd#
+      ,USER_CD = #user_cd#
+      ,DEPT_CD = #dept_cd#
+      ,BIZ_TYPE = #biz_type#
+      ,DSTR_TYPE = #dstr_type#
+      ,PJT_SDATE = replace(#pjt_sdate#,'-','')
+      ,PJT_EDATE = replace(#pjt_edate#,'-','')
+      ,BASE_CRNY = #base_crny#
+      ,END_YN = #end_yn#
+      ,USE_YN = #use_yn#
+      ,MOD_DT = GETDATE()
+      ,MOD_USR = #mod_usr#
+      WHERE
+      COMPANY_CD = #company_cd# AND
+      PJT_CD = #pjt_cd#
+    </update>
+
+
+    <select id="pjt" parameterClass="Hashtable" resultClass="Hashtable">
+      SELECT
+      P.PJT_CD,
+      P.PJT_NM,
+      P.CUST_CD,
+      C.CUST_NM,
+      P.EUSR_CD,
+      C2.CUST_NM AS EUSR_NM,
+      P.USER_CD,
+      U.USER_NM,
+      U.DEPT_CD,
+      D.DEPT_NM,
+      P.DSTR_TYPE,
+      CD.CODE_NM AS DSTR_TYPE_NM
+      FROM
+      T_PROJECT P
+      LEFT OUTER JOIN
+      T_CUSTOMER C
+      ON
+      P.COMPANY_CD = C.COMPANY_CD AND
+      P.CUST_CD = C.CUST_CD
+      LEFT OUTER JOIN
+      T_USER U
+      ON
+      P.COMPANY_CD = U.COMPANY_CD AND
+      P.USER_CD = U.USER_CD
+      LEFT OUTER JOIN
+      T_DEPARTMENT D
+      ON
+      U.COMPANY_CD = D.COMPANY_CD AND
+      U.DEPT_CD = D.DEPT_CD
+      LEFT OUTER JOIN
+      T_CUSTOMER C2
+      ON
+      P.COMPANY_CD = C2.COMPANY_CD AND
+      P.EUSR_CD = C2.CUST_CD
+      LEFT OUTER JOIN
+      T_CODE CD
+      ON
+      P.DSTR_TYPE = CD.CODE_ID
+      WHERE
+      P.COMPANY_CD = #company_cd# AND
+      P.USE_YN = 'Y'
+      <isNotEmpty property="user_cd">
+        AND P.USER_CD = #user_cd#
+      </isNotEmpty>
+      <isNotEmpty property="user_nm">
+        AND U.USER_NM LIKE '%' + #user_nm# + '%'
+      </isNotEmpty>
+      <isNotEmpty property="pjt_nm">
+        AND P.PJT_NM LIKE '%' + #pjt_nm# + '%'
+      </isNotEmpty>
+      <isNotEmpty property="cust_nm">
+        AND C.CUST_NM LIKE '%' + #cust_nm# + '%'
+        AND P.CUST_CD IS NOT NULL
+      </isNotEmpty> 
+      ORDER BY P.PJT_NM
+    </select>
+
+  </statements>
+
+
+
+</sqlMap>
