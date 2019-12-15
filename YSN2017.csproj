@@ -450,6 +450,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="client\app\store\" />
     <Folder Include="Logs\" />
     <Folder Include="Views\File\" />
     <Folder Include="산출물\" />

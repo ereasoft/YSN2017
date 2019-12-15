@@ -31,7 +31,7 @@ namespace YSN2017.Controllers
             hash.Add("language", User.Identity.Name.Split('|')[3]);         // 기본언어
             hash.Add("company_cd", User.Identity.Name.Split('|')[2]);       // 회사코드
 
-            hash.Add("idx", Request["idx"]);
+            hash.Add("idx", Request["idx"]); 
             hash.Add("cate_lv1", Request["cate_lv1"]);
             hash.Add("cate_lv2", Request["cate_lv2"]);
             hash.Add("prod_code", Request["prod_code"]);
@@ -586,6 +586,7 @@ namespace YSN2017.Controllers
             {
                 sql = "cate_lv2";
                 hash.Add("cate_lv1", Request["cate_lv1"]);
+                hash.Add("cate_lv2", Request["cate_lv2"]);
             }  
 
             ISqlMapper mapper = Mapper.Instance();

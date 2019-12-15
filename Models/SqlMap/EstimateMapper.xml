@@ -14,7 +14,7 @@
     <select id="baseProdList" parameterClass="Hashtable" resultClass="Hashtable">
 
       SELECT
-      idx,cate_lv1 ,cate_lv2 ,prod_code ,prod_option1 ,prod_others ,eco_category ,sample_modify
+      idx,cate_lv1 ,cate_lv2 ,prod_code ,prod_code as prod_name, cate_lv2 as prod_desc, prod_option1 ,prod_others ,eco_category ,sample_modify
       ,bottle_5K ,Innerbottle_5K ,pumpcap_5K ,cap_5K ,tubesleeveheadering_5K ,others_5K ,set_5K ,bottle_10K
       ,Innerbottle_10K ,pumpcap_10K ,cap_10K ,tubesleeveheadering_10K ,others_10K ,set_10K ,bottle_30K
       ,Innerbottle_30K ,pumpcap_30K ,cap_30K ,tubesleeveheadering_30K ,others_30K ,set_30K ,bottle_50K
@@ -23,35 +23,40 @@
       ,remark ,create_id ,create_date ,modify_id ,modify_date ,del_yn
       FROM T_BASE_PRODUCT
       WHERE ISNULL(del_yn,'N') = 'N'
-      <isNotNull property="idx">
+      <isNotEmpty property="idx">
         AND idx = #idx#
-      </isNotNull>
-      <isNotNull property="cate_lv1">
+      </isNotEmpty>
+      <isNotEmpty property="cate_lv1">
         AND cate_lv1 = #cate_lv1#
-      </isNotNull>
-      <isNotNull property="cate_lv2">
-        AND cate_lv2 LIKE '%' + #cate_lv2# + '%'
-      </isNotNull>
-      <isNotNull property="prod_code">
+      </isNotEmpty>
+      <isNotEmpty property="cate_lv2">
+        AND cate_lv2 = #cate_lv2#
+      </isNotEmpty>
+      <isNotEmpty property="prod_code">
         AND prod_code LIKE '%' + #prod_code# + '%'
-      </isNotNull>
+      </isNotEmpty>
       
     </select>
 
     <select id="cate_lv1" parameterClass="Hashtable" resultClass="Hashtable">
 
+      SELECT catenm, catenm as cd
+      FROM (
       SELECT  distinct cate_lv1 as catenm
       FROM T_BASE_PRODUCT
-      WHERE ISNULL(del_yn,'N') = 'N' 
+      WHERE ISNULL(del_yn,'N') = 'N' ) A
 
     </select>
 
     <select id="cate_lv2" parameterClass="Hashtable" resultClass="Hashtable">
 
+      SELECT catenm, catenm as cd
+      FROM (
       SELECT  distinct cate_lv2 as catenm
       FROM T_BASE_PRODUCT
       WHERE ISNULL(del_yn,'N') = 'N'
       AND cate_lv1 = #cate_lv1#
+      AND cate_lv2 like '%' + #cate_lv2# + '%') A
 
     </select>
 
@@ -195,8 +200,8 @@
     <select id="estimateItemList" parameterClass="Hashtable" resultClass="Hashtable">
 
       SELECT
-      idx ,estimate_id ,sno ,chk_print ,summary_yn ,set_yn ,cate_lv1 ,cate_lv2
-      ,prod ,sub_prod ,prod_code ,prod_option ,prod_desc ,eco_category ,unit_price ,quantity ,amount
+      idx ,estimate_id ,header_yn ,sno ,chk_print ,summary_yn ,set_yn ,cate_lv1 ,cate_lv2
+      ,prod_name ,prod ,sub_prod ,prod_code ,prod_option ,prod_desc ,eco_category ,unit_price ,quantity ,amount
       ,qty_5k ,qty_10k ,qty_30k ,qty_50k ,qty_100k ,option_price
       ,remark ,create_id ,create_date ,modify_id ,modify_date ,del_yn
       FROM T_ESTIMATE_ITEM
@@ -223,12 +228,14 @@
     <insert id="estimateItemInsert" parameterClass="Hashtable">
 
       INSERT T_ESTIMATE_ITEM(
-      idx ,estimate_id ,sno ,chk_print ,summary_yn ,set_yn ,cate_lv1 ,cate_lv2
+      idx ,estimate_id ,header_yn ,prod_name ,sno ,chk_print ,summary_yn ,set_yn ,cate_lv1 ,cate_lv2
       ,prod ,sub_prod ,prod_code ,prod_option ,prod_desc ,eco_category ,unit_price ,quantity ,amount
       ,qty_5k ,qty_10k ,qty_30k ,qty_50k ,qty_100k ,option_price
       ,remark ,create_id ,create_date ,modify_id ,modify_date ,del_yn)
       VALUES (
       #estimate_id# ,
+      #header_yn# ,
+      #prod_name# ,
       #sno# ,
       #chk_print# ,
       #summary_yn# ,
@@ -249,7 +256,7 @@
       #qty_30k# ,
       #qty_50k# ,
       #qty_100k# ,
-      #option_price# , 
+      #option_price# ,
       #remark# ,
       #create_id# ,
       getdate() ,
@@ -264,6 +271,8 @@
 
       UPDATE T_ESTIMATE_ITEM SET
       estimate_id = #estimate_id# ,
+      header_yn = #header_yn# ,
+      prod_name = #prod_name# ,
       sno = #estimsnoate_id# ,
       chk_print = #chk_print# ,
       summary_yn = #summary_yn#,

@@ -5,7 +5,8 @@
     requires: [
           'Ysn.store.estimateitem',
           'Ysn.view.estimate.estimateDetailController',
-          'Ysn.store.cateLV'
+          'Ysn.store.cateLv',
+          'Ysn.store.cateLv2'
     ],
 
     controller: 'estimateDetail',
@@ -256,127 +257,287 @@
                      },
                      {
                          xtype: 'widgetcolumn',
-                         dataIndex: 'cate_lv1',
-                         text: '품목분류1',
+                         dataIndex: 'header_yn',
+                         text: '헤더구분',
+                         width:85,
                          widget: {
                              xtype: 'combobox',
                              store: {
-                                 type: 'cateLV'
+                                 fields: [{name: 'code'}],
+                                 data: { items: [
+                                       { code: 'Y' }, 
+                                       { code: 'N' } 
+                                 ]},
+                                 proxy: {
+                                     type: 'memory',
+                                     reader: {
+                                         type: 'json',
+                                         rootProperty: 'items'
+                                     }
+                                 }
                              },
+                             flex:1,
+                             minChars: 1,
+                             queryMode: 'local',
+                             publishes: 'value',
+                             displayField: 'code',
+                             valueField: 'code',
+                             hideTrigger: false,
+                             listeners: {
+                                 //specialkey: 'findCateLv2',
+                                 select: 'setCateLv1'
+                             }
+                         }
+                     },
+                     {
+                         xtype: 'widgetcolumn',
+                         hidden: true,
+                         dataIndex: 'cate_lv1',
+                         text: '품목분류1',
+                         width: 145,
+                         widget: {
+                             xtype: 'combobox',
+                             store: {
+                                 type: 'cateLv'
+                             },
+                             flex: 1,
                              minChars: 1,
                              //queryParam: 'customer_name',
                              queryMode: 'local',
                              publishes: 'value',
                              displayField: 'catenm',
-                             valueField: 'catenm',
-                             hideTrigger: true,
+                             valueField: 'cd',
+                             hideTrigger: false,
+                             listeners: {
+                                 //specialkey: 'findCateLv2',
+                                 select: 'setCateLv1',
+                                 change: 'chgCateLv1'
+                             }
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
                          dataIndex: 'cate_lv2',
                          text: '품목분류2',
+                         hidden: true,
+                         width: 210,
                          widget: {
                              xtype: 'combobox',
                              store: {
-                                 type: 'cateLV'
+                                 type: 'cateLv2',
+                                 autoLoad: false,
+                                 autoDestroy: true,
+                                 listeners: {
+                                     beforeload: function ( obj, e, eOpts )
+                                     {
+                                         obj.getProxy().setExtraParams( { cate_lv1: Ysn.Global.getEstCateLv1() } );
+                                     }
+                                 }
                              },
+                             flex: 1,
                              minChars: 1,
-                             //queryParam: 'customer_name',
-                             queryMode: 'local',
+                             queryParam: 'cate_lv2',    
+                             //enableKeyEvents : true, 
+                             queryMode: 'remote',
                              publishes: 'value',
                              displayField: 'catenm',
-                             valueField: 'catenm',
-                             hideTrigger: true,
+                             valueField: 'cd',
+                             hideTrigger: false,
+                             listeners: {
+                                 beforequery: 'beforeQuery',
+                                 select: 'setCateLv2',        
+                                 change: 'chgCateLv2'
+                             }
+                         }
+                     },
+                     {
+                         xtype: 'widgetcolumn',
+                         dataIndex: 'prod',
+                         text: '품목구분',
+                         width: 170,
+                         widget: {
+                             xtype: 'combobox',
+                             store: {
+                                 fields: [{ name: 'code' }],
+                                 data: {
+                                     items: [
+                                           { code: 'Bottle' },
+                                           { code: 'InnerBottle' },
+                                           { code: 'Pump_Cap' },
+                                           { code: 'Cap' },
+                                           { code: 'TubeSleeve_Headering' },
+                                           { code: 'Others' },
+                                           { code: 'SET' }
+                                     ]
+                                 },
+                                 proxy: {
+                                     type: 'memory',
+                                     reader: {
+                                         type: 'json',
+                                         rootProperty: 'items'
+                                     }
+                                 }
+                             },
+                             flex: 1,
+                             minChars: 1,
+                             queryMode: 'local',
+                             publishes: 'value',
+                             displayField: 'code',
+                             valueField: 'code',
+                             hideTrigger: false,
+                             listeners: {
+                                 // beforequery: 'beforeQuery',
+                                 select: 'setProd',
+                                 change: 'chgCateLv2'
+                             }
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
                          dataIndex: 'prod_code',
-                         text: '재품코드',
+                         text: '품목코드',
+                         width: 170,
                          widget: {
-                             xtype: 'combobox'
+                             xtype: 'combobox',
+                             store: {
+                                 type: 'baseProd',
+                                 autoLoad: false,
+                                 autoDestroy: true,
+                                 listeners: {
+                                     beforeload: function ( obj, e, eOpts )
+                                     {
+                                      //   if ( Ysn.Global.getEstCateLv1() != '' &&   Ysn.Global.getEstCateLv2() != ''){
+                                             obj.getProxy().setExtraParams({
+                                                 cate_lv1: Ysn.Global.getEstCateLv1(),
+                                                 cate_lv2: Ysn.Global.getEstCateLv2()
+                                             });
+                                       //  }   
+                                     }
+                                 }
+                             },
+                             flex: 1,
+                             minChars: 1,
+                             queryParam: 'prod_code',
+                             //enableKeyEvents : true, 
+                             queryMode: 'remote',
+                             publishes: 'value',
+                             displayField: 'prod_code',
+                             valueField: 'prod_code',
+                             hideTrigger: false,
+                             listeners: {
+                                 beforequery: 'beforeQuery',
+                                 select: 'setProdCode'
+                             }
+                         }
+                     },
+                     {
+                         xtype: 'widgetcolumn',
+                         dataIndex: 'prod_name',
+                         text: '품목명',
+                         width: 150,
+                         widget: {
+                             xtype: 'textfield',
+                             flex: 1
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
                          dataIndex: 'prod_desc',
-                         text: '재품설명',
+                         text: '품목설명',
+                         width: 150,
                          widget: {
-                             xtype: 'textfield'
+                             xtype: 'textfield',
+                             flex: 1
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
                          dataIndex: 'unit_price',
                          text: '단가',
+                         width: 100,
                          widget: {
-                             xtype: 'numberfield'
+                             xtype: 'numberfield',
+                             flex: 1
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
                          dataIndex: 'quantity',
                          text: '수량',
+                         width: 100,
                          widget: {
-                             xtype: 'numberfield'
+                             xtype: 'numberfield',
+                             flex: 1
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
                          dataIndex: 'amount',
                          text: '금액',
+                         width: 100,
                          widget: {
-                             xtype: 'numberfield'
+                             xtype: 'numberfield',
+                             flex: 1
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
                          dataIndex: 'qty_5k',
                          text: '5K',
+                         width: 100,
                          widget: {
-                             xtype: 'numberfield'
+                             xtype: 'numberfield',
+                             flex: 1
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
                          dataIndex: 'qty_10k',
                          text: '10K',
+                         width: 100,
                          widget: {
-                             xtype: 'numberfield'
+                             xtype: 'numberfield',
+                             flex: 1
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
                          dataIndex: 'qty_30k',
                          text: '30K',
+                         width: 100,
                          widget: {
-                             xtype: 'numberfield'
+                             xtype: 'numberfield',
+                             flex: 1
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
                          dataIndex: 'qty_50k',
                          text: '50K',
+                         width: 100,
                          widget: {
-                             xtype: 'numberfield'
+                             xtype: 'numberfield',
+                             flex: 1
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
                          dataIndex: 'qty_100k',
                          text: '100K',
+                         width: 100,
                          widget: {
-                             xtype: 'numberfield'
+                             xtype: 'numberfield',
+                             flex: 1
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
-                         width: 228,
                          dataIndex: 'remark',
                          text: '비고',
+                         width: 250,
                          widget: {
-                             xtype: 'textfield'
+                             xtype: 'textfield',
+                             flex: 1
                          }
                      },
                      {
@@ -384,7 +545,247 @@
                          hidden: true,
                          dataIndex: 'idx',
                          text: 'idx'
-                     }
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'prod_option1',
+                         text: 'prod_option1'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'prod_others',
+                         text: 'prod_others'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'eco_category',
+                         text: 'eco_category'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'sample_modify',
+                         text: 'sample_modify'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'bottle_5K',
+                         text: 'bottle_5K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'Innerbottle_5K',
+                         text: 'Innerbottle_5K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'pumpcap_5K',
+                         text: 'pumpcap_5K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'cap_5K',
+                         text: 'cap_5K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'tubesleeveheadering_5K',
+                         text: 'tubesleeveheadering_5K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'others_5K',
+                         text: 'others_5K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'set_5K',
+                         text: 'set_5K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'bottle_10K',
+                         text: 'bottle_10K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'Innerbottle_10K',
+                         text: 'Innerbottle_10K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'pumpcap_10K',
+                         text: 'pumpcap_10K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'cap_10K',
+                         text: 'cap_10K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'tubesleeveheadering_10K',
+                         text: 'tubesleeveheadering_10K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'others_10K',
+                         text: 'others_10K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'set_10K',
+                         text: 'set_10K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'bottle_30K',
+                         text: 'bottle_30K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'Innerbottle_30K',
+                         text: 'Innerbottle_30K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'pumpcap_30K',
+                         text: 'pumpcap_30K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'cap_30K',
+                         text: 'cap_30K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'tubesleeveheadering_30K',
+                         text: 'tubesleeveheadering_30K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'others_30K',
+                         text: 'others_30K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'set_30K',
+                         text: 'set_30K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'bottle_50K',
+                         text: 'bottle_50K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'Innerbottle_50K',
+                         text: 'Innerbottle_50K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'pumpcap_50K',
+                         text: 'pumpcap_50K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'cap_50K',
+                         text: 'cap_50K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'tubesleeveheadering_50K',
+                         text: 'tubesleeveheadering_50K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'others_50K',
+                         text: 'others_50K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'set_50K',
+                         text: 'set_50K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'bottle_100K',
+                         text: 'bottle_100K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'Innerbottle_100K',
+                         text: 'Innerbottle_100K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'pumpcap_100K',
+                         text: 'pumpcap_100K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'cap_100K',
+                         text: 'cap_100K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'tubesleeveheadering_100K',
+                         text: 'tubesleeveheadering_100K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'Innerbottle_100K',
+                         text: 'Innerbottle_100K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'others_100K',
+                         text: 'others_100K'
+                     },
+                     {
+                         xtype: 'gridcolumn',
+                         hidden: true,
+                         dataIndex: 'set_100K',
+                         text: 'set_100K'
+                     } 
                  ],
                  selModel: {
                      selType: 'checkboxmodel',

@@ -1,10 +1,12 @@
 Ext.define( 'Ysn.model.baseproductModel', {
     extend: 'Ext.data.Model',
     fields: [
-        { name: 'idx', type: 'int' },             
+        { name: 'idx', type: 'int' },
         { name: 'cate_lv1', type: 'string' },
         { name: 'cate_lv2', type: 'string' },
         { name: 'prod_code', type: 'string' },
+        { name: 'prod_name', type: 'string' },
+        { name: 'prod_desc', type: 'string' },
         { name: 'prod_option1', type: 'string' },
         { name: 'prod_others', type: 'string' },    
         { name: 'eco_category', type: 'string' },
