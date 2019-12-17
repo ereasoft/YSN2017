@@ -32,11 +32,13 @@
       <isNotEmpty property="cate_lv2">
         AND cate_lv2 = #cate_lv2#
       </isNotEmpty>
+      <>
       <isNotEmpty property="prod_code">
         AND prod_code LIKE '%' + #prod_code# + '%'
       </isNotEmpty>
       
     </select>
+     
 
     <select id="cate_lv1" parameterClass="Hashtable" resultClass="Hashtable">
 
