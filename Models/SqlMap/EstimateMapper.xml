@@ -14,7 +14,8 @@
     <select id="baseProdList" parameterClass="Hashtable" resultClass="Hashtable">
 
       SELECT
-      idx,cate_lv1 ,cate_lv2 ,prod_code ,prod_code as prod_name, cate_lv2 as prod_desc, prod_option1 ,prod_others ,eco_category ,sample_modify
+      idx,cate_lv1 ,cate_lv2 ,RTRIM(prod_code + ' ' + prod_option1) as prod_code ,RTRIM(prod_code + ' ' + prod_option1) as prod_name
+      ,cate_lv2 as prod_desc, prod_option1 ,prod_others ,eco_category ,sample_modify
       ,bottle_5K ,Innerbottle_5K ,pumpcap_5K ,cap_5K ,tubesleeveheadering_5K ,others_5K ,set_5K ,bottle_10K
       ,Innerbottle_10K ,pumpcap_10K ,cap_10K ,tubesleeveheadering_10K ,others_10K ,set_10K ,bottle_30K
       ,Innerbottle_30K ,pumpcap_30K ,cap_30K ,tubesleeveheadering_30K ,others_30K ,set_30K ,bottle_50K
@@ -32,10 +33,9 @@
       <isNotEmpty property="cate_lv2">
         AND cate_lv2 = #cate_lv2#
       </isNotEmpty>
-      <>
       <isNotEmpty property="prod_code">
         AND prod_code LIKE '%' + #prod_code# + '%'
-      </isNotEmpty>
+      </isNotEmpty> 
       
     </select>
      
@@ -60,7 +60,7 @@
       AND cate_lv1 = #cate_lv1#
       AND cate_lv2 like '%' + #cate_lv2# + '%') A
 
-    </select>
+    </select> 
 
 
 
@@ -68,22 +68,27 @@
     <select id="baseOptionList" parameterClass="Hashtable" resultClass="Hashtable">
 
       SELECT
-      idx ,prod_code ,prod ,sub_prod ,prod_option
-      ,global_basic ,global_sample ,japan_basic ,japan_sample
-      ,remark ,create_id ,create_date ,modify_id ,modify_date ,del_yn
-      FROM T_BASE_OPTION
-      WHERE ISNULL(del_yn,'N') = 'N'
+      A.idx ,A.prod_code ,A.prod ,A.sub_prod , A.prod_option
+      ,A.prod_option as prod_name, A.sub_prod as prod_desc
+      ,isnull(A.global_basic,0) as global_basic ,isnull(A.global_sample,0) as global_sample
+      ,isnull(A.japan_basic,0) as japan_basic ,isnull(A.japan_sample,0) as japan_sample
+      ,A.remark ,A.create_id ,A.create_date ,A.modify_id ,A.modify_date ,A.del_yn
+      FROM T_BASE_OPTION A, T_OPTION_SPEC_SHEET B
+      WHERE ISNULL(A.del_yn,'N') = 'N'
+      AND A.prod = B.prod
+      AND A.sub_prod = B.sub_prod
+      AND A.prod_option = B.prod_option
       <isNotNull property="idx">
-        AND idx = #idx#
+        AND A.idx = #idx#
       </isNotNull>
       <isNotNull property="prod_code">
-        AND prod_code = #prod_code#
+        AND B.prod_code = #prod_code#
       </isNotNull>
       <isNotNull property="sub_prod">
-        AND sub_prod LIKE '%' + #sub_prod# + '%'
+        AND A.sub_prod LIKE '%' + #sub_prod# + '%'
       </isNotNull>
       <isNotNull property="prod_option">
-        AND prod_option LIKE '%' + #prod_option# + '%'
+        AND A.prod_option LIKE '%' + #prod_option# + '%'
       </isNotNull>
       
     </select>
@@ -92,9 +97,14 @@
     <select id="estimateHeadList" parameterClass="Hashtable" resultClass="Hashtable">
 
       SELECT
-      idx ,estimate_id ,form_lang ,form_type ,form_id ,dstr_type ,user_cd ,user_nm
-      ,estimate_date ,cust_cd ,ref_cd ,ref_nm ,submit_cd ,submit_nm ,currency
-      ,subject ,summary_yn ,remark ,create_id ,create_date ,modify_id ,modify_date ,del_yn
+      idx ,estimate_id ,form_lang ,form_type ,form_id ,dstr_type , dstr_type as dstr_chn, user_cd ,user_nm,status_cd,
+      case when status_cd = '0' then '임시'
+      when status_cd = '1' then '상신'
+      when status_cd = '2' then '승인'
+      else '반려' end AS status_nm
+      ,prod_code, prod_name, item_name, item_qty
+      ,CONVERT(CHAR(10), estimate_date, 20) as estimate_date ,cust_cd ,cust_nm, ref_cd ,ref_nm ,submit_cd ,submit_nm ,currency
+      ,subject ,summary_yn ,remark ,create_id ,CONVERT(CHAR(19), create_date, 20) as create_date ,modify_id ,CONVERT(CHAR(19), modify_date, 20) as modify_date ,del_yn
       FROM T_ESTIMATE_HEAD
       WHERE ISNULL(del_yn,'N') = 'N'
       <isNotNull property="idx">
@@ -121,19 +131,39 @@
       <isNotNull property="submit_cd">
         AND submit_cd = #submit_cd#
       </isNotNull>
+      <isNotEmpty property="dstr_type">
+        AND dstr_type = #dstr_type#
+      </isNotEmpty>
+      <isNotEmpty property="status_cd">
+        AND status_cd = #status_cd#
+      </isNotEmpty>
+      <isNotEmpty property="user_nm">
+        AND user_nm LIKE '%' + #user_nm# + '%'
+      </isNotEmpty>
+      <isNotEmpty property="cust_nm">
+        AND cust_nm LIKE '%' + #cust_nm# + '%'
+      </isNotEmpty>
       <isNotNull property="subject">
         AND subject LIKE '%' + #subject# + '%'
       </isNotNull>
 
     </select>
 
-    <!-- 견적관리 : 견적서 마스터 등록 -->
-    <insert id="estimateHeadInsert" parameterClass="Hashtable">
+
+    <select id="estimateID" parameterClass="Hashtable" resultClass="string">
+      select convert(varchar(4), datepart(year, getdate())) + right('0'+convert(varchar(2), datepart(month, getdate())),2) + right('000' + convert(varchar(4), convert(int, right(isnull(max(estimate_id),1),4)) + 1),4)
+      from T_ESTIMATE_HEAD
+      where left(estimate_id,6)  = convert(varchar(4), datepart(year, getdate())) + right('0'+convert(varchar(2), datepart(month, getdate())),2)
+    </select>
+
+
+      <!-- 견적관리 : 견적서 마스터 등록 -->
+    <insert id="estimateHeadInsert" parameterClass="Hashtable" >
 
       INSERT T_ESTIMATE_HEAD(
       estimate_id ,form_lang ,form_type ,form_id ,dstr_type ,user_cd ,user_nm
-      ,estimate_date ,cust_cd ,ref_cd ,ref_nm ,submit_cd ,submit_nm ,currency
-      ,subject ,summary_yn ,remark ,create_id ,create_date ,modify_id ,modify_date ,del_yn)
+      ,estimate_date ,cust_cd ,cust_nm ,ref_cd ,ref_nm ,submit_cd ,submit_nm ,currency, exch_rate, status_cd
+      ,subject ,summary_yn ,prod_code, prod_name, item_name, item_qty, remark ,create_id ,create_date ,modify_id ,modify_date ,del_yn)
       VALUES (
       #estimate_id# ,
       #form_lang# ,
@@ -144,13 +174,20 @@
       #user_nm# ,
       #estimate_date# ,
       #cust_cd# ,
+      #cust_nm# ,
       #ref_cd# ,
       #ref_nm# ,
       #submit_cd# ,
       #submit_nm# ,
       #currency#,
+      #exch_rate#,
+      #status_cd#,
       #subject# ,
       #summary_yn# ,
+      #prod_code# ,
+      #prod_name# ,
+      #item_name# ,
+      #item_qty# ,
       #remark# ,
       #create_id# ,
       getdate() ,
@@ -158,32 +195,45 @@
       getdate() ,
       'N'
       )
+      <selectKey type="post" resultClass="int" property="idx"> 
+      select @@IDENTITY as idx 
+    </selectKey>
+
+
+
     </insert>
 
     <!-- 견적관리 : 견적서 마스터 수정 -->
     <update id="estimateHeadUpdate" parameterClass="Hashtable">
 
-      UPDATE T_ESTIMATE_HEAD SET 
-        estimate_id = #estimate_id# ,
-        form_lang = #form_lang# ,
-        form_type = #form_type# ,
-        form_id = #form_id# ,
-        dstr_type = #dstr_type# ,
-        user_cd = #user_cd# ,
-        user_nm = #user_nm# ,
-        estimate_date = #estimate_date# ,
-        cust_cd = #cust_cd# ,
-        ref_cd = #ref_cd# ,
-        ref_nm = #ref_nm# ,
-        submit_cd = #submit_cd# ,
-        submit_nm = #submit_nm# ,
-        currency = #currency# ,
-        subject = #subject# ,
-        summary_yn = #summary_yn# ,
-        remark = #remark# ,
-        modify_id = #modify_id# ,
-        modify_date = getdate()  
-      FROM idx = #idx#
+      UPDATE T_ESTIMATE_HEAD SET
+      estimate_id = #estimate_id# ,
+      form_lang = #form_lang# ,
+      form_type = #form_type# ,
+      form_id = #form_id# ,
+      dstr_type = #dstr_type# ,
+      user_cd = #user_cd# ,
+      user_nm = #user_nm# ,
+      estimate_date = #estimate_date# ,
+      cust_cd = #cust_cd# ,
+      cust_nm = #cust_nm# ,
+      ref_cd = #ref_cd# ,
+      ref_nm = #ref_nm# ,
+      submit_cd = #submit_cd# ,
+      submit_nm = #submit_nm# ,
+      currency = #currency# ,
+      exch_rate = #exch_rate#,
+      status_cd = #status_cd#,
+      subject = #subject# ,
+      summary_yn = #summary_yn# ,
+      prod_code = #prod_code# ,
+      prod_name = #prod_name# ,
+      item_name = #item_name# ,
+      item_qty = #item_qty# ,
+      remark = #remark# ,
+      modify_id = #modify_id# ,
+      modify_date = getdate()
+      WHERE idx = #idx#
 
     </update>
 
@@ -194,7 +244,7 @@
       modify_id = #modify_id# ,
       modify_date = getdate() ,
       del_yn = 'Y'
-      FROM idx = #idx#
+      WHERE idx = #idx#
 
     </update>
 
@@ -202,9 +252,15 @@
     <select id="estimateItemList" parameterClass="Hashtable" resultClass="Hashtable">
 
       SELECT
-      idx ,estimate_id ,header_yn ,sno ,chk_print ,summary_yn ,set_yn ,cate_lv1 ,cate_lv2
-      ,prod_name ,prod ,sub_prod ,prod_code ,prod_option ,prod_desc ,eco_category ,unit_price ,quantity ,amount
+      idx , estimate_id ,header_yn ,ROW_NUMBER() OVER( ORDER BY idx) AS no
+      , sno ,chk_print ,summary_yn ,set_yn ,cate_lv1 ,cate_lv2, sample_modify
+      ,prod_name ,item_name ,prod ,sub_prod ,prod_code ,prod_option ,prod_desc ,eco_category ,unit_price ,quantity ,amount
       ,qty_5k ,qty_10k ,qty_30k ,qty_50k ,qty_100k ,option_price
+      ,bottle_5K ,Innerbottle_5K ,pumpcap_5K ,cap_5K ,tubesleeveheadering_5K ,others_5K ,set_5K ,bottle_10K
+      ,Innerbottle_10K ,pumpcap_10K ,cap_10K ,tubesleeveheadering_10K ,others_10K ,set_10K ,bottle_30K
+      ,Innerbottle_30K ,pumpcap_30K ,cap_30K ,tubesleeveheadering_30K ,others_30K ,set_30K ,bottle_50K
+      ,Innerbottle_50K ,pumpcap_50K ,cap_50K ,tubesleeveheadering_50K ,others_50K ,set_50K ,bottle_100K
+      ,Innerbottle_100K ,pumpcap_100K ,cap_100K ,tubesleeveheadering_100K ,others_100K ,set_100K
       ,remark ,create_id ,create_date ,modify_id ,modify_date ,del_yn
       FROM T_ESTIMATE_ITEM
       WHERE ISNULL(del_yn,'N') = 'N'
@@ -230,20 +286,28 @@
     <insert id="estimateItemInsert" parameterClass="Hashtable">
 
       INSERT T_ESTIMATE_ITEM(
-      idx ,estimate_id ,header_yn ,prod_name ,sno ,chk_print ,summary_yn ,set_yn ,cate_lv1 ,cate_lv2
+      no, estimate_id ,header_yn ,prod_name ,item_name ,sno ,chk_print ,summary_yn ,set_yn ,cate_lv1 ,cate_lv2, sample_modify
       ,prod ,sub_prod ,prod_code ,prod_option ,prod_desc ,eco_category ,unit_price ,quantity ,amount
       ,qty_5k ,qty_10k ,qty_30k ,qty_50k ,qty_100k ,option_price
+      ,bottle_5K ,Innerbottle_5K ,pumpcap_5K ,cap_5K ,tubesleeveheadering_5K ,others_5K ,set_5K ,bottle_10K
+      ,Innerbottle_10K ,pumpcap_10K ,cap_10K ,tubesleeveheadering_10K ,others_10K ,set_10K ,bottle_30K
+      ,Innerbottle_30K ,pumpcap_30K ,cap_30K ,tubesleeveheadering_30K ,others_30K ,set_30K ,bottle_50K
+      ,Innerbottle_50K ,pumpcap_50K ,cap_50K ,tubesleeveheadering_50K ,others_50K ,set_50K ,bottle_100K
+      ,Innerbottle_100K ,pumpcap_100K ,cap_100K ,tubesleeveheadering_100K ,others_100K ,set_100K
       ,remark ,create_id ,create_date ,modify_id ,modify_date ,del_yn)
       VALUES (
+      #no# ,
       #estimate_id# ,
       #header_yn# ,
       #prod_name# ,
+      #item_name#,
       #sno# ,
       #chk_print# ,
       #summary_yn# ,
       #set_yn# ,
       #cate_lv1# ,
       #cate_lv2# ,
+      #sample_modify#,
       #prod# ,
       #sub_prod# ,
       #prod_code# ,
@@ -259,6 +323,41 @@
       #qty_50k# ,
       #qty_100k# ,
       #option_price# ,
+      #bottle_5K #,
+      #Innerbottle_5K#,
+      #pumpcap_5K# ,
+      #cap_5K#,
+      #tubesleeveheadering_5K#,
+      #others_5K#,
+      #set_5K#,
+      #bottle_10K#,
+      #Innerbottle_10K#,
+      #pumpcap_10K#,
+      #cap_10K#,
+      #tubesleeveheadering_10K#,
+      #others_10K#,
+      #set_10K#,
+      #bottle_30K#,
+      #Innerbottle_30K#,
+      #pumpcap_30K# ,
+      #cap_30K#,
+      #tubesleeveheadering_30K#,
+      #others_30K#,
+      #set_30K#,
+      #bottle_50K#,
+      #Innerbottle_50K#,
+      #pumpcap_50K#,
+      #cap_50K#,
+      #tubesleeveheadering_50K#,
+      #others_50K#,
+      #set_50K#,
+      #bottle_100K#,
+      #Innerbottle_100K#,
+      #pumpcap_100K#,
+      #cap_100K#,
+      #tubesleeveheadering_100K#,
+      #others_100K#,
+      #set_100K#,
       #remark# ,
       #create_id# ,
       getdate() ,
@@ -274,14 +373,17 @@
       UPDATE T_ESTIMATE_ITEM SET
       estimate_id = #estimate_id# ,
       header_yn = #header_yn# ,
-      prod_name = #prod_name# ,
-      sno = #estimsnoate_id# ,
+      prod_name = #prod_name# ,  
+      item_name = #item_name# ,
+      sno = #sno# ,
+      no = #no# ,
       chk_print = #chk_print# ,
       summary_yn = #summary_yn#,
       set_yn = #set_yn#,
       cate_lv1 = #cate_lv1# ,
       cate_lv2 = #cate_lv2# ,
       prod = #prod# ,
+      sample_modify = #sample_modify#,
       sub_prod = #sub_prod#,
       prod_code = #prod_code#,
       prod_option = #prod_option# ,
@@ -296,21 +398,82 @@
       qty_50k = #qty_50k#,
       qty_100k = #qty_100k#,
       option_price = #option_price#,
+      bottle_5K = #bottle_5K# ,
+      Innerbottle_5K = #Innerbottle_5K# ,
+      pumpcap_5K = #pumpcap_5K# ,
+      cap_5K = #cap_5K# ,
+      tubesleeveheadering_5K = #tubesleeveheadering_5K# ,
+      others_5K= #others_5K# ,
+      set_5K= #set_5K# ,
+      bottle_10K= #bottle_10K# ,
+      Innerbottle_10K= #Innerbottle_10K# ,
+      pumpcap_10K= #pumpcap_10K# ,
+      cap_10K= #cap_10K# ,
+      tubesleeveheadering_10K= #tubesleeveheadering_10K# ,
+      others_10K= #others_10K# ,
+      set_10K= #set_10K# ,
+      bottle_30K= #bottle_30K# ,
+      Innerbottle_30K= #Innerbottle_30K# ,
+      pumpcap_30K= #pumpcap_30K# ,
+      cap_30K= #cap_30K# ,
+      tubesleeveheadering_30K= #tubesleeveheadering_30K# ,
+      others_30K= #others_30K# ,
+      set_30K= #set_30K# ,
+      bottle_50K= #bottle_50K# ,
+      Innerbottle_50K= #Innerbottle_50K# ,
+      pumpcap_50K= #pumpcap_50K# ,
+      cap_50K= #cap_50K# ,
+      tubesleeveheadering_50K= #tubesleeveheadering_50K# ,
+      others_50K= #others_50K# ,
+      set_50K= #set_50K# ,
+      bottle_100K= #bottle_100K# ,
+      Innerbottle_100K= #Innerbottle_100K# ,
+      pumpcap_100K= #pumpcap_100K# ,
+      cap_100K= #cap_100K# ,
+      tubesleeveheadering_100K= #tubesleeveheadering_100K# ,
+      others_100K= #others_100K# ,
+      set_100K= #set_100K# ,
       remark = #remark# ,
       modify_id = #modify_id# ,
       modify_date = getdate()
-      FROM idx = #idx#
+      WHERE idx = #idx#
 
     </update>
 
     <!-- 견적관리 : 견적서 아이템 삭제 -->
-    <update id="estimateItemDelete" parameterClass="Hashtable">
+    <delete id="estimateItemDelete" parameterClass="Hashtable">
 
-      UPDATE T_ESTIMATE_ITEM SET
-      del_yn = #del_yn#
-      FROM idx = #idx#
+      DELETE T_ESTIMATE_ITEM 
+      WHERE 1 = 1 
+    <isNotNull property="idx">
+      AND idx = #idx#
+    </isNotNull>
+    <isNotNull property="sno">
+      AND sno = #sno#
+    </isNotNull>
+      
+    </delete>
 
-    </update> 
+
+    <!-- 옵션 스펙시트 등록 -->
+    <insert id="prodOptionInsert" parameterClass="Hashtable" >
+
+      INSERT T_OPTION_SPEC_SHEET(
+      prod_code ,prod ,sub_prod ,prod_option ,remark ,create_id ,create_date, modify_id, modify_date, del_yn)
+       VALUES (
+      #prod_code# ,
+      #prod# ,
+      #sub_prod# ,
+      #prod_option# ,
+      '자동등록' ,
+      'system' ,
+      getdate() ,
+      'system' ,
+      getdate(), 
+      'N'
+      )
+
+    </insert>
     
   
 </statements>

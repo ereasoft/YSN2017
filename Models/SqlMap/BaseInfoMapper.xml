@@ -449,7 +449,7 @@
 
       SELECT
       BASE_YR
-      , BASE_CRNY
+      , RTRIM(BASE_CRNY) AS BASE_CRNY
       , EXCH_RATE
       , CRNY_ORDER
       , USE_YN

@@ -33,13 +33,16 @@ Ext.application({
 	    Sch.locale[localeClass].apply();
 	   // this.setMainView( 'Ysn.view.estimate.estimateDetail' );
 		if(flag == 0){
-		    //this.setMainView('Ysn.view.main.Main');
-		    this.setMainView( 'Ysn.view.estimate.estimateDetail' );
+		    this.setMainView('Ysn.view.main.Main');      
 		}else if(flag == 1){
 		    this.setMainView('Ysn.view.main.login');
+		}else if(flag == 3){
+		    this.setMainView( 'Ysn.view.estimate.requestMain' );
 		}else{
 			this.setMainView('Ysn.view.main.mainpopupView'); 
-		} 
+		}   
+
+	   // this.setMainView( 'Ysn.view.estimate.estimateDetail' );
 
 	
     }

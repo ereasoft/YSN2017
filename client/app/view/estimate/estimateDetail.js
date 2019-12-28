@@ -6,7 +6,8 @@
           'Ysn.store.estimateitem',
           'Ysn.view.estimate.estimateDetailController',
           'Ysn.store.cateLv',
-          'Ysn.store.cateLv2'
+          'Ysn.store.cateLv2',
+          'Ysn.store.baseOption'
     ],
 
     controller: 'estimateDetail',
@@ -32,17 +33,45 @@
                  ui: 'footer',
                  items: [
                      {
+                         xtype: 'button',
+                         iconCls: 'fa fa-recycle',
+                         reference: 'recylebtn',
+                         text: '재사용',
+                         handler: 'resetId'
+                     },
+                       {
+                           xtype: 'button',
+                           iconCls: 'fa fa-eraser',
+                           reference: 'newbtn',
+                           text: '신규작성',
+                           handler: 'resetAll'
+                       },
+                     {
                          xtype: 'tbfill'
                      },
                      {
                          xtype: 'button',
-                         iconCls: 'fa fa-floppy-o',
-                         text: '등록'
+                         iconCls: 'fa fa-plus-square-o',
+                         reference: 'tempbtn',
+                         text: '임시저장',
+                         listeners: {
+                             click: {
+                                 fn: 'Save',
+                                 args: ['임시저장', '0']
+                             }
+                         }
                      },
                      {
                          xtype: 'button',
-                         iconCls: 'fa fa-level-up',
-                         text: '결재요청'
+                         iconCls: 'fa fa-plus-square',
+                         reference: 'reqbtn',
+                         text: '결재상신',
+                         listeners: {
+                             click: {
+                                 fn: 'Save',
+                                 args: ['결재상신', '1']
+                             }
+                         }
                      },
                      {
                          xtype: 'button',
@@ -69,30 +98,41 @@
                 columns: 4,
                 tableAttrs: {
                     style: {
-                        width: '100%' 
+                        width: '100%'
                     }
                 }
 
             },
             items: [
+                {
+                    xtype: 'hiddenfield',
+                    reference: 'idx',
+                    name: 'idx',
+                },
               {
                   xtype: 'radiogroup',
                   width: 270,
                   fieldLabel: '<b>견적구분</b>',
+                  reference: 'form_lang',
+                  name: 'form_lang',
                   labelAlign: 'right',
                   labelWidth: 60,
                   items: [
                       {
                           xtype: 'radiofield',
-                          boxLabel: '한국어'
+                          boxLabel: '한국어',
+                          inputValue: 'kr'
                       },
                       {
                           xtype: 'radiofield',
-                          boxLabel: '영어'
+                          boxLabel: '영어',
+                          inputValue: 'en',
+                          checked: true
                       },
                       {
                           xtype: 'radiofield',
-                          boxLabel: '알본어'
+                          boxLabel: '알본어',
+                          inputValue: 'jp'
                       }
                   ]
               },
@@ -100,30 +140,44 @@
             xtype: 'radiogroup',
             width: 270,
             fieldLabel: '<b>견적타입</b>',
+            reference: 'form_type',
+            name: 'form_type',
             labelWidth: 60,
             items: [
                 {
                     xtype: 'radiofield',
-                    boxLabel: 'A'
+                    boxLabel: 'A',
+                    inputValue: 'A'
+
                 },
                 {
                     xtype: 'radiofield',
-                    boxLabel: 'B'
+                    boxLabel: 'B',
+                    inputValue: 'B',
+                    checked: true
+
                 }
-            ]
+            ],
+            listeners: {
+                change: 'chgType'
+            }
         },
         {
             xtype: 'datefield',
             width: 200,
+            reference: 'estimate_date',
+            name: 'estimate_date',
             fieldLabel: '<b>견적일</b>',
-            labelWidth: 60,
-            value: '11/20/2019'
+            labelWidth: 60
         },
         {
             xtype: 'textfield',
             width: 230,
+            reference: 'estimate_id',
+            name: 'estimate_id',
             fieldLabel: '<b>견적번호</b>',
-            labelWidth: 60
+            labelWidth: 60,
+            readOnly: true
         },
         {
             xtype: 'combobox',
@@ -146,8 +200,8 @@
             listeners: {
                 //change: 'onChangeBiz'
             }
-        },      
-        {        
+        },
+        {
             xtype: 'fieldcontainer',
             fieldLabel: '<b>거래처</b>',
             labelWidth: 60,
@@ -199,41 +253,100 @@
             xtype: 'textfield',
             width: 230,
             fieldLabel: '<b>영업담당</b>',
-            labelWidth: 60
+            reference: 'user_nm',
+            name: 'user_nm',
+            labelWidth: 60,
+            readOnly: true
         },
         {
             xtype: 'hiddenfield',
-            width: 230,
-            fieldLabel: '<b>영업담당</b>',
-            labelWidth: 60
+            reference: 'user_cd',
+            name: 'user_cd',
         },
+        {
+            xtype: 'hiddenfield',
+            reference: 'status_cd',
+            name: 'status_cd',
+        },
+        {
+            xtype: 'hiddenfield',
+            reference: 'ditems',
+            name: 'ditems',
+        },
+         {
+             xtype: 'hiddenfield',
+             reference: 'exch_rate',
+             name: 'exch_rate',
+         },
         {
             xtype: 'combobox',
             width: 230,
             fieldLabel: '<b>환율</b>',
-            labelWidth: 60
+            labelWidth: 60,
+            reference: 'currency',
+            name: 'currency',
+            publishes: 'value',
+            displayField: 'BASE_CRNY',
+            valueField: 'BASE_CRNY',
+            store: {
+                type: 'baseCrnyInfoList2'
+            },
+            minChars: 0,
+            allowBlank: false,
+            //width: 120,
+            queryMode: 'local',
+            listeners: {
+                change: 'onChangeCrny'
+            }
         },
         {
             xtype: 'textfield',
             colspan: 2,
             width: 610,
             fieldLabel: '<b>제목</b>',
+            reference: 'subject',
+            name: 'subject',
+            allowBlank: false,
             labelWidth: 60
         },
         {
             xtype: 'combobox',
             width: 230,
             fieldLabel: '<b>참조자</b>',
-            labelWidth: 60
+            labelWidth: 60,
+            reference: 'ref_cd',
+            name: 'ref_cd',
+            publishes: 'value',
+            displayField: 'USER_NM',
+            valueField: 'USER_CD',
+            allowBlank: false,
+            store: {
+                type: 'usercd2'
+            },
+            minChars: 0,
+            queryMode: 'local'
+
         },
-        {
-            xtype: 'combobox',
-            width: 230,
-            fieldLabel: '<b>결재자</b>',
-            labelWidth: 60
-        },
+       {
+           xtype: 'combobox',
+           width: 230,
+           fieldLabel: '<b>결재자</b>',
+           labelWidth: 60,
+           reference: 'submit_cd',
+           name: 'submit_cd',
+           publishes: 'value',
+           displayField: 'USER_NM',
+           valueField: 'USER_CD',
+           allowBlank: false,
+           store: {
+               type: 'usercd2'
+           },
+           minChars: 0,
+           queryMode: 'local'
+
+       },
          {
-             xtype: 'fieldset',     
+             xtype: 'fieldset',
              colspan: 4,
              layout: {
                  type: 'vbox',
@@ -256,27 +369,102 @@
                  },
                  store: { type: 'estimateitem' },
 
+                 tbar: {
+                     items: [       
+                     {
+                         xtype: 'combobox',
+                         width: 340,
+                         fieldLabel: '<b>Product Code</b>',
+                         reference: 'prod_code',
+                         name: 'prod_code',     
+                         labelWidth: 100,
+                         store: {
+                             type: 'baseProd',
+                             autoLoad: false,
+                             autoDestroy: true,
+                             listeners: {
+                                 beforeload: function ( obj, e, eOpts )
+                                 {
+                                     //   if ( Ysn.Global.getEstCateLv1() != '' &&   Ysn.Global.getEstCateLv2() != ''){
+                                     obj.getProxy().setExtraParams( {
+                                         cate_lv1: Ysn.Global.getEstCateLv1(),
+                                         cate_lv2: Ysn.Global.getEstCateLv2()
+                                     } );
+                                     //  }   
+                                 }
+                             }
+                         },      
+                         minChars: 1,
+                         queryParam: 'prod_code',
+                         //enableKeyEvents : true, 
+                         queryMode: 'remote',
+                         publishes: 'value',
+                         displayField: 'prod_code',
+                         valueField: 'prod_code',
+                         hideTrigger: false,
+                         listeners: {
+                             beforequery: 'beforeQuery',
+                             select: 'setProdCode'
+                         }
+                     },
+                     {
+                         xtype: 'textfield',
+                         width: 280,
+                         fieldLabel: '<b>Product Name</b>',
+                         reference: 'prod_name',
+                         name: 'prod_name',
+                         labelWidth: 100,
+                         readOnly: false
+                     },
+                     {
+                         xtype: 'textfield',
+                         width: 240,
+                         fieldLabel: '<b>Item Name</b>',
+                         reference: 'item_name',
+                         name: 'item_name',
+                         labelWidth: 70,
+                         readOnly: false
+                     },
+                     {
+                         xtype: 'numberfield',
+                         width: 170,
+                         fieldLabel: '<b>Quantity</b>',
+                         reference: 'item_qty',
+                         name: 'item_qty',
+
+                         value: 100,
+                         labelWidth: 60,
+                         listeners: {   
+                             change: 'setQty'
+                         },
+                         hidden: true,
+                         readOnly: false
+                     }]
+                 },
+
                  columns: [
                      {
                          xtype: 'gridcolumn',
                          dataIndex: 'no',
                          hidden: false,
-                         width:30
+                         width: 30
                      },
                      {
                          xtype: 'widgetcolumn',
                          //dataIndex: 'header_yn',
-                         text: '헤더구분',
-                         width:85,
+                         text: 'Step.',
+                         width: 130,
                          widget: {
                              xtype: 'combobox',
                              bind: '{record.header_yn}',
                              store: {
-                                 fields: [{name: 'code'}],
-                                 data: { items: [
-                                       { code: 'Y' }, 
-                                       { code: 'N' } 
-                                 ]},
+                                 fields: [{ name: 'code' }, { name: 'cdnm' }],
+                                 data: {
+                                     items: [
+                                           { cdnm: 'BASE', code: 'Y' },
+                                           { cdnm: 'OPTION', code: 'N' }
+                                     ]
+                                 },
                                  proxy: {
                                      type: 'memory',
                                      reader: {
@@ -285,20 +473,20 @@
                                      }
                                  }
                              },
-                             flex:1,
+                             flex: 1,
                              minChars: 1,
                              queryMode: 'local',
                              publishes: 'value',
-                             displayField: 'code',
+                             displayField: 'cdnm',
                              valueField: 'code',
                              hideTrigger: false,
                              listeners: {
                                  //specialkey: 'findCateLv2',
-                                 select: 'setCateLv1'
+                                 select: 'setStep'
                              }
                          }
                      },
-                     {
+                     /*{
                          xtype: 'widgetcolumn',
                          hidden: true,
                          //dataIndex: 'cate_lv1',
@@ -327,7 +515,7 @@
                      },
                      {
                          xtype: 'widgetcolumn',
-                        // dataIndex: 'cate_lv2',
+                         // dataIndex: 'cate_lv2',
                          text: '품목분류2',
                          hidden: true,
                          width: 210,
@@ -347,7 +535,7 @@
                              },
                              flex: 1,
                              minChars: 1,
-                             queryParam: 'cate_lv2',    
+                             queryParam: 'cate_lv2',
                              //enableKeyEvents : true, 
                              queryMode: 'remote',
                              publishes: 'value',
@@ -356,70 +544,116 @@
                              hideTrigger: false,
                              listeners: {
                                  beforequery: 'beforeQuery',
-                                 select: 'setCateLv2',        
+                                 select: 'setCateLv2',
                                  change: 'chgCateLv2'
+                             }
+                         }
+                     },   */
+                     {
+                         xtype: 'gridcolumn',
+                         dataIndex: 'prod_code',
+                         text: 'Prod.Code',
+                         width: 0  
+                     },
+                     {
+                         xtype: 'widgetcolumn',
+                         //dataIndex: 'prod',
+                         text: 'Product',
+                         width: 170,
+                         widget: {
+                             xtype: 'combobox',
+                             bind: '{record.prod}',
+                             store: {
+                                 fields: [{ name: 'code' }, { name: 'cdnm' }],
+                                 data: {
+                                     items: [
+                                           { code: 'Bottle', cdnm: 'BOTTLE' },
+                                           { code: 'InnerBottle', cdnm: 'INNER BOTTLE' },
+                                           { code: 'Pump_Cap', cdnm: 'PUMP' },
+                                           { code: 'Cap', cdnm: 'CAP' },
+                                           { code: 'TubeSleeve_Headering', cdnm: 'TUBE' },
+                                           { code: 'Others', cdnm: 'OTHER' },
+                                           { code: 'SET', cdnm: 'SET' }
+                                     ]
+                                 },
+                                 proxy: {
+                                     type: 'memory',
+                                     reader: {
+                                         type: 'json',
+                                         rootProperty: 'items'
+                                     }
+                                 }
+                             },
+                             flex: 1,
+                             minChars: 1,
+                             queryMode: 'local',
+                             publishes: 'value',
+                             displayField: 'cdnm',
+                             valueField: 'code',
+                             hideTrigger: false,
+                             listeners: {
+                                 // beforequery: 'beforeQuery',
+                                 select: 'setProd',
+                                 // change: 'chgCateLv2'
                              }
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
                          //dataIndex: 'prod_code',
-                         text: '품목코드',
-                         width: 170,
+                         text: 'Option',
+                         width: 220,
                          widget: {
                              xtype: 'combobox',
-                             bind: '{record.prod_code}',
+                             bind: '{record.prod_option}',
                              store: {
-                                 type: 'baseProd',
+                                 type: 'baseOption',
                                  autoLoad: false,
                                  autoDestroy: true,
                                  listeners: {
                                      beforeload: function ( obj, e, eOpts )
                                      {
-                                      //   if ( Ysn.Global.getEstCateLv1() != '' &&   Ysn.Global.getEstCateLv2() != ''){
-                                             obj.getProxy().setExtraParams({
-                                                 cate_lv1: Ysn.Global.getEstCateLv1(),
-                                                 cate_lv2: Ysn.Global.getEstCateLv2()
-                                             });
-                                       //  }   
+                                         var prod_code = 'BASE';
+                                         if ( Ysn.Global.getEstStep() == 'N' ){
+                                             prod_code = Ysn.Global.getEstProdCode();
+                                         }
+                                         obj.getProxy().setExtraParams( {
+                                             prod_code: prod_code 
+                                         } );
+
+                                         
                                      }
                                  }
                              },
                              flex: 1,
                              minChars: 1,
-                             queryParam: 'prod_code',
+                             queryParam: 'prod_option',
                              //enableKeyEvents : true, 
                              queryMode: 'remote',
                              publishes: 'value',
-                             displayField: 'prod_code',
-                             valueField: 'prod_code',
+                             displayField: 'prod_option',
+                             valueField: 'prod_option',
                              hideTrigger: false,
                              listeners: {
                                  beforequery: 'beforeQuery',
-                                 select: 'setProdCode'
+                                 select: 'setProdOption'
                              }
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
-                         //dataIndex: 'prod',
-                         text: '품목구분',
-                         width: 170,
+                         //dataIndex: 'prod',    
+                         text: '샘플여부',
+                         width: 0,
                          widget: {
                              xtype: 'combobox',
-                             type: 'cateLv2',
-                             bind: '{record.prod}',
+                             bind: '{record.sample_modify}',
                              store: {
                                  fields: [{ name: 'code' }],
                                  data: {
                                      items: [
-                                           { code: 'Bottle' },
-                                           { code: 'InnerBottle' },
-                                           { code: 'Pump_Cap' },
-                                           { code: 'Cap' },
-                                           { code: 'TubeSleeve_Headering' },
-                                           { code: 'Others' },
-                                           { code: 'SET' }
+                                           { code: 'Y' },
+                                           { code: 'N' }
                                      ]
                                  },
                                  proxy: {
@@ -438,28 +672,28 @@
                              valueField: 'code',
                              hideTrigger: false,
                              listeners: {
-                                // beforequery: 'beforeQuery',
-                                 select: 'setPriceType',
-                                // change: 'chgCateLv2'
+                                 // beforequery: 'beforeQuery',
+                                 //select: 'setSampleYn',
+                                 // change: 'chgCateLv2'
                              }
                          }
-                     },
+                     },/*
                      {
                          xtype: 'widgetcolumn',
                          //dataIndex: 'prod_name',
                          text: '품목명',
-                         width: 150,
+                         width: 0,
                          widget: {
                              xtype: 'textfield',
                              bind: '{record.prod_name}',
                              flex: 1
                          }
-                     },
+                     }, */
                      {
                          xtype: 'widgetcolumn',
                          //dataIndex: 'prod_desc',
-                         text: '품목설명',
-                         width: 150,
+                         text: 'Description',
+                         width: 200,
                          widget: {
                              xtype: 'textfield',
                              bind: '{record.prod_desc}',
@@ -468,32 +702,39 @@
                      },
                      {
                          xtype: 'widgetcolumn',
-                         //dataIndex: 'unit_price',
-                         text: '단가',
-                         width: 130,
-                         widget: {
-                             xtype: 'numberfield',
-                             bind: '{record.unit_price}',
-                             flex: 1
-                         }
-                     },
-                     {
-                         xtype: 'widgetcolumn',
-                        // dataIndex: 'quantity',
-                         text: '수량',
-                         width: 130,
-                         width: 1,
+                         hidden: true,
+                         // dataIndex: 'quantity',
+                         text: 'Quantity',
+                         width: 150,
                          widget: {
                              xtype: 'numberfield',
                              bind: '{record.quantity}',
+                             flex: 1,
+                             listeners: {
+                                 //  beforequery: 'beforeQuery',
+                                 change: 'calcAmt'
+                             }
+                         }
+                     },
+                     {
+                         xtype: 'widgetcolumn',
+                         hidden: true,
+                         //dataIndex: 'unit_price',
+                         text: 'Unit Price',
+                         width: 150,
+                         widget: {
+                             xtype: 'numberfield',
+                             bind: '{record.unit_price}',
+                             format: '0.0000',
                              flex: 1
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
-                        // dataIndex: 'amount',
-                         text: '금액',
-                         width: 130,
+                         // dataIndex: 'amount',     
+                         hidden: true,
+                         text: 'Amount',
+                         width: 150,
                          widget: {
                              xtype: 'numberfield',
                              bind: '{record.amount}',
@@ -502,62 +743,67 @@
                      },
                      {
                          xtype: 'widgetcolumn',
-                        // dataIndex: 'qty_5k',
+                         // dataIndex: 'qty_5k',
                          text: '5K',
-                         width: 130,
+                         width: 150,
                          widget: {
                              xtype: 'numberfield',
                              bind: '{record.qty_5k}',
+                             format: '0.0000',
                              flex: 1
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
-                        // dataIndex: 'qty_10k',
+                         // dataIndex: 'qty_10k',
                          text: '10K',
-                         width: 100,
+                         width: 150,
                          widget: {
                              xtype: 'numberfield',
                              bind: '{record.qty_10k}',
+                             format: '0.0000',
                              flex: 1
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
-                        // dataIndex: 'qty_30k',
+                         // dataIndex: 'qty_30k',
                          text: '30K',
-                         width: 100,
+                         width: 150,
                          widget: {
                              xtype: 'numberfield',
                              bind: '{record.qty_30k}',
+                             format: '0.0000',
                              flex: 1
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
-                        // dataIndex: 'qty_50k',
+                         // dataIndex: 'qty_50k',
                          text: '50K',
-                         width: 100,
+                         width: 150,
                          widget: {
                              xtype: 'numberfield',
                              bind: '{record.qty_50k}',
+                             format: '0.0000',
                              flex: 1
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
-                        // dataIndex: 'qty_100k',
+                         // dataIndex: 'qty_100k',
                          text: '100K',
-                         width: 100,
+                         width: 150,
                          widget: {
                              xtype: 'numberfield',
                              bind: '{record.qty_100k}',
+                             format: '0.0000',
                              flex: 1
                          }
                      },
                      {
                          xtype: 'widgetcolumn',
-                        // dataIndex: 'remark',
+                         // dataIndex: 'remark',
                          text: '비고',
                          width: 250,
                          widget: {
@@ -811,17 +1057,17 @@
                          hidden: true,
                          dataIndex: 'set_100K',
                          text: 'set_100K'
-                     } 
+                     }
                  ],
                  selModel: {
                      selType: 'checkboxmodel',
                      checkOnly: true
-                 } 
+                 }
              }]
          },
          {
              xtype: 'fieldset',
-             colspan: 4,   
+             colspan: 4,
              layout: {
                  type: 'vbox',
                  pack: 'start',
@@ -834,6 +1080,7 @@
                  height: 190,
                  padding: 0,
                  fieldLabel: '<b>특이사항</b>',
+                 name: 'remark',
                  labelAlign: 'right',
                  labelWidth: 60,
                  value: 'Origin                      : Republic of Korea\nPacking                    : Export Standard Packaging\nShipment                 : To be advised  \nShipping port            : To be advised\nInspection                : Manufacturer Standard\nDestination               : To be advised\nPayment                  : By T/T 50% in advance, 50% before shipment\nCurrency                  : USD\nDelivery Term           : FOB KOREA\nValidity                     : Valid in 30days after date of issue.'

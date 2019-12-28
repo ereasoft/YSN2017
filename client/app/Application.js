@@ -85,11 +85,15 @@ Ext.define('Ysn.Global', {
     smpBottom: '<br> <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">   <tr>     <th width=\"100\" align=\"center\" valign=\"middle\" bgcolor=\"#EFEFEF\" scope=\"row\">' + Locale.getMsg('특이사항') + '<\/th>     <td>remark1<\/td>   <\/tr> <\/table> <\/body> <\/html>',
     nosmpMailBody: '<h4>다음의 사유로 인하여 작업견본이 없이 발주진행을 요청하고자 함</h4> <p><strong>1. 해당제품</strong></p> <p>가. 발주처 : custNm</p> <p>나. 발주수량:  </p> <p>다. 주문번호:  </p> <p>라. 요청내용</p> <p>&nbsp;</p> <p><strong>2. 목적</strong></p> <p>&nbsp;</p> <p><strong>3. 요청범위</strong></p> <p>BOM구성, 작업견본, 발주진행</p>' ,
     config: {
+        estStep: 'Y',  
         estCateLv1: '',
         estCateLv2: '',
         estProdCode: '',
         estCateLvid: '',
-        estRowIdx: 0
+        estScrny: 'KRW',
+        estCrny:'1.0000',
+        estRowIdx: 0,
+        estQty: '100'
     },
 } );
 

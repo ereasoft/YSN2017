@@ -4,7 +4,8 @@ Ext.define('Ysn.view.main.topbar',{
     xtype: 'main-topbar',
     requires: [
         'Ysn.view.main.topbarController',
-        'Ysn.view.main.topbarModel'
+        'Ysn.view.main.topbarModel',
+        'Ysn.view.estimate.estimateDetail'
     ],
 
     controller: 'main-topbar',
@@ -27,6 +28,32 @@ Ext.define('Ysn.view.main.topbar',{
                  html: '<img src=\"resources/yonwoo.jpg\" width=215 height=50 />'
 			},
 			  '->',
+            {
+                  xtype: 'button',
+                  iconCls: 'x-fa  fa-external-link',
+                  text: Locale.getMsg( '견적서작성' ),
+                  listeners: {
+                      click: function(){
+                          var tabs = Ext.getCmp('centerregion'),
+                          id = 'requestMain',
+                          tab = tabs.items.getByKey(id);
+                          var cfg = {
+                              xtype: 'requestMain',
+                              title:'견적서작성',
+                              session: true
+                          }
+                          if (!tab) {
+                              Ysn.Global.activeMenu = id;
+                              cfg.itemId = id; 
+                              cfg.closable = true;
+                              tab = tabs.add(cfg);
+                          }
+
+                          tabs.setActiveTab(tab);
+                      }
+                  }
+            },
+             '-',
 			{
 				xtype: 'checkboxfield',
 				id: 'chkpopup',

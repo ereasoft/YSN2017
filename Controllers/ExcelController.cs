@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.IO;
+using System.Text;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -26,8 +27,55 @@ namespace YSN2017.Controllers{
         readonly log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
 
+        [HttpGet]
+        public ActionResult ImportSpecSheet()
+        {
+            ISqlMapper mapper = Mapper.Instance();
+            try
+            {
+                string path1 = string.Format("{0}/{1}", Server.MapPath("~/Content"), "spec_sheet.xlsx");
+                FileStream fs = System.IO.File.Open(path1, FileMode.Open);
+
+                IExcelDataReader reader = null;
+
+                reader = ExcelReaderFactory.CreateOpenXmlReader(fs);
+                reader.IsFirstRowAsColumnNames = true;
+                DataSet result = reader.AsDataSet();
+                DataTable dt = result.Tables[0]; //스펙시트
+
+                Hashtable hash = new Hashtable();
+               
+                hash["create_id"] = Session["id"];
+                hash["modify_id"] = Session["id"];
+
+                mapper.BeginTransaction();
+
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    Hashtable param = new Hashtable();
+                    param.Add("prod", dt.Rows[i][0].ToString().Trim());
+                    param.Add("sub_prod", dt.Rows[i][1].ToString().Trim()); 
+                    param.Add("prod_option", dt.Rows[i][2].ToString().Trim());
+                    for(int j = 3; j < dt.Columns.Count; j++)
+                    {
+                        param["prod_code"] = dt.Columns[j].ColumnName;
+                        if (dt.Rows[i][j].ToString().Trim().Equals("O"))
+                        {
+                         //   mapper.Insert("prodOptionInsert", param);
+                        }
+                    } 
+                }
+
+                mapper.CommitTransaction();
 
 
+            }
+            catch (Exception ex)
+            {
+                mapper.RollBackTransaction(); 
+            }
+            return new EmptyResult();
+        }
 
 
 

@@ -4,6 +4,11 @@ Ext.define('Ysn.view.main.topbarController', {
     init: function () {
         if (company_cd != 'YONWOO') Ext.getCmp('logo').setHtml('<img src=\"resources/spr.jpg\" width=215 height=50 />');
     },
+
+    moveEstimate: function(){
+        window.open( 'index.aspx?locale=ko&flag=3', '_blank' );
+    },
+
 	logOut: function(){
 		Ext.Ajax.request({
 							 url: '/Member/LogOut',

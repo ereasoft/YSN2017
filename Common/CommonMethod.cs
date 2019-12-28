@@ -54,6 +54,14 @@ namespace YSN2017.ComLIB {
             return ((String)data).Trim();
         }
 
+        public static String nullToStr2(object data)
+        {
+
+            if (data == null) return "";
+
+            return ((String)data).Trim();
+        }
+
 
 
         public static int nullToInt(this string data) {

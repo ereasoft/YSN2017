@@ -97,4 +97,26 @@ Ext.define('Ysn.store.baseCrnyInfoList', {
     autoLoad: false,
     autoDestroy: false
 
+} );
+
+Ext.define('Ysn.store.baseCrnyInfoList2', {
+    extend: 'Ext.data.Store',
+    alias: 'store.baseCrnyInfoList2',
+    storeId: 'baseCrnyInfo2',
+    model: 'Ysn.model.baseCrnyInfoList',
+    proxy: {
+        method: "POST",
+        type: 'ajax',
+        url: '/BaseInfo/baseCrnyInfoList',
+        reader: {
+            type: 'json',
+            rootProperty: 'LIST'
+        }
+    },
+    listeners: {
+        load: function (store) {       }
+    },
+    autoLoad: true,
+    autoDestroy: true
+
 });

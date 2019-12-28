@@ -47,6 +47,19 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptModuleKind>None</TypeScriptModuleKind>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -290,6 +303,11 @@
     <Compile Include="Models\T_NATION.cs" />
     <Compile Include="Models\T_CODE.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -317,6 +335,7 @@
     <Content Include="client\app\model\sample.js" />
     <Content Include="client\app\model\searchmodel.js" />
     <Content Include="client\app\store\baseInfo.js" />
+    <Content Include="client\app\store\baseOption.js" />
     <Content Include="client\app\store\baseProd.js" />
     <Content Include="client\app\store\boardStore.js" />
     <Content Include="client\app\store\cateLv.js" />
@@ -324,7 +343,7 @@
     <Content Include="client\app\store\combo1.js" />
     <Content Include="client\app\store\customerdb.js" />
     <Content Include="client\app\store\demo.js" />
-    <Content Include="client\app\store\estimateitem.js" />
+    <Content Include="client\app\store\estimatehead.js" />
     <Content Include="client\app\store\Event.js" />
     <Content Include="client\app\store\Files.js" />
     <Content Include="client\app\store\mainStore.js" />
@@ -478,6 +497,8 @@
     <Content Include="client\app\view\demo\menuModel.js__" />
     <Content Include="client\app\view\main\MainView.js_bak" />
     <Content Include="client\app\view\salesactivity\salesHistoryjs.js___" />
+    <Content Include="Content\en_estimate_A.xlsx" />
+    <Content Include="Content\en_estimate_B.xlsx" />
     <None Include="Content\Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Content\Scripts\jquery-1.10.2.js" />
     <Content Include="Content\Scripts\jquery-1.10.2.min.js" />
@@ -496,7 +517,9 @@
     <Content Include="Models\SqlMap\AdminMenuMapper.xml" />
     <Content Include="Models\SqlMap\AdminUserChangeMapper.xml" />
     <Content Include="Models\SqlMap\AdminUserMapper.xml" />
-    <Content Include="Models\SqlMap\BaseInfoMapper.xml" />
+    <Content Include="Models\SqlMap\BaseInfoMapper.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Models\SqlMap\DaliyInfoMapper.xml" />
     <Content Include="Models\SqlMap\EstimateMapper.xml">
       <SubType>Designer</SubType>
@@ -558,6 +581,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

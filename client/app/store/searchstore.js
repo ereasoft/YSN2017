@@ -255,7 +255,42 @@ Ext.define('Ysn.store.usercd', {
 	autoLoad: false,
 	autoDestroy: false
 
-});
+} );
+
+Ext.define( 'Ysn.store.usercd2', {
+    extend: 'Ext.data.Store',
+    alias: 'store.usercd2',
+
+    fields: [
+             { name: 'USER_CD', type: 'string' },
+             { name: 'USER_NM', type: 'string' },
+             { name: 'DEPT_NM', type: 'string' }
+
+    ],
+    storeId: 'usercd',
+
+    proxy: {
+        method: "POST",
+        type: 'ajax',
+        url: '/CodeList/DePartUser',
+        reader: {
+            type: 'json',
+            rootProperty: ''
+        }
+    },
+    listeners: {
+        load: function ( store, records, successful, operation )
+        {
+           
+        }
+    },
+    autoLoad: false,
+    autoDestroy: false
+
+} );
+
+
+
 
 Ext.define('Ysn.store.dstr_usercd', {
    extend: 'Ext.data.Store',

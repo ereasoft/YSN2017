@@ -1,4 +1,4 @@
-Ext.define('Ysn.store.baseProd', {
+Ext.define( 'Ysn.store.baseProd', {
     extend: 'Ext.data.Store',
     alias: 'store.baseProd',
 
@@ -15,8 +15,9 @@ Ext.define('Ysn.store.baseProd', {
         }
     },
     listeners: {
-        load: function (store, records, successful, operation) {
-            if(!Ysn.Util.OnsessOut(operation._response.responseText)) return false;
+        load: function ( store, records, successful, operation )
+        {
+            if ( !Ysn.Util.OnsessOut( operation._response.responseText ) ) return false;
             //store.insert(0, { DEPT_CD: '', DEPT_NM: Locale.getMsg('전체') });
             //Ext.getCmp('customer-search').down('#user_cd').store.removeAll();
         }
@@ -24,9 +25,4 @@ Ext.define('Ysn.store.baseProd', {
     autoLoad: false,
     autoDestroy: false
 
-});
-
-
-
-
-
+} );
