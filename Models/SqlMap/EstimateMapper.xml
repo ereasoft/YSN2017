@@ -279,6 +279,9 @@
       <isNotNull property="set_yn">
         AND set_yn = #set_yn#
       </isNotNull>
+      <isNotNull property="prod_Not">
+        AND prod != ''
+      </isNotNull>
 
     </select>
 

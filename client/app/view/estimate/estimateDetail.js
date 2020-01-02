@@ -1083,7 +1083,7 @@
                  name: 'remark',
                  labelAlign: 'right',
                  labelWidth: 60,
-                 value: 'Origin                      : Republic of Korea\nPacking                    : Export Standard Packaging\nShipment                 : To be advised  \nShipping port            : To be advised\nInspection                : Manufacturer Standard\nDestination               : To be advised\nPayment                  : By T/T 50% in advance, 50% before shipment\nCurrency                  : USD\nDelivery Term           : FOB KOREA\nValidity                     : Valid in 30days after date of issue.'
+                 value: 'Origin : Republic of Korea\nPacking : Export Standard Packaging\nShipment : To be advised  \nShipping port : To be advised\nInspection : Manufacturer Standard\nDestination : To be advised\nPayment : By T/T 50% in advance, 50% before shipment\nCurrency : USD\nDelivery Term : FOB KOREA\nValidity : Valid in 30days after date of issue.'
              }]
          }
 
