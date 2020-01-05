@@ -6,12 +6,13 @@ Ext.define( 'Ysn.view.estimate.estimateDetailController', {
     {
         var now = new Date();
         var year = Ext.Date.format( now, 'Y' );
+        year = '2019';
 
         this.lookupReference( 'dstr_chn' ).getStore().load( { params: { up_code_id: 'DSTR_TYPE', lang: localeCd } } );
         this.lookupReference( 'currency' ).getStore().load( { params: { base_yr: year, lang: localeCd } } );
         this.lookupReference( 'submit_cd' ).getStore().load( { params: { dept_cd: dept_cd, lang: localeCd } } );
         this.lookupReference( 'ref_cd' ).getStore().load( { params: { dept_cd: dept_cd, lang: localeCd } } );
-        //this.lookupReference( 'estimate_date' ).setValue( now );
+        this.lookupReference( 'estimate_date' ).setValue( now );
         this.lookupReference( 'currency' ).setValue( 'KRW' );
         Ysn.Global.setEstQty( this.lookupReference( 'item_qty' ).getValue() );
         this.lookupReference( 'dstr_chn' ).setValue( dstr_chn );
@@ -64,7 +65,7 @@ Ext.define( 'Ysn.view.estimate.estimateDetailController', {
     {
         if ( newValue == null || newValue == '' ) return false;
         var grid = this.lookupReference( 'estimateItem' );
-        var rec = obj.lookupViewModel().get( 'record' );
+        var rec =  obj.up( 'grid' ).getSelection()[0];
         rec.set( 'amount', rec.get( 'unit_price' ) * rec.get( 'quantity' ) );
 
     },
@@ -103,7 +104,7 @@ Ext.define( 'Ysn.view.estimate.estimateDetailController', {
         var rowIdx = obj.up( 'gridview' ).indexOf( obj.el.up( 'table' ) );
         var store = obj.up( 'grid' ).getStore();
         var seldata = store.data.items[0];
-        var rec = obj.lookupViewModel().get( 'record' );
+        var rec =  obj.up( 'grid' ).getSelection()[0];
         if ( obj.getValue() == 'Y' )
         {     
             return false;
@@ -200,7 +201,7 @@ Ext.define( 'Ysn.view.estimate.estimateDetailController', {
 
     setProdOption: function ( obj, e, eOpts )
     {
-        var rec = obj.lookupViewModel().get( 'record' );
+        var rec =  obj.up( 'grid' ).getSelection()[0];
         var seldata = obj.getSelectedRecord();
         var quantity = Ysn.Global.getEstQty();
         rec.set( 'quantity', quantity );
@@ -263,7 +264,7 @@ Ext.define( 'Ysn.view.estimate.estimateDetailController', {
 
     setSampleYn: function ( obj, e, eOpts )
     {
-        var rec = obj.lookupViewModel().get( 'record' );
+        var rec =  obj.up( 'grid' ).getSelection()[0];
         var currency = parseFloat( Ysn.Global.getEstCrny() );
         var chk = obj.up( 'form' ).getForm().findField( 'form_lang' ).getValue();
         switch ( obj.getValue() )
@@ -315,7 +316,8 @@ Ext.define( 'Ysn.view.estimate.estimateDetailController', {
 
     setProd: function ( obj, e, eOpts )
     {
-        var rec = obj.lookupViewModel().get( 'record' );
+        //var rec =  obj.up( 'grid' ).getSelection()[0];
+        var rec = obj.up( 'grid' ).getSelection()[0];
         var currency = parseFloat( Ysn.Global.getEstCrny() );
         var quantity = Ysn.Global.getEstQty();
         var rowIdx = obj.up( 'gridview' ).indexOf( obj.el.up( 'table' ) );     
@@ -441,6 +443,16 @@ Ext.define( 'Ysn.view.estimate.estimateDetailController', {
         rec.set( 'amount', rec.get( 'unit_price' ) * rec.get( 'quantity' ) );
     },
 
+    itemclick1: function(obj,record,item,index,e,eOpts){
+        Ysn.Global.setEstStep( record.get( 'header_yn' ) );
+        Ysn.Global.setEstProdCode( this.lookupReference( 'prod_code' ).getValue() ); Ysn.Global.setEstProdCode( this.lookupReference( 'prod_code' ).getValue() );
+        var estCrny = this.lookupReference( 'currency' ).getSelectedRecord().get( 'EXCH_RATE' );
+        Ysn.Global.setEstCrny( estCrny );
+        Ysn.Global.setEstScrny( this.lookupReference( 'currency' ).getValue() );
+        Ysn.Global.setEstRowIdx( index );
+        Ysn.Global.setEstQty( this.lookupReference( 'item_qty' ).getValue() );
+    },
+
     chgCateLv1: function ( obj, newValue, oldValue, eOpts )
     {
         if ( newValue != 'NA' ) return false;
@@ -500,6 +512,62 @@ Ext.define( 'Ysn.view.estimate.estimateDetailController', {
             store.insert( i + 1, { no: i + 1, header_yn: 'Y' } );
         }
 
+    },
+
+    itemcontextmenu1: function ( view, record, item, index, e, eopts )
+    {
+        if ( e.position.colIdx > 2 ) return false;
+        e.stopEvent();
+        var mymenu = new Ext.menu.Menu({
+            items: [
+              {
+                  text: '\uD589 \uCD94\uAC00(\uC120\uD0DD\uD589 \uC544\uB798)',
+                  handler: function ()
+                  {
+                      var rec = {};
+                      rec = record.data;
+                      rec.no = '';
+                      rec.prod_option = '';
+                      rec.prod_option = '';
+                      rec.unit_price = '';
+                      rec.amount = '';
+                      rec.qty_5k = '';
+                      rec.qty_10k= '';
+                      rec.qty_30k= '';
+                      rec.qty_50k= '';
+                      rec.qty_100k= '';
+                      rec.prod_desc = '';
+                      view.getStore().insert( e.position.rowIdx + 1, rec );
+                  }
+              }, {
+                  text: '\uC120\uD0DD\uD55C \uD589 \uC0AD\uC81C',
+                  handler: function () {
+                      alert("Item 2 clicked");
+                  }
+              }
+            ],
+            listeners:{
+                hide:function(){
+                    setTimeout(function(){
+                        mymenu.destroy();
+                    },2000);
+                }
+            }
+        });
+        mymenu.showAt(e.getXY());
+    },
+
+    gridDestroy: function (grid) {
+        var menu = grid.getView().mymenu;
+                    
+        if (menu) {
+            Ext.destroy(menu);
+        }
+    },
+
+    itemselect1: function ( grid, record, index )
+    {
+        alert('11');
     },
 
     Save: function (title, status)

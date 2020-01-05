@@ -783,6 +783,8 @@ namespace YSN2017.Controllers
                 string[] remark;
                 List<int> totRange = new List<int>();  //품목 합계를 구하기 위해 subTotRow를 배열에 등록
                 int[] subRange = new int[] { 0, 0, 0 }; //subTotRow, 첫번째품목옵션, 마지막품목옵션
+                double[] subTotal = new double[] { 0.00, 0.00, 0.00, 0.00, 0.00, 0.00 }; //품목별 합계  listprice, 5k, 10k, 30k, 50k, 100k
+
                 string itemType;
                 var picture = ws.Drawings.AddPicture("sign1", sign1);
 
@@ -857,7 +859,8 @@ namespace YSN2017.Controllers
                                 //ws.Cells["F" + pointRow].Value = Item["amount"]; 
                                 pointRow += 1;
                                 ws.InsertRow(pointRow, 1);
-                                subRange[1] = pointRow;
+                                subRange[1] = pointRow; 
+                                if (summary_yn == "Y") ws.Row(pointRow).Hidden = true;
                                 //    subTotRow = pointRow;
                             }
                             else
@@ -867,7 +870,8 @@ namespace YSN2017.Controllers
                                 {
                                     subRange[1] = pointRow;
                                 }
-                                subRange[2] = pointRow;
+                                subRange[2] = pointRow; 
+                                if (summary_yn == "Y") ws.Row(pointRow).Hidden = true;
                             }
                             ws.Cells["A" + pointRow].Style.Border.Left.Style = ExcelBorderStyle.Thin;
                             ws.Cells["B" + pointRow].Style.Border.Left.Style = ExcelBorderStyle.Thin;
@@ -1006,6 +1010,7 @@ namespace YSN2017.Controllers
                                 pointRow += 1;
                                 ws.InsertRow(pointRow, 1);
                                 subRange[1] = pointRow;
+                                if (summary_yn == "Y") ws.Row(pointRow).Hidden = true;
                                 //    subTotRow = pointRow;
                             }
                             else
@@ -1016,6 +1021,7 @@ namespace YSN2017.Controllers
                                     subRange[1] = pointRow;
                                 }
                                 subRange[2] = pointRow;
+                                if (summary_yn == "Y") ws.Row(pointRow).Hidden = true;
                             }
 
                             ws.Cells["A" + pointRow].Style.Border.Left.Style = ExcelBorderStyle.Thin;

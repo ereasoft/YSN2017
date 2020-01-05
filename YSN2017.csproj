@@ -402,9 +402,11 @@
     <Content Include="client\app\view\demo\search.js" />
     <Content Include="client\app\view\demo\searchController.js" />
     <Content Include="client\app\view\demo\searchModel.js" />
+    <None Include="client\app\view\estimate\estimateDetail.js.bak" />
     <Content Include="client\app\view\estimate\estimateDetail.js" />
     <Content Include="client\app\view\estimate\estimateDetailController.js" />
     <Content Include="client\app\view\estimate\estimateList.js" />
+    <Content Include="client\app\view\estimate\estimateListController.js" />
     <Content Include="client\app\view\estimate\requestMain.js" />
     <Content Include="client\app\view\estimate\requestMainController.js" />
     <Content Include="client\app\view\main\Main.js" />
