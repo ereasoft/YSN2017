@@ -49,19 +49,21 @@
     <WarningLevel>4</WarningLevel>
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
-    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
-    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptCompileOnSaveEnabled>False</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>True</TypeScriptNoImplicitAny>
     <TypeScriptModuleKind>None</TypeScriptModuleKind>
-    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
     <TypeScriptOutFile />
     <TypeScriptOutDir />
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
-    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
     <TypeScriptMapRoot />
     <TypeScriptSourceRoot />
-    <ExcludeGeneratedDebugSymbol>true</ExcludeGeneratedDebugSymbol>
+    <ExcludeGeneratedDebugSymbol>false</ExcludeGeneratedDebugSymbol>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -346,6 +348,7 @@
     <Content Include="client\app\store\customerdb.js" />
     <Content Include="client\app\store\demo.js" />
     <Content Include="client\app\store\estimatehead.js" />
+    <Content Include="client\app\store\estimateitem.js" />
     <Content Include="client\app\store\Event.js" />
     <Content Include="client\app\store\Files.js" />
     <Content Include="client\app\store\mainStore.js" />
@@ -359,6 +362,7 @@
     <Content Include="client\app\store\sampleProduction.js" />
     <Content Include="client\app\store\sampleRequest.js" />
     <Content Include="client\app\store\searchstore.js" />
+    <Content Include="client\app\store\submitcd.js" />
     <Content Include="client\app\util\ThousandSeparatorNumber.js" />
     <Content Include="client\app\view\admin\adminAuth.js" />
     <Content Include="client\app\view\admin\adminCode.js" />
@@ -402,12 +406,17 @@
     <Content Include="client\app\view\demo\search.js" />
     <Content Include="client\app\view\demo\searchController.js" />
     <Content Include="client\app\view\demo\searchModel.js" />
-    <None Include="client\app\view\estimate\estimateDetail.js.bak" />
     <Content Include="client\app\view\estimate\estimateDetail.js" />
-    <Content Include="client\app\view\estimate\estimateDetailController.js" />
+    <Content Include="client\app\view\estimate\estimateDetail2.js" />
+    <Content Include="client\app\view\estimate\estimateDetail3.js" />
+    <Content Include="client\app\view\estimate\estimateDetail3Controller.js" />
     <Content Include="client\app\view\estimate\estimateList.js" />
+    <Content Include="client\app\view\estimate\estimateList2.js" />
+    <Content Include="client\app\view\estimate\estimateList3.js" />
     <Content Include="client\app\view\estimate\estimateListController.js" />
     <Content Include="client\app\view\estimate\requestMain.js" />
+    <Content Include="client\app\view\estimate\requestMain2.js" />
+    <Content Include="client\app\view\estimate\requestMain3.js" />
     <Content Include="client\app\view\estimate\requestMainController.js" />
     <Content Include="client\app\view\main\Main.js" />
     <Content Include="client\app\view\main\MainController.js" />
@@ -680,6 +689,8 @@
           <DevelopmentServerPort>6666</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:61614/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:61614/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

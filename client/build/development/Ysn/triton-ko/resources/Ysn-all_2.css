@@ -7625,6 +7625,547 @@
     width: 100%;
     height: auto;
 }
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/component/MonthBar.scss:1 */
+.cal-month-bar {
+    height: 24px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/component/MonthBar.scss:5 */
+.cal-month-bar-buttons {
+    table-layout: fixed;
+    width: 100%;
+    height: 100%;
+    background: #f6f6f6;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #f6f6f6;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/component/MonthBar.scss:17 */
+.cal-month-bar-button {
+    text-align: center;
+    color: #606060;
+    cursor: pointer;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/component/MonthBar.scss:22 */
+.cal-month-bar-button-pressed {
+    background: #fff !important;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #ddd !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/component/MonthHeader.scss:1 */
+.cal-month-header {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-align: right;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/component/MonthHeader.scss:6 */
+.cal-month-header-day {
+    display: inline-block;
+    cursor: pointer;
+    padding-right: 5px;
+    padding-bottom: 2px;
+    color: #606060;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/component/MonthHeader.scss:13 */
+.cal-month-header-day-nonworking {
+    color: #ea3b06;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:1 */
+.cal-event-starts-earlier-week:before,
+.cal-event-ends-future-week:after {
+    top: 50%;
+    border-style: solid;
+    border-color: transparent;
+    border-top-width: 8px;
+    border-bottom-width: 8px;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    margin-top: -8px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:16 */
+.cal-drag-drop-proxy {
+    z-index: -1;
+    width: 0;
+    height: 0;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:22 */
+.cal-event {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: #606060;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    position: relative;
+    white-space: nowrap;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 10px;
+    margin: 0 2px 1px 1px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:39 */
+.cal-drag-drop-proxy .cal-event {
+    position: absolute;
+    z-index: 50000;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:44 */
+.cal-event.x-view-item-focused {
+    outline: none !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:48 */
+.cal-event-bullet {
+    display: inline-block;
+    height: 6px;
+    width: 6px;
+    position: relative;
+    top: -1px;
+    margin-left: 6px;
+    border-radius: 6px;
+    background-color: #606060;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:59 */
+.cal-event-body {
+    overflow: hidden;
+    text-align: left;
+    padding: 0 6px;
+    white-space: pre;
+    position: relative;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:67 */
+.cal-event-more-events {
+    font-size: 0.9em;
+    font-weight: 500;
+    padding: 0 7px;
+    color: #ea3b06;
+    position: relative;
+    cursor: pointer;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:78 */
+.cal-event-dragging {
+    cursor: move;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:82 */
+.cal-event-selected {
+    color: #fff !important;
+    background-color: green !important;
+    border-color: green !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:89 */
+.cal-event-selected .cal-event-bullet {
+    background-color: #fff !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:94 */
+.cal-event-multiday {
+    color: #fff !important;
+    background-color: #606060;
+    border-color: #606060;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:101 */
+.cal-event-multiday .cal-event-bullet {
+    background-color: #fff !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:106 */
+.cal-event-resizable-handle {
+    position: absolute;
+    top: 0;
+    z-index: 10;
+    width: 10px;
+    height: 100%;
+    cursor: col-resize;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:114 */
+.cal-event-resizable-handle-start {
+    left: 0;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:118 */
+.cal-event-resizable-handle-end {
+    right: 0;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:124 */
+.cal-event-starts-earlier-week .cal-event-bullet {
+    visibility: hidden;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:128 */
+.cal-event-starts-earlier-week:before {
+    background: #fff;
+    right: 100%;
+    margin-right: -5px;
+    border-left-width: 0;
+    border-right-width: 5px;
+    border-right-color: inherit;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:145 */
+.cal-event-ends-future-week:after {
+    background: #f6f6f6;
+    left: 100%;
+    margin-left: -5px;
+    border-right-width: 0;
+    border-left-width: 5px;
+    border-left-color: inherit;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/DayName.scss:1 */
+.cal-day-week-num,
+.cal-day-date-num {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: absolute;
+    top: 0;
+    padding: 3px 5px;
+    line-height: 14px;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    min-width: 25px;
+    cursor: default;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/DayName.scss:15 */
+.cal-day-week-num {
+    color: #5fa2dd;
+    left: 0;
+    cursor: pointer;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/DayName.scss:23 */
+.cal-day-date-num {
+    color: #606060;
+    right: 0;
+    cursor: pointer;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/DayName.scss:30 */
+.cal-day-date-num-other-month {
+    color: #aaa;
+    font-weight: 300;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/DayName.scss:35 */
+.cal-day-date-num-today {
+    background: #5fa2dd !important;
+    color: #fff;
+    border-radius: 5px;
+    right: 1px;
+    top: 1px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/DayName.scss:43 */
+.cal-day-date-num-container {
+    height: 23px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:1 */
+.cal-week-row {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: absolute;
+    left: 0;
+    width: 100%;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:8 */
+.cal-week-row-events-row {
+    table-layout: fixed;
+    height: 100%;
+    width: 100%;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:14 */
+.cal-week-row-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    table-layout: fixed;
+    border-top-width: 1px;
+    border-top-color: #ddd;
+    border-top-style: solid;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:29 */
+.cal-week-row-background-day {
+    background-color: #fff;
+    position: relative;
+    border-right-width: 1px;
+    border-right-color: #ddd;
+    border-right-style: solid;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:40 */
+.cal-week-row-background-day-nonworking {
+    background-color: #f6f6f6;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:44 */
+.cal-week-row-background-day-highlight {
+    background-color: #fdfced !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:48 */
+.cal-week-row-background-day-dragging {
+    background-color: #fdfced !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:56 */
+.cal-week-row-index-1 {
+    top: 0%;
+    height: 17%;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:56 */
+.cal-week-row-index-2 {
+    top: 16.66667%;
+    height: 17%;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:56 */
+.cal-week-row-index-3 {
+    top: 33.33333%;
+    height: 17%;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:56 */
+.cal-week-row-index-4 {
+    top: 50%;
+    height: 17%;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:56 */
+.cal-week-row-index-5 {
+    top: 66.66667%;
+    height: 17%;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:56 */
+.cal-week-row-index-6 {
+    top: 83.33333%;
+    bottom: 0%;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/menu/ResourceSelector.scss:2 */
+.cal-resource-sel-menu .x-menu-item a {
+    color: inherit !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/menu/ResourceSelector.scss:6 */
+.cal-resource-sel-menu-group-item {
+    color: inherit !important;
+    font-family: FontAwesome !important;
+    background: transparent !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/menu/ResourceSelector.scss:12 */
+.x-menu-item-checked .cal-resource-sel-menu-group-item:before {
+    content: "\f14a" !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/menu/ResourceSelector.scss:15 */
+.x-menu-item-unchecked .cal-resource-sel-menu-group-item:before {
+    content: "\f0c8" !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourcePicker.scss:2 */
+.cal-resource-picker input {
+    padding-left: 28px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourcePicker.scss:6 */
+.cal-resource-picker .x-form-item-body {
+    position: relative;
+    z-index: 10;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourcePicker.scss:11 */
+.cal-resource-picker-icon {
+    z-index: 10;
+    height: 45%;
+    overflow: auto;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 10px;
+    line-height: 1em;
+    font-size: 1em;
+    font-family: FontAwesome !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourcePicker.scss:26 */
+.cal-resource-picker-icon:before {
+    content: "\f0c8" !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourcePicker.scss:31 */
+.cal-resource-picker-option-icon {
+    margin-right: 10px;
+    color: inherit;
+    font-family: FontAwesome !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourcePicker.scss:38 */
+.cal-resource-picker-option-icon:before {
+    content: "\f0c8" !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourcePicker.scss:41 */
+.x-boundlist-selected .cal-resource-picker-option-icon:before {
+    content: "\f0c8" !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:1 */
+.cal-event-list {
+    background: #fff;
+    border: none;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:5 */
+.cal-event-list ul {
+    margin: 0;
+    padding: 0;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:10 */
+.cal-event-list .x-tip-body {
+    background-color: #fff;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:14 */
+.cal-event-list .x-tip-header {
+    background-color: #fff;
+    padding: 3px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:19 */
+.cal-event-list .x-tip-header-title {
+    color: #606060;
+    padding-left: 5px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:24 */
+.cal-event-list .x-tool-img {
+    color: #606060;
+    font-family: FontAwesome !important;
+    background: transparent !important;
+    opacity: 0.8;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:30 */
+.cal-event-list .x-tool-img:before {
+    content: "\f00d" !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:35 */
+.cal-event-list .cal-event {
+    color: #606060;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:38 */
+.cal-event-list .cal-event .cal-event-bullet {
+    background-color: #606060;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:44 */
+.cal-event-list .x-tip-default-tl,
+.cal-event-list .x-tip-default-tr,
+.cal-event-list .x-tip-default-tc,
+.cal-event-list .x-tip-default-bl,
+.cal-event-list .x-tip-default-br,
+.cal-event-list .x-tip-default-bc,
+.cal-event-list .x-tip-default-ml,
+.cal-event-list .x-tip-default-mr,
+.cal-event-list .x-tip-default-mc {
+    background: #fff;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:49 */
+.cal-event-list-view-container {
+    table-layout: fixed;
+    width: 100%;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/container/Month.scss:1 */
+.cal-month-view {
+    background: #fff;
+    overflow: hidden;
+    border-width: 1px;
+    border-color: #ddd;
+    border-bottom-style: solid;
+    border-left-style: solid;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/ResourceFilter.scss:1 */
+.cal-resource-filter {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background: #f6f6f6;
+    border-width: 0;
+    border-color: #ddd;
+    border-style: solid;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/ResourceFilter.scss:11 */
+.cal-resource-filter .x-form-item-label-inner {
+    color: #606060 !important;
+    font-weight: bold;
+    padding: 8px 10px 5px 10px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/ResourceFilter.scss:17 */
+.cal-resource-filter .x-form-checkboxgroup-body {
+    padding: 0 10px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/ResourceFilter.scss:21 */
+.cal-resource-filter .x-form-cb-label {
+    color: #606060 !important;
+    cursor: pointer;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/ResourceFilter.scss:26 */
+.cal-resource-filter .x-form-cb-input {
+    cursor: pointer;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/ResourceFilter.scss:30 */
+.cal-resource-filter .x-form-checkbox {
+    color: inherit;
+    font-family: FontAwesome !important;
+    background: transparent !important;
+    font-size: 1.2em;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/ResourceFilter.scss:36 */
+.cal-resource-filter .x-form-checkbox:before {
+    content: "\f0c8" !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/ResourceFilter.scss:43 */
+.cal-resource-filter .x-form-cb-checked .x-form-checkbox:before {
+    content: "\f14a" !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourceDisplay.scss:2 */
+.cal-resource-field .x-form-display-field {
+    padding-left: 18px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourceDisplay.scss:6 */
+.cal-resource-field .x-form-item-body {
+    position: relative;
+    z-index: 10;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourceDisplay.scss:11 */
+.cal-resource-field-icon {
+    z-index: 10;
+    height: 50%;
+    overflow: auto;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    line-height: 1em;
+    font-size: 1em;
+    font-family: FontAwesome !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourceDisplay.scss:26 */
+.cal-resource-field-icon:before {
+    content: "\f0c8" !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/toolbar/Navigation.scss:1 */
+.cal-nav-bar {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background: #fff;
+    border-width: 0px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/toolbar/Navigation.scss:9 */
+.cal-nav-bar .x-btn {
+    border-color: #ddd;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/toolbar/Navigation.scss:13 */
+.cal-nav-bar .x-btn-inner {
+    color: #606060;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/toolbar/Navigation.scss:17 */
+.cal-nav-bar .cal-current-month {
+    color: #606060;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/toolbar/Navigation.scss:26 */
+.cal-nav-bar .cal-create-btn .x-btn-inner {
+    line-height: 1.5em;
+    font-size: 1.5em;
+}
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:187 */
 .x-tab-navigation-top {
     -webkit-border-radius: 0;

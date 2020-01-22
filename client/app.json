@@ -74,12 +74,13 @@
      *          "charts"
      *      ]
      */
-    "requires": [
-        "font-awesome", 
-	"bryntum-scheduler", 
-	"charts",
-      "core" 
-    ], 
+  "requires": [
+    "font-awesome",
+    "bryntum-calendar",
+    "bryntum-scheduler",
+    "charts",
+    "core"
+  ], 
     /**
      * Fashion build configuration properties.
      패션 빌드 설정 속성들
@@ -285,10 +286,13 @@
             "ko",
             "en"
         ],
-        "requires": [
-            "locale",
-            "font-ext"
-        ]
+      "requires": [
+        "locale",
+        "font-ext",
+        "bryntum-scheduler",
+        "charts",
+        "core"
+      ]
     },
 
     /**
@@ -670,64 +674,64 @@
      *     }
      *
      */
-    
-    "builds": {
-      "triton": {
-        "toolkit": "classic",
-        "theme": "theme-triton",
-        "sass": {
 
-          "generated": {
-            "var": "${theme.name}/sass/save.scss",
-            "src": "${theme.name}/sass/save"
-          }
-        }
-      },
-      "neptune": {
-        "toolkit": "classic",
-        "theme": "theme-neptune",
-        "sass": {
+  "builds": {
+    "triton": {
+      "toolkit": "classic",
+      "theme": "theme-triton",
+      "sass": {
 
-          "generated": {
-            "var": "${theme.name}/sass/save.scss",
-            "src": "${theme.name}/sass/save"
-          }
-        }
-      },
-      "classic": {
-        "toolkit": "classic",
-        "theme": "theme-classic",
-        "sass": {
-
-          "generated": {
-            "var": "${theme.name}/sass/save.scss",
-            "src": "${theme.name}/sass/save"
-          }
-        }
-      },
-      "gray": {
-        "toolkit": "classic",
-        "theme": "theme-gray",
-        "sass": {
-
-          "generated": {
-            "var": "${theme.name}/sass/save.scss",
-            "src": "${theme.name}/sass/save"
-          }
-        }
-      },
-      "crisp": {
-        "toolkit": "classic",
-        "theme": "theme-crisp",
-        "sass": {
-
-          "generated": {
-            "var": "${theme.name}/sass/save.scss",
-            "src": "${theme.name}/sass/save"
-          }
+        "generated": {
+          "var": "${theme.name}/sass/save.scss",
+          "src": "${theme.name}/sass/save"
         }
       }
-      /*"crisp-touch": {
+    },
+    "neptune": {
+      "toolkit": "classic",
+      "theme": "theme-neptune",
+      "sass": {
+
+        "generated": {
+          "var": "${theme.name}/sass/save.scss",
+          "src": "${theme.name}/sass/save"
+        }
+      }
+    },
+    "classic": {
+      "toolkit": "classic",
+      "theme": "theme-classic",
+      "sass": {
+
+        "generated": {
+          "var": "${theme.name}/sass/save.scss",
+          "src": "${theme.name}/sass/save"
+        }
+      }
+    },
+    "gray": {
+      "toolkit": "classic",
+      "theme": "theme-gray",
+      "sass": {
+
+        "generated": {
+          "var": "${theme.name}/sass/save.scss",
+          "src": "${theme.name}/sass/save"
+        }
+      }
+    },
+    "crisp": {
+      "toolkit": "classic",
+      "theme": "theme-crisp",
+      "sass": {
+
+        "generated": {
+          "var": "${theme.name}/sass/save.scss",
+          "src": "${theme.name}/sass/save"
+        }
+      }
+    }
+    /*"crisp-touch": {
         "toolkit": "classic",
         "theme": "theme-crisp-touch",
         "sass": {
@@ -750,7 +754,7 @@
         }
       }*/
 
-      /** 
+    /** 
        *
        *  "modern": {
        *    "toolkit": "modern",
@@ -761,7 +765,7 @@
        *         // "save": "modern/sass/save.scss"
        *     }
        * } */
-    },
+  },
     
    
 

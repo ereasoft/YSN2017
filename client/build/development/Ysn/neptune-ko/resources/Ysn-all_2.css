@@ -1,194 +1,4 @@
 /* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
-.x-tab.x-tab-disabled .x-tab-default-right-tl,
-.x-tab.x-tab-disabled .x-tab-default-right-bl,
-.x-tab.x-tab-disabled .x-tab-default-right-tr,
-.x-tab.x-tab-disabled .x-tab-default-right-br,
-.x-tab.x-tab-disabled .x-tab-default-right-tc,
-.x-tab.x-tab-disabled .x-tab-default-right-bc {
-    background-image: url(images/tab/tab-default-right-disabled-corners.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
-.x-tab.x-tab-disabled .x-tab-default-right-ml,
-.x-tab.x-tab-disabled .x-tab-default-right-mr {
-    background-image: url(images/tab/tab-default-right-disabled-sides.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
-.x-tab.x-tab-disabled .x-tab-default-right-mc {
-    background-repeat: repeat-x;
-    background-image: url(images/tab/tab-default-right-disabled-fbg.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
-.x-tab-over .x-tab-default-bottom-tl,
-.x-tab-over .x-tab-default-bottom-bl,
-.x-tab-over .x-tab-default-bottom-tr,
-.x-tab-over .x-tab-default-bottom-br,
-.x-tab-over .x-tab-default-bottom-tc,
-.x-tab-over .x-tab-default-bottom-bc {
-    background-image: url(images/tab/tab-default-bottom-over-corners.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
-.x-tab-over .x-tab-default-bottom-ml,
-.x-tab-over .x-tab-default-bottom-mr {
-    background-image: url(images/tab/tab-default-bottom-over-sides.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
-.x-tab-over .x-tab-default-bottom-mc {
-    background-repeat: repeat-x;
-    background-image: url(images/tab/tab-default-bottom-over-fbg.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
-.x-tab-focus .x-tab-default-bottom-tl,
-.x-tab-focus .x-tab-default-bottom-bl,
-.x-tab-focus .x-tab-default-bottom-tr,
-.x-tab-focus .x-tab-default-bottom-br,
-.x-tab-focus .x-tab-default-bottom-tc,
-.x-tab-focus .x-tab-default-bottom-bc {
-    background-image: url(images/tab/tab-default-bottom-focus-corners.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
-.x-tab-focus .x-tab-default-bottom-ml,
-.x-tab-focus .x-tab-default-bottom-mr {
-    background-image: url(images/tab/tab-default-bottom-focus-sides.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
-.x-tab-focus .x-tab-default-bottom-mc {
-    background-repeat: repeat-x;
-    background-image: url(images/tab/tab-default-bottom-focus-fbg.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
-.x-tab-focus.x-tab-over .x-tab-default-bottom-tl,
-.x-tab-focus.x-tab-over .x-tab-default-bottom-bl,
-.x-tab-focus.x-tab-over .x-tab-default-bottom-tr,
-.x-tab-focus.x-tab-over .x-tab-default-bottom-br,
-.x-tab-focus.x-tab-over .x-tab-default-bottom-tc,
-.x-tab-focus.x-tab-over .x-tab-default-bottom-bc {
-    background-image: url(images/tab/tab-default-bottom-focus-over-corners.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
-.x-tab-focus.x-tab-over .x-tab-default-bottom-ml,
-.x-tab-focus.x-tab-over .x-tab-default-bottom-mr {
-    background-image: url(images/tab/tab-default-bottom-focus-over-sides.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
-.x-tab-focus.x-tab-over .x-tab-default-bottom-mc {
-    background-repeat: repeat-x;
-    background-image: url(images/tab/tab-default-bottom-focus-over-fbg.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
-.x-tab.x-tab-active .x-tab-default-bottom-tl,
-.x-tab.x-tab-active .x-tab-default-bottom-bl,
-.x-tab.x-tab-active .x-tab-default-bottom-tr,
-.x-tab.x-tab-active .x-tab-default-bottom-br,
-.x-tab.x-tab-active .x-tab-default-bottom-tc,
-.x-tab.x-tab-active .x-tab-default-bottom-bc {
-    background-image: url(images/tab/tab-default-bottom-active-corners.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
-.x-tab.x-tab-active .x-tab-default-bottom-ml,
-.x-tab.x-tab-active .x-tab-default-bottom-mr {
-    background-image: url(images/tab/tab-default-bottom-active-sides.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
-.x-tab.x-tab-active .x-tab-default-bottom-mc {
-    background-repeat: repeat-x;
-    background-image: url(images/tab/tab-default-bottom-active-fbg.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
-.x-tab-focus.x-tab-active .x-tab-default-bottom-tl,
-.x-tab-focus.x-tab-active .x-tab-default-bottom-bl,
-.x-tab-focus.x-tab-active .x-tab-default-bottom-tr,
-.x-tab-focus.x-tab-active .x-tab-default-bottom-br,
-.x-tab-focus.x-tab-active .x-tab-default-bottom-tc,
-.x-tab-focus.x-tab-active .x-tab-default-bottom-bc {
-    background-image: url(images/tab/tab-default-bottom-focus-active-corners.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
-.x-tab-focus.x-tab-active .x-tab-default-bottom-ml,
-.x-tab-focus.x-tab-active .x-tab-default-bottom-mr {
-    background-image: url(images/tab/tab-default-bottom-focus-active-sides.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
-.x-tab-focus.x-tab-active .x-tab-default-bottom-mc {
-    background-repeat: repeat-x;
-    background-image: url(images/tab/tab-default-bottom-focus-active-fbg.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
-.x-tab.x-tab-disabled .x-tab-default-bottom-tl,
-.x-tab.x-tab-disabled .x-tab-default-bottom-bl,
-.x-tab.x-tab-disabled .x-tab-default-bottom-tr,
-.x-tab.x-tab-disabled .x-tab-default-bottom-br,
-.x-tab.x-tab-disabled .x-tab-default-bottom-tc,
-.x-tab.x-tab-disabled .x-tab-default-bottom-bc {
-    background-image: url(images/tab/tab-default-bottom-disabled-corners.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
-.x-tab.x-tab-disabled .x-tab-default-bottom-ml,
-.x-tab.x-tab-disabled .x-tab-default-bottom-mr {
-    background-image: url(images/tab/tab-default-bottom-disabled-sides.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
-.x-tab.x-tab-disabled .x-tab-default-bottom-mc {
-    background-repeat: repeat-x;
-    background-image: url(images/tab/tab-default-bottom-disabled-fbg.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
-.x-tab-over .x-tab-default-left-tl,
-.x-tab-over .x-tab-default-left-bl,
-.x-tab-over .x-tab-default-left-tr,
-.x-tab-over .x-tab-default-left-br,
-.x-tab-over .x-tab-default-left-tc,
-.x-tab-over .x-tab-default-left-bc {
-    background-image: url(images/tab/tab-default-left-over-corners.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
-.x-tab-over .x-tab-default-left-ml,
-.x-tab-over .x-tab-default-left-mr {
-    background-image: url(images/tab/tab-default-left-over-sides.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
-.x-tab-over .x-tab-default-left-mc {
-    background-repeat: repeat-x;
-    background-image: url(images/tab/tab-default-left-over-fbg.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
-.x-tab-focus .x-tab-default-left-tl,
-.x-tab-focus .x-tab-default-left-bl,
-.x-tab-focus .x-tab-default-left-tr,
-.x-tab-focus .x-tab-default-left-br,
-.x-tab-focus .x-tab-default-left-tc,
-.x-tab-focus .x-tab-default-left-bc {
-    background-image: url(images/tab/tab-default-left-focus-corners.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
-.x-tab-focus .x-tab-default-left-ml,
-.x-tab-focus .x-tab-default-left-mr {
-    background-image: url(images/tab/tab-default-left-focus-sides.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
-.x-tab-focus .x-tab-default-left-mc {
-    background-repeat: repeat-x;
-    background-image: url(images/tab/tab-default-left-focus-fbg.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
-.x-tab-focus.x-tab-over .x-tab-default-left-tl,
-.x-tab-focus.x-tab-over .x-tab-default-left-bl,
-.x-tab-focus.x-tab-over .x-tab-default-left-tr,
-.x-tab-focus.x-tab-over .x-tab-default-left-br,
-.x-tab-focus.x-tab-over .x-tab-default-left-tc,
-.x-tab-focus.x-tab-over .x-tab-default-left-bc {
-    background-image: url(images/tab/tab-default-left-focus-over-corners.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
-.x-tab-focus.x-tab-over .x-tab-default-left-ml,
-.x-tab-focus.x-tab-over .x-tab-default-left-mr {
-    background-image: url(images/tab/tab-default-left-focus-over-sides.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
-.x-tab-focus.x-tab-over .x-tab-default-left-mc {
-    background-repeat: repeat-x;
-    background-image: url(images/tab/tab-default-left-focus-over-fbg.gif);
-}
-/* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
 .x-tab.x-tab-active .x-tab-default-left-tl,
 .x-tab.x-tab-active .x-tab-default-left-bl,
 .x-tab.x-tab-active .x-tab-default-left-tr,
@@ -299,150 +109,6 @@
 .x-rtl.x-tab-closable.x-tab-default .x-tab-button {
     padding-right: 0px;
     padding-left: 15px;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-default-top:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-top-focus-corners.gif), sides:url(images/tab/tab-default-top-focus-sides.gif), frame-bg:url(images/tab/tab-default-top-focus-fbg.gif), frame:3px 3px 3px 3px, stretch:bottom" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-default-right:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-right-focus-corners.gif), sides:url(images/tab/tab-default-right-focus-sides.gif), frame-bg:url(images/tab/tab-default-right-focus-fbg.gif), frame:3px 3px 3px 3px, stretch:left" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-default-bottom:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-bottom-focus-corners.gif), sides:url(images/tab/tab-default-bottom-focus-sides.gif), frame-bg:url(images/tab/tab-default-bottom-focus-fbg.gif), frame:3px 3px 3px 3px, stretch:top" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-default-left:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-left-focus-corners.gif), sides:url(images/tab/tab-default-left-focus-sides.gif), frame-bg:url(images/tab/tab-default-left-focus-fbg.gif), frame:3px 3px 3px 3px, stretch:right" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-over.x-tab-default-top:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-top-over-corners.gif), sides:url(images/tab/tab-default-top-over-sides.gif), frame-bg:url(images/tab/tab-default-top-over-fbg.gif), frame:3px 3px 3px 3px, stretch:bottom" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-over.x-tab-default-right:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-right-over-corners.gif), sides:url(images/tab/tab-default-right-over-sides.gif), frame-bg:url(images/tab/tab-default-right-over-fbg.gif), frame:3px 3px 3px 3px, stretch:left" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-over.x-tab-default-bottom:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-bottom-over-corners.gif), sides:url(images/tab/tab-default-bottom-over-sides.gif), frame-bg:url(images/tab/tab-default-bottom-over-fbg.gif), frame:3px 3px 3px 3px, stretch:top" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-over.x-tab-default-left:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-left-over-corners.gif), sides:url(images/tab/tab-default-left-over-sides.gif), frame-bg:url(images/tab/tab-default-left-over-fbg.gif), frame:3px 3px 3px 3px, stretch:right" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-active.x-tab-default-top:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-top-active-corners.gif), sides:url(images/tab/tab-default-top-active-sides.gif), frame-bg:url(images/tab/tab-default-top-active-fbg.gif), frame:3px 3px 3px 3px, stretch:bottom" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-active.x-tab-default-right:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-right-active-corners.gif), sides:url(images/tab/tab-default-right-active-sides.gif), frame-bg:url(images/tab/tab-default-right-active-fbg.gif), frame:3px 3px 3px 3px, stretch:left" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-active.x-tab-default-bottom:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-bottom-active-corners.gif), sides:url(images/tab/tab-default-bottom-active-sides.gif), frame-bg:url(images/tab/tab-default-bottom-active-fbg.gif), frame:3px 3px 3px 3px, stretch:top" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-active.x-tab-default-left:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-left-active-corners.gif), sides:url(images/tab/tab-default-left-active-sides.gif), frame-bg:url(images/tab/tab-default-left-active-fbg.gif), frame:3px 3px 3px 3px, stretch:right" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-over.x-tab-default-top:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-top-focus-over-corners.gif), sides:url(images/tab/tab-default-top-focus-over-sides.gif), frame-bg:url(images/tab/tab-default-top-focus-over-fbg.gif), frame:3px 3px 3px 3px, stretch:bottom" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-over.x-tab-default-right:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-right-focus-over-corners.gif), sides:url(images/tab/tab-default-right-focus-over-sides.gif), frame-bg:url(images/tab/tab-default-right-focus-over-fbg.gif), frame:3px 3px 3px 3px, stretch:left" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-over.x-tab-default-bottom:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-bottom-focus-over-corners.gif), sides:url(images/tab/tab-default-bottom-focus-over-sides.gif), frame-bg:url(images/tab/tab-default-bottom-focus-over-fbg.gif), frame:3px 3px 3px 3px, stretch:top" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-over.x-tab-default-left:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-left-focus-over-corners.gif), sides:url(images/tab/tab-default-left-focus-over-sides.gif), frame-bg:url(images/tab/tab-default-left-focus-over-fbg.gif), frame:3px 3px 3px 3px, stretch:right" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-active.x-tab-default-top:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-top-focus-active-corners.gif), sides:url(images/tab/tab-default-top-focus-active-sides.gif), frame-bg:url(images/tab/tab-default-top-focus-active-fbg.gif), frame:3px 3px 3px 3px, stretch:bottom" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-active.x-tab-default-right:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-right-focus-active-corners.gif), sides:url(images/tab/tab-default-right-focus-active-sides.gif), frame-bg:url(images/tab/tab-default-right-focus-active-fbg.gif), frame:3px 3px 3px 3px, stretch:left" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-active.x-tab-default-bottom:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-bottom-focus-active-corners.gif), sides:url(images/tab/tab-default-bottom-focus-active-sides.gif), frame-bg:url(images/tab/tab-default-bottom-focus-active-fbg.gif), frame:3px 3px 3px 3px, stretch:top" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-active.x-tab-default-left:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-left-focus-active-corners.gif), sides:url(images/tab/tab-default-left-focus-active-sides.gif), frame-bg:url(images/tab/tab-default-left-focus-active-fbg.gif), frame:3px 3px 3px 3px, stretch:right" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-disabled.x-tab-default-top:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-top-disabled-corners.gif), sides:url(images/tab/tab-default-top-disabled-sides.gif), frame-bg:url(images/tab/tab-default-top-disabled-fbg.gif), frame:3px 3px 3px 3px, stretch:bottom" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-disabled.x-tab-default-right:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-right-disabled-corners.gif), sides:url(images/tab/tab-default-right-disabled-sides.gif), frame-bg:url(images/tab/tab-default-right-disabled-fbg.gif), frame:3px 3px 3px 3px, stretch:left" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-disabled.x-tab-default-bottom:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-bottom-disabled-corners.gif), sides:url(images/tab/tab-default-bottom-disabled-sides.gif), frame-bg:url(images/tab/tab-default-bottom-disabled-fbg.gif), frame:3px 3px 3px 3px, stretch:top" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-disabled.x-tab-default-left:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-default-left-disabled-corners.gif), sides:url(images/tab/tab-default-left-disabled-sides.gif), frame-bg:url(images/tab/tab-default-left-disabled-fbg.gif), frame:3px 3px 3px 3px, stretch:right" !important;
 }
 /* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Bar.scss:168 */
 .x-tab-bar-default {
@@ -725,30 +391,6 @@
 /* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Bar.scss:616 */
 .x-box-scroller-plain.x-box-scroller-tab-bar-default.x-box-scroller-bottom {
     background-image: url(images/tab-bar/default-plain-scroll-bottom.png);
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-bar-default-top:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-bar-default-bottom:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:top" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-bar-default-left:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:right" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-bar-default-right:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:left" !important;
 }
 /* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/toolbar/Breadcrumb.scss:162 */
 .x-breadcrumb-btn-default {
@@ -1312,30 +954,6 @@
 .x-panel .x-panel-header-light-collapsed-border-left {
     border-right-width: 1px !important;
 }
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-panel-header-light-top:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-panel-header-light-bottom:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:top" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-panel-header-light-left:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:right" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-panel-header-light-right:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:left" !important;
-}
 /* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/panel/Panel.scss:786 */
 .x-panel-header-light-horizontal .x-tool-after-title {
     margin: 0 0 0 6px;
@@ -1755,12 +1373,6 @@
 .x-panel-light-framed-mc {
     padding: 0px 0px 0px 0px;
 }
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-panel-light-framed:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, frame:5px 5px 5px 5px, corners:url(images/panel/panel-light-framed-corners.gif), sides:url(images/panel/panel-light-framed-sides.gif)" !important;
-}
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:187 */
 .x-panel-header-light-framed-top {
     -moz-border-radius-topleft: 4px;
@@ -1872,12 +1484,6 @@
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:464 */
 .x-panel-header-light-framed-top-mc {
     padding: 5px 5px 5px 5px;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-panel-header-light-framed-top:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, frame:5px 5px 0 5px, corners:url(images/panel-header/panel-header-light-framed-top-corners.gif), sides:url(images/panel-header/panel-header-light-framed-top-sides.gif)" !important;
 }
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:187 */
 .x-panel-header-light-framed-right {
@@ -2005,12 +1611,6 @@
 .x-panel-header-light-framed-right-mc {
     padding: 5px 5px 5px 5px;
 }
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-panel-header-light-framed-right:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, frame:5px 5px 5px 0, corners:url(images/panel-header/panel-header-light-framed-right-corners.gif), corners-rtl:url(images/panel-header/panel-header-light-framed-right-corners-rtl.gif), sides:url(images/panel-header/panel-header-light-framed-right-sides.gif)" !important;
-}
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:187 */
 .x-panel-header-light-framed-bottom {
     -moz-border-radius-topleft: 0;
@@ -2122,12 +1722,6 @@
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:464 */
 .x-panel-header-light-framed-bottom-mc {
     padding: 5px 5px 5px 5px;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-panel-header-light-framed-bottom:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, frame:0 5px 5px 5px, corners:url(images/panel-header/panel-header-light-framed-bottom-corners.gif), sides:url(images/panel-header/panel-header-light-framed-bottom-sides.gif)" !important;
 }
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:187 */
 .x-panel-header-light-framed-left {
@@ -2255,12 +1849,6 @@
 .x-panel-header-light-framed-left-mc {
     padding: 5px 5px 5px 5px;
 }
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-panel-header-light-framed-left:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, frame:5px 0 5px 5px, corners:url(images/panel-header/panel-header-light-framed-left-corners.gif), corners-rtl:url(images/panel-header/panel-header-light-framed-left-corners-rtl.gif), sides:url(images/panel-header/panel-header-light-framed-left-sides.gif)" !important;
-}
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:187 */
 .x-panel-header-light-framed-collapsed-top {
     -moz-border-radius-topleft: 4px;
@@ -2372,12 +1960,6 @@
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:464 */
 .x-panel-header-light-framed-collapsed-top-mc {
     padding: 5px 5px 5px 5px;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-panel-header-light-framed-collapsed-top:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, frame:5px 5px 5px 5px, corners:url(images/panel-header/panel-header-light-framed-collapsed-top-corners.gif), sides:url(images/panel-header/panel-header-light-framed-collapsed-top-sides.gif)" !important;
 }
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:187 */
 .x-panel-header-light-framed-collapsed-right {
@@ -2505,12 +2087,6 @@
 .x-panel-header-light-framed-collapsed-right-mc {
     padding: 5px 5px 5px 5px;
 }
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-panel-header-light-framed-collapsed-right:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, frame:5px 5px 5px 5px, corners:url(images/panel-header/panel-header-light-framed-collapsed-right-corners.gif), corners-rtl:url(images/panel-header/panel-header-light-framed-collapsed-right-corners-rtl.gif), sides:url(images/panel-header/panel-header-light-framed-collapsed-right-sides.gif)" !important;
-}
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:187 */
 .x-panel-header-light-framed-collapsed-bottom {
     -moz-border-radius-topleft: 4px;
@@ -2622,12 +2198,6 @@
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:464 */
 .x-panel-header-light-framed-collapsed-bottom-mc {
     padding: 5px 5px 5px 5px;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-panel-header-light-framed-collapsed-bottom:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, frame:5px 5px 5px 5px, corners:url(images/panel-header/panel-header-light-framed-collapsed-bottom-corners.gif), sides:url(images/panel-header/panel-header-light-framed-collapsed-bottom-sides.gif)" !important;
 }
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:187 */
 .x-panel-header-light-framed-collapsed-left {
@@ -2754,12 +2324,6 @@
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:464 */
 .x-panel-header-light-framed-collapsed-left-mc {
     padding: 5px 5px 5px 5px;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-panel-header-light-framed-collapsed-left:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, frame:5px 5px 5px 5px, corners:url(images/panel-header/panel-header-light-framed-collapsed-left-corners.gif), corners-rtl:url(images/panel-header/panel-header-light-framed-collapsed-left-corners-rtl.gif), sides:url(images/panel-header/panel-header-light-framed-collapsed-left-sides.gif)" !important;
 }
 /* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/panel/Panel.scss:638 */
 .x-panel .x-panel-header-light-framed-top {
@@ -3096,12 +2660,6 @@
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:464 */
 .x-btn-plain-toolbar-small-mc {
     padding: 1px 1px 1px 1px;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-plain-toolbar-small:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, frame-bg:url(images/btn/btn-plain-toolbar-small-fbg.gif)" !important;
 }
 /* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/button/Button.scss:445 */
 .x-btn-plain-toolbar-small {
@@ -3539,42 +3097,6 @@
     border-width: 1px;
     border-color: #4297d4;
 }
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-focus.x-btn-plain-toolbar-small:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-small-focus-corners.gif), sides:url(images/btn/btn-plain-toolbar-small-focus-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-small-focus-fbg.gif)" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-over.x-btn-plain-toolbar-small:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-small-over-corners.gif), sides:url(images/btn/btn-plain-toolbar-small-over-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-small-over-fbg.gif)" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-focus.x-btn-over.x-btn-plain-toolbar-small:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-small-focus-over-corners.gif), sides:url(images/btn/btn-plain-toolbar-small-focus-over-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-small-focus-over-fbg.gif)" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-pressed.x-btn-plain-toolbar-small:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-small-pressed-corners.gif), sides:url(images/btn/btn-plain-toolbar-small-pressed-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-small-pressed-fbg.gif)" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-focus.x-btn-pressed.x-btn-plain-toolbar-small:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-small-focus-pressed-corners.gif), sides:url(images/btn/btn-plain-toolbar-small-focus-pressed-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-small-focus-pressed-fbg.gif)" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-disabled.x-btn-plain-toolbar-small:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-small-disabled-corners.gif), sides:url(images/btn/btn-plain-toolbar-small-disabled-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-small-disabled-fbg.gif)" !important;
-}
 /* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/button/Button.scss:1246 */
 .x-button-plain-toolbar-small-cell > .x-grid-cell-inner {
     padding-top: 0px;
@@ -3675,12 +3197,6 @@
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:464 */
 .x-btn-plain-toolbar-medium-mc {
     padding: 1px 1px 1px 1px;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-plain-toolbar-medium:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, frame-bg:url(images/btn/btn-plain-toolbar-medium-fbg.gif)" !important;
 }
 /* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/button/Button.scss:445 */
 .x-btn-plain-toolbar-medium {
@@ -4118,42 +3634,6 @@
     border-width: 1px;
     border-color: #4297d4;
 }
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-focus.x-btn-plain-toolbar-medium:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-medium-focus-corners.gif), sides:url(images/btn/btn-plain-toolbar-medium-focus-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-medium-focus-fbg.gif)" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-over.x-btn-plain-toolbar-medium:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-medium-over-corners.gif), sides:url(images/btn/btn-plain-toolbar-medium-over-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-medium-over-fbg.gif)" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-focus.x-btn-over.x-btn-plain-toolbar-medium:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-medium-focus-over-corners.gif), sides:url(images/btn/btn-plain-toolbar-medium-focus-over-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-medium-focus-over-fbg.gif)" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-pressed.x-btn-plain-toolbar-medium:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-medium-pressed-corners.gif), sides:url(images/btn/btn-plain-toolbar-medium-pressed-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-medium-pressed-fbg.gif)" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-focus.x-btn-pressed.x-btn-plain-toolbar-medium:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-medium-focus-pressed-corners.gif), sides:url(images/btn/btn-plain-toolbar-medium-focus-pressed-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-medium-focus-pressed-fbg.gif)" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-disabled.x-btn-plain-toolbar-medium:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-medium-disabled-corners.gif), sides:url(images/btn/btn-plain-toolbar-medium-disabled-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-medium-disabled-fbg.gif)" !important;
-}
 /* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/button/Button.scss:1246 */
 .x-button-plain-toolbar-medium-cell > .x-grid-cell-inner {
     padding-top: 0;
@@ -4254,12 +3734,6 @@
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:464 */
 .x-btn-plain-toolbar-large-mc {
     padding: 1px 1px 1px 1px;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-plain-toolbar-large:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, frame-bg:url(images/btn/btn-plain-toolbar-large-fbg.gif)" !important;
 }
 /* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/button/Button.scss:445 */
 .x-btn-plain-toolbar-large {
@@ -4697,42 +4171,6 @@
     border-width: 1px;
     border-color: #4297d4;
 }
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-focus.x-btn-plain-toolbar-large:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-large-focus-corners.gif), sides:url(images/btn/btn-plain-toolbar-large-focus-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-large-focus-fbg.gif)" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-over.x-btn-plain-toolbar-large:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-large-over-corners.gif), sides:url(images/btn/btn-plain-toolbar-large-over-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-large-over-fbg.gif)" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-focus.x-btn-over.x-btn-plain-toolbar-large:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-large-focus-over-corners.gif), sides:url(images/btn/btn-plain-toolbar-large-focus-over-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-large-focus-over-fbg.gif)" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-pressed.x-btn-plain-toolbar-large:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-large-pressed-corners.gif), sides:url(images/btn/btn-plain-toolbar-large-pressed-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-large-pressed-fbg.gif)" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-focus.x-btn-pressed.x-btn-plain-toolbar-large:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-large-focus-pressed-corners.gif), sides:url(images/btn/btn-plain-toolbar-large-focus-pressed-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-large-focus-pressed-fbg.gif)" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-btn-disabled.x-btn-plain-toolbar-large:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-large-disabled-corners.gif), sides:url(images/btn/btn-plain-toolbar-large-disabled-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-large-disabled-fbg.gif)" !important;
-}
 /* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/button/Button.scss:1246 */
 .x-button-plain-toolbar-large-cell > .x-grid-cell-inner {
     padding-top: 0;
@@ -4991,6 +4429,159 @@
 /* E:/YSN2017/client/ext/packages/font-ext/sass/src/all.scss:108 */
 .ext-unpin:before {
     content: "\e611";
+}
+/* E:/YSN2017/client/ext/packages/charts/sass/src/draw/Surface.scss:1 */
+.x-surface {
+    position: absolute;
+}
+/* E:/YSN2017/client/ext/packages/charts/sass/src/draw/Surface.scss:5 */
+.x-surface-canvas {
+    position: absolute;
+}
+/* E:/YSN2017/client/ext/packages/charts/sass/src/draw/Container.scss:1 */
+.x-draw-container {
+    position: relative;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:1 */
+.x-legend {
+    background: #fff;
+    outline: none;
+}
+/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:6 */
+.x-legend-horizontal {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:11 */
+.x-legend-horizontal .x-legend-item {
+    display: inline-block;
+    border-right: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:18 */
+.x-legend-horizontal .x-legend-item:first-child {
+    border-left: 1px solid #ccc;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+}
+/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:24 */
+.x-legend-horizontal .x-legend-item:last-child {
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+}
+/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:30 */
+.x-legend-horizontal.x-rtl .x-legend-item:first-child {
+    border-right: 1px solid #ccc;
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+}
+/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:35 */
+.x-legend-horizontal.x-rtl .x-legend-item:last-child {
+    border-right: none;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+}
+/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:43 */
+.x-legend-vertical {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:48 */
+.x-legend-vertical .x-legend-item {
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:53 */
+.x-legend-vertical .x-legend-item:first-child {
+    border-top: 1px solid #ccc;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:59 */
+.x-legend-vertical .x-legend-item:last-child {
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:66 */
+.x-legend-item-inactive {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+    opacity: 0.3;
+}
+/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:70 */
+.x-legend-item {
+    padding: 0.8em 1em 0.8em 1.8em;
+    color: #333;
+    background: rgba(255, 255, 255, 0);
+    max-width: 16em;
+    min-width: 0;
+    font-size: 13px;
+    font-family: helvetica, arial, verdana, sans-serif;
+    line-height: 13px;
+    font-weight: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+}
+/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:86 */
+.x-rtl > * > .x-legend-item {
+    padding: 0.8em 1.8em 0.8em 1em;
+}
+/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:90 */
+.x-legend-item-marker {
+    position: absolute;
+    width: 0.8em;
+    height: 0.8em;
+    -webkit-border-radius: 0.4em;
+    -moz-border-radius: 0.4em;
+    -ms-border-radius: 0.4em;
+    -o-border-radius: 0.4em;
+    border-radius: 0.4em;
+    -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0 1px 0, rgba(0, 0, 0, 0.4) 0 1px 0 inset;
+    -moz-box-shadow: rgba(255, 255, 255, 0.3) 0 1px 0, rgba(0, 0, 0, 0.4) 0 1px 0 inset;
+    box-shadow: rgba(255, 255, 255, 0.3) 0 1px 0, rgba(0, 0, 0, 0.4) 0 1px 0 inset;
+    left: 0.7em;
+    top: 0.85em;
+}
+/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:102 */
+.x-rtl > * > * > .x-legend-item-marker {
+    right: 0.7em;
+}
+/* E:/YSN2017/client/ext/packages/charts/classic/sass/src/chart/legend/Legend.scss:1 */
+.x-legend-inner {
+    display: table;
+    text-align: center;
+    padding: 5px;
+}
+/* E:/YSN2017/client/ext/packages/charts/classic/sass/src/chart/legend/Legend.scss:8 */
+.x-legend-horizontal .x-legend-inner {
+    min-width: 100%;
+}
+/* E:/YSN2017/client/ext/packages/charts/classic/sass/src/chart/legend/Legend.scss:14 */
+.x-legend-vertical .x-legend-inner {
+    min-height: 100%;
+}
+/* E:/YSN2017/client/ext/packages/charts/classic/sass/src/chart/legend/Legend.scss:19 */
+.x-legend-container {
+    display: table-cell;
+    vertical-align: middle;
+    white-space: nowrap;
+    line-height: 0;
+    background: #fff;
+    -webkit-box-shadow: rgba(255, 255, 255, 0.6) 0 1px 1px;
+    -moz-box-shadow: rgba(255, 255, 255, 0.6) 0 1px 1px;
+    box-shadow: rgba(255, 255, 255, 0.6) 0 1px 1px;
+}
+/* E:/YSN2017/client/ext/packages/charts/classic/sass/src/chart/AbstractChart.scss:1 */
+.x-chart-image {
+    width: 100%;
+    height: auto;
 }
 /* E:/YSN2017/client/ext/packages/font-awesome/sass/etc/_path.scss:5 */
 @font-face {
@@ -7645,158 +7236,546 @@
 .x-fa:before {
     font-family: FontAwesome !important;
 }
-/* E:/YSN2017/client/ext/packages/charts/sass/src/draw/Surface.scss:1 */
-.x-surface {
-    position: absolute;
-}
-/* E:/YSN2017/client/ext/packages/charts/sass/src/draw/Surface.scss:5 */
-.x-surface-canvas {
-    position: absolute;
-}
-/* E:/YSN2017/client/ext/packages/charts/sass/src/draw/Container.scss:1 */
-.x-draw-container {
-    position: relative;
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/component/MonthBar.scss:1 */
+.cal-month-bar {
+    height: 24px;
     -webkit-user-select: none;
     -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
-    cursor: default;
 }
-/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:1 */
-.x-legend {
-    background: #fff;
-    outline: none;
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/component/MonthBar.scss:5 */
+.cal-month-bar-buttons {
+    table-layout: fixed;
+    width: 100%;
+    height: 100%;
+    background: #f6f6f6;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #f6f6f6;
 }
-/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:6 */
-.x-legend-horizontal {
-    overflow-x: auto;
-    overflow-y: hidden;
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/component/MonthBar.scss:17 */
+.cal-month-bar-button {
+    text-align: center;
+    color: #606060;
+    cursor: pointer;
 }
-/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:11 */
-.x-legend-horizontal .x-legend-item {
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/component/MonthBar.scss:22 */
+.cal-month-bar-button-pressed {
+    background: #fff !important;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #ddd !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/component/MonthHeader.scss:1 */
+.cal-month-header {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-align: right;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/component/MonthHeader.scss:6 */
+.cal-month-header-day {
     display: inline-block;
-    border-right: 1px solid #ccc;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    padding-right: 5px;
+    padding-bottom: 2px;
+    color: #606060;
 }
-/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:18 */
-.x-legend-horizontal .x-legend-item:first-child {
-    border-left: 1px solid #ccc;
-    border-bottom-left-radius: 3px;
-    border-top-left-radius: 3px;
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/component/MonthHeader.scss:13 */
+.cal-month-header-day-nonworking {
+    color: #ea3b06;
 }
-/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:24 */
-.x-legend-horizontal .x-legend-item:last-child {
-    border-bottom-right-radius: 3px;
-    border-top-right-radius: 3px;
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:1 */
+.cal-event-starts-earlier-week:before,
+.cal-event-ends-future-week:after {
+    top: 50%;
+    border-style: solid;
+    border-color: transparent;
+    border-top-width: 8px;
+    border-bottom-width: 8px;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    margin-top: -8px;
 }
-/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:30 */
-.x-legend-horizontal.x-rtl .x-legend-item:first-child {
-    border-right: 1px solid #ccc;
-    border-bottom-right-radius: 3px;
-    border-top-right-radius: 3px;
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:16 */
+.cal-drag-drop-proxy {
+    z-index: -1;
+    width: 0;
+    height: 0;
 }
-/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:35 */
-.x-legend-horizontal.x-rtl .x-legend-item:last-child {
-    border-right: none;
-    border-bottom-left-radius: 3px;
-    border-top-left-radius: 3px;
-}
-/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:43 */
-.x-legend-vertical {
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:48 */
-.x-legend-vertical .x-legend-item {
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-}
-/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:53 */
-.x-legend-vertical .x-legend-item:first-child {
-    border-top: 1px solid #ccc;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-}
-/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:59 */
-.x-legend-vertical .x-legend-item:last-child {
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
-}
-/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:66 */
-.x-legend-item-inactive {
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
-    opacity: 0.3;
-}
-/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:70 */
-.x-legend-item {
-    padding: 0.8em 1em 0.8em 1.8em;
-    color: #333;
-    background: rgba(255, 255, 255, 0);
-    max-width: 16em;
-    min-width: 0;
-    font-size: 13px;
-    font-family: helvetica, arial, verdana, sans-serif;
-    line-height: 13px;
-    font-weight: normal;
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:22 */
+.cal-event {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: #606060;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    position: relative;
     white-space: nowrap;
+    cursor: pointer;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding-right: 10px;
+    margin: 0 2px 1px 1px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:39 */
+.cal-drag-drop-proxy .cal-event {
+    position: absolute;
+    z-index: 50000;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:44 */
+.cal-event.x-view-item-focused {
+    outline: none !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:48 */
+.cal-event-bullet {
+    display: inline-block;
+    height: 6px;
+    width: 6px;
+    position: relative;
+    top: -1px;
+    margin-left: 6px;
+    border-radius: 6px;
+    background-color: #606060;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:59 */
+.cal-event-body {
+    overflow: hidden;
+    text-align: left;
+    padding: 0 6px;
+    white-space: pre;
     position: relative;
 }
-/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:86 */
-.x-rtl > * > .x-legend-item {
-    padding: 0.8em 1.8em 0.8em 1em;
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:67 */
+.cal-event-more-events {
+    font-size: 0.9em;
+    font-weight: 500;
+    padding: 0 7px;
+    color: #ea3b06;
+    position: relative;
+    cursor: pointer;
 }
-/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:90 */
-.x-legend-item-marker {
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:78 */
+.cal-event-dragging {
+    cursor: move;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:82 */
+.cal-event-selected {
+    color: #fff !important;
+    background-color: green !important;
+    border-color: green !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:89 */
+.cal-event-selected .cal-event-bullet {
+    background-color: #fff !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:94 */
+.cal-event-multiday {
+    color: #fff !important;
+    background-color: #606060;
+    border-color: #606060;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:101 */
+.cal-event-multiday .cal-event-bullet {
+    background-color: #fff !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:106 */
+.cal-event-resizable-handle {
     position: absolute;
-    width: 0.8em;
-    height: 0.8em;
-    -webkit-border-radius: 0.4em;
-    -moz-border-radius: 0.4em;
-    -ms-border-radius: 0.4em;
-    -o-border-radius: 0.4em;
-    border-radius: 0.4em;
-    -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0 1px 0, rgba(0, 0, 0, 0.4) 0 1px 0 inset;
-    -moz-box-shadow: rgba(255, 255, 255, 0.3) 0 1px 0, rgba(0, 0, 0, 0.4) 0 1px 0 inset;
-    box-shadow: rgba(255, 255, 255, 0.3) 0 1px 0, rgba(0, 0, 0, 0.4) 0 1px 0 inset;
-    left: 0.7em;
-    top: 0.85em;
+    top: 0;
+    z-index: 10;
+    width: 10px;
+    height: 100%;
+    cursor: col-resize;
 }
-/* E:/YSN2017/client/ext/packages/charts/sass/src/chart/legend/Legend.scss:102 */
-.x-rtl > * > * > .x-legend-item-marker {
-    right: 0.7em;
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:114 */
+.cal-event-resizable-handle-start {
+    left: 0;
 }
-/* E:/YSN2017/client/ext/packages/charts/classic/sass/src/chart/legend/Legend.scss:1 */
-.x-legend-inner {
-    display: table;
-    text-align: center;
-    padding: 5px;
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:118 */
+.cal-event-resizable-handle-end {
+    right: 0;
 }
-/* E:/YSN2017/client/ext/packages/charts/classic/sass/src/chart/legend/Legend.scss:8 */
-.x-legend-horizontal .x-legend-inner {
-    min-width: 100%;
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:124 */
+.cal-event-starts-earlier-week .cal-event-bullet {
+    visibility: hidden;
 }
-/* E:/YSN2017/client/ext/packages/charts/classic/sass/src/chart/legend/Legend.scss:14 */
-.x-legend-vertical .x-legend-inner {
-    min-height: 100%;
-}
-/* E:/YSN2017/client/ext/packages/charts/classic/sass/src/chart/legend/Legend.scss:19 */
-.x-legend-container {
-    display: table-cell;
-    vertical-align: middle;
-    white-space: nowrap;
-    line-height: 0;
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:128 */
+.cal-event-starts-earlier-week:before {
     background: #fff;
-    -webkit-box-shadow: rgba(255, 255, 255, 0.6) 0 1px 1px;
-    -moz-box-shadow: rgba(255, 255, 255, 0.6) 0 1px 1px;
-    box-shadow: rgba(255, 255, 255, 0.6) 0 1px 1px;
+    right: 100%;
+    margin-right: -5px;
+    border-left-width: 0;
+    border-right-width: 5px;
+    border-right-color: inherit;
 }
-/* E:/YSN2017/client/ext/packages/charts/classic/sass/src/chart/AbstractChart.scss:1 */
-.x-chart-image {
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/Event.scss:145 */
+.cal-event-ends-future-week:after {
+    background: #f6f6f6;
+    left: 100%;
+    margin-left: -5px;
+    border-right-width: 0;
+    border-left-width: 5px;
+    border-left-color: inherit;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/DayName.scss:1 */
+.cal-day-week-num,
+.cal-day-date-num {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: absolute;
+    top: 0;
+    padding: 3px 5px;
+    line-height: 14px;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    min-width: 25px;
+    cursor: default;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/DayName.scss:15 */
+.cal-day-week-num {
+    color: #5fa2dd;
+    left: 0;
+    cursor: pointer;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/DayName.scss:23 */
+.cal-day-date-num {
+    color: #606060;
+    right: 0;
+    cursor: pointer;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/DayName.scss:30 */
+.cal-day-date-num-other-month {
+    color: #aaa;
+    font-weight: 300;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/DayName.scss:35 */
+.cal-day-date-num-today {
+    background: #5fa2dd !important;
+    color: #fff;
+    border-radius: 5px;
+    right: 1px;
+    top: 1px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/DayName.scss:43 */
+.cal-day-date-num-container {
+    height: 23px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:1 */
+.cal-week-row {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: absolute;
+    left: 0;
     width: 100%;
-    height: auto;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:8 */
+.cal-week-row-events-row {
+    table-layout: fixed;
+    height: 100%;
+    width: 100%;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:14 */
+.cal-week-row-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    table-layout: fixed;
+    border-top-width: 1px;
+    border-top-color: #ddd;
+    border-top-style: solid;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:29 */
+.cal-week-row-background-day {
+    background-color: #fff;
+    position: relative;
+    border-right-width: 1px;
+    border-right-color: #ddd;
+    border-right-style: solid;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:40 */
+.cal-week-row-background-day-nonworking {
+    background-color: #f6f6f6;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:44 */
+.cal-week-row-background-day-highlight {
+    background-color: #fdfced !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:48 */
+.cal-week-row-background-day-dragging {
+    background-color: #fdfced !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:56 */
+.cal-week-row-index-1 {
+    top: 0%;
+    height: 17%;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:56 */
+.cal-week-row-index-2 {
+    top: 16.66667%;
+    height: 17%;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:56 */
+.cal-week-row-index-3 {
+    top: 33.33333%;
+    height: 17%;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:56 */
+.cal-week-row-index-4 {
+    top: 50%;
+    height: 17%;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:56 */
+.cal-week-row-index-5 {
+    top: 66.66667%;
+    height: 17%;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/template/WeekRow.scss:56 */
+.cal-week-row-index-6 {
+    top: 83.33333%;
+    bottom: 0%;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/menu/ResourceSelector.scss:2 */
+.cal-resource-sel-menu .x-menu-item a {
+    color: inherit !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/menu/ResourceSelector.scss:6 */
+.cal-resource-sel-menu-group-item {
+    color: inherit !important;
+    font-family: FontAwesome !important;
+    background: transparent !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/menu/ResourceSelector.scss:12 */
+.x-menu-item-checked .cal-resource-sel-menu-group-item:before {
+    content: "\f14a" !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/menu/ResourceSelector.scss:15 */
+.x-menu-item-unchecked .cal-resource-sel-menu-group-item:before {
+    content: "\f0c8" !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourcePicker.scss:2 */
+.cal-resource-picker input {
+    padding-left: 28px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourcePicker.scss:6 */
+.cal-resource-picker .x-form-item-body {
+    position: relative;
+    z-index: 10;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourcePicker.scss:11 */
+.cal-resource-picker-icon {
+    z-index: 10;
+    height: 45%;
+    overflow: auto;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 10px;
+    line-height: 1em;
+    font-size: 1em;
+    font-family: FontAwesome !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourcePicker.scss:26 */
+.cal-resource-picker-icon:before {
+    content: "\f0c8" !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourcePicker.scss:31 */
+.cal-resource-picker-option-icon {
+    margin-right: 10px;
+    color: inherit;
+    font-family: FontAwesome !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourcePicker.scss:38 */
+.cal-resource-picker-option-icon:before {
+    content: "\f0c8" !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourcePicker.scss:41 */
+.x-boundlist-selected .cal-resource-picker-option-icon:before {
+    content: "\f0c8" !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:1 */
+.cal-event-list {
+    background: #fff;
+    border: none;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:5 */
+.cal-event-list ul {
+    margin: 0;
+    padding: 0;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:10 */
+.cal-event-list .x-tip-body {
+    background-color: #fff;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:14 */
+.cal-event-list .x-tip-header {
+    background-color: #fff;
+    padding: 3px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:19 */
+.cal-event-list .x-tip-header-title {
+    color: #606060;
+    padding-left: 5px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:24 */
+.cal-event-list .x-tool-img {
+    color: #606060;
+    font-family: FontAwesome !important;
+    background: transparent !important;
+    opacity: 0.8;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:30 */
+.cal-event-list .x-tool-img:before {
+    content: "\f00d" !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:35 */
+.cal-event-list .cal-event {
+    color: #606060;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:38 */
+.cal-event-list .cal-event .cal-event-bullet {
+    background-color: #606060;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:44 */
+.cal-event-list .x-tip-default-tl,
+.cal-event-list .x-tip-default-tr,
+.cal-event-list .x-tip-default-tc,
+.cal-event-list .x-tip-default-bl,
+.cal-event-list .x-tip-default-br,
+.cal-event-list .x-tip-default-bc,
+.cal-event-list .x-tip-default-ml,
+.cal-event-list .x-tip-default-mr,
+.cal-event-list .x-tip-default-mc {
+    background: #fff;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/tip/EventList.scss:49 */
+.cal-event-list-view-container {
+    table-layout: fixed;
+    width: 100%;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/container/Month.scss:1 */
+.cal-month-view {
+    background: #fff;
+    overflow: hidden;
+    border-width: 1px;
+    border-color: #ddd;
+    border-bottom-style: solid;
+    border-left-style: solid;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/ResourceFilter.scss:1 */
+.cal-resource-filter {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background: #f6f6f6;
+    border-width: 0;
+    border-color: #ddd;
+    border-style: solid;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/ResourceFilter.scss:11 */
+.cal-resource-filter .x-form-item-label-inner {
+    color: #606060 !important;
+    font-weight: bold;
+    padding: 8px 10px 5px 10px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/ResourceFilter.scss:17 */
+.cal-resource-filter .x-form-checkboxgroup-body {
+    padding: 0 10px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/ResourceFilter.scss:21 */
+.cal-resource-filter .x-form-cb-label {
+    color: #606060 !important;
+    cursor: pointer;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/ResourceFilter.scss:26 */
+.cal-resource-filter .x-form-cb-input {
+    cursor: pointer;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/ResourceFilter.scss:30 */
+.cal-resource-filter .x-form-checkbox {
+    color: inherit;
+    font-family: FontAwesome !important;
+    background: transparent !important;
+    font-size: 1.2em;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/ResourceFilter.scss:36 */
+.cal-resource-filter .x-form-checkbox:before {
+    content: "\f0c8" !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/ResourceFilter.scss:43 */
+.cal-resource-filter .x-form-cb-checked .x-form-checkbox:before {
+    content: "\f14a" !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourceDisplay.scss:2 */
+.cal-resource-field .x-form-display-field {
+    padding-left: 18px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourceDisplay.scss:6 */
+.cal-resource-field .x-form-item-body {
+    position: relative;
+    z-index: 10;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourceDisplay.scss:11 */
+.cal-resource-field-icon {
+    z-index: 10;
+    height: 50%;
+    overflow: auto;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    line-height: 1em;
+    font-size: 1em;
+    font-family: FontAwesome !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/form/field/ResourceDisplay.scss:26 */
+.cal-resource-field-icon:before {
+    content: "\f0c8" !important;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/toolbar/Navigation.scss:1 */
+.cal-nav-bar {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background: #fff;
+    border-width: 0px;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/toolbar/Navigation.scss:9 */
+.cal-nav-bar .x-btn {
+    border-color: #ddd;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/toolbar/Navigation.scss:13 */
+.cal-nav-bar .x-btn-inner {
+    color: #606060;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/toolbar/Navigation.scss:17 */
+.cal-nav-bar .cal-current-month {
+    color: #606060;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+/* E:/YSN2017/client/packages/bryntum-calendar/sass/src/Cal/toolbar/Navigation.scss:26 */
+.cal-nav-bar .cal-create-btn .x-btn-inner {
+    line-height: 1.5em;
+    font-size: 1.5em;
 }
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:187 */
 .x-tab-navigation-top {
@@ -7885,12 +7864,6 @@
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:464 */
 .x-tab-navigation-top-mc {
     padding: 24px 24px 24px 24px;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-navigation-top:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, frame:0 0 0 0" !important;
 }
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:187 */
 .x-tab-navigation-bottom {
@@ -7987,12 +7960,6 @@
 .x-tab-navigation-bottom-mc {
     padding: 24px 24px 24px 24px;
 }
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-navigation-bottom:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, frame:0 0 0 0" !important;
-}
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:187 */
 .x-tab-navigation-left {
     -moz-border-radius-topleft: 0;
@@ -8088,12 +8055,6 @@
 .x-tab-navigation-left-mc {
     padding: 24px 24px 24px 24px;
 }
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-navigation-left:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, frame:0 0 0 0" !important;
-}
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:187 */
 .x-tab-navigation-right {
     -moz-border-radius-topleft: 0;
@@ -8188,12 +8149,6 @@
 /* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/frame.scss:464 */
 .x-tab-navigation-right-mc {
     padding: 24px 24px 24px 24px;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-navigation-right:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, frame:0 0 0 0" !important;
 }
 /* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Tab.scss:1597 */
 .x-tab-navigation {
@@ -8981,150 +8936,6 @@
     padding-right: 0px;
     padding-left: 15px;
 }
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-navigation-top:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-top-focus-corners.gif), sides:url(images/tab/tab-navigation-top-focus-sides.gif), frame-bg:url(images/tab/tab-navigation-top-focus-fbg.gif), frame:0 0 0 0, stretch:bottom" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-navigation-right:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-right-focus-corners.gif), sides:url(images/tab/tab-navigation-right-focus-sides.gif), frame-bg:url(images/tab/tab-navigation-right-focus-fbg.gif), frame:0 0 0 0, stretch:left" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-navigation-bottom:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-bottom-focus-corners.gif), sides:url(images/tab/tab-navigation-bottom-focus-sides.gif), frame-bg:url(images/tab/tab-navigation-bottom-focus-fbg.gif), frame:0 0 0 0, stretch:top" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-navigation-left:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-left-focus-corners.gif), sides:url(images/tab/tab-navigation-left-focus-sides.gif), frame-bg:url(images/tab/tab-navigation-left-focus-fbg.gif), frame:0 0 0 0, stretch:right" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-over.x-tab-navigation-top:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-top-over-corners.gif), sides:url(images/tab/tab-navigation-top-over-sides.gif), frame-bg:url(images/tab/tab-navigation-top-over-fbg.gif), frame:0 0 0 0, stretch:bottom" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-over.x-tab-navigation-right:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-right-over-corners.gif), sides:url(images/tab/tab-navigation-right-over-sides.gif), frame-bg:url(images/tab/tab-navigation-right-over-fbg.gif), frame:0 0 0 0, stretch:left" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-over.x-tab-navigation-bottom:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-bottom-over-corners.gif), sides:url(images/tab/tab-navigation-bottom-over-sides.gif), frame-bg:url(images/tab/tab-navigation-bottom-over-fbg.gif), frame:0 0 0 0, stretch:top" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-over.x-tab-navigation-left:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-left-over-corners.gif), sides:url(images/tab/tab-navigation-left-over-sides.gif), frame-bg:url(images/tab/tab-navigation-left-over-fbg.gif), frame:0 0 0 0, stretch:right" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-active.x-tab-navigation-top:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-top-active-corners.gif), sides:url(images/tab/tab-navigation-top-active-sides.gif), frame-bg:url(images/tab/tab-navigation-top-active-fbg.gif), frame:0 0 0 0, stretch:bottom" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-active.x-tab-navigation-right:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-right-active-corners.gif), sides:url(images/tab/tab-navigation-right-active-sides.gif), frame-bg:url(images/tab/tab-navigation-right-active-fbg.gif), frame:0 0 0 0, stretch:left" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-active.x-tab-navigation-bottom:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-bottom-active-corners.gif), sides:url(images/tab/tab-navigation-bottom-active-sides.gif), frame-bg:url(images/tab/tab-navigation-bottom-active-fbg.gif), frame:0 0 0 0, stretch:top" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-active.x-tab-navigation-left:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-left-active-corners.gif), sides:url(images/tab/tab-navigation-left-active-sides.gif), frame-bg:url(images/tab/tab-navigation-left-active-fbg.gif), frame:0 0 0 0, stretch:right" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-over.x-tab-navigation-top:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-top-focus-over-corners.gif), sides:url(images/tab/tab-navigation-top-focus-over-sides.gif), frame-bg:url(images/tab/tab-navigation-top-focus-over-fbg.gif), frame:0 0 0 0, stretch:bottom" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-over.x-tab-navigation-right:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-right-focus-over-corners.gif), sides:url(images/tab/tab-navigation-right-focus-over-sides.gif), frame-bg:url(images/tab/tab-navigation-right-focus-over-fbg.gif), frame:0 0 0 0, stretch:left" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-over.x-tab-navigation-bottom:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-bottom-focus-over-corners.gif), sides:url(images/tab/tab-navigation-bottom-focus-over-sides.gif), frame-bg:url(images/tab/tab-navigation-bottom-focus-over-fbg.gif), frame:0 0 0 0, stretch:top" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-over.x-tab-navigation-left:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-left-focus-over-corners.gif), sides:url(images/tab/tab-navigation-left-focus-over-sides.gif), frame-bg:url(images/tab/tab-navigation-left-focus-over-fbg.gif), frame:0 0 0 0, stretch:right" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-active.x-tab-navigation-top:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-top-focus-active-corners.gif), sides:url(images/tab/tab-navigation-top-focus-active-sides.gif), frame-bg:url(images/tab/tab-navigation-top-focus-active-fbg.gif), frame:0 0 0 0, stretch:bottom" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-active.x-tab-navigation-right:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-right-focus-active-corners.gif), sides:url(images/tab/tab-navigation-right-focus-active-sides.gif), frame-bg:url(images/tab/tab-navigation-right-focus-active-fbg.gif), frame:0 0 0 0, stretch:left" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-active.x-tab-navigation-bottom:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-bottom-focus-active-corners.gif), sides:url(images/tab/tab-navigation-bottom-focus-active-sides.gif), frame-bg:url(images/tab/tab-navigation-bottom-focus-active-fbg.gif), frame:0 0 0 0, stretch:top" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-focus.x-tab-active.x-tab-navigation-left:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-left-focus-active-corners.gif), sides:url(images/tab/tab-navigation-left-focus-active-sides.gif), frame-bg:url(images/tab/tab-navigation-left-focus-active-fbg.gif), frame:0 0 0 0, stretch:right" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-disabled.x-tab-navigation-top:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-top-disabled-corners.gif), sides:url(images/tab/tab-navigation-top-disabled-sides.gif), frame-bg:url(images/tab/tab-navigation-top-disabled-fbg.gif), frame:0 0 0 0, stretch:bottom" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-disabled.x-tab-navigation-right:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-right-disabled-corners.gif), sides:url(images/tab/tab-navigation-right-disabled-sides.gif), frame-bg:url(images/tab/tab-navigation-right-disabled-fbg.gif), frame:0 0 0 0, stretch:left" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-disabled.x-tab-navigation-bottom:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-bottom-disabled-corners.gif), sides:url(images/tab/tab-navigation-bottom-disabled-sides.gif), frame-bg:url(images/tab/tab-navigation-bottom-disabled-fbg.gif), frame:0 0 0 0, stretch:top" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-disabled.x-tab-navigation-left:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, corners:url(images/tab/tab-navigation-left-disabled-corners.gif), sides:url(images/tab/tab-navigation-left-disabled-sides.gif), frame-bg:url(images/tab/tab-navigation-left-disabled-fbg.gif), frame:0 0 0 0, stretch:right" !important;
-}
 /* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/tab/Bar.scss:168 */
 .x-tab-bar-navigation {
     background-color: #404040;
@@ -9323,30 +9134,6 @@
 .x-box-scroller-plain.x-box-scroller-tab-bar-navigation.x-box-scroller-bottom {
     background-image: url(images/tab-bar/navigation-plain-scroll-bottom.png);
 }
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-bar-navigation-top:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-bar-navigation-bottom:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:top" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-bar-navigation-left:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:right" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-tab-bar-navigation-right:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:left" !important;
-}
 /* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/panel/Panel.scss:276 */
 .x-panel-navigation {
     border-color: #157fcc;
@@ -9485,30 +9272,6 @@
 /* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/panel/Panel.scss:750 */
 .x-panel .x-panel-header-navigation-collapsed-border-left {
     border-right-width: 1px !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-panel-header-navigation-top:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:bottom" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-panel-header-navigation-bottom:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:top" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-panel-header-navigation-left:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:right" !important;
-}
-/* E:/YSN2017/client/ext/classic/theme-base/sass/etc/mixins/slicer.scss:83 */
-.x-cmd-slicer.x-panel-header-navigation-right:before {
-    /*<if slicer>*/
-    display: none;
-    content: "x-slicer:, stretch:left" !important;
 }
 /* E:/YSN2017/client/ext/classic/theme-neutral/sass/src/panel/Panel.scss:786 */
 .x-panel-header-navigation-horizontal .x-tool-after-title {

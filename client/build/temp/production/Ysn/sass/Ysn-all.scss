@@ -1573,6 +1573,7 @@ $include-ysn-store-selectorderresultlist: dynamic(true);;
 $include-ysn-store-selectsalesresultlist: dynamic(true);;
 $include-ysn-store-subsampleproductionlist: dynamic(true);;
 $include-ysn-store-subsamplerequestlist: dynamic(true);;
+$include-ysn-store-submitcd: dynamic(true);;
 $include-ysn-store-suc2user: dynamic(true);;
 $include-ysn-store-sucuser: dynamic(true);;
 $include-ysn-store-time: dynamic(true);;
@@ -1796,10 +1797,18 @@ $include-ysn-view-demo-search: dynamic(true);;
 $include-ysn-view-demo-searchcontroller: dynamic(true);;
 $include-ysn-view-demo-searchmodel: dynamic(true);;
 $include-ysn-view-estimate-estimatedetail: dynamic(true);;
+$include-ysn-view-estimate-estimatedetail2: dynamic(true);;
+$include-ysn-view-estimate-estimatedetail2controller: dynamic(true);;
+$include-ysn-view-estimate-estimatedetail3: dynamic(true);;
+$include-ysn-view-estimate-estimatedetail3controller: dynamic(true);;
 $include-ysn-view-estimate-estimatedetailcontroller: dynamic(true);;
 $include-ysn-view-estimate-estimatelist: dynamic(true);;
+$include-ysn-view-estimate-estimatelist2: dynamic(true);;
+$include-ysn-view-estimate-estimatelist3: dynamic(true);;
 $include-ysn-view-estimate-estimatelistcontroller: dynamic(true);;
 $include-ysn-view-estimate-requestmain: dynamic(true);;
+$include-ysn-view-estimate-requestmain2: dynamic(true);;
+$include-ysn-view-estimate-requestmain3: dynamic(true);;
 $include-ysn-view-estimate-requestmaincontroller: dynamic(true);;
 $include-ysn-view-main-list: dynamic(true);;
 $include-ysn-view-main-main: dynamic(true);;
@@ -2050,6 +2059,14 @@ $current-resource-root: $theme-crisp-resource-root;
 $relative-image-path-for-uis: $theme-crisp-resource-path;
 @import '../../../../../ext/classic/theme-crisp/sass/etc/all';
 
+/* including package charts */
+$charts-resource-root: 'charts' !default;
+$charts-resource-path: 'charts/images' !default;
+$current-package: 'charts';
+$current-resource-root: $charts-resource-root;
+$relative-image-path-for-uis: $charts-resource-path;
+@import '../../../../../ext/packages/charts/sass/etc/all';
+
 /* including package font-awesome */
 $font-awesome-resource-root: 'font-awesome' !default;
 $font-awesome-resource-path: 'font-awesome/images' !default;
@@ -2058,13 +2075,13 @@ $current-resource-root: $font-awesome-resource-root;
 $relative-image-path-for-uis: $font-awesome-resource-path;
 @import '../../../../../ext/packages/font-awesome/sass/etc/all';
 
-/* including package charts */
-$charts-resource-root: 'charts' !default;
-$charts-resource-path: 'charts/images' !default;
-$current-package: 'charts';
-$current-resource-root: $charts-resource-root;
-$relative-image-path-for-uis: $charts-resource-path;
-@import '../../../../../ext/packages/charts/sass/etc/all';
+/* including package bryntum-calendar */
+$bryntum-calendar-resource-root: 'bryntum-calendar' !default;
+$bryntum-calendar-resource-path: 'bryntum-calendar/images' !default;
+$current-package: 'bryntum-calendar';
+$current-resource-root: $bryntum-calendar-resource-root;
+$relative-image-path-for-uis: $bryntum-calendar-resource-path;
+@import '../../../../../packages/bryntum-calendar/sass/etc/all';
 
 /* including package Ysn */
 $Ysn-resource-root: '' !default;
@@ -2255,6 +2272,14 @@ $relative-image-path-for-uis: $charts-resource-path;
 @import '../../../../../ext/packages/charts/classic/sass/var/chart/legend/Legend';
 @import '../../../../../ext/packages/charts/classic/sass/var/chart/AbstractChart';
 
+/* including package bryntum-calendar */
+$bryntum-calendar-resource-root: 'bryntum-calendar' !default;
+$bryntum-calendar-resource-path: 'bryntum-calendar/images' !default;
+$current-package: 'bryntum-calendar';
+$current-resource-root: $bryntum-calendar-resource-root;
+$relative-image-path-for-uis: $bryntum-calendar-resource-path;
+@import '../../../../../packages/bryntum-calendar/sass/var/all';
+
 /* including package Ysn */
 $Ysn-resource-root: '' !default;
 $Ysn-resource-path: 'images' !default;
@@ -2435,14 +2460,6 @@ $current-resource-root: $font-ext-resource-root;
 $relative-image-path-for-uis: $font-ext-resource-path;
 @import '../../../../../ext/packages/font-ext/sass/src/all';
 
-/* including package font-awesome */
-$font-awesome-resource-root: 'font-awesome' !default;
-$font-awesome-resource-path: 'font-awesome/images' !default;
-$current-package: 'font-awesome';
-$current-resource-root: $font-awesome-resource-root;
-$relative-image-path-for-uis: $font-awesome-resource-path;
-@import '../../../../../ext/packages/font-awesome/sass/src/all';
-
 /* including package charts */
 $charts-resource-root: 'charts' !default;
 $charts-resource-path: 'charts/images' !default;
@@ -2462,6 +2479,32 @@ $current-resource-root: $charts-resource-root;
 $relative-image-path-for-uis: $charts-resource-path;
 @import '../../../../../ext/packages/charts/classic/sass/src/chart/legend/Legend';
 @import '../../../../../ext/packages/charts/classic/sass/src/chart/AbstractChart';
+
+/* including package font-awesome */
+$font-awesome-resource-root: 'font-awesome' !default;
+$font-awesome-resource-path: 'font-awesome/images' !default;
+$current-package: 'font-awesome';
+$current-resource-root: $font-awesome-resource-root;
+$relative-image-path-for-uis: $font-awesome-resource-path;
+@import '../../../../../ext/packages/font-awesome/sass/src/all';
+
+/* including package bryntum-calendar */
+$bryntum-calendar-resource-root: 'bryntum-calendar' !default;
+$bryntum-calendar-resource-path: 'bryntum-calendar/images' !default;
+$current-package: 'bryntum-calendar';
+$current-resource-root: $bryntum-calendar-resource-root;
+$relative-image-path-for-uis: $bryntum-calendar-resource-path;
+@import '../../../../../packages/bryntum-calendar/sass/src/Cal/component/MonthBar';
+@import '../../../../../packages/bryntum-calendar/sass/src/Cal/component/MonthHeader';
+@import '../../../../../packages/bryntum-calendar/sass/src/Cal/template/Event';
+@import '../../../../../packages/bryntum-calendar/sass/src/Cal/template/DayName';
+@import '../../../../../packages/bryntum-calendar/sass/src/Cal/template/WeekRow';
+@import '../../../../../packages/bryntum-calendar/sass/src/Cal/menu/ResourceSelector';
+@import '../../../../../packages/bryntum-calendar/sass/src/Cal/form/field/ResourcePicker';
+@import '../../../../../packages/bryntum-calendar/sass/src/Cal/tip/EventList';
+@import '../../../../../packages/bryntum-calendar/sass/src/Cal/container/Month';
+@import '../../../../../packages/bryntum-calendar/sass/src/Cal/form/ResourceFilter';
+@import '../../../../../packages/bryntum-calendar/sass/src/Cal/toolbar/Navigation';
 
 /* including package Ysn */
 $Ysn-resource-root: '' !default;

@@ -105,7 +105,7 @@
         Else
             Response.Write("flag = 0;" & Chr(13) & Chr(10))
         End If
-        Response.Write("flag = 3;" & Chr(13) & Chr(10))
+        '      Response.Write("flag = 3;" & Chr(13) & Chr(10))
         Response.Write("username = '" & uname & "';" & Chr(13) & Chr(10))
         Response.Write("loginUser = '" & uid & "';" & Chr(13) & Chr(10))
         Response.Write("company_cd = '" & company_cd & "';" & Chr(13) & Chr(10))
