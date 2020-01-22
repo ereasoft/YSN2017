@@ -1,6 +1,6 @@
-Ext.define('Ysn.view.estimate.estimateList',{
+Ext.define('Ysn.view.estimate.estimateList3',{
     extend: 'Ext.grid.Panel',
-    xtype: 'estimateList',
+    xtype: 'estimateList3',
 
     requires: [     
         'Ysn.store.estimatehead'  ,
@@ -8,7 +8,7 @@ Ext.define('Ysn.view.estimate.estimateList',{
     ],
 
     controller: 'estimateList', 
-   // id: 'estimateList',      
+  //  id: 'estimateList3',      
     title: '견적목록',
     store: {
         type: 'estimatehead'
@@ -78,18 +78,18 @@ Ext.define('Ysn.view.estimate.estimateList',{
             width:80,
             text: '견적상테'
         },
+       {
+           xtype: 'gridcolumn',
+           dataIndex: 'user_nm',
+           width: 90,
+           text: '등록자'
+       },
         {
-            xtype: 'gridcolumn',  
-            dataIndex: 'user_nm',      
-            width:90,
-            text: '등록자'
-        },
-        {
-            xtype: 'gridcolumn', 
-            dataIndex: 'submit_nm',      
-            width:80,
+            xtype: 'gridcolumn',
+            dataIndex: 'submit_nm',
+            width: 80,
             text: '결재자'
-        } ,     
+        },
         {
             xtype: 'datecolumn', 
             dataIndex: 'create_date',     

@@ -16,7 +16,8 @@ Ext.define('Ysn.view.main.Main', {
         'Ysn.view.main.MainController',
         'Ysn.view.main.MainModel', 
 	    'Ext.layout.container.Border',
-		'Ysn.view.main.topbar'
+		'Ysn.view.main.topbar',
+        'Ext.form.RadioGroup'
     ],
 
     controller: 'main',

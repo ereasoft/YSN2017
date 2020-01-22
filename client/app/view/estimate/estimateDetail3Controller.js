@@ -1,6 +1,6 @@
-﻿Ext.define( 'Ysn.view.estimate.estimateDetailController', {
+﻿Ext.define( 'Ysn.view.estimate.estimateDetail3Controller', {
     extend: 'Ext.app.ViewController',
-    alias: 'controller.estimateDetail',
+    alias: 'controller.estimateDetail3',
 
     init: function ()
     {
@@ -44,7 +44,7 @@
     {
         var grid = this.lookupReference( 'estimateItem' );
         var grid2 = this.lookupReference( 'estimateItem2' );
-        var formLang =  this.lookupReference( 'form_lang' ).getValue().form_lang; 
+        var formLang = this.lookupReference( 'form_lang' ).getValue().form_lang;
         Ysn.Global.setFormType( newValue.form_type );
         if ( formLang == 'kr' )
         {
@@ -117,19 +117,10 @@
 
     calcAmt: function ( obj, newValue, oldValue, eOpts )
     {
-       // if ( newValue == null || newValue == '' ) return false;
+        if ( newValue == null || newValue == '' ) return false;
         var grid = this.lookupReference( 'estimateItem' );
         var rec = obj.up( 'grid' ).getSelection()[0];
-        rec.set( 'amount', rec.get( 'unit_price' ) * newValue );
-
-    },
-
-    calcAmt2: function ( obj, newValue, oldValue, eOpts )
-    {
-        // if ( newValue == null || newValue == '' ) return false;
-        var grid = this.lookupReference( 'estimateItem' );
-        var rec = obj.up( 'grid' ).getSelection()[0];
-        rec.set( 'amount', newValue * rec.get( 'quantity' ) );
+        rec.set( 'amount', rec.get( 'unit_price' ) * rec.get( 'quantity' ) );
 
     },
 
@@ -150,8 +141,8 @@
         }
         var hidfield = win.query( '#paentFrm' )[0];
         win.down( '#cust_nm' ).setValue( this.lookupReference( 'cust_nm' ).getValue() )
-        hidfield.setValue( 'estimateDetail' );
-        Ext.getCmp( 'estimateDetail' ).add( win );
+        hidfield.setValue( 'estimateDetail3' );
+        Ext.getCmp( 'estimateDetail3' ).add( win );
         win.setPosition( 10, 10 );
         win.show();
         //}

@@ -215,6 +215,36 @@ namespace YonWooCRM.Controllers{
 
         }
 
+        // 매출조직 결재자목록
+        public ActionResult SubmitUser(string up_dept_cd, string dept_cd = "")
+        {
+
+            if (!String.IsNullOrEmpty(up_dept_cd) || !String.IsNullOrEmpty(dept_cd))
+            {
+
+                Hashtable param = new Hashtable();
+
+
+                param.Add("company_cd", User.Identity.Name.Split('|')[2]);
+                param.Add("up_dept_cd", up_dept_cd);
+                param.Add("dept_cd", dept_cd);
+
+
+                IEnumerable<Hashtable> list = Mapper.Instance().QueryForList<Hashtable>("SubmitUser", param);
+
+                return Json(list, JsonRequestBehavior.AllowGet);
+
+            }
+            else
+            {
+
+                return new EmptyResult();
+            }
+
+
+
+        }
+
         // 유통조직 영업담당
         public ActionResult DstrUser(string dstr_chn)
         {

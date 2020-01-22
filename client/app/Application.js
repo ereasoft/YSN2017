@@ -93,7 +93,8 @@ Ext.define('Ysn.Global', {
         estScrny: 'KRW',
         estCrny:'1.0000',
         estRowIdx: 0,
-        estQty: '100'
+        estQty: '100',
+        formType: 'A'
     },
 } );
 

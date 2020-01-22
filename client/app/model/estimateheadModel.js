@@ -1,4 +1,4 @@
-Ext.define( 'Ysn.model.\estimateheadModel', {
+Ext.define( 'Ysn.model.estimateheadModel', {
     extend: 'Ext.data.Model',
     fields: [
         { name: 'idx', type: 'int' },

@@ -1,3 +1,4 @@
+/// <reference path="../estimate/estimateDetail.js" />
 
 Ext.define('Ysn.view.main.topbar',{
     extend: 'Ext.panel.Panel',
@@ -28,7 +29,7 @@ Ext.define('Ysn.view.main.topbar',{
                  html: '<img src=\"resources/yonwoo.jpg\" width=215 height=50 />'
 			},
 			  '->',
-            {
+           /* {
                   xtype: 'button',
                   iconCls: 'x-fa  fa-external-link',
                   text: Locale.getMsg( '견적서작성' ),
@@ -53,6 +54,60 @@ Ext.define('Ysn.view.main.topbar',{
                       }
                   }
             },
+            {
+                 xtype: 'button',
+                 iconCls: 'x-fa  fa-external-link',
+                 text: Locale.getMsg( '견적서참조' ),
+                 listeners: {
+                     click: function ()
+                     {
+                         var tabs = Ext.getCmp( 'centerregion' ),
+                         id = 'requestMain2',
+                         tab = tabs.items.getByKey( id );
+                         var cfg = {
+                             xtype: 'requestMain2',
+                             title: '견적서참조',
+                             session: true
+                         }
+                         if ( !tab )
+                         {
+                             Ysn.Global.activeMenu = id;
+                             cfg.itemId = id;
+                             cfg.closable = true;
+                             tab = tabs.add( cfg );
+                         }
+
+                         tabs.setActiveTab( tab );
+                     }
+                 }
+             },   
+             {
+                 xtype: 'button',
+                 iconCls: 'x-fa  fa-external-link',
+                 text: Locale.getMsg( '견적서승인' ),
+                 listeners: {
+                     click: function ()
+                     {
+                         var tabs = Ext.getCmp( 'centerregion' ),
+                         id = 'requestMain3',
+                         tab = tabs.items.getByKey( id );
+                         var cfg = {
+                             xtype: 'requestMain3',
+                             title: '견적서승인',
+                             session: true
+                         }
+                         if ( !tab )
+                         {
+                             Ysn.Global.activeMenu = id;
+                             cfg.itemId = id;
+                             cfg.closable = true;
+                             tab = tabs.add( cfg );
+                         }
+
+                         tabs.setActiveTab( tab );
+                     }
+                 }
+             },        */
              '-',
 			{
 				xtype: 'checkboxfield',

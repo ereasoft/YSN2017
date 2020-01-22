@@ -1,11 +1,11 @@
-﻿Ext.define( 'Ysn.view.estimate.estimateDetail', {
+﻿Ext.define( 'Ysn.view.estimate.estimateDetail3', {
     extend: 'Ext.form.Panel',
-    xtype: 'estimateDetail',
+    xtype: 'estimateDetail3',
 
     requires: [
           'Ysn.store.estimateitem',
           'Ysn.store.submitcd',
-          'Ysn.view.estimate.estimateDetailController',
+          'Ysn.view.estimate.estimateDetail3Controller',
           'Ysn.store.cateLv',
           'Ysn.store.cateLv2',
           'Ysn.store.baseOption'
@@ -16,7 +16,7 @@
     border: false,
     bodyPadding: 1,
     scrollable: true,
-    id: 'estimateDetail',
+    id: 'estimateDetail3',
     layout: {
         type: 'fit',
         /*(columns: 1,
@@ -33,20 +33,7 @@
                  dock: 'top',
                  ui: 'footer',
                  items: [
-                     {
-                         xtype: 'button',
-                         iconCls: 'fa fa-recycle',
-                         reference: 'recylebtn',
-                         text: '재사용',
-                         handler: 'resetId'
-                     },
-                       {
-                           xtype: 'button',
-                           iconCls: 'fa fa-eraser',
-                           reference: 'newbtn',
-                           text: '신규작성',
-                           handler: 'resetAll'
-                       },
+                    
                      {
                          xtype: 'tbfill'
                      },
@@ -54,11 +41,11 @@
                          xtype: 'button',
                          iconCls: 'fa fa-plus-square-o',
                          reference: 'tempbtn',
-                         text: '임시저장',
+                         text: '결재승인',
                          listeners: {
                              click: {
                                  fn: 'Save',
-                                 args: ['임시저장', '0']
+                                 args: ['결재승인', '2']
                              }
                          }
                      },
@@ -66,11 +53,11 @@
                          xtype: 'button',
                          iconCls: 'fa fa-plus-square',
                          reference: 'reqbtn',
-                         text: '결재상신',
+                         text: '결재반려',
                          listeners: {
                              click: {
                                  fn: 'Save',
-                                 args: ['결재상신', '1']
+                                 args: ['결재반려', '3']
                              }
                          }
                      },
@@ -93,7 +80,7 @@
         labelAlign: 'right',
         msgTarget: 'side',
         allowBlank: true,
-        readOnly: false
+        readOnly: true
     },
     items: [
         {
@@ -380,21 +367,14 @@
 
                  multiSelect: false,
                  singleExpand: true,
-                 //selModel: 'cellmodel',
-                 plugins: {
-                     ptype: 'cellediting',
-                     clicksToEdit: 1,
-                     listeners: {
-                         //edit: 'edit'
-                     }
-                 },
+                 //selModel: 'cellmodel',      
 
                  store: { type: 'estimateitem' },
 
                  listeners: {
                      itemcontextmenu: 'itemcontextmenu1',
                      destroy: 'gridDestroy',
-                     itemclick: 'itemclick1'   
+                     itemclick: 'itemclick1'
                  },
 
                  tbar: {
@@ -486,37 +466,6 @@
                          {
                              if ( val == 'Y' ) return 'BASE';
                              if ( val == 'N' ) return 'OPTION';
-                         },
-                         editor: {
-                             xtype: 'combobox',
-                             //bind: '{record.header_yn}',
-                             store: {
-                                 fields: [{ name: 'code' }, { name: 'cdnm' }],
-                                 data: {
-                                     items: [
-                                           { cdnm: 'BASE', code: 'Y' },
-                                           { cdnm: 'OPTION', code: 'N' }
-                                     ]
-                                 },
-                                 proxy: {
-                                     type: 'memory',
-                                     reader: {
-                                         type: 'json',
-                                         rootProperty: 'items'
-                                     }
-                                 }
-                             },
-                             flex: 1,
-                             minChars: 1,
-                             queryMode: 'local',
-                             publishes: 'value',
-                             displayField: 'cdnm',
-                             valueField: 'code',
-                             hideTrigger: false,
-                             listeners: {
-                                 //specialkey: 'findCateLv2',
-                                 select: 'setStep'
-                             }
                          }
                      },
                      {
@@ -539,156 +488,34 @@
                              if ( val == 'TubeSleeve_Headering' ) return 'TUBE';
                              if ( val == 'Others' ) return 'OTHER';
                              if ( val == 'SET' ) return 'SET';
-                         },
-                         editor: {
-                             xtype: 'combobox',
-                             //bind: '{record.prod}',
-                             store: {
-                                 fields: [{ name: 'code' }, { name: 'cdnm' }],
-                                 data: {
-                                     items: [
-                                           { code: 'Bottle', cdnm: 'BOTTLE' },
-                                           { code: 'InnerBottle', cdnm: 'INNER BOTTLE' },
-                                           { code: 'Pump_Cap', cdnm: 'PUMP' },
-                                           { code: 'Cap', cdnm: 'CAP' },
-                                           { code: 'TubeSleeve_Headering', cdnm: 'TUBE' },
-                                           { code: 'Others', cdnm: 'OTHER' },
-                                           { code: 'SET', cdnm: 'SET' }
-                                     ]
-                                 },
-                                 proxy: {
-                                     type: 'memory',
-                                     reader: {
-                                         type: 'json',
-                                         rootProperty: 'items'
-                                     }
-                                 }
-                             },
-                             flex: 1,
-                             minChars: 1,
-                             queryMode: 'local',
-                             publishes: 'value',
-                             displayField: 'cdnm',
-                             valueField: 'code',
-                             hideTrigger: false,
-                             listeners: {
-                                 // beforequery: 'beforeQuery',
-                                 select: 'setProd',
-                                 // change: 'chgCateLv2'
-                             }
                          }
+
                      },
                      {
                          xtype: 'gridcolumn',
                          dataIndex: 'prod_option',
                          text: 'Option',
-                         width: 220,
-                         editor: {
-                             xtype: 'combobox',
-                             //bind: '{record.prod_option}',
-                             store: {
-                                 type: 'baseOption',
-                                 autoLoad: false,
-                                 autoDestroy: true,
-                                 listeners: {
-                                     beforeload: function ( obj, e, eOpts )
-                                     {
-                                         var prod_code = 'BASE';
-                                         if ( Ysn.Global.getEstStep() == 'N' )
-                                         {
-                                             prod_code = Ysn.Global.getEstProdCode();
-                                         }
-                                         obj.getProxy().setExtraParams( {
-                                             prod_code: prod_code
-                                         } );
+                         width: 220
 
-
-                                     }
-                                 }
-                             },
-                             flex: 1,
-                             minChars: 1,
-                             queryParam: 'prod_option',
-                             //enableKeyEvents : true, 
-                             queryMode: 'remote',
-                             publishes: 'value',
-                             displayField: 'prod_option',
-                             valueField: 'prod_option',
-                             hideTrigger: false,
-                             listeners: {
-                                 beforequery: 'beforeQuery',
-                                 select: 'setProdOption',
-                                 click: function ()
-                                 {
-                                     alert( 'aaa' );
-                                 }
-                             }
-                         }
                      },
                      {
                          xtype: 'gridcolumn',
                          dataIndex: 'sample_modify',
                          text: '샘플여부',
-                         width: 0,
-                         editor: {
-                             xtype: 'combobox',
-                             //bind: '{record.sample_modify}',
-                             store: {
-                                 fields: [{ name: 'code' }],
-                                 data: {
-                                     items: [
-                                           { code: 'Y' },
-                                           { code: 'N' }
-                                     ]
-                                 },
-                                 proxy: {
-                                     type: 'memory',
-                                     reader: {
-                                         type: 'json',
-                                         rootProperty: 'items'
-                                     }
-                                 }
-                             },
-                             flex: 1,
-                             minChars: 1,
-                             queryMode: 'local',
-                             publishes: 'value',
-                             displayField: 'code',
-                             valueField: 'code',
-                             hideTrigger: false,
-                             listeners: {
-                                 // beforequery: 'beforeQuery',
-                                 //select: 'setSampleYn',
-                                 // change: 'chgCateLv2'
-                             }
-                         }
+                         width: 0
                      },
                      {
                          xtype: 'gridcolumn',
                          dataIndex: 'prod_desc',
                          text: 'Description',
-                         width: 200,
-                         editor: {
-                             xtype: 'textfield',
-                             //bind: '{record.prod_desc}',
-                             flex: 1
-                         }
+                         width: 200
                      },
                      {
                          xtype: 'gridcolumn',
                          hidden: true,
                          dataIndex: 'quantity',
                          text: 'Quantity',
-                         width: 150,
-                         editor: {
-                             xtype: 'numberfield',
-                             //ind: '{record.quantity}',
-                             flex: 1,
-                             listeners: {
-                                 //  beforequery: 'beforeQuery',
-                                 change: 'calcAmt'
-                             }
-                         }
+                         width: 150
                      },
                      {
                          xtype: 'numbercolumn',
@@ -697,16 +524,6 @@
                          text: 'Unit Price',
                          width: 150,
                          format: '0.00',
-                         editor: {
-                             xtype: 'numberfield',
-                             //bind: '{record.unit_price}',
-                             format: '0.0000',
-                             flex: 1,
-                              listeners: {
-                                 //  beforequery: 'beforeQuery',
-                                 change: 'calcAmt2'
-                             }
-                         }
                      },
                      {
                          xtype: 'numbercolumn',
@@ -715,11 +532,6 @@
                          text: 'Amount',
                          width: 150,
                          format: '0.00',
-                         editor: {
-                             xtype: 'numberfield',
-                             //bind: '{record.amount}',
-                             flex: 1
-                         }
                      },
                      {
                          xtype: 'numbercolumn',
@@ -727,25 +539,13 @@
                          text: '5K',
                          width: 150,
                          format: '0.00',
-                         editor: {
-                             xtype: 'numberfield',
-                             //bind: '{record.qty_5k}',
-                             format: '0.0000',
-                             flex: 1
-                         }
                      },
                      {
                          xtype: 'numbercolumn',
                          dataIndex: 'qty_10k',
                          text: '10K',
                          width: 150,
-                         format: '0.00',
-                         editor: {
-                             xtype: 'numberfield',
-                             //bind: '{record.qty_10k}',
-                             format: '0.0000',
-                             flex: 1
-                         }
+                         format: '0.00'
                      },
                      {
                          xtype: 'numbercolumn',
@@ -753,49 +553,26 @@
                          text: '30K',
                          width: 150,
                          format: '0.00',
-                         editor: {
-                             xtype: 'numberfield',
-                             //bind: '{record.qty_30k}',
-                             format: '0.0000',
-                             flex: 1
-                         }
                      },
                      {
                          xtype: 'numbercolumn',
                          dataIndex: 'qty_50k',
                          text: '50K',
                          width: 150,
-                         format: '0.00',
-                         editor: {
-                             xtype: 'numberfield',
-                             //bind: '{record.qty_50k}',
-                             format: '0.0000',
-                             flex: 1
-                         }
+                         format: '0.00'
                      },
                      {
                          xtype: 'numbercolumn',
                          dataIndex: 'qty_100k',
                          text: '100K',
                          width: 150,
-                         format: '0.00',
-                         editor: {
-                             xtype: 'numberfield',
-                             //bind: '{record.qty_100k}',
-                             format: '0.0000',
-                             flex: 1
-                         }
+                         format: '0.00'
                      },
                      {
                          xtype: 'gridcolumn',
                          dataIndex: 'remark',
                          text: 'Remark',
-                         width: 250,
-                         editor: {
-                             xtype: 'textfield',
-                             //bind: '{record.remark}',
-                             flex: 1
-                         }
+                         width: 250
                      },
                      {
                          xtype: 'gridcolumn',
@@ -1045,8 +822,8 @@
                      }
                  ],
                  selModel: {
-                    // selType: 'checkboxmodel',
-                    // checkOnly: true
+                     // selType: 'checkboxmodel',
+                     // checkOnly: true
                  }
              },
              {
@@ -1054,7 +831,7 @@
                  reference: 'estimateItem2',
                  height: 480,
                  header: false,
-                 hidden: true,          
+                 hidden: true,
                  listeners: {
                      itemcontextmenu: 'itemcontextmenu2',
                      destroy: 'gridDestroy',
@@ -1064,20 +841,13 @@
                      stripeRows: true,
                      enableTextSelection: false,
                      markDirty: false
-                 },           
+                 },
                  multiSelect: false,
                  singleExpand: true,
-                 plugins: {
-                     ptype: 'cellediting',
-                     clicksToEdit: 1,
-                     listeners: {
-                         //edit: 'edit'
-                     }
-                 },
                  store: { type: 'estimateitem' },
 
                  tbar: {
-                     items: [           
+                     items: [
                      {
                          xtype: 'textfield',
                          width: 240,
@@ -1085,7 +855,7 @@
                          reference: 'summary_yn',
                          name: 'summary_yn',
                          labelWidth: 70,
-                         readOnly: false
+                         readOnly: true
                      },
                      {
                          xtype: 'textfield',
@@ -1094,7 +864,7 @@
                          reference: 'prod_name2',
                          name: 'prod_name',
                          labelWidth: 100,
-                         readOnly: false
+                         readOnly: true
                      }
                      ]
                  },
@@ -1103,97 +873,38 @@
                       {
                           xtype: 'gridcolumn',
                           dataIndex: 'no',
-                          hidden: true     
+                          hidden: true
                       },
                      {
                          xtype: 'gridcolumn',
                          dataIndex: 'prod',
                          text: '구분',
-                         width: 100,
-                         editor: {
-                             xtype: 'combobox',            
-                             store: {
-                                 fields: [{ name: 'code' }, { name: 'cdnm' }],
-                                 data: {
-                                     items: [
-                                           { code: '용기', cdnm: '용기' },
-                                           { code: '내용기', cdnm: '내용기' },
-                                           { code: '펌프', cdnm: '펌프' },
-                                           { code: '캡', cdnm: '캡' },
-                                           { code: '류브', cdnm: '류브' },
-                                           { code: '기타', cdnm: '기타' },
-                                           { code: 'SET', cdnm: 'SET' }
-                                     ]
-                                 },
-                                 proxy: {
-                                     type: 'memory',
-                                     reader: {
-                                         type: 'json',
-                                         rootProperty: 'items'
-                                     }
-                                 }
-                             },
-                             flex: 1,
-                             minChars: 1,
-                             queryMode: 'local',
-                             publishes: 'value',
-                             displayField: 'cdnm',
-                             valueField: 'code',
-                             hideTrigger: false,
-                             listeners: {
-                                 // beforequery: 'beforeQuery',
-                                 select: 'setProd2',
-                                 // change: 'chgCateLv2'
-                             }
-                         }
+                         width: 100
                      },
                      {
                          xtype: 'gridcolumn',
                          dataIndex: 'prod_desc',
                          text: '세부견적내역',
-                         width: 250,
-                         editor: {
-                             xtype: 'textfield',       
-                             flex: 1
-                         }
+                         width: 250
                      },
                      {
-                         xtype: 'gridcolumn',           
+                         xtype: 'gridcolumn',
                          dataIndex: 'item_name',
                          text: '수량',
-                         width: 150,
-                         editor: {
-                             xtype: 'textfield',      
-                             flex: 1,
-                             listeners: {
-                                 //  beforequery: 'beforeQuery',
-                                // change: 'calcAmt'
-                             }
-                         }
+                         width: 150
                      },
                      {
                          xtype: 'gridcolumn',
                          hidden: false,
                          dataIndex: 'unit_price',
                          text: '단가(원)',
-                         width: 150,
-                         editor: {
-                             xtype: 'numberfield',
-                             decimalPrecision:0,
-                             allowDecimals: false,
-                             format: '0,000',
-                             flex: 1
-                         }
+                         width: 150
                      },
                      {
                          xtype: 'gridcolumn',
                          dataIndex: 'remark',
                          text: '비고',
-                         width: 250,
-                         editor: {
-                             xtype: 'textfield',         
-                             flex: 1
-                         }
+                         width: 250
                      },
                      {
                          xtype: 'gridcolumn',
@@ -1203,8 +914,8 @@
                      }
                  ],
                  selModel: {
-                  //   selType: 'checkboxmodel',
-                 //    checkOnly: true
+                     //   selType: 'checkboxmodel',
+                     //    checkOnly: true
                  }
              }
              ]

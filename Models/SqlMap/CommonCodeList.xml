@@ -133,6 +133,22 @@
 -->
     </select>
 
+    <!-- 결재자목록  -->
+    <select id="SubmitUser" parameterClass="Hashtable" resultClass="Hashtable">
+
+
+      SELECT a.USER_CD, a.USER_NM, a.dept_cd, b.up_dept_cd
+      FROM T_USER a
+      inner join T_DEPARTMENT b
+      on a.dept_cd = b.dept_cd
+      WHERE a.COMPANY_CD = #company_cd#
+      AND a.USE_YN = 'Y'
+      AND a.DEPT_CD in (#up_dept_cd#,#dept_cd#)
+
+      ORDER BY dept_cd, USER_NM
+
+    </select>
+
 
    <!-- 유통구조기준영업담당  -->
     <select id="DstrUser" parameterClass="Hashtable" resultClass="Hashtable">

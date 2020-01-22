@@ -1,17 +1,17 @@
-Ext.define('Ysn.view.estimate.requestMain',{
+Ext.define('Ysn.view.estimate.requestMain2',{
     extend: 'Ext.panel.Panel',
-    xtype: 'requestMain',
+    xtype: 'requestMain2',
 
     requires: [
         'Ysn.view.estimate.requestMainController',
-        'Ysn.view.estimate.estimateDetail',
-        'Ysn.view.estimate.estimateList'
+        'Ysn.view.estimate.estimateDetail2',
+        'Ysn.view.estimate.estimateList2'
     ],
 
     controller: 'requestMain',
 
-    reference: 'requestMain',
-    id: 'estimate-requestMain',
+    reference: 'requestMain2',
+    id: 'estimate-requestMain2',
     layout: 'border',
     width: 500,
     height: 400,
@@ -104,8 +104,7 @@ Ext.define('Ysn.view.estimate.requestMain',{
                                    fields: [{ name: 'code' }, { name: 'cdnm' } ],
                                    data: {
                                        items: [
-                                             { cdnm: '전체', code: '' },
-                                             { cdnm: '임시', code: '0' },
+                                             { cdnm: '전체', code: '' },        
                                              { cdnm: '상신', code: '1' },
                                              { cdnm: '승인', code: '2' },
                                              { cdnm: '반려', code: '3' }
@@ -132,7 +131,7 @@ Ext.define('Ysn.view.estimate.requestMain',{
                                xtype: 'button',
                                iconCls: 'fa fa-search',
                                text: '검색',
-                               handler: 'findList'
+                               handler: 'findList2'
                            }
 	                   ]
 	               }
@@ -143,9 +142,9 @@ Ext.define('Ysn.view.estimate.requestMain',{
 		    header: false,
 		    region: 'center',
 		    itemId: 'center',
-		    xtype: 'estimateList', 
+		    xtype: 'estimateList2', 
 		    listeners: {
-		        select: 'itemclick'
+		        select: 'itemclick2'
 		    }
 
 		}, {
@@ -161,7 +160,7 @@ Ext.define('Ysn.view.estimate.requestMain',{
 		    minWidth: 850,
 		    maxWidth: 1920,
 		    items: {
-		        xtype: 'estimateDetail'
+		        xtype: 'estimateDetail2'
 		    }
 		}
     ]

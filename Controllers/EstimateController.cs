@@ -118,11 +118,13 @@ namespace YSN2017.Controllers
             hash.Add("company_cd", User.Identity.Name.Split('|')[2]);       // 회사코드
 
             hash.Add("idx", Request["idx"]);
+            hash.Add("stype", Request["stype"]);
             hash.Add("estimate_id", Request["estimate_id"]);
             hash.Add("form_lang", Request["form_lang"]);
             hash.Add("form_type", Request["form_type"]);
             hash.Add("form_id", Request["form_id"]);
             hash.Add("user_cd", Request["user_cd"]);
+            hash.Add("dept_cd", Request["dept_cd"]);
             hash.Add("ref_cd", Request["ref_cd"]);
             hash.Add("submit_cd", Request["submit_cd"]);
             hash.Add("subject", Request["subject"]);
@@ -168,6 +170,7 @@ namespace YSN2017.Controllers
             hash.Add("company_cd", User.Identity.Name.Split('|')[2]);       // 회사코드
 
             hash.Add("idx", Request["idx"]);
+            hash.Add("stype", Request["stype"]);
 
 
             ISqlMapper mapper = Mapper.Instance();
@@ -244,7 +247,11 @@ namespace YSN2017.Controllers
                 if (hash["status_cd"].ToString().Equals("1"))
                 {
                     estimateID = (string)mapper.QueryForObject("estimateID", hash);
+                    string up_dept_cd = User.Identity.Name.Split('|')[8].ToString();
+                    if (up_dept_cd.Equals("3")) estimateID = "국영-625-" + estimateID;
+                    if (up_dept_cd.Equals("4")) estimateID = "YWPI-" + estimateID;  
                 }
+
 
                 hash.Add("estimate_id", estimateID);
 
@@ -334,8 +341,16 @@ namespace YSN2017.Controllers
                 if (hash["estimate_id"].ToString() == "") hash["estimate_id"] = null;
                 if (hash["estimate_id"] == null || hash["estimate_id"].ToString() == "")
                 {
-                    hash["estimate_id"] = null;
-                    if (hash["status_cd"].ToString().Equals("1")) hash["estimate_id"] = (string)mapper.QueryForObject("estimateID", hash);
+                    hash["estimate_id"] = null; 
+                    if (hash["status_cd"].ToString().Equals("1"))
+                    {
+                       string estimateID = (string)mapper.QueryForObject("estimateID", hash);
+                        string up_dept_cd = User.Identity.Name.Split('|')[8].ToString();
+                        if (up_dept_cd.Equals("3")) estimateID = "국영-625-" + estimateID;
+                        if (up_dept_cd.Equals("4")) estimateID = "YWPI-" + estimateID;
+                        hash["estimate_id"] = estimateID;
+                    }
+
                 }
 
                 mapper.Update("estimateHeadUpdate", hash);
@@ -731,7 +746,7 @@ namespace YSN2017.Controllers
             switch (type)
             {
                 case "00": //국내영업
-
+                    fileNm = "kr_estimate_A.xlsx";
                     break;
                 case "01"://해외영업 수량
                     fileNm = "en_estimate_A.xlsx";
@@ -769,7 +784,10 @@ namespace YSN2017.Controllers
                 items.Add("prod_Not", "NOT");
                 IEnumerable<Hashtable> list = mapper.QueryForList<Hashtable>("estimateItemList", items);
 
-                outputFileNm = CommonMethod.nullToStr2(data["cust_nm"]) + "_" + CommonMethod.nullToStr2(data["estimate_id"]) + ".xlsx";
+                string tailNM = "임시저장";
+                if (CommonMethod.nullToStr2(data["estimate_id"]) != "") tailNM = CommonMethod.nullToStr2(data["estimate_id"]);
+
+                outputFileNm = CommonMethod.nullToStr2(data["cust_nm"]) + "_" + tailNM + ".xlsx";
 
                 int fontSize = 8;
 
@@ -785,12 +803,111 @@ namespace YSN2017.Controllers
                 int[] subRange = new int[] { 0, 0, 0 }; //subTotRow, 첫번째품목옵션, 마지막품목옵션
                 double[] subTotal = new double[] { 0.00, 0.00, 0.00, 0.00, 0.00, 0.00 }; //품목별 합계  listprice, 5k, 10k, 30k, 50k, 100k
 
-                string itemType;
-                var picture = ws.Drawings.AddPicture("sign1", sign1);
+                string itemType; 
 
                 switch (type)
                 {
                     case "00": //국내영업
+                         
+
+                        //견적기본정보
+                        ws.Cells["A5"].Value = data["cust_nm"]; //row, col
+                        ws.Cells["E3"].Value =  data["estimate_date"]; //row, col
+                        ws.Cells["B3"].Value =  data["estimate_id"]; //row, col 
+                        ws.Cells["A6"].Value = ws.Cells["A6"].Value + " " + data["summary_yn"]; //row, col
+                        ws.Cells["A7"].Value = ws.Cells["A7"].Value + " " + data["prod_name"]; //row, col
+
+                        pointRow = 13;
+
+                        int ix = 1;
+
+                        foreach (Hashtable Item in list)
+                        {
+                            if (Item["prod"].ToString().Equals("SET"))
+                            {
+                                ws.Cells["G" + pointRow].Style.Font.Bold = true;
+                                ws.Cells["A" + pointRow + ":C" + pointRow].Merge = true;
+                                ws.Cells["A" + pointRow].Style.Font.Bold = true;
+                                ws.Cells["A" + pointRow].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center; 
+                                ws.Cells["A" + pointRow].Value = Item["prod_desc"];
+                                ws.Cells["D" + pointRow].Value = Item["item_name"];
+                                ws.Cells["G" + pointRow].Value = Item["unit_price"];
+                                ws.Cells["J" + pointRow].Value = Item["remark"];
+                                totRange.Add(pointRow);
+                            }
+                            else
+                            {
+                                ws.Cells["A" + pointRow].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                                ws.Cells["A" + pointRow].Value = Item["prod"];
+                                ws.Cells["B" + pointRow].Value = Item["prod_desc"];
+                                ws.Cells["D" + pointRow].Value = Item["item_name"];
+                                ws.Cells["G" + pointRow].Value = Item["unit_price"];
+                                ws.Cells["J" + pointRow].Value = Item["remark"];
+                            }
+                            pointRow += 1;
+                            ix ++;
+                        }
+
+                        for (int i = 0; i < totRange.Count; i++)
+                        {
+                            Dformula += "G" + totRange[i];
+                            if (i < totRange.Count - 1)
+                            {
+                                Dformula += "+";
+                            }
+                        } 
+
+                    ws.Cells["D11"].Formula = Dformula;
+
+                        /*  foreach (Hashtable Item in list)
+                          {
+                              if(subRange[0].ToString() != Item["prod"].ToString())
+                              {
+                                  if (pointRow > 13)
+                                  {
+                                      ws.Cells["G" + pointRow].Style.Font.Bold = true;
+                                      ws.Cells["A" + pointRow + ":F" + pointRow].Merge = true;
+                                      ws.Cells["A" + pointRow].Style.Font.Bold = true;
+                                      ws.Cells["A" + pointRow].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                                      ws.Cells["G" + pointRow].Formula = "=SUM(G" + subRange[1] + ":G" + subRange[2] + ")";
+                                     // ws.Cells["A" + pointRow].Value = "용기 SET -\" & G"+ pointRow + "& \"원\"";
+                                      ws.Cells["A" + pointRow].Value = "용기 SET";
+                                      totRange.Add(pointRow);
+                                      pointRow += 1;
+                                  }
+                                  ix = 1;
+                                  subRange[0] = int.Parse(Item["prod"].ToString());
+                                  subRange[1] = pointRow; 
+
+                              }
+                              subRange[2] = pointRow;
+                              ws.Cells["A" + pointRow].Value = ix;
+                              ws.Cells["B" + pointRow].Value = Item["prod_desc"];
+                              ws.Cells["D" + pointRow].Value = Item["prod_option"];
+                              ws.Cells["G" + pointRow].Value = Item["unit_price"];
+                              pointRow += 1;
+                              ix += 1;
+                          }
+
+                          ws.Cells["G" + pointRow].Style.Font.Bold = true;
+                          ws.Cells["A" + pointRow + ":F" + pointRow].Merge = true;
+                          ws.Cells["A" + pointRow].Style.Font.Bold = true;
+                          ws.Cells["A" + pointRow].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                          ws.Cells["G" + pointRow].Formula = "=SUM(G" + subRange[1] + ":G" + subRange[2] + ")";
+                          // ws.Cells["A" + pointRow].Value = "용기 SET -\" & G"+ pointRow + "& \"원\"";
+                          ws.Cells["A" + pointRow].Value = "용기 SET";
+                          totRange.Add(pointRow);
+
+                          for (int i = 0; i < totRange.Count; i++)
+                          {
+                              Dformula += "G" + totRange[i]; 
+                              if (i < totRange.Count - 1)
+                              {
+                                  Dformula += "+"; 
+                              }
+                          } */
+
+                       // ws.Cells["D11"].Formula = Dformula;
 
                         break;
                     case "01"://해외영업 수량 
@@ -836,7 +953,7 @@ namespace YSN2017.Controllers
                                     //Unit Price
                                     ws.Cells["E" + subRange[0]].Formula = "=SUM(E" + subRange[1] + ":E" + subRange[2] + ")";
                                     //Amount
-                                    ws.Cells["F" + subRange[0]].Formula = "=D" + subRange[0] + "+E" + subRange[0];
+                                    ws.Cells["F" + subRange[0]].Formula = "=D" + subRange[0] + "*E" + subRange[0];
 
                                     subRange[1] = 0;
                                     subRange[2] = 0;
@@ -889,7 +1006,7 @@ namespace YSN2017.Controllers
                         }
 
                         ws.Cells["E" + subRange[0]].Formula = "=SUM(E" + subRange[1] + ":E" + subRange[2] + ")";
-                        ws.Cells["F" + subRange[0]].Formula = "=D" + subRange[0] + "+E" + subRange[0];
+                        ws.Cells["F" + subRange[0]].Formula = "=D" + subRange[0] + "*E" + subRange[0];
 
                         subRange[1] = 0;
                         subRange[2] = 0;
@@ -926,14 +1043,18 @@ namespace YSN2017.Controllers
                         ws.Cells["F" + totRow].Formula = Fformula;
 
                         pointRow += 1;
-
+                         
                         ws.Cells["C" + pointRow].Style.Font.Size = fontSize;
-                        ws.Cells["C" + pointRow].Value = "PRODUCT NAME: " + data["prod_name"]; 
-                        
+                        ws.Cells["C" + pointRow].Value = "PRODUCT NAME: " + data["prod_name"];
+
                         //picture.To.Column = 5;
-                        picture.From.Column = 3;
-                        picture.From.Row = pointRow + 10;
-                        picture.SetSize(265, 45);
+                        var pic1 = ws.Drawings.AddPicture("sign1", sign1);
+                        pic1.From.Column = 3;
+                        pic1.From.Row = pointRow + 10;
+                        pic1.SetSize(265, 45);
+
+                        pointRow += 14;
+                        ws.Cells["A" + pointRow].Value = data["cust_nm"];
 
                         break;
 
@@ -1100,9 +1221,10 @@ namespace YSN2017.Controllers
                         ws.Cells["C" + pointRow].Value = "PRODUCT NAME: " + data["prod_name"];
                         //picture.To.Column = 5;
                         pointRow += 10;
-                        picture.From.Column = 3;
-                        picture.From.Row = pointRow;
-                        picture.SetSize(265, 45);
+                        var pic2 = ws.Drawings.AddPicture("sign1", sign1);
+                        pic2.From.Column = 3;
+                        pic2.From.Row = pointRow;
+                        pic2.SetSize(265, 45);
 
                         pointRow += 4;
                         ws.Cells["A" + pointRow].Value = data["cust_nm"];
