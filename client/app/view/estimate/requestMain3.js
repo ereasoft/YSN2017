@@ -146,7 +146,7 @@ Ext.define('Ysn.view.estimate.requestMain3',{
 		    itemId: 'center',
 		    xtype: 'estimateList3', 
 		    listeners: {
-		        select: 'itemclick'
+		        select: 'itemclick3'
 		    }
 
 		}, {

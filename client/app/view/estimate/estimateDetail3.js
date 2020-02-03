@@ -11,7 +11,7 @@
           'Ysn.store.baseOption'
     ],
 
-    controller: 'estimateDetail',
+    controller: 'estimateDetail3',
     frame: false,
     border: false,
     bodyPadding: 1,

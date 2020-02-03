@@ -636,8 +636,9 @@
                   text: '\uD589 \uCD94\uAC00(\uC120\uD0DD\uD589 \uC544\uB798)',
                   handler: function ()
                   {
-                      var rec = {};
-                      rec = record.data;
+                      var rec = {
+                          no: e.position.rowIdx + 2 
+                      }
                       rec.no = '';
                       rec.prod_option = '';
                       rec.prod_option = '';
@@ -776,7 +777,7 @@
                         me.lookupReference( 'tempbtn' ).setDisabled( true );
                         me.lookupReference( 'reqbtn' ).setDisabled( true );
                     }
-                    Ext.getCmp( 'estimateList' ).getStore().reload();
+                    me.getView().up( '[xtype=requestMain]' ).down( '#center' ).getStore().reload();
 
                 },
                 failure: function ( form, action )

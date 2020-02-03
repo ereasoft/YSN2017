@@ -951,7 +951,14 @@ namespace YSN2017.Controllers
                                     //Qty
                                     //ws.Cells["D" + subRange[0]].Formula = "=SUM(D"+ subRange[1] + ":D"+ subRange[2] + ")"; 
                                     //Unit Price
-                                    ws.Cells["E" + subRange[0]].Formula = "=SUM(E" + subRange[1] + ":E" + subRange[2] + ")";
+                                    if (subRange[2] == 0)
+                                    {
+                                        ws.Cells["E" + subRange[0]].Formula = "=SUM(E" + subRange[1] + ")";
+                                    }
+                                    else
+                                    {
+                                        ws.Cells["E" + subRange[0]].Formula = "=SUM(E" + subRange[1] + ":E" + subRange[2] + ")";
+                                    } 
                                     //Amount
                                     ws.Cells["F" + subRange[0]].Formula = "=D" + subRange[0] + "*E" + subRange[0];
 
@@ -1005,7 +1012,14 @@ namespace YSN2017.Controllers
                             pointRow += 1;
                         }
 
-                        ws.Cells["E" + subRange[0]].Formula = "=SUM(E" + subRange[1] + ":E" + subRange[2] + ")";
+                        if(subRange[2] == 0)
+                        {
+                            ws.Cells["E" + subRange[0]].Formula = "=SUM(E" + subRange[1] + ")";
+                        }
+                        else
+                        {
+                            ws.Cells["E" + subRange[0]].Formula = "=SUM(E" + subRange[1] + ":E" + subRange[2] + ")";
+                        } 
                         ws.Cells["F" + subRange[0]].Formula = "=D" + subRange[0] + "*E" + subRange[0];
 
                         subRange[1] = 0;

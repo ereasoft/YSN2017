@@ -767,7 +767,7 @@
                         me.lookupReference( 'tempbtn' ).setDisabled( true );
                         me.lookupReference( 'reqbtn' ).setDisabled( true );
                     }
-                    Ext.getCmp( 'estimateList' ).getStore().reload();
+                    me.getView().up( '[xtype=requestMain3]' ).down( '#center' ).getStore().reload();
 
                 },
                 failure: function ( form, action )
