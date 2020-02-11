@@ -811,10 +811,10 @@ namespace YSN2017.Controllers
                          
 
                         //견적기본정보
-                        ws.Cells["A5"].Value = data["cust_nm"]; //row, col
+                        ws.Cells["A5"].Value = data["cust_nm"] + " 귀중"; //row, col
                         ws.Cells["E3"].Value =  data["estimate_date"]; //row, col
                         ws.Cells["B3"].Value =  data["estimate_id"]; //row, col 
-                        ws.Cells["A6"].Value = ws.Cells["A6"].Value + " " + data["summary_yn"]; //row, col
+                        ws.Cells["A6"].Value = ws.Cells["A6"].Value + " " + data["summary_yn"] + " 귀하"; //row, col
                         ws.Cells["A7"].Value = ws.Cells["A7"].Value + " " + data["prod_name"]; //row, col
 
                         pointRow = 13;
@@ -830,7 +830,8 @@ namespace YSN2017.Controllers
                                 ws.Cells["A" + pointRow].Style.Font.Bold = true;
                                 ws.Cells["A" + pointRow].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center; 
                                 ws.Cells["A" + pointRow].Value = Item["prod_desc"];
-                                ws.Cells["D" + pointRow].Value = Item["item_name"];
+                               // ws.Cells["D" + pointRow].Value = String.Format("{0:0,000}", int.Parse(Item["item_name"].ToString()));
+                                ws.Cells["D" + pointRow].Value = int.Parse(Item["item_name"].ToString());
                                 ws.Cells["G" + pointRow].Value = Item["unit_price"];
                                 ws.Cells["J" + pointRow].Value = Item["remark"];
                                 totRange.Add(pointRow);
@@ -840,7 +841,8 @@ namespace YSN2017.Controllers
                                 ws.Cells["A" + pointRow].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                                 ws.Cells["A" + pointRow].Value = Item["prod"];
                                 ws.Cells["B" + pointRow].Value = Item["prod_desc"];
-                                ws.Cells["D" + pointRow].Value = Item["item_name"];
+                             //   ws.Cells["D" + pointRow].Value = String.Format("{0:0,000}", int.Parse(Item["item_name"].ToString()));
+                                ws.Cells["D" + pointRow].Value = int.Parse(Item["item_name"].ToString());
                                 ws.Cells["G" + pointRow].Value = Item["unit_price"];
                                 ws.Cells["J" + pointRow].Value = Item["remark"];
                             }
@@ -850,7 +852,7 @@ namespace YSN2017.Controllers
 
                         for (int i = 0; i < totRange.Count; i++)
                         {
-                            Dformula += "G" + totRange[i];
+                            Dformula += "G" + totRange[i] + "*D" + totRange[i];
                             if (i < totRange.Count - 1)
                             {
                                 Dformula += "+";

@@ -1056,7 +1056,7 @@
                  header: false,
                  hidden: true,          
                  listeners: {
-                     itemcontextmenu: 'itemcontextmenu2',
+                 //    itemcontextmenu: 'itemcontextmenu2',
                      destroy: 'gridDestroy',
                      itemclick: 'itemclick2'
                  },

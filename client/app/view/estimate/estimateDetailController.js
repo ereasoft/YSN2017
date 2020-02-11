@@ -386,12 +386,16 @@
             if ( obj.getValue() == prevRec.get( 'prod' ) )
             {
                 rec.set( 'item_name', prevRec.get( 'item_name' ) )
+                rec.set( 'sub_prod', prevRec.get( 'sub_prod' ) );
+            } else
+            {
+                if ( obj.getValue() != 'SET' )   rec.set( 'sub_prod', rec.get( 'no' ) );
             }
             if ( obj.getValue() == 'SET' )
             {
                 if ( Ysn.Global.getFormType() == 'A' )
                 {
-                    var frecs = obj.up( 'grid' ).getStore().queryBy( function ( rec, id ) { return ( rec.get( 'prod' ) == prevRec.get( 'prod' ) ); } )
+                    var frecs = obj.up( 'grid' ).getStore().queryBy( function ( rec, id ) { return ( rec.get( 'sub_prod' ) == prevRec.get( 'sub_prod' ) ); } )
                     var total = 0;
                     for ( var i = 0; i < frecs.items.length; i++ )
                     {
@@ -638,25 +642,65 @@
                   {
                       var rec = {
                           no: e.position.rowIdx + 2 
+                      }             
+                      var seldata = view.up( 'grid' ).getSelection()[0];
+                      rec.quantity = seldata.get( 'quantity' );
+                      rec.idx = seldata.get( 'idx' );
+                      rec.bottle_5K = seldata.get( 'bottle_5K' );
+                      rec.bottle_10K = seldata.get( 'bottle_10K' );
+                      rec.bottle_30K = seldata.get( 'bottle_30K' );
+                      rec.bottle_50K = seldata.get( 'bottle_50K' );
+                      rec.bottle_100K = seldata.get( 'bottle_100K' );
+                      rec.Innerbottle_5K = seldata.get( 'Innerbottle_5K' );
+                      rec.Innerbottle_10K = seldata.get( 'Innerbottle_10K' );
+                      rec.Innerbottle_50K = seldata.get( 'Innerbottle_50K' );
+                      rec.Innerbottle_100K = seldata.get( 'Innerbottle_100K' );
+                      rec.pumpcap_5K = seldata.get( 'pumpcap_5K' );
+                      rec.pumpcap_10K = seldata.get( 'pumpcap_10K' );
+                      rec.pumpcap_30K = seldata.get( 'pumpcap_30K' );
+                      rec.pumpcap_50K = seldata.get( 'pumpcap_50K' );
+                      rec.pumpcap_100K = seldata.get( 'pumpcap_100K' );
+                      rec.cap_5K = seldata.get( 'cap_5K' );
+                      rec.cap_10K = seldata.get( 'cap_10K' );
+                      rec.cap_30K = seldata.get( 'cap_30K' );
+                      rec.cap_50K = seldata.get( 'cap_50K' );
+                      rec.cap_100K = seldata.get( 'cap_100K' );
+                      rec.tubesleeveheadering_5K = seldata.get( 'tubesleeveheadering_5K' );
+                      rec.tubesleeveheadering_10K = seldata.get( 'tubesleeveheadering_10K' );
+                      rec.tubesleeveheadering_30K = seldata.get( 'tubesleeveheadering_30K' );
+                      rec.tubesleeveheadering_50K = seldata.get( 'tubesleeveheadering_50K' );
+                      rec.tubesleeveheadering_100K = seldata.get( 'tubesleeveheadering_100K' );
+                      rec.others_5K = seldata.get( 'others_5K' );
+                      rec.others_10K = seldata.get( 'others_10K' );
+                      rec.others_30K = seldata.get( 'others_30K' );
+                      rec.others_50K = seldata.get( 'others_50K' );
+                      rec.others_100K = seldata.get( 'others_100K' );
+                      rec.set_5K = seldata.get( 'set_5K' );
+                      rec.set_10K = seldata.get( 'set_10K' );
+                      rec.set_30K = seldata.get( 'set_30K' );
+                      rec.set_50K = seldata.get( 'set_50K' );
+                      rec.set_50K = seldata.get( 'others_10K' );
+                      rec.set_100K = seldata.get( 'set_100K' );
+                      rec.set_100K = seldata.get( 'set_100K' );
+                      rec.set_100K = seldata.get( 'set_100K' );
+                      rec.set_100K = seldata.get( 'set_100K' );
+                      var store = view.up( 'grid' ).getStore();
+                      store.insert( e.position.rowIdx + 1, rec );
+                      for ( var i = e.position.rowIdx + 2; i < store.data.items.length; i++ )
+                      {
+                          store.data.items[i].set( 'no', i + 1 );
                       }
-                      rec.no = '';
-                      rec.prod_option = '';
-                      rec.prod_option = '';
-                      rec.unit_price = '';
-                      rec.amount = '';
-                      rec.qty_5k = '';
-                      rec.qty_10k = '';
-                      rec.qty_30k = '';
-                      rec.qty_50k = '';
-                      rec.qty_100k = '';
-                      rec.prod_desc = '';
-                      view.getStore().insert( e.position.rowIdx + 1, rec );
                   }
               }, {
                   text: '\uC120\uD0DD\uD55C \uD589 \uC0AD\uC81C',
                   handler: function ()
                   {
-                      alert( "Item 2 clicked" );
+                      var store = view.up( 'grid' ).getStore();
+                      store.remove( record );
+                      for ( var i = e.position.rowIdx ; i < store.data.items.length; i++ )
+                      {
+                          store.data.items[i].set( 'no', i + 1  );
+                      }
                   }
               }
             ],
@@ -683,26 +727,67 @@
                   text: '\uD589 \uCD94\uAC00(\uC120\uD0DD\uD589 \uC544\uB798)',
                   handler: function ()
                   {
-                      var rec = {};
-                      rec = record.data;
-                      rec.no = '';
-                      rec.prod_option = '';
-                      rec.prod_option = '';
-                      rec.unit_price = '';
-                      rec.amount = '';
-                      rec.qty_5k = '';
-                      rec.qty_10k = '';
-                      rec.qty_30k = '';
-                      rec.qty_50k = '';
-                      rec.qty_100k = '';
-                      rec.prod_desc = '';
-                      view.getStore().insert( e.position.rowIdx + 1, rec );
+                      var rec = {
+                          no: e.position.rowIdx + 2
+                      }
+                      var seldata = view.up( 'grid' ).getSelection()[0];
+                      rec.quantity = seldata.get( 'quantity' );
+                      rec.idx = seldata.get( 'idx' );
+                      rec.bottle_5K = seldata.get( 'bottle_5K' );
+                      rec.bottle_10K = seldata.get( 'bottle_10K' );
+                      rec.bottle_30K = seldata.get( 'bottle_30K' );
+                      rec.bottle_50K = seldata.get( 'bottle_50K' );
+                      rec.bottle_100K = seldata.get( 'bottle_100K' );
+                      rec.Innerbottle_5K = seldata.get( 'Innerbottle_5K' );
+                      rec.Innerbottle_10K = seldata.get( 'Innerbottle_10K' );
+                      rec.Innerbottle_50K = seldata.get( 'Innerbottle_50K' );
+                      rec.Innerbottle_100K = seldata.get( 'Innerbottle_100K' );
+                      rec.pumpcap_5K = seldata.get( 'pumpcap_5K' );
+                      rec.pumpcap_10K = seldata.get( 'pumpcap_10K' );
+                      rec.pumpcap_30K = seldata.get( 'pumpcap_30K' );
+                      rec.pumpcap_50K = seldata.get( 'pumpcap_50K' );
+                      rec.pumpcap_100K = seldata.get( 'pumpcap_100K' );
+                      rec.cap_5K = seldata.get( 'cap_5K' );
+                      rec.cap_10K = seldata.get( 'cap_10K' );
+                      rec.cap_30K = seldata.get( 'cap_30K' );
+                      rec.cap_50K = seldata.get( 'cap_50K' );
+                      rec.cap_100K = seldata.get( 'cap_100K' );
+                      rec.tubesleeveheadering_5K = seldata.get( 'tubesleeveheadering_5K' );
+                      rec.tubesleeveheadering_10K = seldata.get( 'tubesleeveheadering_10K' );
+                      rec.tubesleeveheadering_30K = seldata.get( 'tubesleeveheadering_30K' );
+                      rec.tubesleeveheadering_50K = seldata.get( 'tubesleeveheadering_50K' );
+                      rec.tubesleeveheadering_100K = seldata.get( 'tubesleeveheadering_100K' );
+                      rec.others_5K = seldata.get( 'others_5K' );
+                      rec.others_10K = seldata.get( 'others_10K' );
+                      rec.others_30K = seldata.get( 'others_30K' );
+                      rec.others_50K = seldata.get( 'others_50K' );
+                      rec.others_100K = seldata.get( 'others_100K' );
+                      rec.set_5K = seldata.get( 'set_5K' );
+                      rec.set_10K = seldata.get( 'set_10K' );
+                      rec.set_30K = seldata.get( 'set_30K' );
+                      rec.set_50K = seldata.get( 'set_50K' );
+                      rec.set_50K = seldata.get( 'others_10K' );
+                      rec.set_100K = seldata.get( 'set_100K' );
+                      rec.set_100K = seldata.get( 'set_100K' );
+                      rec.set_100K = seldata.get( 'set_100K' );
+                      rec.set_100K = seldata.get( 'set_100K' );
+                      var store = view.up( 'grid' ).getStore();
+                      store.insert( e.position.rowIdx + 1, rec );
+                      for ( var i = e.position.rowIdx + 2; i < store.data.items.length; i++ )
+                      {
+                          store.data.items[i].set( 'no', i + 1 );
+                      }
                   }
               }, {
                   text: '\uC120\uD0DD\uD55C \uD589 \uC0AD\uC81C',
                   handler: function ()
                   {
-                      alert( "Item 2 clicked" );
+                      var store = view.up( 'grid' ).getStore();
+                      store.remove( record );
+                      for ( var i = e.position.rowIdx ; i < store.data.items.length; i++ )
+                      {
+                          store.data.items[i].set( 'no', i + 1 );
+                      }
                   }
               }
             ],

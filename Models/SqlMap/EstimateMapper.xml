@@ -35,8 +35,7 @@
       </isNotEmpty>
       <isNotEmpty property="prod_code">
         AND prod_code LIKE '%' + #prod_code# + '%'
-      </isNotEmpty> 
-      
+      </isNotEmpty>
     </select>
      
 
@@ -156,8 +155,8 @@
       </isNotEmpty>
       <isNotNull property="subject">
         AND subject LIKE '%' + #subject# + '%'
-      </isNotNull>  
-
+      </isNotNull> 
+      ORDER BY idx desc
     </select>
 
 

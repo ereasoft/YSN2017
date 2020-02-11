@@ -338,7 +338,7 @@
                  store: { type: 'estimateitem' },
 
                  listeners: {
-                     itemcontextmenu: 'itemcontextmenu1',
+                    // itemcontextmenu: 'itemcontextmenu1',
                      destroy: 'gridDestroy',
                      itemclick: 'itemclick1'   
                  },
@@ -799,7 +799,7 @@
                  header: false,
                  hidden: true,          
                  listeners: {
-                     itemcontextmenu: 'itemcontextmenu2',
+                   //  itemcontextmenu: 'itemcontextmenu2',
                      destroy: 'gridDestroy',
                      itemclick: 'itemclick2'
                  },
