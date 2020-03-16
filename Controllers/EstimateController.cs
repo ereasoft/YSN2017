@@ -115,7 +115,8 @@ namespace YSN2017.Controllers
             Hashtable hash = new Hashtable();
 
             hash.Add("language", User.Identity.Name.Split('|')[3]);         // 기본언어
-            hash.Add("company_cd", User.Identity.Name.Split('|')[2]);       // 회사코드
+            hash.Add("company_cd", User.Identity.Name.Split('|')[2]);       // 회사코드 
+            hash.Add("user_cd", User.Identity.Name.Split('|')[0]);
 
             hash.Add("idx", Request["idx"]);
             hash.Add("stype", Request["stype"]);
@@ -133,6 +134,18 @@ namespace YSN2017.Controllers
             hash.Add("cust_nm", Request["cust_nm"]);
             hash.Add("dstr_type", Request["dstr_type"]);
 
+            if(Request["dept_cd"] == "3" || Request["dept_cd"] == "4")
+            {
+                hash["dept_lv"] = "2";
+            }else
+            {
+                hash["dept_lv"] = "3";
+            }
+
+            if(hash["user_cd"].ToString() == "sysadmin")
+            {
+                hash["dept_lv"] = "0";
+            }
 
             ISqlMapper mapper = Mapper.Instance();
             IEnumerable<Hashtable> list = mapper.QueryForList<Hashtable>("estimateHeadList", hash);
@@ -305,7 +318,7 @@ namespace YSN2017.Controllers
 
                 hash.Add("language", User.Identity.Name.Split('|')[3]);         // 기본언어
                 hash.Add("company_cd", User.Identity.Name.Split('|')[2]);       // 회사코드
-                                                                                //hash.Add("estimate_id", nullToStr(Request["estimate_id"]));
+                //hash.Add("estimate_id", nullToStr(Request["estimate_id"]));
                 hash.Add("idx", Request["idx"]);
                 hash.Add("estimate_id", Request["estimate_id"]);
                 hash.Add("form_lang", Request["form_lang"]);

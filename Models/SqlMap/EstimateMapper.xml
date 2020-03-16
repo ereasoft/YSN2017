@@ -105,16 +105,30 @@
       ,CONVERT(CHAR(10), estimate_date, 20) as estimate_date ,cust_cd ,cust_nm, ref_cd ,ref_nm ,submit_cd ,submit_nm ,currency
       ,subject ,summary_yn ,remark ,create_id ,CONVERT(CHAR(19), create_date, 20) as create_date ,modify_id ,CONVERT(CHAR(19), modify_date, 20) as modify_date ,del_yn
       FROM T_ESTIMATE_HEAD
-      WHERE ISNULL(del_yn,'N') = 'N'
-     <isNotNull property="stype">
+      WHERE ISNULL(del_yn,'N') = 'N' AND company_cd = #company_cd#
+      <isNotNull property="stype">
       <isEqual property="stype" compareValue="0">
         AND status_cd in ('0','1','2','3')
+        <isNotEqual property="user_cd" compareValue="sysadmin">
+          AND  user_cd =  #user_cd#
+        </isNotEqual>
       </isEqual>
       <isEqual property="stype" compareValue="1">
-        AND status_cd in ('1','2','3')
+        AND status_cd in ('1','2','3') 
+        <isNotNull property="dept_cd">
+          <isEqual property="dept_lv" compareValue="2">
+            AND  user_cd in (select user_cd from T_USER where FN_GET_UP_DEPT_CD(dept_cd) =  #dept_cd#)
+          </isEqual>
+          <isEqual property="dept_lv" compareValue="3">
+            AND  user_cd in (select user_cd from T_USER where dept_cd = #dept_cd# )
+          </isEqual>
+        </isNotNull>
       </isEqual>
       <isEqual property="stype" compareValue="2">
         AND status_cd = '1'
+        <isNotEqual property="user_cd" compareValue="sysadmin">
+          AND  user_cd =  #user_cd#
+        </isNotEqual>
       </isEqual>
     </isNotNull>
       <isNotNull property="idx">
@@ -134,9 +148,6 @@
       </isNotNull>
       <isNotNull property="user_cd">
         AND user_cd = #user_cd#
-      </isNotNull>
-      <isNotNull property="dept_cd">
-        AND  user_cd in (select user_cd from T_USER where dept_cd = #dept_cd# )
       </isNotNull>
       <isNotNull property="submit_cd">
         AND submit_cd = #submit_cd#
