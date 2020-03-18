@@ -30,7 +30,7 @@ Ext.define( 'Ysn.view.estimate.requestMainController', {
         me.getView().down( 'estimateList2' ).items.items[0].getStore().load(
                      {
                          params: {
-                             stype: '1',
+                             stype: '1',            
                              user_nm: me.lookupReference( 'user_nm' ).getValue(),
                              cust_nm: me.lookupReference( 'cust_nm' ).getValue(),
                              dstr_type: me.lookupReference( 'dstr_chn' ).getValue(),
