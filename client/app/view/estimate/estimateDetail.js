@@ -696,7 +696,7 @@
                          dataIndex: 'unit_price',
                          text: 'Unit Price',
                          width: 150,
-                         format: '0.00',
+                         format: '0.000',
                          editor: {
                              xtype: 'numberfield',
                              //bind: '{record.unit_price}',
@@ -714,7 +714,7 @@
                          hidden: true,
                          text: 'Amount',
                          width: 150,
-                         format: '0.00',
+                         format: '0.000',
                          editor: {
                              xtype: 'numberfield',
                              //bind: '{record.amount}',
@@ -726,7 +726,7 @@
                          dataIndex: 'qty_5k',
                          text: '5K',
                          width: 150,
-                         format: '0.00',
+                         format: '0.000',
                          editor: {
                              xtype: 'numberfield',
                              //bind: '{record.qty_5k}',
@@ -739,7 +739,7 @@
                          dataIndex: 'qty_10k',
                          text: '10K',
                          width: 150,
-                         format: '0.00',
+                         format: '0.000',
                          editor: {
                              xtype: 'numberfield',
                              //bind: '{record.qty_10k}',
@@ -752,7 +752,7 @@
                          dataIndex: 'qty_30k',
                          text: '30K',
                          width: 150,
-                         format: '0.00',
+                         format: '0.000',
                          editor: {
                              xtype: 'numberfield',
                              //bind: '{record.qty_30k}',
@@ -765,7 +765,7 @@
                          dataIndex: 'qty_50k',
                          text: '50K',
                          width: 150,
-                         format: '0.00',
+                         format: '0.000',
                          editor: {
                              xtype: 'numberfield',
                              //bind: '{record.qty_50k}',
@@ -778,7 +778,7 @@
                          dataIndex: 'qty_100k',
                          text: '100K',
                          width: 150,
-                         format: '0.00',
+                         format: '0.000',
                          editor: {
                              xtype: 'numberfield',
                              //bind: '{record.qty_100k}',
