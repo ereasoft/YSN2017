@@ -115,8 +115,7 @@ namespace YSN2017.Controllers
             Hashtable hash = new Hashtable();
 
             hash.Add("language", User.Identity.Name.Split('|')[3]);         // 기본언어
-            hash.Add("company_cd", User.Identity.Name.Split('|')[2]);       // 회사코드 
-            hash.Add("user_cd", User.Identity.Name.Split('|')[0]);
+            hash.Add("company_cd", User.Identity.Name.Split('|')[2]);       // 회사코드  
 
             hash.Add("idx", Request["idx"]);
             hash.Add("stype", Request["stype"]);
@@ -134,7 +133,7 @@ namespace YSN2017.Controllers
             hash.Add("cust_nm", Request["cust_nm"]);
             hash.Add("dstr_type", Request["dstr_type"]);
 
-            if(Request["dept_cd"] == "3" || Request["dept_cd"] == "4")
+            if(Request["dept_cd"] == "3" || Request["dept_cd"] == "4" || Request["dept_cd"] == "416" || Request["dept_cd"] == "415")
             {
                 hash["dept_lv"] = "2";
             }else
@@ -142,7 +141,9 @@ namespace YSN2017.Controllers
                 hash["dept_lv"] = "3";
             }
 
-            if(hash["user_cd"].ToString() == "sysadmin")
+            if (hash["stype"] == null) hash["stype"] = "0";
+
+            if (hash["stype"].ToString() == "1" && User.Identity.Name.Split('|')[0] == "Sysadmin")
             {
                 hash["dept_lv"] = "0";
             }
@@ -814,7 +815,7 @@ namespace YSN2017.Controllers
                 string[] remark;
                 List<int> totRange = new List<int>();  //품목 합계를 구하기 위해 subTotRow를 배열에 등록
                 int[] subRange = new int[] { 0, 0, 0 }; //subTotRow, 첫번째품목옵션, 마지막품목옵션
-                double[] subTotal = new double[] { 0.00, 0.00, 0.00, 0.00, 0.00, 0.00 }; //품목별 합계  listprice, 5k, 10k, 30k, 50k, 100k
+                double[] subTotal = new double[] { 0.000, 0.000, 0.000, 0.000, 0.000, 0.000 }; //품목별 합계  listprice, 5k, 10k, 30k, 50k, 100k
 
                 string itemType; 
 
@@ -945,7 +946,7 @@ namespace YSN2017.Controllers
                         }
 
                         pointRow += 3; //세부품목 처리 
-                        totRow = 0;  //합계 ROW indexㅠ c 
+                        totRow = 0;  //합계 ROW index
 
                         foreach (Hashtable Item in list)
                         {
@@ -957,7 +958,10 @@ namespace YSN2017.Controllers
                             ws.Cells["E" + pointRow].Style.Font.Size = fontSize;
                             ws.Cells["F" + pointRow].Style.Font.Size = fontSize;
                             ws.Cells["G" + pointRow].Style.Font.Size = fontSize;
-                            ws.Cells["H" + pointRow].Style.Font.Size = fontSize;
+                            ws.Cells["H" + pointRow].Style.Font.Size = fontSize;  
+                     
+                            ws.Cells["E" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                            ws.Cells["F" + pointRow].Style.Numberformat.Format = "#,##0.000"; 
 
                             if (Item["header_yn"].ToString().Equals("Y"))
                             {
@@ -968,13 +972,16 @@ namespace YSN2017.Controllers
                                     //Unit Price
                                     if (subRange[2] == 0)
                                     {
+                                        ws.Cells["E" + subRange[0]].Style.Numberformat.Format = "#,##0.000";
                                         ws.Cells["E" + subRange[0]].Formula = "=SUM(E" + subRange[1] + ")";
                                     }
                                     else
                                     {
+                                        ws.Cells["E" + subRange[0]].Style.Numberformat.Format = "#,##0.000";
                                         ws.Cells["E" + subRange[0]].Formula = "=SUM(E" + subRange[1] + ":E" + subRange[2] + ")";
-                                    } 
+                                    }
                                     //Amount
+                                    ws.Cells["F" + subRange[0]].Style.Numberformat.Format = "#,##0.000";
                                     ws.Cells["F" + subRange[0]].Formula = "=D" + subRange[0] + "*E" + subRange[0];
 
                                     subRange[1] = 0;
@@ -995,6 +1002,11 @@ namespace YSN2017.Controllers
                                 ws.Cells["A" + pointRow].Value = data["item_name"] + " " + itemType;
                                 ws.Cells["C" + pointRow].Value = itemType + " TOTAL";
                                 ws.Cells["D" + pointRow].Value = Item["quantity"];
+
+                               
+                                ws.Cells["E" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                                ws.Cells["F" + pointRow].Style.Numberformat.Format = "#,##0.000"; 
+
                                 //ws.Cells["F" + pointRow].Value = Item["amount"]; 
                                 pointRow += 1;
                                 ws.InsertRow(pointRow, 1);
@@ -1021,20 +1033,28 @@ namespace YSN2017.Controllers
                             ws.Cells["F" + pointRow].Style.Border.Right.Style = ExcelBorderStyle.Thin;
                             ws.Cells["C" + pointRow].Style.Font.Size = fontSize;
                             ws.Cells["E" + pointRow].Style.Font.Size = fontSize;
+
+                            ws.Cells["E" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                            ws.Cells["F" + pointRow].Style.Numberformat.Format = "#,##0.000";
+
                             ws.Cells["C" + pointRow].Value = Item["prod_desc"];
                             ws.Cells["E" + pointRow].Value = Item["unit_price"];
+                              
 
                             pointRow += 1;
                         }
 
                         if(subRange[2] == 0)
                         {
-                            ws.Cells["E" + subRange[0]].Formula = "=SUM(E" + subRange[1] + ")";
+                            ws.Cells["E" + subRange[0]].Style.Numberformat.Format = "#,##0.000";
+                            ws.Cells["E" + subRange[0]].Formula = "=SUM(E" + subRange[1] + ")"; 
                         }
                         else
                         {
+                            ws.Cells["E" + subRange[0]].Style.Numberformat.Format = "#,##0.000";
                             ws.Cells["E" + subRange[0]].Formula = "=SUM(E" + subRange[1] + ":E" + subRange[2] + ")";
-                        } 
+                        }
+                        ws.Cells["F" + pointRow].Style.Numberformat.Format = "#,##0.000";
                         ws.Cells["F" + subRange[0]].Formula = "=D" + subRange[0] + "*E" + subRange[0];
 
                         subRange[1] = 0;
@@ -1048,6 +1068,9 @@ namespace YSN2017.Controllers
                         ws.Cells["F" + pointRow].Style.Font.Size = fontSize;
                         ws.Cells["G" + pointRow].Style.Font.Size = fontSize;
                         ws.Cells["H" + pointRow].Style.Font.Size = fontSize;
+                         
+                        ws.Cells["E" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                        ws.Cells["F" + pointRow].Style.Numberformat.Format = "#,##0.000"; 
 
                         ws.Cells["A" + pointRow].Value = data["item_name"] + " SET";
                         ws.Cells["C" + pointRow].Value = "PRODUCT CODE: " + data["prod_code"];
@@ -1070,6 +1093,9 @@ namespace YSN2017.Controllers
                         ws.Cells["D" + totRow].Formula = Dformula;
                         ws.Cells["E" + totRow].Formula = Eformula;
                         ws.Cells["F" + totRow].Formula = Fformula;
+
+                        ws.Cells["E" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                        ws.Cells["F" + pointRow].Style.Numberformat.Format = "#,##0.000";
 
                         pointRow += 1;
                          
@@ -1121,15 +1147,31 @@ namespace YSN2017.Controllers
                             ws.Cells["G" + pointRow].Style.Font.Size = fontSize;
                             ws.Cells["H" + pointRow].Style.Font.Size = fontSize;
 
+                            ws.Cells["D" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                            ws.Cells["E" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                            ws.Cells["F" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                            ws.Cells["G" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                            ws.Cells["H" + pointRow].Style.Numberformat.Format = "#,##0.000";
+
                             if (Item["header_yn"].ToString().Equals("Y"))
                             {
                                 if (subRange[0] > 0) //0보다 크면 두번째 이후 부터이기 때문에 이전 품목의 합계를 구한다.
-                                { 
+                                {
+                                    if (subRange[2] == 0) subRange[2] = subRange[1];  // subRange[2]가 0이면, option이 없는 경우
+
+                                    ws.Cells["D" + subRange[0]].Style.Numberformat.Format = "#,##0.000";
+                                    ws.Cells["E" + subRange[0]].Style.Numberformat.Format = "#,##0.000";
+                                    ws.Cells["F" + subRange[0]].Style.Numberformat.Format = "#,##0.000";
+                                    ws.Cells["G" + subRange[0]].Style.Numberformat.Format = "#,##0.000";
+                                    ws.Cells["H" + subRange[0]].Style.Numberformat.Format = "#,##0.000";
+
                                     ws.Cells["D" + subRange[0]].Formula = "=SUM(D" + subRange[1] + ":D" + subRange[2] + ")";
                                     ws.Cells["E" + subRange[0]].Formula = "=SUM(E" + subRange[1] + ":E" + subRange[2] + ")";
                                     ws.Cells["F" + subRange[0]].Formula = "=SUM(F" + subRange[1] + ":F" + subRange[2] + ")";
                                     ws.Cells["G" + subRange[0]].Formula = "=SUM(G" + subRange[1] + ":G" + subRange[2] + ")";
                                     ws.Cells["H" + subRange[0]].Formula = "=SUM(H" + subRange[1] + ":H" + subRange[2] + ")";
+
+                            
 
                                     subRange[1] = 0;
                                     subRange[2] = 0;
@@ -1148,6 +1190,13 @@ namespace YSN2017.Controllers
                                 ws.Cells["G" + pointRow].Style.Border.Left.Style = ExcelBorderStyle.Thin;
                                 ws.Cells["H" + pointRow].Style.Border.Left.Style = ExcelBorderStyle.Thin;
                                 ws.Cells["H" + pointRow].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+
+                                ws.Cells["D" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                                ws.Cells["E" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                                ws.Cells["F" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                                ws.Cells["G" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                                ws.Cells["H" + pointRow].Style.Numberformat.Format = "#,##0.000";
+
                                 itemType = Item["prod_desc"].ToString().Replace(" BASE", "");
 
                                 ws.Cells["A" + pointRow].Value = data["item_name"] + " " + itemType;
@@ -1185,6 +1234,13 @@ namespace YSN2017.Controllers
                             ws.Cells["H" + pointRow].Style.Border.Right.Style = ExcelBorderStyle.Thin;
                             ws.Cells["C" + pointRow].Style.Font.Size = fontSize;
                             ws.Cells["E" + pointRow].Style.Font.Size = fontSize;
+
+                            ws.Cells["D" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                            ws.Cells["E" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                            ws.Cells["F" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                            ws.Cells["G" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                            ws.Cells["H" + pointRow].Style.Numberformat.Format = "#,##0.000";
+
                             ws.Row(pointRow).Style.Font.Size = fontSize;
                             ws.Cells["C" + pointRow].Value = Item["prod_desc"];
                             ws.Cells["D" + pointRow].Value = Item["qty_5k"];
@@ -1194,6 +1250,14 @@ namespace YSN2017.Controllers
                             ws.Cells["H" + pointRow].Value = Item["qty_100k"]; 
                             pointRow += 1;
                         }
+
+                        if (subRange[2] == 0) subRange[2] = subRange[1];  // subRange[2]가 0이면, option이 없는 경우
+
+                        ws.Cells["D" + subRange[0]].Style.Numberformat.Format = "#,##0.000";
+                        ws.Cells["E" + subRange[0]].Style.Numberformat.Format = "#,##0.000";
+                        ws.Cells["F" + subRange[0]].Style.Numberformat.Format = "#,##0.000";
+                        ws.Cells["G" + subRange[0]].Style.Numberformat.Format = "#,##0.000";
+                        ws.Cells["H" + subRange[0]].Style.Numberformat.Format = "#,##0.000";
 
                         ws.Cells["D" + subRange[0]].Formula = "=SUM(D" + subRange[1] + ":D" + subRange[2] + ")";
                         ws.Cells["E" + subRange[0]].Formula = "=SUM(E" + subRange[1] + ":E" + subRange[2] + ")";
@@ -1212,6 +1276,12 @@ namespace YSN2017.Controllers
                         ws.Cells["F" + pointRow].Style.Font.Size = fontSize;
                         ws.Cells["G" + pointRow].Style.Font.Size = fontSize;
                         ws.Cells["H" + pointRow].Style.Font.Size = fontSize;
+
+                        ws.Cells["D" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                        ws.Cells["E" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                        ws.Cells["F" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                        ws.Cells["G" + pointRow].Style.Numberformat.Format = "#,##0.000";
+                        ws.Cells["H" + pointRow].Style.Numberformat.Format = "#,##0.000";
 
                         ws.Cells["A" + pointRow].Value = data["item_name"] + " SET";
                         ws.Cells["C" + pointRow].Value = "PRODUCT CODE: " + data["prod_code"];
@@ -1246,8 +1316,7 @@ namespace YSN2017.Controllers
                         pointRow += 1;
 
                         ws.Cells["C" + pointRow].Style.Font.Size = fontSize;
-                        ws.Cells["C" + pointRow].Value = "PRODUCT NAME: " + data["prod_name"]; 
-                        ws.Cells["C" + pointRow].Value = "PRODUCT NAME: " + data["prod_name"];
+                        ws.Cells["C" + pointRow].Value = "PRODUCT NAME: " + data["prod_name"];  
                         //picture.To.Column = 5;
                         pointRow += 10;
                         var pic2 = ws.Drawings.AddPicture("sign1", sign1);
